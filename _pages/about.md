@@ -1,4 +1,3 @@
-<--Xinyuan-->
 ---
 permalink: /
 <-- title: "About Me" -->
