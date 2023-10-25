@@ -9,8 +9,8 @@ redirect_from:
 
 
 
-Education 
-======
+<h2>Education</h2> 
+
 - M.S., Georgia State University
 - B.S., Dalian University of Technology
   
