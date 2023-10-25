@@ -1,10 +1,13 @@
 ---
 layout: archive
-title: "Sitemap"
-permalink: /sitemap/
+title: "Service"
+permalink: /service/
 author_profile: true
 ---
+- Reviewer for Journal of Business Research
+- Reviewer for Electronic Commerce Research
 
+<--
 {% include base_path %}
 
 A list of all the posts and pages found on the site. For you robots out there is an [XML version]({{ base_path }}/sitemap.xml) available for digesting as well.
@@ -35,3 +38,4 @@ A list of all the posts and pages found on the site. For you robots out there is
   {% endunless %}
 {% endfor %}
 {% endfor %}
+-->
