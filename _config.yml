@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Xinyuan Wei's Homepage"
+title                    : "Homepage"
 title_separator          : "-"
 name                     : &name "Xinyuan Wei"
 description              : &description "personal description"
