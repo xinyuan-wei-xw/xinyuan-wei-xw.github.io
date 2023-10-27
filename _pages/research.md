@@ -16,5 +16,7 @@ author_profile: true
 
 <h2>Working Papers</h2>
 
+- AI Patent Classification: A Two-stage Method (with Arun Rai and Yusen Xia)
+  
 - Peng, L., Wei, X., & Yao, V. (2022). [Statistical Analysis of Home-Sharing Effect](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4034848). Available at SSRN 4034848.
 
