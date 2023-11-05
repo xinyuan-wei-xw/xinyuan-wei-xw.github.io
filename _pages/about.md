@@ -8,7 +8,7 @@ redirect_from:
   - /about.html
 ---
 
-I am currently a Ph.D. student at the Institute for Insight (IFI) & Center for Digital Innovation (CDIN), at Georgia State University. My current research interests mainly focus on artificial intelligence, innovation, and online community.
+I am currently a Ph.D. student in Business Administration (Digital Innovation Concentration), at the Institute for Insight (IFI) & Center for Digital Innovation (CDIN), at Georgia State University. My current research interests mainly focus on artificial intelligence, innovation, and online community.
 
 Before joining the Ph.D. program, I received my master's degrees in Actuarial Science and Quantitative Risk Analysis & Management at Georgia State University.
 
