@@ -6,4 +6,4 @@ author_profile: true
 
 ---
 
-[Download my CV](https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112.pdf)
+[Download my CV](https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112_2.pdf)
