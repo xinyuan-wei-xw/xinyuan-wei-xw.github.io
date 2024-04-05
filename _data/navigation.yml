@@ -12,6 +12,9 @@ main:
   
   - title: "Blog"
     url: /blog/
+
+  - title: "Course Work"
+    url: /coursework/
     
   - title: "CV"
     url: /cv/
