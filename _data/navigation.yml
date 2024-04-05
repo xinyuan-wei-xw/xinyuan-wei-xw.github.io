@@ -2,19 +2,19 @@
 main:
     
   - title: "Research"
-    url: /research/
+    url: research/
 
   - title: "Teaching"
-    url: /teaching/
+    url: teaching/
   
   - title: "Service"
-    url: /service/
+    url: service/
   
   - title: "Blog"
-    url: /blog/
+    url: blog/
 
   - title: "Course Work"
-    url: /coursework/
+    url: coursework/
     
   - title: "CV"
-    url: /cv/
+    url: cv/
