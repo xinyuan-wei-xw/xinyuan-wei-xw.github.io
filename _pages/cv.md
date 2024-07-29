@@ -11,5 +11,7 @@ redirect_from:
 
 <br/>
 [Download CV](https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112_2.pdf)
-<iframe src="https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112_2.pdf" width="100%" height="800px"></iframe>
 
+<object data="https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112_2.pdf" type="application/pdf" width="100%" height="800px">
+  <p>Your browser does not support PDFs. <a href="https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112_2.pdf">Download the PDF</a>.</p>
+</object>
