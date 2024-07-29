@@ -1,20 +1,18 @@
-# main links links
 main:
-    
   - title: "Research"
     url: research/
-
+  
   - title: "Teaching"
     url: teaching/
+  
+  - title: "Course Work"
+    url: coursework/
   
   - title: "Service"
     url: service/
   
-  - title: "Blog"
-    url: blog/
-
-  - title: "Course Work"
-    url: coursework/
-    
   - title: "CV"
     url: cv/
+  
+  - title: "Blog"
+    url: blog/
