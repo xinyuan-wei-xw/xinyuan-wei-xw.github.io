@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Service"
+title: "Service and Professional Activities"
 permalink: /service/
 author_profile: true
 ---
@@ -10,3 +10,6 @@ author_profile: true
 - Journal of Business Research
 - Electronic Commerce Research
 
+<h2>Conference Reviewer</h2>
+
+- **Outstanding Reviewer, AMCIS (Americas Conference on Information Systems), 2024**
