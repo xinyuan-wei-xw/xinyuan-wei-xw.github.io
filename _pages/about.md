@@ -8,7 +8,7 @@ redirect_from:
   - /about.html
 ---
 
-My name is Xinyuan Wei (IPA /ɕɪŋ1/ /ɥœn2/ /weɪ4/). I am currently a Ph.D. student in Business Administration (Digital Innovation Concentration), at the [Institute for Insight](https://robinson.gsu.edu/academic-departments/insight/) (IFI) & [Center for Digital Innovation](https://www.cdin.net/) (CDIN), at Georgia State University. My current research interests mainly focus on artificial intelligence, innovation, and online community, working with Dr. [Arun Rai](https://www.arunrai.net/) and Dr. [Yusen Xia](https://robinson.gsu.edu/profile/yusen-xia/).
+My name is Xinyuan Wei (IPA: /ɕɪŋ1//ɥœn2/ /weɪ4/). I am currently a Ph.D. student in Business Administration (Digital Innovation Concentration), at the [Institute for Insight](https://robinson.gsu.edu/academic-departments/insight/) (IFI) & [Center for Digital Innovation](https://www.cdin.net/) (CDIN), at Georgia State University. My current research interests mainly focus on artificial intelligence, innovation, and online community, working with Dr. [Arun Rai](https://www.arunrai.net/) and Dr. [Yusen Xia](https://robinson.gsu.edu/profile/yusen-xia/).
 
 Before joining the Ph.D. program, I received my master's degrees in Actuarial Science and Quantitative Risk Analysis & Management at Georgia State University.
 
