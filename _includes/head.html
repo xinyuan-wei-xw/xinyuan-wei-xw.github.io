@@ -2,6 +2,10 @@
 
 <meta charset="utf-8">
 
+{% if site.analytics.provider == "google-gtag" and page.analytics != false %}
+  {% include analytics-providers/google-gtag.html %}
+{% endif %}
+
 {% include seo.html %}
 
 <link href="{% if site.atom_feed.path %}{{ site.atom_feed.path }}{% else %}{{ base_path }}/feed.xml{% endif %}" type="application/atom+xml" rel="alternate" title="{{ site.title }} Feed">

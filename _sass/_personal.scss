@@ -1,0 +1,26 @@
+// Color-only customization of the published site.
+// Preserve all existing typography, dimensions, spacing, and layout.
+$personal-blue: #0039a6;
+
+html, body { background-color: #e8f2fc; }
+body { color: #39434f; }
+.masthead, .greedy-nav { background-color: #e8f2fc; }
+.masthead { border-color: #dce3ee; }
+.greedy-nav a { color: #43536b; }
+.greedy-nav a:hover { color: $personal-blue; }
+.greedy-nav .visible-links a:before { background-color: $personal-blue; }
+.greedy-nav button { background-color: $personal-blue; }
+.greedy-nav .hidden-links { background-color: #e8f2fc; border-color: #dce3ee; }
+
+.page__title, .sidebar .author__name { color: #18345a; }
+.page__content h2, .page__content h3 { color: #234877; }
+.page__content h2 { border-color: #dce3ee; }
+a, .page__content a { color: $personal-blue; }
+a:hover, .page__content a:hover { color: #00266f; }
+.author__bio .degree-connector { color: #69717c; }
+.author__avatar img { border-color: #dce3ee; }
+.author__urls a { color: #43536b; }
+.author__urls a:hover { color: $personal-blue; }
+.page__footer { background-color: #e1edf9; border-color: #dce3ee; color: #636e7d; }
+.page__footer a { color: #43536b; }
+::selection { background-color: #dce7fb; color: #18345a; }
