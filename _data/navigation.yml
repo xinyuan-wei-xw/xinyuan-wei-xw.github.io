@@ -1,18 +1,7 @@
 main:
   - title: "Research"
-    url: research/
-  
+    url: /research/
   - title: "Teaching"
-    url: teaching/
-  
-  - title: "Course Work"
-    url: coursework/
-  
+    url: /teaching/
   - title: "Service"
-    url: service/
-  
-  - title: "CV"
-    url: cv/
-  
-  - title: "Blog"
-    url: blog/
+    url: /service/

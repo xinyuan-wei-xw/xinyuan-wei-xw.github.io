@@ -124,6 +124,16 @@
 .author__bio {
   margin: 0;
 
+  .degree-line {
+    display: block;
+    white-space: nowrap;
+    font-size: 0.85em;
+  }
+
+  .degree-connector {
+    color: #767676;
+  }
+
   @include breakpoint($large) {
     margin-top: 10px;
     margin-bottom: 20px;

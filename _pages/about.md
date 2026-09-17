@@ -1,21 +1,33 @@
 ---
-permalink: /
-excerpt: "About me"
+layout: single
 title: "About Me"
+permalink: /
 author_profile: true
-redirect_from: 
+redirect_from:
   - /about/
   - /about.html
 ---
 
-My name is Xinyuan Wei (IPA: /ɕɪŋ1//ɥœn2/ /weɪ4/). I am currently a Ph.D. student in Business Administration (Digital Innovation Concentration), at the [Institute for Insight](https://robinson.gsu.edu/academic-departments/insight/) (IFI) & [Center for Digital Innovation](https://www.cdin.net/) (CDIN), at Georgia State University. My current research interests mainly focus on artificial intelligence, innovation, and online community, working with Dr. [Arun Rai](https://www.arunrai.net/) and Dr. [Yusen Xia](https://robinson.gsu.edu/profile/yusen-xia/).
+I am a Ph.D. candidate in Business Administration (Computer Information Systems) at the J. Mack Robinson College of Business, Georgia State University. I work with [Dr. Arun Rai](https://www.arunrai.net/) and [Dr. Yusen Xia](https://robinson.gsu.edu/profile/yusen-xia/), with affiliations at the Institute for Insight (IFI) and the Center for Digital Innovation (CDIN). I expect to complete my Ph.D. in **Spring 2027**.
 
-Before joining the Ph.D. program, I received my master's degrees in Actuarial Science and Quantitative Risk Analysis & Management at Georgia State University.
+My research examines how generative and agentic AI changes engagement in online communities and decisions in digital markets. My broader work addresses AI governance, healthcare analytics, and operations and supply chain analytics. I combine empirical analysis, computational experiments, analytical modeling, and framework development and evaluation.
 
+## Research Interests
 
-<h2>Education</h2> 
+- Generative and Agentic AI
+- Digital Platforms and Online Communities
+- AI Governance
+- Healthcare Analytics
+- Operations and Supply Chain Analytics
 
-- M.S., Georgia State University
-- B.S., Dalian University of Technology
-  
+## Education
 
+- **Ph.D. in Business Administration, Computer Information Systems**, Georgia State University, 2022–present; expected Spring 2027. Dissertation proposal defended September 2, 2026.
+- **Master of Science in Quantitative Risk Analysis and Management**, Georgia State University, May 2022.
+- **Master of Actuarial Science**, Georgia State University, May 2022.
+
+## Contact
+
+**Office:** Room 1764, 55 Park Place
+
+[xinyuanwei@gsu.edu](mailto:xinyuanwei@gsu.edu)

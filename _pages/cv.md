@@ -1,17 +1,16 @@
 ---
-layout: archive
-title: "CV"
+layout: single
+title: "Curriculum Vitae"
 permalink: /cv/
 author_profile: true
 redirect_from:
   - /resume
 ---
 
-{% include base_path %}
+[Download my CV (PDF)]({{ '/files/Xinyuan_Wei_CV.pdf' | relative_url }})
 
-<br/>
-[Xinyuan Wei](https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112_2.pdf)
+Updated September 2026.
 
-<object data="https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112_2.pdf" type="application/pdf" width="100%" height="100%">
-  <p>Your browser does not support PDFs. <a href="https://xinyuan-wei-xw.github.io/files/CV_Xinyuan_Wei_20231112_2.pdf">Download the PDF</a>.</p>
+<object data="{{ '/files/Xinyuan_Wei_CV.pdf' | relative_url }}" type="application/pdf" width="100%" height="900" aria-label="Xinyuan Wei curriculum vitae">
+  <p><a href="{{ '/files/Xinyuan_Wei_CV.pdf' | relative_url }}">Download the CV as a PDF</a> to view it on your device.</p>
 </object>

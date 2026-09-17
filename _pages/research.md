@@ -1,22 +1,51 @@
 ---
-layout: archive
+layout: single
 title: "Research"
 permalink: /research/
 author_profile: true
 ---
 
-<h2>Publications</h2>
+My research focuses on generative and agentic AI, digital platforms and online communities, and AI governance, with applications in healthcare and operations analytics.
 
-<!---
-- Wei, X., Yu, B., & Liu, Y. (2020). [Accessing Information Asymmetry in Peer-to-Peer Lending by Default Prediction from Investors’ Perspective](https://www.mdpi.com/2073-8994/12/6/935). *Symmetry*, *12*(6), 935.
--->
-- Wang, G., Wei, X., Yu, B., & Xu, L. (2020). [An efficient proximal block coordinate homotopy method for large-scale sparse least squares problems](https://epubs.siam.org/doi/abs/10.1137/19M1243828). *SIAM Journal on Scientific Computing*, *42*(1), A395-A423.
+## Working Papers
 
-- Wei, X., Gotoh, J. Y., & Uryasev, S. (2018). [Peer-to-peer lending: classification in the loan application process](https://www.mdpi.com/2227-9091/6/4/129). *Risks*, *6*(4), 129. Data and code files are available at [https://www.ise.ufl.edu/uryasev/research/testproblems/financial_engineering/%20classification-in-loan-application-process%20/](https://www.ise.ufl.edu/uryasev/research/testproblems/financial_engineering/%20classification-in-loan-application-process%20/)
+### Architecture as Governance: How AI Service Design Shapes Resource Consumption and Tariff Form
 
-<h2>Working Papers</h2>
+*Working paper.*
 
-- AI Patent Classification: A Two-stage Method (with Arun Rai and Yusen Xia)
-  
-- Peng, L., Wei, X., & Yao, V. (2022). [Statistical Analysis of Home-Sharing Effect](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4034848). Available at SSRN 4034848.
+Formal theory of access governance linking AI service architecture, contractible usage, resource consumption, and tariff design.
 
+### Adaptive Engagement in Online Q&A Communities under the Introduction of Conversational LLMs
+
+In collaboration with A. Rai, Y. Xia, and X. Fu.
+
+*Targeting submission October 2026.*
+
+Examines changes in responsiveness and evaluation within online Q&A communities following conversational LLM introduction, using matched historical comparisons.
+
+### A Causal Discovery Framework for Data-Driven Hypothesis Generation
+
+In collaboration with A. Baird, M. Lajnef, A. Rai, and Y. Xia.
+
+*Invited for revision, ACM Transactions on Management Information Systems.*
+
+Combines causal machine learning and LLM-assisted hypothesis generation in healthcare, with an application to substance use disorder treatment using TEDS-D data.
+
+### When All-or-Nothing Fails: Endogenous Customer Service Times in Guaranteed-Service Models
+
+In collaboration with G. Li, Z. Liu, and Y. Xia.
+
+*Revising for submission to Operations Research.*
+
+Studies endogenous delivery promises and safety-stock placement through structural analysis, dynamic programming, and numerical experiments.
+
+### Statistical Analysis of Home-Sharing Effect
+
+In collaboration with L. Peng and V. Yao.
+
+*SSRN Working Paper, No. 4034848 (2022).* [Read on SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4034848)
+
+## Refereed Journal Articles
+
+- Wang, G., **Wei, X.**, Yu, B., & Xu, L. (2020). [An Efficient Proximal Block Coordinate Homotopy Method for Large-Scale Sparse Least Squares Problems](https://doi.org/10.1137/19M1243828). *SIAM Journal on Scientific Computing*, 42(1), A395–A423.
+- **Wei, X.**, Gotoh, J. Y., & Uryasev, S. (2018). [Peer-to-Peer Lending: Classification in the Loan Application Process](https://www.mdpi.com/2227-9091/6/4/129). *Risks*, 6(4), 129. [Code and data](https://uryasev.ams.stonybrook.edu/research/testproblems/financial_engineering/classification-in-loan-application-process/)

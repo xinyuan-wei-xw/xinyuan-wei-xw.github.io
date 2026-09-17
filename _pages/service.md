@@ -1,15 +1,28 @@
 ---
-layout: archive
+layout: single
 title: "Service and Professional Activities"
 permalink: /service/
 author_profile: true
 ---
 
-<h2>Journal Reviewer</h2>
+## Awards and Honors
+
+**Outstanding Reviewer, Americas Conference on Information Systems (AMCIS), 2024.** [Award announcement](https://aisel.aisnet.org/amcis2024/awards.html)
+
+## Academic Service
+
+### Journal Reviewing
 
 - Journal of Business Research
 - Electronic Commerce Research
 
-<h2>Conference Reviewer</h2>
+### Conference Reviewing
 
-- Outstanding Reviewer, AMCIS (Americas Conference on Information Systems), 2024, [https://aisel.aisnet.org/amcis2024/awards.html](https://aisel.aisnet.org/amcis2024/awards.html)
+- International Conference on Information Systems (ICIS)
+- Pacific Asia Conference on Information Systems (PACIS)
+- Americas Conference on Information Systems (AMCIS)
+
+### Conference Service
+
+- **Conference on Information Systems and Technology (CIST):** Volunteer, 2025.
+- **Robinson Impact Summit (RIS), Georgia State University:** Planning Committee Member, 2025.

@@ -7,13 +7,13 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Homepage"
+title                    : "Xinyuan Wei"
 title_separator          : "-"
 name                     : &name "Xinyuan Wei"
-description              : &description "personal description"
+description              : &description "Xinyuan Wei — Information Systems researcher studying AI, digital platforms, and AI governance, with healthcare and operations applications."
 url                      : https://xinyuan-wei-xw.github.io/
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "https://xinyuan-wei-xw.github.io/"
+repository               : "xinyuan-wei-xw/xinyuan-wei-xw.github.io"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
@@ -82,12 +82,12 @@ analytics:
 author:
   name             : "Xinyuan Wei"
   avatar           : "xinyuan_wei.jpg"
-  bio              : "Ph.D. student at Robinson College of Business, Georgia State University"
-  location         : "Room 1657, 55 Park Place"
+  bio              : '<span class="degree-line">Ph.D. Candidate <span class="degree-connector">in</span></span><span class="degree-line">Business Administration</span><span class="degree-line degree-connector">with concentration in</span><span class="degree-line">Computer Information Systems</span>'
+  location         : "Room 1764, 55 Park Place"
   employer         : "Georgia State University"
   pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : "https://scholar.google.com/citations?hl=en&user=nfJ1e1EAAAAJ"
-  email            : "xwei6@gsu.edu"
+  email            : "xinyuanwei@gsu.edu"
   researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
@@ -109,7 +109,7 @@ author:
   stackoverflow    : # http://stackoverflow.com/users/123456/username
   steam            :
   tumblr           :
-  twitter          : "wei_xinyuan"
+  twitter          :
   vine             :
   weibo            :
   xing             :
