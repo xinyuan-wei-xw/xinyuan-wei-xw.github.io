@@ -25,9 +25,3 @@ My research examines how generative and agentic AI changes engagement in online 
 - **Ph.D. in Business Administration, Computer Information Systems**, Georgia State University, 2022–present; expected Spring 2027. Dissertation proposal defended September 2, 2026.
 - **Master of Science in Quantitative Risk Analysis and Management**, Georgia State University, May 2022.
 - **Master of Actuarial Science**, Georgia State University, May 2022.
-
-## Contact
-
-**Office:** Room 1764, 55 Park Place
-
-[xinyuanwei@gsu.edu](mailto:xinyuanwei@gsu.edu)
