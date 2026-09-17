@@ -82,7 +82,7 @@ analytics:
 author:
   name             : "Xinyuan Wei"
   avatar           : "xinyuan_wei.jpg"
-  bio              : '<span class="degree-line">Ph.D. Candidate <span class="degree-connector">in</span></span><span class="degree-line">Business Administration</span><span class="degree-line degree-connector">with concentration in</span><span class="degree-line">Computer Information Systems</span>'
+  bio              : '<span class="degree-line">Ph.D. Candidate <span class="degree-connector">in</span></span><br><span class="degree-line">Business Administration</span><br><span class="degree-line degree-connector">with concentration in</span><br><span class="degree-line">Computer Information Systems</span>'
   location         : "Room 1764, 55 Park Place"
   employer         : "Georgia State University"
   pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
