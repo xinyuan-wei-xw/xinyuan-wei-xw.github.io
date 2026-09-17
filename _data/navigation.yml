@@ -5,3 +5,5 @@ main:
     url: /teaching/
   - title: "Service"
     url: /service/
+  - title: "Lab"
+    url: /lab/

@@ -1,0 +1,10 @@
+{% if include.project.figure and include.project.figure != empty %}
+  {% assign figure_url = include.project.figure %}
+  {% assign first_character = figure_url | slice: 0 %}
+  {% if first_character == '/' %}
+    {% assign figure_url = figure_url | relative_url %}
+  {% endif %}
+  <img class="lab-card__figure" src="{{ figure_url | escape }}" alt="{{ include.project.figure_alt | default: '' | escape }}" loading="lazy">
+{% else %}
+  <div class="lab-card__figure lab-card__figure--placeholder">Figure</div>
+{% endif %}

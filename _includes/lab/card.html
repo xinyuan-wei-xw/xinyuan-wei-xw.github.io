@@ -1,0 +1,21 @@
+{% assign project = include.project %}
+{% if project.url and project.url != empty %}
+  {% assign project_url = project.url %}
+  {% assign first_character = project_url | slice: 0 %}
+  {% if first_character == '/' %}
+    {% assign project_url = project_url | relative_url %}
+  {% endif %}
+  <a class="lab-card" href="{{ project_url | escape }}">
+    {% include lab/figure.html project=project %}
+    <h2 class="lab-card__title">{{ project.title | escape }}</h2>
+    <p>{{ project.description | escape }}</p>
+    <span class="lab-card__action">Explore <span aria-hidden="true">&rarr;</span></span>
+  </a>
+{% else %}
+  <div class="lab-card lab-card--pending">
+    {% include lab/figure.html project=project %}
+    <h2 class="lab-card__title">{{ project.title | default: 'Coming soon' | escape }}</h2>
+    <p>{{ project.description | default: 'Interactive experiments and small tools will appear here.' | escape }}</p>
+    <span class="lab-card__action">Coming soon</span>
+  </div>
+{% endif %}

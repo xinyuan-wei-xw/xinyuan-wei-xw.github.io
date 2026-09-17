@@ -1,0 +1,16 @@
+---
+layout: single
+title: "Lab"
+permalink: /lab/
+author_profile: true
+---
+
+<p>Small interactive experiments and tools built with AI-assisted coding.</p>
+
+<div class="lab-grid">
+  {% for project in site.data.lab.projects %}
+    {% include lab/card.html project=project %}
+  {% else %}
+    {% include lab/card.html %}
+  {% endfor %}
+</div>

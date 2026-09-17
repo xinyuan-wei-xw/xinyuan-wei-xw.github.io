@@ -1,0 +1,57 @@
+// Components scoped to Lab; existing pages retain their typography and layout.
+.lab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  margin: 24px 0;
+}
+.page__content .lab-card {
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  border: 1px solid #cbdced;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.55);
+  color: #39434f;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+
+  .lab-card__title {
+    margin: 0 0 12px;
+    padding: 0;
+    border: 0;
+    font-size: 1.1em;
+    color: #234877;
+  }
+  p { margin: 0 0 20px; }
+  .lab-card__action { margin-top: auto; color: #0039a6; font-size: 0.85em; }
+}
+.page__content a.lab-card:hover {
+  background: #fff;
+  border-color: #0039a6;
+  text-decoration: none;
+}
+.page__content a.lab-card:focus-visible {
+  outline: 2px solid #0039a6;
+  outline-offset: 4px;
+}
+.page__content .lab-card--pending .lab-card__action { color: #69717c; }
+@media (max-width: 640px) {
+  .lab-grid { grid-template-columns: 1fr; }
+}
+.page__content .lab-card__figure {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  margin: 0 0 18px;
+  border-radius: 3px;
+}
+.page__content .lab-card__figure--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e1edf9;
+  color: #586c86;
+  border: 1px dashed #b8cce3;
+}
