@@ -163,6 +163,11 @@ export default function App() {
     : "";
   return (
     <div className="app-shell">
+      <nav className="lab-navigation" aria-label="Return to website">
+        <a href="https://xinyuan-wei-xw.github.io/lab/">
+          <span aria-hidden="true">←</span> Back to Lab
+        </a>
+      </nav>
       <header className="mast">
         <a
           className="brand"
