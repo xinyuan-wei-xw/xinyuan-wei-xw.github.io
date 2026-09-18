@@ -180,9 +180,33 @@ export function Character() {
           <sphereGeometry args={[0.295, 24, 20]} />
           <meshStandardMaterial color="#4e3932" />
         </mesh>
-        <mesh position={[0, 0.09, -0.33]} castShadow>
-          <sphereGeometry args={[0.16, 16, 16]} />
+        {/* Swept hair, shoulder-length sides, and a visible low ponytail. */}
+        <mesh
+          position={[0.22, -0.22, -0.23]}
+          rotation={[0.2, 0, 0.3]}
+          castShadow
+        >
+          <capsuleGeometry args={[0.12, 0.36, 8, 16]} />
           <meshStandardMaterial color="#4e3932" />
+        </mesh>
+        {[-0.24, 0.24].map((x) => (
+          <mesh key={x} position={[x, -0.08, 0.015]} castShadow>
+            <capsuleGeometry args={[0.075, 0.22, 8, 16]} />
+            <meshStandardMaterial color="#4e3932" />
+          </mesh>
+        ))}
+        <mesh
+          position={[-0.11, 0.19, 0.17]}
+          rotation={[0, 0, -0.35]}
+          scale={[1.5, 0.55, 0.6]}
+          castShadow
+        >
+          <sphereGeometry args={[0.16, 20, 16]} />
+          <meshStandardMaterial color="#4e3932" />
+        </mesh>
+        <mesh position={[0.255, 0.12, 0.17]} rotation={[0, 0, 0.35]}>
+          <capsuleGeometry args={[0.018, 0.075, 4, 8]} />
+          <meshStandardMaterial color="#c8b079" />
         </mesh>
         <mesh position={[0, -0.04, 0.17]} scale={[0.92, 0.8, 0.7]}>
           <sphereGeometry args={[0.255, 24, 20]} />

@@ -11,7 +11,7 @@ rmSync(resolve(target,'assets'),{recursive:true,force:true});
 cpSync(resolve(root,'dist'),target,{recursive:true});
 const source=resolve(site,'_tools/under_review');
 mkdirSync(source,{recursive:true});
-for(const file of ['src','tests','scripts','package.json','package-lock.json','tsconfig.json','vite.config.ts','index.html','README.md','SPECIFICATION.md','.gitignore']){
+for(const file of ['src','tests','scripts','package.json','package-lock.json','tsconfig.json','vite.config.ts','index.html','README.md','SPECIFICATION.md','REVIEW_SOURCES.md','.gitignore']){
  cpSync(resolve(root,file),resolve(source,file),{recursive:true});
 }
 console.log('Staged game build and source archive in homepage_Xinyuan.');

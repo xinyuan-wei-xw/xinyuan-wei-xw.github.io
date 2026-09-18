@@ -1,3 +1,5 @@
+import { reviewCycles } from "../data/reviewCycles";
+import { reviewStage } from "../simulation/engine";
 import {
   Component,
   Suspense,
@@ -126,12 +128,10 @@ export default function App() {
       ["submit", "revise", "new", "file", "retrieve", "rest"].includes(a) &&
       window.innerWidth <= 760
     ) {
-      document
-        .querySelector(".world-card")
-        ?.scrollIntoView({
-          behavior: g.reducedMotion ? "instant" : "smooth",
-          block: "start",
-        });
+      document.querySelector(".world-card")?.scrollIntoView({
+        behavior: g.reducedMotion ? "instant" : "smooth",
+        block: "start",
+      });
     }
   };
   const phaseLabel = {
@@ -143,7 +143,9 @@ export default function App() {
           : "BACK AT THE DESK",
     writing: "A NEW MANUSCRIPT",
     throwing: "A LEAP OF ACADEMIC FAITH",
-    review: "UNDER REVIEW…",
+    review: g.pending
+      ? reviewStage(g.pending, g.elapsed / g.duration).toUpperCase()
+      : "UNDER REVIEW…",
     decision:
       last?.outcome === "Accept"
         ? "ACCEPTED"
@@ -532,9 +534,28 @@ export default function App() {
                     is not always the best match.
                   </p>
                   <div className="demo-note">
-                    Real journal names. Fictional game priorities, selectivity,
-                    and review times. No affiliation or endorsement.
+                    Real journal names. Simulated priorities and selectivity.
+                    Process-informed timing with random delays. No affiliation
+                    or endorsement.
                   </div>
+                  <details className="revision-box">
+                    <summary>Review-cycle basis · {j.id.toUpperCase()}</summary>
+                    <p>
+                      {reviewCycles[j.id as keyof typeof reviewCycles].note}
+                    </p>
+                    <a
+                      href={reviewCycles[j.id as keyof typeof reviewCycles].url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Journal source ↗
+                    </a>
+                    <p>
+                      Timing luck affects reviewer availability and delays.
+                      Assessment luck remains separate; neither changes the
+                      paper’s underlying quality.
+                    </p>
+                  </details>
                   <div className="journal-list">
                     {journals.map((journal) => (
                       <button
@@ -636,8 +657,11 @@ export default function App() {
         <section className="researcher-card">
           <div className="researcher-intro">
             <span className="eyebrow">THE PERSON BEHIND THE PAPER</span>
-            <h2>A work in progress.</h2>
-            <p>Skill and confidence don’t always move together.</p>
+            <h2>Meet your researcher.</h2>
+            <p>
+              She is building her career. Skill and confidence don’t always move
+              together.
+            </p>
           </div>
           <div className="researcher-meters">
             {(
@@ -842,9 +866,11 @@ export default function App() {
                   acceptance test.
                 </p>
                 <p>
-                  All journal weights and review times are invented game
-                  settings, not claims about real editorial policies. Names
-                  appear as plain text; no journal endorses this game.
+                  Weights and outcome probabilities remain game settings. Review
+                  stages use published guidance where available; delay
+                  distributions and later-round durations are simulation
+                  assumptions. Names appear as plain text; no journal endorses
+                  this game.
                 </p>
                 <p>
                   Progress stays in local browser storage. No account, AI API,

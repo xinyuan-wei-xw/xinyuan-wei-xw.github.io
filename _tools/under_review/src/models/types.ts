@@ -22,6 +22,7 @@ export interface ResearcherState {
   energy: number;
   resilience: number;
   careerMonth: number;
+  careerDay?: number;
   careerYear: number;
 }
 export type Outcome =
@@ -36,9 +37,10 @@ export interface Journal {
   color: string;
   preferenceWeights: Profile;
   selectivity: number;
-  reviewSpeed: { minMonths: number; maxMonths: number };
 }
 export interface Review {
+  totalDays?: number;
+  stages?: { label: string; days: number }[];
   journalId: string;
   outcome: Outcome;
   assessment: Profile;

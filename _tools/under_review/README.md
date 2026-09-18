@@ -89,9 +89,10 @@ section without assuming unspecified later requirements.
 ## Data, originality, and attribution
 
 All game scenarios, geometry, character, and sounds are original procedural work.
-Real journals appear only as plain text names. Their weights, selectivity, and
-speeds are **fictional game settings**, not official acceptance rates, policies,
-or measured journal preferences. No journal or publisher endorses the game.
+Real journals appear only as plain text names. Weights, selectivity, and outcome probabilities are **fictional game settings**.
+Review timing uses published process guidance where available; distributions and
+revision multipliers are modeling assumptions. See `src/data/reviewCycles.ts`
+and `REVIEW_SOURCES.md` for the evidence and remaining gaps. No journal or publisher endorses the game.
 
 Software dependencies are listed in `package.json` / `package-lock.json` with
 their upstream licenses. Icons: Lucide (ISC). No remote fonts, textures, models,

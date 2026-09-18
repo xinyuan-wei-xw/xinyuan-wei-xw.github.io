@@ -1,3 +1,4 @@
+import { reviewCycles, timingAssumptions } from "../data/reviewCycles";
 import {
   dimensions,
   labels,
@@ -152,13 +153,14 @@ export function assess(g: Game, p: Manuscript, j: Journal): Review {
           ? "Minor Revision"
           : "Major Revision";
   }
-  const days = outcome === "Desk Reject" ? 2 + Math.floor(random(g) * 26) : 0;
-  const months = days
-    ? 0
-    : Math.floor(
-        j.reviewSpeed.minMonths +
-          random(g) * (j.reviewSpeed.maxMonths - j.reviewSpeed.minMonths + 1),
-      ) + (random(g) < config.longReviewChance ? 4 : 0);
+  const timing = reviewTiming(
+    g,
+    j,
+    outcome,
+    continuing ? last?.outcome : undefined,
+  );
+  const days = outcome === "Desk Reject" ? timing.totalDays : 0;
+  const months = days ? 0 : Math.ceil(timing.totalDays / 30);
   const ranked = [...dimensions].sort((a, b) => assessment[a] - assessment[b]);
   const feedback: Review["feedback"] = [
     {
@@ -166,23 +168,22 @@ export function assess(g: Game, p: Manuscript, j: Journal): Review {
       dimension: ranked[4],
       text: `${labels[ranked[4]]} stands out positively in this assessment.`,
     },
-    ...ranked
-      .slice(0, outcome === "Accept" ? 1 : 2)
-      .map((d) => ({
-        kind: "Concern" as const,
-        dimension: d,
-        text: {
-          theory:
-            "Clarify the theoretical mechanism and what changes in our understanding.",
-          novelty: "Make the departure from existing work more explicit.",
-          rigor: "Strengthen the design checks and explain the assumptions.",
-          relevance:
-            "Connect the evidence more closely to the intended audience.",
-          writing: "Sharpen the positioning and simplify the main argument.",
-        }[d],
-      })),
+    ...ranked.slice(0, outcome === "Accept" ? 1 : 2).map((d) => ({
+      kind: "Concern" as const,
+      dimension: d,
+      text: {
+        theory:
+          "Clarify the theoretical mechanism and what changes in our understanding.",
+        novelty: "Make the departure from existing work more explicit.",
+        rigor: "Strengthen the design checks and explain the assumptions.",
+        relevance:
+          "Connect the evidence more closely to the intended audience.",
+        writing: "Sharpen the positioning and simplify the main argument.",
+      }[d],
+    })),
   ];
   return {
+    ...timing,
     journalId: j.id,
     outcome,
     assessment,
@@ -214,7 +215,7 @@ export function receive(g: Game, p: Manuscript, v: Review) {
   );
   r.patience = clamp(r.patience - v.months * 1.6 - (rejected ? 4 : 0));
   r.energy = clamp(r.energy - v.months * 0.8);
-  advance(r, Math.max(1, v.months));
+  advanceDays(r, v.totalDays ?? (v.days || v.months * 30));
   p.perception = mapProfile((d) =>
     clamp(
       p.perception[d] * 0.48 +
@@ -266,4 +267,78 @@ export function revise(g: Game, p: Manuscript) {
   advance(g.researcher, Math.max(1, Math.ceil(spent / 6)));
   g.effort = zero();
   g.message = "“Okay… now this is good.”";
+}
+
+export function advanceDays(r: ResearcherState, days: number) {
+  const elapsed = (r.careerDay ?? 1) - 1 + days;
+  advance(r, Math.floor(elapsed / 30));
+  r.careerDay = (elapsed % 30) + 1;
+}
+export function reviewTiming(
+  g: { seed: number },
+  j: Journal,
+  outcome: Review["outcome"],
+  previous?: Review["outcome"],
+) {
+  const triangular = (lo: number, mode: number, hi: number) => {
+    const u = random(g),
+      cut = (mode - lo) / (hi - lo);
+    return u < cut
+      ? lo + Math.sqrt(u * (hi - lo) * (mode - lo))
+      : hi - Math.sqrt((1 - u) * (hi - lo) * (hi - mode));
+  };
+  if (outcome === "Desk Reject") {
+    const totalDays = Math.round(triangular(2, 10, 28));
+    return {
+      totalDays,
+      stages: [{ label: "Editorial screening", days: totalDays }],
+    };
+  }
+  const base = reviewCycles[j.id as keyof typeof reviewCycles].baselineDays;
+  const factor =
+    previous === "Minor Revision"
+      ? timingAssumptions.minorRoundFactor
+      : previous === "Major Revision"
+        ? timingAssumptions.majorRoundFactor
+        : 1;
+  const total = Math.max(
+    21,
+    Math.round(base * factor * triangular(0.65, 0.95, 1.6)),
+  );
+  const stages = [
+    {
+      label: previous ? "Revision screening" : "Editorial screening",
+      days: Math.max(2, Math.round(total * 0.1)),
+    },
+    {
+      label: "Finding available reviewers",
+      days: Math.max(3, Math.round(total * 0.15)),
+    },
+    {
+      label:
+        previous === "Minor Revision"
+          ? "Checking the revision"
+          : "External review",
+      days: Math.round(total * 0.58),
+    },
+  ];
+  stages.push({
+    label: "Editorial decision",
+    days: total - stages.reduce((s, x) => s + x.days, 0),
+  });
+  if (random(g) < timingAssumptions.delayChance)
+    stages.splice(2, 0, {
+      label: "Reviewer availability delay",
+      days: Math.round(triangular(14, 35, 120)),
+    });
+  return { totalDays: stages.reduce((s, x) => s + x.days, 0), stages };
+}
+export function reviewStage(review: Review, progress: number) {
+  if (!review.stages || !review.totalDays) return "Journal review";
+  let day = Math.min(0.999, progress) * review.totalDays;
+  for (const stage of review.stages) {
+    day -= stage.days;
+    if (day < 0) return stage.label;
+  }
+  return "Editorial decision";
 }

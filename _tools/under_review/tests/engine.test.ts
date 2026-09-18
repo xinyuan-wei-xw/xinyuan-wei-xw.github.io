@@ -58,7 +58,7 @@ test("All outcomes reachable; assessments bounded and waits finite", () => {
     dimensions.forEach((d) =>
       assert.ok(v.assessment[d] >= 0 && v.assessment[d] <= 100),
     );
-    assert.ok(v.months <= 11);
+    assert.ok(v.months <= 12);
     assert.ok(v.days <= 27);
     assert.ok(v.feedback.length >= 2 && v.feedback.length <= 4);
   }
@@ -103,4 +103,31 @@ test("Many revision cycles remain bounded and career calendar rolls over", () =>
   advance(g.researcher, 24);
   assert.ok(g.researcher.careerMonth >= 1 && g.researcher.careerMonth <= 12);
   assert.equal(makePaper(g).id, 2);
+});
+
+test("Review stages sum to elapsed days; minor rounds shorter on average; screening keeps submonth time", async () => {
+  const { reviewTiming, advanceDays } =
+    await import("../src/simulation/engine");
+  let first = 0,
+    minor = 0;
+  for (let i = 1; i <= 1000; i++) {
+    const a = { seed: i * 883 },
+      b = { seed: i * 883 };
+    const t = reviewTiming(a, journals[1], "Major Revision"),
+      m = reviewTiming(b, journals[1], "Minor Revision", "Minor Revision");
+    assert.equal(
+      t.totalDays,
+      t.stages.reduce((s, x) => s + x.days, 0),
+    );
+    first += t.totalDays;
+    minor += m.totalDays;
+  }
+  assert.ok(minor < first);
+  const g = initial(3);
+  advanceDays(g.researcher, 11);
+  assert.equal(g.researcher.careerMonth, 1);
+  assert.equal(g.researcher.careerDay, 12);
+  advanceDays(g.researcher, 20);
+  assert.equal(g.researcher.careerMonth, 2);
+  assert.equal(g.researcher.careerDay, 2);
 });

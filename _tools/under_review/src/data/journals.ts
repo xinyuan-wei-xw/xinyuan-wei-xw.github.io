@@ -1,5 +1,5 @@
 import type { Journal } from "../models/types";
-// All weights, speeds, and selectivity values are fictional game design parameters.
+// Weights and selectivity are fictional. Review timing is configured in reviewCycles.ts.
 // Simulation placeholder. Not an official journal acceptance rate.
 // Plain text names only; no endorsement or journal-specific empirical claims.
 export const journals: Journal[] = [
@@ -15,7 +15,6 @@ export const journals: Journal[] = [
       writing: 0.13,
     },
     selectivity: 0.76,
-    reviewSpeed: { minMonths: 2, maxMonths: 7 },
   },
   {
     id: "isr",
@@ -29,7 +28,6 @@ export const journals: Journal[] = [
       writing: 0.13,
     },
     selectivity: 0.75,
-    reviewSpeed: { minMonths: 2, maxMonths: 7 },
   },
   {
     id: "jais",
@@ -43,7 +41,6 @@ export const journals: Journal[] = [
       writing: 0.24,
     },
     selectivity: 0.64,
-    reviewSpeed: { minMonths: 2, maxMonths: 6 },
   },
   {
     id: "jmis",
@@ -57,7 +54,6 @@ export const journals: Journal[] = [
       writing: 0.14,
     },
     selectivity: 0.66,
-    reviewSpeed: { minMonths: 2, maxMonths: 6 },
   },
   {
     id: "ejis",
@@ -71,7 +67,6 @@ export const journals: Journal[] = [
       writing: 0.24,
     },
     selectivity: 0.61,
-    reviewSpeed: { minMonths: 2, maxMonths: 6 },
   },
   {
     id: "isj",
@@ -85,7 +80,6 @@ export const journals: Journal[] = [
       writing: 0.2,
     },
     selectivity: 0.6,
-    reviewSpeed: { minMonths: 2, maxMonths: 6 },
   },
   {
     id: "jsis",
@@ -99,7 +93,6 @@ export const journals: Journal[] = [
       writing: 0.14,
     },
     selectivity: 0.63,
-    reviewSpeed: { minMonths: 2, maxMonths: 6 },
   },
   {
     id: "jit",
@@ -113,6 +106,5 @@ export const journals: Journal[] = [
       writing: 0.16,
     },
     selectivity: 0.62,
-    reviewSpeed: { minMonths: 2, maxMonths: 6 },
   },
 ];
