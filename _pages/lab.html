@@ -9,7 +9,9 @@ author_profile: true
 
 <div class="lab-grid">
   {% for project in site.data.lab.projects %}
-    {% include lab/card.html project=project %}
+    {% unless project.draft %}
+      {% include lab/card.html project=project %}
+    {% endunless %}
   {% else %}
     {% include lab/card.html %}
   {% endfor %}

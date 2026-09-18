@@ -45,6 +45,8 @@ jobs:
           import json
           root = Path('_site')
           assert (root / 'visitor-map/index.html').exists()
+          assert (root / 'lab/under-review/index.html').exists()
+          assert list((root / 'lab/under-review/assets').glob('*.js'))
           assert json.loads((root / 'assets/data/visitor-map.json').read_text())['status'] == 'ready'
           assert not (root / '_tools').exists()
           assert not list(root.rglob('gha-creds-*.json'))
