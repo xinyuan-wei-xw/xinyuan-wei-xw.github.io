@@ -64,7 +64,7 @@ mechanics and remain available if WebGL initialization fails.
 | `src/data/journals.ts`     | Eight journal labels with editable demo profiles                  |
 | `src/data/config.ts`       | Effort, timing, noise, probability, and title settings            |
 | `src/simulation/engine.ts` | Pure editorial, perception, revision, and career logic            |
-| `src/state/store.ts`       | Zustand state machine and browser persistence                     |
+| `src/state/store.ts`       | Zustand state machine and in-memory game state                     |
 | `src/scene/Manuscript.tsx` | Smoothly deforming five-region sphere mesh                        |
 | `src/scene/Character.tsx`  | Procedural female academic and contextual poses                   |
 | `src/scene/Office.tsx`     | Original office, shaped gates, review field, flight, camera       |
@@ -98,7 +98,7 @@ Software dependencies are listed in `package.json` / `package-lock.json` with
 their upstream licenses. Icons: Lucide (ISC). No remote fonts, textures, models,
 or audio files are needed at runtime.
 
-Progress lives in localStorage under `under-review-v1`. Resetting a career asks
-for confirmation. No gameplay data is sent to a server. Clear browser site data
-to remove the save. Review draws and in-flight state are saved to prevent
-refreshing from rerolling editorial decisions.
+Progress stays in memory for the current page only. Refreshing, closing the page,
+or opening another tab starts a fresh career. The legacy `under-review-v1` save
+is deleted on startup and never restored. Resetting the current career asks for
+confirmation. No gameplay data is sent to a server.

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { useGame } from "../src/state/store";
+import { useGame, createGameStore } from "../src/state/store";
 import { initial } from "../src/simulation/engine";
 const state = () => useGame.getState();
 const finish = () => {
@@ -78,4 +78,17 @@ test("R&R requires actual revision; accepted papers cannot be submitted again", 
   useGame.setState({ game: accepted });
   state().act("submit");
   assert.equal(state().game.phase, "decision");
+});
+
+test("Fresh page stores never inherit another player's career", () => {
+  const first = createGameStore();
+  first.getState().act("start");
+  first.getState().act("submit");
+  for (let i = 0; i < 300; i++) first.getState().tick(0.1);
+  assert.equal(first.getState().game.papers[0].history.length, 1);
+  const next = createGameStore();
+  assert.equal(next.getState().game.started, false);
+  assert.equal(next.getState().game.papers[0].history.length, 0);
+  assert.equal(next.getState().game.pending, null);
+  assert.equal(first.getState().game.papers[0].history.length, 1);
 });

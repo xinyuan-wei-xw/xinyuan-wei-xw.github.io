@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 import type { Game, Dimension, Phase } from "../models/types";
 import { dimensions } from "../models/types";
 import { config, zero } from "../data/config";
@@ -28,33 +27,13 @@ function enter(g: Game, phase: Phase, duration: number) {
   g.elapsed = 0;
   g.duration = duration;
 }
-export let saveFailed = false;
-const storage = {
-  getItem: (k: string) => {
-    try {
-      return localStorage.getItem(k);
-    } catch {
-      saveFailed = true;
-      return null;
-    }
-  },
-  setItem: (k: string, v: string) => {
-    try {
-      localStorage.setItem(k, v);
-    } catch {
-      saveFailed = true;
-    }
-  },
-  removeItem: (k: string) => {
-    try {
-      localStorage.removeItem(k);
-    } catch {
-      saveFailed = true;
-    }
-  },
-};
-export const useGame = create<Store>()(
-  persist(
+// Remove the legacy save without reading or restoring another player's career.
+try {
+  localStorage.removeItem("under-review-v1");
+} catch {
+  // Storage may be unavailable; gameplay needs no browser storage.
+}
+export const createGameStore = () => create<Store>()(
     (set, get) => ({
       game: initial(),
       reset: () => set({ game: initial() }),
@@ -244,22 +223,5 @@ export const useGame = create<Store>()(
         });
       },
     }),
-    {
-      name: "under-review-v1",
-      version: 1,
-      storage: createJSONStorage(() => storage),
-      partialize: (s) => ({ game: s.game }),
-      merge: (saved, current) => {
-        const g = (saved as { game?: Game })?.game;
-        if (
-          !g ||
-          !g.papers?.length ||
-          !g.papers.some((p) => p.id === g.activeId) ||
-          !journals.some((j) => j.id === g.selectedJournal)
-        )
-          return current;
-        return { ...current, game: g };
-      },
-    },
-  ),
 );
+export const useGame = createGameStore();

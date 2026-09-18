@@ -30,7 +30,7 @@ import {
 const Office = lazy(() =>
   import("../scene/Office").then((m) => ({ default: m.Office })),
 );
-import { useGame, saveFailed } from "../state/store";
+import { useGame } from "../state/store";
 import { dimensions, labels, type Profile } from "../models/types";
 import { journals } from "../data/journals";
 import { config } from "../data/config";
@@ -181,7 +181,7 @@ export default function App() {
         </a>
         <div className="header-right">
           <span className="saved">
-            {saveFailed ? "Saving unavailable" : "Saved on this device"}
+            Current session only
           </span>
           <button
             className="icon-button"
@@ -312,7 +312,7 @@ export default function App() {
                     Enter the office <ArrowUpRight size={19} />
                   </button>
                   <small>
-                    Single player · No aiming required · Progress autosaves
+                    Single player · No aiming required · Refresh starts a new game
                   </small>
                 </div>
               </div>
@@ -818,7 +818,7 @@ export default function App() {
             {reset ? (
               <>
                 <p>
-                  This replaces the career saved in this browser, including its
+                  This restarts the current game, including its
                   File Drawer.
                 </p>
                 <button
@@ -873,7 +873,7 @@ export default function App() {
                   this game.
                 </p>
                 <p>
-                  Progress stays in local browser storage. No account, AI API,
+                  Progress lasts only while this page is open. Refreshing starts a new game. No account, AI API,
                   or external asset service is required.
                 </p>
                 <button className="primary" onClick={() => setHelp(false)}>
