@@ -1,0 +1,11 @@
+# Source configuration only; no credentials or visitor-level data.
+# Authentication and the aggregate export are not connected yet.
+property_id: "554846099"
+status: awaiting_first_authenticated_export
+hostname: "xinyuan-wei-xw.github.io"
+metric: sessions
+geography: [country, region, city]
+minimum_city_sessions: 1
+exclude_page_paths:
+  - "/visitor-map/"
+  - "/visitor-map/index.html"

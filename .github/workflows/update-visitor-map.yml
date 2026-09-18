@@ -1,0 +1,65 @@
+name: Update visitor map and publish website
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  schedule:
+    - cron: '23 11 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      pages: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate for read-only Analytics access
+        id: google
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: website-visitor-map
+          workload_identity_provider: projects/991675045474/locations/global/workloadIdentityPools/website-map-github/providers/github
+          service_account: visitor-map-reader@website-visitor-map.iam.gserviceaccount.com
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/analytics.readonly
+          create_credentials_file: false
+      - name: Export country aggregates and map preview
+        env:
+          GA_ACCESS_TOKEN: ${{ steps.google.outputs.access_token }}
+        run: python3 _tools/visitor_map/export.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - name: Check public artifact
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          root = Path('_site')
+          assert (root / 'visitor-map/index.html').exists()
+          assert json.loads((root / 'assets/data/visitor-map.json').read_text())['status'] == 'ready'
+          assert not (root / '_tools').exists()
+          assert not list(root.rglob('gha-creds-*.json'))
+          PY
+      - uses: actions/upload-pages-artifact@v3
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

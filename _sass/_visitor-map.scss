@@ -1,0 +1,21 @@
+.visitor-summary { display: flex; flex-wrap: wrap; gap: 32px; margin: 24px 0; }
+.visitor-summary strong { display: block; color: #18345a; font-size: 1.6em; }
+.visitor-summary span, .visitor-note, #visitor-status { color: #586c86; font-size: 0.85em; }
+.visitor-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+.visitor-toolbar button { padding: 7px 14px; background: #fff; border: 1px solid #b8cce3; border-radius: 4px; color: #0039a6; cursor: pointer; }
+.visitor-toolbar button:disabled { opacity: 0.45; cursor: default; }
+.visitor-toolbar button:focus-visible { outline: 2px solid #0039a6; outline-offset: 2px; }
+.visitor-toolbar span { color: #586c86; font-size: 0.8em; }
+.visitor-map-viewport { overflow: auto; max-height: 650px; border: 1px solid #cbdced; border-radius: 6px; }
+#visitor-map-image { display: block; width: 100%; max-width: none; aspect-ratio: 900 / 506.25; }
+.visitor-table { width: 100%; }
+.visitor-table th { text-align: left; }
+.visitor-table td, .visitor-table thead th:last-child { text-align: right; }
+.visitor-table tbody th { font-weight: normal; }
+.visitor-filters { display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0; }
+.visitor-filters label { flex: 1 1 200px; font-size: 0.85em; color: #43536b; }
+.visitor-filters select { display: block; width: 100%; margin-top: 6px; padding: 8px; background: #fff; border: 1px solid #b8cce3; border-radius: 4px; }
+#visitor-map-canvas { aspect-ratio: 16 / 9; overflow: hidden; }
+#visitor-map-canvas > svg { display: block; width: 100%; height: 100%; background: #e8f2fc; touch-action: none; cursor: grab; }
+#visitor-map-canvas path:hover { stroke: #0039a6; }
+.visitor-place-link { border: 0; padding: 4px 0; background: transparent; color: #0039a6; cursor: pointer; text-align: left; text-decoration: underline; }

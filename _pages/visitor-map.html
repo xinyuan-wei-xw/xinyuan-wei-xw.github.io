@@ -1,0 +1,40 @@
+---
+layout: lab-standalone
+title: "Visitor Map"
+permalink: /visitor-map/
+analytics: false
+---
+
+<p>Explore the geographic reach of this website.</p>
+<div class="visitor-summary" aria-live="polite">
+  <div><strong id="visitor-total">—</strong><span>Website visits</span></div>
+  <div><strong id="visitor-countries">—</strong><span>Countries / regions</span></div>
+  <div><strong>30 days</strong><span>Reporting window</span></div>
+</div>
+<p id="visitor-status" role="status">Visitor data is not yet connected.</p>
+<div class="visitor-filters">
+  <label>Country / region<select id="map-country"><option value="">World</option></select></label>
+  <label>State / province<select id="map-region" disabled><option value="">All states / provinces</option></select></label>
+  <label>City<select id="map-city" disabled><option value="">All cities</option></select></label>
+</div>
+<div class="visitor-toolbar" aria-label="Map controls">
+  <button type="button" id="map-out" aria-label="Zoom out" disabled>−</button>
+  <button type="button" id="map-in" aria-label="Zoom in">+</button>
+  <button type="button" id="map-reset">Reset map</button>
+  <span>Select a country, state / province, or city</span>
+</div>
+<div id="visitor-map-canvas" class="visitor-map-viewport" tabindex="0" aria-label="Interactive visitor map. Use the selectors and zoom buttons to explore.">
+  <img src="{{ '/images/lab/visitor-map.svg' | relative_url }}" alt="World map of website visits by country">
+</div>
+<p id="visitor-location-note" class="visitor-note" aria-live="polite"></p>
+<p class="visitor-note">Visits are GA4 sessions with a page view on this website, excluding this map page. Counts update daily; today's data may still change. No raw IP addresses or individual visit histories are displayed.</p>
+<div id="visitor-table-wrap" hidden>
+  <h2 id="visitor-table-title">Visits by country / region</h2>
+  <table class="visitor-table">
+    <thead><tr><th scope="col" id="visitor-table-place">Country / region</th><th scope="col">Visits</th></tr></thead>
+    <tbody id="visitor-table-body"></tbody>
+  </table>
+</div>
+<p><small>Map boundaries: <a href="https://www.naturalearthdata.com/">Natural Earth</a>.</small></p>
+<noscript><p>Enable JavaScript to view totals and use map controls. The map image above remains available.</p></noscript>
+<script src="{{ '/assets/js/visitor-map.js' | relative_url }}" defer></script>

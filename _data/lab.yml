@@ -1,10 +1,11 @@
 # Replace placeholders with real projects. URL makes the entire card clickable.
 # figure: use an image path such as /images/lab/example.png
 projects:
-  - title: "Title"
-    description: "Introduction"
-    figure: ""
-    url: ""
+  - title: "Visitor Map"
+    description: "Explore the geographic reach of your website."
+    figure: "/images/lab/visitor-map.svg"
+    figure_alt: "World map of website visits by country"
+    url: "/visitor-map/"
   - title: "Title"
     description: "Introduction"
     figure: ""
