@@ -2,7 +2,7 @@
 # figure: use an image path such as /images/lab/example.png
 projects:
   - title: "Visitor Map"
-    description: "Explore the geographic reach of your website."
+    description: "Explore website visits by country, state or province, and city."
     figure: "/images/lab/visitor-map.svg"
     figure_alt: "World map of website visits by country"
     url: "/visitor-map/"
