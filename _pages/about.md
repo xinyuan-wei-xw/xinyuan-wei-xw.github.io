@@ -10,7 +10,7 @@ redirect_from:
 
 I am a Ph.D. candidate in Business Administration (Computer Information Systems) at the J. Mack Robinson College of Business, Georgia State University. I work with [Dr. Arun Rai](https://www.arunrai.net/) and [Dr. Yusen Xia](https://robinson.gsu.edu/profile/yusen-xia/), with affiliations at the Institute for Insight (IFI) and the Center for Digital Innovation (CDIN). I expect to complete my Ph.D. in **Spring 2027**.
 
-My research examines how generative and agentic AI changes engagement in online communities and decisions in digital markets. My broader work addresses AI governance, healthcare analytics, and operations and supply chain analytics. I combine empirical analysis, computational experiments, analytical modeling, and framework development and evaluation.
+I study how AI reshapes participation and choice in digital markets, and what these changes imply for AI governance.
 
 ## Research Interests
 
@@ -19,6 +19,13 @@ My research examines how generative and agentic AI changes engagement in online 
 - AI Governance
 - Healthcare Analytics
 - Operations and Supply Chain Analytics
+
+## Research Methods
+
+- **Empirical:** Observational analysis and matched historical comparisons.
+- **Computational:** Controlled experiments, machine learning, and model interpretability.
+- **Analytical:** Formal modeling, optimization, and dynamic programming.
+- **Design science:** Framework development and evaluation.
 
 ## Education
 
