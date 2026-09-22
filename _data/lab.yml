@@ -22,7 +22,7 @@ projects:
     figure_alt: "Eat Well meal planner interface"
     url: "/lab/eatwell/"
   - title: "[Game] Under Review"
-    description: "A 3D simulation designed to help early-career researchers become familiar with the academic publishing process—from journal selection and submission to rejection, revision, and resubmission."
+    description: "A simulation designed to help us get used to the process"
     figure: "/images/lab/under-review.svg"
     figure_alt: "A manuscript approaching a journal gate in UNDER REVIEW"
     url: "/lab/under-review/"
