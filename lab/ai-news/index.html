@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily AI News Briefing</title>
+<style>
+:root{--blue:#52adc8;--ink:#2b2f33;--soft:#5b636b;--line:#e3e6e8;--bg:#f7f8f8;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.75}
+.topbar{border-bottom:1px solid var(--line);background:var(--bg)}
+.topbar .wrap{max-width:1180px;margin:0 auto;padding:12px 22px}
+.topbar a{color:var(--blue);text-decoration:none;font-weight:600}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+main{max-width:780px;padding:34px 0 80px}
+.hero h1{font-size:2.2em;margin:.2em 0 .1em}
+.hero .sub{font-size:1.05em;color:var(--soft);margin:0 0 1.6em}
+ul.briefings{list-style:none;margin:0;padding:0}
+ul.briefings li{margin:0 0 12px}
+ul.briefings a{display:flex;align-items:baseline;gap:14px;padding:16px 20px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);background:#fff;transition:border-color .15s,box-shadow .15s}
+ul.briefings a:hover{border-color:var(--blue);box-shadow:0 2px 10px rgba(82,173,200,.15)}
+ul.briefings .d{font-weight:700;font-size:1.08em;white-space:nowrap}
+ul.briefings .t{color:var(--soft);font-size:.95em}
+ul.briefings .arrow{margin-left:auto;color:var(--blue);font-weight:700}
+.loading{color:var(--soft)}
+footer{border-top:1px solid var(--line);background:var(--bg);margin-top:40px}
+footer .wrap{padding:22px;font-size:13px;color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap"><a href="../">← Back to Lab</a></div></div>
+<div class="wrap">
+<main>
+<div class="hero"><h1>Daily AI News Briefing</h1>
+<p class="sub">One page per day, newest first.</p></div>
+<ul class="briefings" id="list"><li class="loading">Loading briefings…</li></ul>
+</main>
+</div>
+<footer><div class="wrap">Daily AI News Briefing · Reading notes.</div></footer>
+<script>
+var REPO = "xinyuan-wei-xw/xinyuan-wei-xw.github.io";
+var DIR = "lab/ai-news";
+var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+// Entries baked in at build time so the list works even if the API is unreachable.
+// New files named AI_news_YYYYMMDD.html uploaded to the folder appear automatically.
+var FALLBACK = [{file:"AI_news_20260922.html", date:"20260922"}];
+
+function fmt(d){ return MONTHS[parseInt(d.slice(4,6),10)-1] + " " + parseInt(d.slice(6,8),10) + ", " + d.slice(0,4); }
+
+function render(items){
+  var ul = document.getElementById("list");
+  ul.innerHTML = "";
+  items.forEach(function(it){
+    var li = document.createElement("li");
+    var a = document.createElement("a");
+    a.href = it.file;
+    var d = document.createElement("span"); d.className = "d"; d.textContent = fmt(it.date);
+    var t = document.createElement("span"); t.className = "t"; t.textContent = "AI News Briefing";
+    var ar = document.createElement("span"); ar.className = "arrow"; ar.textContent = "→";
+    a.appendChild(d); a.appendChild(t); a.appendChild(ar);
+    li.appendChild(a); ul.appendChild(li);
+  });
+}
+
+render(FALLBACK);
+fetch("https://api.github.com/repos/" + REPO + "/contents/" + DIR)
+  .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(function(arr){
+    var items = arr
+      .filter(function(e){ return e.type === "file" && /^AI_news_\d{8}\.html$/i.test(e.name); })
+      .map(function(e){ return {file: e.name, date: e.name.match(/(\d{8})/)[1]}; })
+      .sort(function(a,b){ return b.date < a.date ? -1 : 1; });
+    if(items.length) render(items);
+  })
+  .catch(function(){ /* keep the baked-in list */ });
+</script>
+</body>
+</html>
