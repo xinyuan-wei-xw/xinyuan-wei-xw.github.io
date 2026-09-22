@@ -11,6 +11,11 @@ projects:
     figure: "/lab/planner/thumbnail.png"
     figure_alt: "X Planner daily planner interface"
     url: "/lab/planner/"
+  - title: "[Life] Eat Well"
+    description: "Weekly meal planner: pick a cuisine, browse dishes, plan your week, and auto-generate a grocery list."
+    figure: "/lab/eatwell/thumbnail.png"
+    figure_alt: "Eat Well meal planner interface"
+    url: "/lab/eatwell/"
   - title: "Becoming a Researcher"
     draft: true
     description: "Learn through research, collaboration, and peer review in a single-player game about growing as a researcher."
