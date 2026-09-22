@@ -12,16 +12,17 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"He
 .topbar .wrap{max-width:1180px;margin:0 auto;padding:12px 22px}
 .topbar a{color:var(--blue);text-decoration:none;font-weight:600}
 .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
-main{max-width:780px;padding:34px 0 80px}
+main{padding:34px 0 80px}
 .hero h1{font-size:2.2em;margin:.2em 0 .1em}
 .hero .sub{font-size:1.05em;color:var(--soft);margin:0 0 1.6em}
-ul.briefings{list-style:none;margin:0;padding:0}
-ul.briefings li{margin:0 0 12px}
-ul.briefings a{display:flex;align-items:baseline;gap:14px;padding:16px 20px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);background:#fff;transition:border-color .15s,box-shadow .15s}
-ul.briefings a:hover{border-color:var(--blue);box-shadow:0 2px 10px rgba(82,173,200,.15)}
-ul.briefings .d{font-weight:700;font-size:1.08em;white-space:nowrap}
-ul.briefings .t{color:var(--soft);font-size:.95em}
-ul.briefings .arrow{margin-left:auto;color:var(--blue);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.card{display:block;border:1px solid var(--line);border-radius:12px;overflow:hidden;text-decoration:none;color:var(--ink);background:#fff;transition:transform .15s,box-shadow .15s,border-color .15s}
+.card:hover{border-color:var(--blue);box-shadow:0 4px 18px rgba(82,173,200,.18);transform:translateY(-3px)}
+.card img{width:100%;height:150px;object-fit:cover;display:block;background:var(--bg)}
+.card .body{padding:16px 18px 18px}
+.card .date{font-weight:700;font-size:1.1em;margin:0 0 4px}
+.card .tag{display:inline-block;font-size:.78em;color:var(--blue);border:1px solid var(--blue);border-radius:20px;padding:1px 10px;margin-bottom:8px}
+.card .desc{color:var(--soft);font-size:.92em;margin:0}
 .loading{color:var(--soft)}
 footer{border-top:1px solid var(--line);background:var(--bg);margin-top:40px}
 footer .wrap{padding:22px;font-size:13px;color:var(--soft)}
@@ -32,8 +33,8 @@ footer .wrap{padding:22px;font-size:13px;color:var(--soft)}
 <div class="wrap">
 <main>
 <div class="hero"><h1>Daily AI News Briefing</h1>
-<p class="sub">One page per day, newest first.</p></div>
-<ul class="briefings" id="list"><li class="loading">Loading briefings…</li></ul>
+<p class="sub">One card per day, newest first. Upload a new <code>AI_news_YYYYMMDD.html</code> to this folder and its card appears here automatically.</p></div>
+<div class="grid" id="grid"><p class="loading">Loading briefings…</p></div>
 </main>
 </div>
 <footer><div class="wrap">Daily AI News Briefing · Reading notes.</div></footer>
@@ -41,24 +42,26 @@ footer .wrap{padding:22px;font-size:13px;color:var(--soft)}
 var REPO = "xinyuan-wei-xw/xinyuan-wei-xw.github.io";
 var DIR = "lab/ai-news";
 var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-// Entries baked in at build time so the list works even if the API is unreachable.
-// New files named AI_news_YYYYMMDD.html uploaded to the folder appear automatically.
+// Entries baked in at build time so cards show even if the API is unreachable.
+// New files named AI_news_YYYYMMDD.html uploaded to the folder are picked up automatically.
 var FALLBACK = [{file:"AI_news_20260922.html", date:"20260922"}];
 
 function fmt(d){ return MONTHS[parseInt(d.slice(4,6),10)-1] + " " + parseInt(d.slice(6,8),10) + ", " + d.slice(0,4); }
 
 function render(items){
-  var ul = document.getElementById("list");
-  ul.innerHTML = "";
+  var grid = document.getElementById("grid");
+  grid.innerHTML = "";
   items.forEach(function(it){
-    var li = document.createElement("li");
     var a = document.createElement("a");
-    a.href = it.file;
-    var d = document.createElement("span"); d.className = "d"; d.textContent = fmt(it.date);
-    var t = document.createElement("span"); t.className = "t"; t.textContent = "AI News Briefing";
-    var ar = document.createElement("span"); ar.className = "arrow"; ar.textContent = "→";
-    a.appendChild(d); a.appendChild(t); a.appendChild(ar);
-    li.appendChild(a); ul.appendChild(li);
+    a.className = "card"; a.href = it.file;
+    var img = document.createElement("img"); img.src = "cover.jpg"; img.alt = "Daily AI News Briefing cover";
+    var body = document.createElement("div"); body.className = "body";
+    var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = "AI News Briefing";
+    var h = document.createElement("p"); h.className = "date"; h.textContent = fmt(it.date);
+    var d = document.createElement("p"); d.className = "desc"; d.textContent = "The day's AI news and research, distilled.";
+    body.appendChild(tag); body.appendChild(h); body.appendChild(d);
+    a.appendChild(img); a.appendChild(body);
+    grid.appendChild(a);
   });
 }
 
@@ -72,7 +75,7 @@ fetch("https://api.github.com/repos/" + REPO + "/contents/" + DIR)
       .sort(function(a,b){ return b.date < a.date ? -1 : 1; });
     if(items.length) render(items);
   })
-  .catch(function(){ /* keep the baked-in list */ });
+  .catch(function(){ /* keep the baked-in cards */ });
 </script>
 </body>
 </html>
