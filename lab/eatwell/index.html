@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>认真吃饭 Eat Well</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+:root{
+  --cream:#faf1dd; --paper:#ffffff; --ink:#232a33; --ink-soft:#5a6875; --faint:#9fb0c2;
+  --green:#4183c4; --green-deep:#2b5488; --green-soft:#e9f1fa;
+  --orange:#c08a2e; --orange-soft:#faf1dd;
+  --red:#c0503f; --line:#d9e4f0; --gold:#c99022;
+  --shadow:0 2px 10px rgba(43,84,136,.08);
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--cream);color:var(--ink);min-height:100vh}
+a{color:var(--green)}
+.topbar{background:var(--paper);border-bottom:1px solid var(--line);padding:10px 18px;
+  display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+.backlink{color:#0039a6;text-decoration:none;font-size:14px;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:9px;margin-right:auto}
+.brand .pot{font-size:26px}
+.brand h1{font-size:19px;font-weight:700}
+.brand h1 small{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);letter-spacing:.4px}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:none;background:none;padding:6px 13px;font-size:13px;cursor:pointer;color:var(--ink-soft);font-family:var(--sans)}
+.seg button.on{background:var(--green);color:#fff}
+.areabar{background:var(--paper);border-bottom:1px solid var(--line);padding:10px 18px;display:flex;gap:8px;overflow-x:auto}
+.areabar button{flex-shrink:0;border:1px solid var(--line);background:var(--cream);border-radius:999px;
+  padding:7px 15px;font-size:13.5px;cursor:pointer;color:var(--ink);font-family:var(--sans)}
+.areabar button.on{background:var(--green);border-color:var(--green);color:#fff}
+.tabs{background:var(--paper);border-bottom:1px solid var(--line);padding:0 18px;display:flex;gap:4px;position:sticky;top:57px;z-index:40}
+.tabs button{border:none;background:none;padding:13px 16px;font-size:14.5px;cursor:pointer;color:var(--ink-soft);
+  font-family:var(--sans);border-bottom:3px solid transparent}
+.tabs button.on{color:var(--green-deep);font-weight:700;border-bottom-color:var(--green)}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 18px 90px}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.toolbar input[type=search]{flex:1;min-width:200px;border:1px solid var(--line);border-radius:10px;padding:9px 13px;
+  font-size:14px;font-family:var(--sans);background:#fff}
+.toolbar input:focus{outline:none;border-color:var(--green)}
+.pill-note{font-size:12.5px;color:var(--ink-soft)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;transition:transform .12s}
+.card:hover{transform:translateY(-2px)}
+.card .thumb{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--orange-soft);cursor:pointer}
+.card .body{padding:11px 13px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card .nm{font-size:14.5px;font-weight:600;line-height:1.35;cursor:pointer}
+.card .nm:hover{color:var(--green-deep)}
+.card .row{display:flex;gap:8px;margin-top:auto}
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:7px 13px;font-size:13px;
+  cursor:pointer;color:var(--ink);font-family:var(--sans)}
+.btn:hover{border-color:var(--green);color:var(--green-deep)}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn.primary:hover{background:var(--green-deep)}
+.btn.sel{background:var(--green-soft);border-color:var(--green);color:var(--green-deep);font-weight:600}
+.badge{display:inline-block;font-size:11px;background:var(--orange-soft);color:#a86a1f;border-radius:999px;padding:2px 9px}
+.badge.lunch{background:#e4ecf9;color:#2f5da3}
+/* week */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+@media(max-width:900px){.week{grid-template-columns:repeat(2,1fr)}}
+.daycol{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:170px;box-shadow:var(--shadow)}
+.daycol h3{font-size:13.5px;margin-bottom:8px;color:var(--green-deep)}
+.daycol .slot{font-size:11px;color:var(--ink-soft);margin:7px 0 3px;text-transform:uppercase;letter-spacing:.5px}
+.dishchip{background:var(--cream);border:1px solid var(--line);border-radius:9px;padding:6px 8px;font-size:12.5px;margin-bottom:6px}
+.dishchip img{width:100%;border-radius:6px;margin-bottom:4px;aspect-ratio:16/9;object-fit:cover}
+.dishchip .x{float:right;border:none;background:none;color:var(--faint);cursor:pointer;font-size:14px}
+.empty{color:var(--faint);font-size:12.5px;font-style:italic}
+/* plan list */
+.planitem{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;
+  display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);flex-wrap:wrap}
+.planitem img{width:64px;height:64px;border-radius:10px;object-fit:cover}
+.planitem .nm{font-weight:600;font-size:14.5px}
+.planitem select,.planitem input[type=number]{border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px;font-family:var(--sans)}
+.planitem label{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:6px}
+.planitem .rm{margin-left:auto;border:none;background:none;color:var(--faint);font-size:18px;cursor:pointer}
+.servrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:14px}
+/* grocery */
+.gcat{margin-bottom:22px}
+.gcat h3{font-size:15px;color:var(--green-deep);margin-bottom:10px}
+.gitem{background:var(--paper);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;box-shadow:var(--shadow)}
+.gitem .head{padding:10px 14px;display:flex;gap:10px;align-items:center;cursor:pointer}
+.gitem .head .in{font-weight:600;font-size:14px}
+.gitem .head .amt{margin-left:auto;font-size:13px;color:var(--ink-soft)}
+.gitem .head .chev{color:var(--faint);font-size:12px}
+.gitem .kb{display:none;padding:0 14px 12px;font-size:13px;line-height:1.65;color:var(--ink)}
+.gitem.open .kb{display:block}
+.gitem.open .chev{transform:rotate(180deg);display:inline-block}
+.kb h4{font-size:12.5px;color:var(--green-deep);margin:8px 0 2px}
+.kb p{margin-bottom:4px}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(40,25,15,.45);display:none;z-index:100;overflow-y:auto;padding:26px 14px}
+.overlay.show{display:block}
+.modal{max-width:640px;margin:0 auto;background:var(--paper);border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.modal img.hero{width:100%;max-height:300px;object-fit:cover}
+.modal .mbody{padding:20px 22px}
+.modal h2{font-size:20px;margin-bottom:4px}
+.modal .close{float:right;border:none;background:var(--cream);border:1px solid var(--line);border-radius:50%;
+  width:32px;height:32px;font-size:16px;cursor:pointer;color:var(--ink-soft)}
+.ingtable{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+.ingtable td{border-bottom:1px dashed var(--line);padding:6px 4px}
+.ingtable td:last-child{text-align:right;color:var(--ink-soft)}
+.steps{margin:10px 0 0 20px;font-size:14px;line-height:1.75}
+.steps li{margin-bottom:8px}
+.yt{display:inline-block;margin-top:12px;font-size:13.5px}
+.loading{text-align:center;padding:40px;color:var(--ink-soft)}
+.err{background:#fdeeee;border:1px solid #f3c1b8;color:#a33d31;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:14px}
+/* auth bar (same account as X Planner) */
+.authbar{background:var(--paper);border-bottom:1px solid var(--line);padding:8px 18px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}
+#authBox{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}
+#authBox input{border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;
+  font-family:var(--sans);width:170px;background:#fff}
+#authBox input:focus{outline:none;border-color:var(--green)}
+#authBox button{border:1px solid var(--line);background:var(--paper);border-radius:8px;
+  padding:6px 12px;font-size:13px;cursor:pointer;color:var(--ink);font-family:var(--sans)}
+#authBox button:hover{border-color:var(--green);color:var(--green-deep)}
+#authBox a{font-size:12.5px;color:var(--green);text-decoration:none}
+#authBox a:hover{text-decoration:underline}
+#authErr{color:#a33d31;font-size:12.5px;flex-basis:100%}
+#authWho{color:var(--green-deep);font-weight:600}
+#syncStat{font-size:11.5px;color:var(--ink-soft)}
+.lockpanel{background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:34px 26px;text-align:center;box-shadow:var(--shadow);max-width:520px;margin:30px auto}
+.lockpanel .big{font-size:40px;margin-bottom:10px}
+.lockpanel h2{font-size:18px;margin-bottom:8px}
+.lockpanel p{font-size:14px;color:var(--ink-soft);line-height:1.7}
+footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="backlink" href="../">← Back to Lab</a>
+  <div class="brand"><span class="pot">🍲</span><h1><span data-t="appName">认真吃饭</span><small>Eat Well, Live Better</small></h1></div>
+  <div class="seg" id="langSeg">
+    <button data-lang="zh" class="on">中文</button><button data-lang="en">EN</button>
+  </div>
+</div>
+<div class="authbar">
+  <span id="authBox" style="display:none">
+    <span id="authForm">
+      <input type="email" id="authEmail" data-t-ph="emailPh" placeholder="Email" autocomplete="email">
+      <input type="password" id="authPass" data-t-ph="passPh" placeholder="Password" autocomplete="current-password">
+      <button id="authGo" data-t="unlock">Unlock</button>
+      <a href="#" id="authNew" data-t="newAccount">new account</a>
+      <a href="#" id="authCheck" data-t="checkKey" title="Test whether this page's Firebase API key is accepted by Google">check key</a>
+    </span>
+    <span id="authOut" style="display:none">
+      <span id="authWho"></span>
+      <button id="authSignOut" data-t="signOut">Sign out</button>
+    </span>
+    <span id="authErr"></span>
+  </span>
+  <span id="syncStat"></span>
+</div>
+<div class="areabar" id="areaBar"></div>
+<div class="tabs" id="tabs">
+  <button data-tab="browse" class="on" data-t="tabBrowse">选菜</button>
+  <button data-tab="plan" data-t="tabPlan">本周计划</button>
+  <button data-tab="grocery" data-t="tabGrocery">采购清单</button>
+</div>
+<div class="wrap">
+  <div id="errBox"></div>
+  <section id="tab-browse">
+    <div class="toolbar">
+      <input type="search" id="searchBox" data-t-ph="searchPh" placeholder="搜索菜名… Search dishes…">
+      <span class="pill-note" id="browseCount"></span>
+    </div>
+    <div class="grid" id="dishGrid"></div>
+  </section>
+  <section id="tab-plan" style="display:none">
+    <div class="servrow">
+      <span data-t="servings">每餐份数 Servings</span>
+      <input type="number" id="servings" min="1" max="8" value="2" style="width:64px;border:1px solid var(--line);border-radius:8px;padding:6px 8px">
+      <span class="pill-note" data-t="servingsNote">采购量会按份数折算</span>
+    </div>
+    <div id="planList"></div>
+    <h3 style="margin:22px 0 12px" data-t="weekView">本周一览</h3>
+    <div class="week" id="weekGrid"></div>
+  </section>
+  <section id="tab-grocery" style="display:none">
+    <div class="toolbar"><span class="pill-note" id="groceryNote"></span></div>
+    <div id="groceryList"></div>
+  </section>
+</div>
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<footer class="credit">Eat Well · recipes from TheMealDB (open database)</footer>
+<script>
+"use strict";
+/* ================= i18n ================= */
+const T={
+en:{appName:"Eat Well",tagline:"Eat Well, Live Better",tabBrowse:"Browse",tabPlan:"This Week",
+tabGrocery:"Grocery List",searchPh:"Search dishes…",servings:"Servings per meal",
+servingsNote:"Grocery amounts scale with servings",weekView:"Week at a glance",
+addDish:"+ Select",selected:"✓ Selected",recipe:"Recipe",loading:"Loading dishes…",
+loadFail:"Couldn't load dishes. Check your connection and retry.",retry:"Retry",
+dishesCount:n=>n+" dishes",planEmpty:"No dishes selected yet — pick some in Browse!",
+dinner:"Dinner",lunch:"Lunch",nextDayLunch:"Double · covers tomorrow's lunch",
+remove:"Remove",groceryEmpty:"Select dishes and your grocery list will appear here.",
+groceryNote:"Auto-summed from this week's dishes × servings",usedIn:n=>"for "+n+" dish"+(n>1?"es":""),
+buyTip:"Buying",storeTip:"Storage",cookTip:"Cooking notes",ingredients:"Ingredients",steps:"Steps",
+watchVideo:"▶ Watch video tutorial",amount:"Amount",
+kbFBuy:"Choose fresh-looking items; check dates on packaged goods.",
+kbFStore:"Refrigerate perishables promptly; keep dry goods cool and dark.",
+kbFCook:"Cook proteins to a safe internal temperature; wash produce well.",
+catProtein:"Protein",catVeg:"Vegetables",catStaple:"Staples & carbs",catSeason:"Seasonings",catOther:"Other",
+days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],lunchFrom:"← from yesterday's double",
+tapForTips:"Tap for buying / storage / cooking tips",unlock:"Unlock",newAccount:"new account",
+signOut:"Sign out",checkKey:"check key",emailPh:"Email",passPh:"Password",
+lockTitle:"Your week plan lives here",lockBody:"Sign in above with your X Planner account to pick dishes, plan the week, and get a grocery list. Your plan syncs across devices and stays private — just like the planner.",
+needLogin:"Please sign in above first — your dishes and grocery list sync to your account.",
+noDetail:"Couldn't load the recipe. Check your connection and try again.",
+serves:"Best for",syncSaving:"Saving…",syncDone:"Synced ✓",syncErr:"Sync error",syncing:"Syncing…",
+confirmNew:p=>"Create a new account for "+p+"?",typeCreds:"Type the email and password you want to use, then click “new account”.",
+keyChecking:"Checking the Firebase key…",
+keyOk:"Key accepted — Google recognizes this page's Firebase key. If sign-in still fails, the cause is something else (e.g. the Email/Password provider or the authorized domain).",
+keyBad:"Key rejected by Google. "},
+zh:{appName:"认真吃饭",tagline:"好好吃饭，好好生活",tabBrowse:"选菜",tabPlan:"本周计划",
+tabGrocery:"采购清单",searchPh:"搜索菜名…",servings:"每餐份数",
+servingsNote:"采购量会按份数折算",weekView:"本周一览",
+addDish:"+ 选这道",selected:"✓ 已选",recipe:"做法",loading:"正在加载菜谱…",
+loadFail:"菜谱加载失败，请检查网络后重试。",retry:"重试",
+dishesCount:n=>"共 "+n+" 道菜",planEmpty:"还没有选菜，去「选菜」挑几道吧！",
+dinner:"晚餐",lunch:"午餐",nextDayLunch:"做双份 · 含次日午餐",
+remove:"移除",groceryEmpty:"选菜后，这里会自动生成采购清单。",
+groceryNote:"根据本周所选菜品与份数自动汇总",usedIn:n=>"用于 "+n+" 道菜",
+buyTip:"选购",storeTip:"储存",cookTip:"烹饪注意",ingredients:"食材",steps:"做法步骤",
+watchVideo:"▶ 观看视频教程",amount:"数量",
+kbFBuy:"挑选新鲜、色泽正常的；包装食品注意保质期。",
+kbFStore:"易腐食材及时冷藏；干货放在阴凉干燥处。",
+kbFCook:"肉类务必彻底加热；果蔬洗净再烹饪。",
+catProtein:"蛋白质",catVeg:"蔬菜",catStaple:"主食",catSeason:"调料",catOther:"其他",
+days:["周一","周二","周三","周四","周五","周六","周日"],lunchFrom:"← 来自昨晚的双份",
+tapForTips:"点开展开选购 / 储存 / 烹饪小贴士",unlock:"解锁",newAccount:"新账号",
+signOut:"退出登录",checkKey:"检查密钥",emailPh:"邮箱",passPh:"密码",
+lockTitle:"你的本周计划在这里",lockBody:"用 X Planner 的账号在上方登录，就可以选菜、安排一周、自动生成采购清单。计划会同步到你的所有设备，且仅你可见——和 planner 一样。",
+needLogin:"请先在上方登录——你的选菜和采购清单会同步到你的账号。",
+noDetail:"菜谱加载失败，请检查网络后重试。",
+serves:"份量",syncSaving:"保存中…",syncDone:"已同步 ✓",syncErr:"同步出错",syncing:"同步中…",
+confirmNew:p=>"为 "+p+" 创建新账号？",typeCreds:"输入想用的邮箱和密码，再点“新账号”。",
+keyChecking:"正在检查 Firebase 密钥…",
+keyOk:"密钥有效——Google 识别本页的 Firebase 密钥。若登录仍失败，原因是别的（比如 Email/Password 未启用或域名未授权）。",
+keyBad:"密钥被 Google 拒绝。"}};
+/* ================= state ================= */
+const API="https://www.themealdb.com/api/json/v1/1";
+const S={lang:"zh",area:"Chinese",
+ areas:["Chinese","American","Korean","Japanese","Thai","Italian","Mexican","Indian","French","Spanish","Vietnamese","British"],
+ meals:[],sel:{},detail:{},servings:2,tab:"browse",q:""};
+const LS="eatwell-prefs";
+try{const p=JSON.parse(localStorage.getItem(LS)||"{}");
+ if(p.lang)S.lang=p.lang;if(p.area)S.area=p.area;if(p.servings)S.servings=p.servings;}catch(e){}
+function savePrefs(){try{localStorage.setItem(LS,JSON.stringify({lang:S.lang,area:S.area,servings:S.servings}));}catch(e){}}
+const $=id=>document.getElementById(id);
+const t=k=>T[S.lang][k];
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function errBox(msg){const b=$("errBox");b.innerHTML=msg?'<div class="err">'+esc(msg)+'</div>':"";}
+/* ================= firebase (shared with X Planner) ================= */
+const firebaseConfig={apiKey:"AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw",
+ authDomain:"x-planner-99dd3.firebaseapp.com",projectId:"x-planner-99dd3",
+ appId:"1:146714833806:web:d1c4516985514f7c35eadf"};
+let fauth=null,fdb=null,userDoc=null,fbUser=null,unsub=null,pushTimer=null,applyingRemote=false,wipeOnSignOut=false;
+function firebaseReady(){return typeof firebase!=="undefined"&&!firebaseConfig.apiKey.startsWith("PASTE");}
+function setSync(m){const el=$("syncStat");if(el)el.textContent=m||"";}
+function locked(){return !fbUser;}
+function applyRemote(d){applyingRemote=true;
+ S.sel=(d&&d.sel)||{};S.servings=(d&&d.servings)||2;if(d&&d.area)S.area=d.area;
+ savePrefs();renderAll();applyingRemote=false;}
+function pushRemote(now){if(!userDoc||applyingRemote)return;
+ clearTimeout(pushTimer);
+ const go=()=>{setSync(t("syncSaving"));
+  userDoc.set({sel:S.sel,servings:S.servings,area:S.area,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true})
+   .then(()=>setSync(t("syncDone"))).catch(e=>{setSync(t("syncErr"));console.error(e);});};
+ if(now)go();else pushTimer=setTimeout(go,900);}
+function listen(){if(!userDoc)return;if(unsub)unsub();
+ unsub=userDoc.onSnapshot(snap=>{if(!snap.exists)return;
+  const d=snap.data();if(!d||d._n===undefined&&false)return;
+  if(applyingRemote)return;applyRemote(d);});}
+function friendlyAuthError(e){const c=(e&&e.code)||"";
+ if(c==="auth/user-not-found"||c==="auth/wrong-password"||c==="auth/invalid-credential")
+  return S.lang==="zh"?"邮箱或密码不对。检查后重新点“解锁”，如果是新邮箱，先点“新账号”注册。":
+   "Wrong email or password. Double-check both and click Unlock again — or click “new account” if this email hasn't been registered yet.";
+ if(c==="auth/invalid-email")return S.lang==="zh"?"邮箱格式不对，应为 name@example.com 的形式。":"That email doesn't look right — it should look like name@example.com.";
+ if(c==="auth/weak-password")return S.lang==="zh"?"密码太弱：Google 要求至少 6 个字符，换一个更长的密码再试。":"Password too weak: Google requires at least 6 characters — pick a longer one and try again.";
+ if(c==="auth/email-already-in-use")return S.lang==="zh"?"这个邮箱已经注册过了，直接点“解锁”登录即可。":"This email is already registered — just click Unlock to sign in.";
+ if(c==="auth/api-key-not-valid")return t("keyBad")+(S.lang==="zh"?"请检查 Google Cloud Console 中该密钥的应用限制/ API 限制，或新建一个密钥。":"Check the key's Application/API restrictions in Google Cloud Console, or create a fresh key.");
+ if(c==="auth/network-request-failed")return S.lang==="zh"?"网络请求失败，请检查网络连接后重试。":"Network request failed — check your connection and try again.";
+ if(c==="auth/too-many-requests")return S.lang==="zh"?"尝试太频繁，稍后再试。":"Too many attempts — try again in a bit.";
+ return (e&&e.message)||String(e);}
+function initFirebase(){const box=$("authBox");if(!firebaseReady()){box.style.display="none";return;}
+ try{firebase.initializeApp(firebaseConfig);fauth=firebase.auth();fdb=firebase.firestore();box.style.display="";
+  const emailEl=$("authEmail"),passEl=$("authPass");
+  const err=m=>{$("authErr").textContent=m||"";};
+  const showForm=s=>{$("authForm").style.display=s?"":"none";$("authOut").style.display=s?"none":"";};
+  const creds=()=>({em:emailEl.value.trim(),pw:passEl.value});
+  $("authGo").onclick=()=>{err("");const{em,pw}=creds();
+   if(!em||!pw){err(S.lang==="zh"?"输入邮箱和密码，再点“解锁”。":"Type your email and password, then click Unlock.");return;}
+   fauth.signInWithEmailAndPassword(em,pw).catch(e=>err((S.lang==="zh"?"登录失败：":"Sign-in failed: ")+friendlyAuthError(e)));};
+  $("authNew").onclick=e=>{e.preventDefault();err("");const{em,pw}=creds();
+   if(!em||!pw){err(t("typeCreds"));return;}
+   if(!confirm(t("confirmNew")(em)))return;
+   fauth.createUserWithEmailAndPassword(em,pw).catch(e=>err((S.lang==="zh"?"注册失败：":"Couldn't create account: ")+friendlyAuthError(e)));};
+  $("authSignOut").onclick=()=>{wipeOnSignOut=true;fauth.signOut();};
+  $("authCheck").onclick=e=>{e.preventDefault();err(t("keyChecking"));
+   fauth.fetchSignInMethodsForEmail("key-check@example.invalid").then(()=>err(t("keyOk")))
+    .catch(e2=>{const c2=(e2&&e2.code)||"";
+     err(c2==="auth/api-key-not-valid"?t("keyBad")+friendlyAuthError(e2):t("keyOk")+" (check: "+(c2||"ok")+")");});};
+  passEl.addEventListener("keydown",e=>{if(e.key==="Enter")$("authGo").click();});
+  fauth.onAuthStateChanged(u=>{fbUser=u;err("");
+   if(u){$("authWho").textContent=u.email||"";showForm(false);setSync(t("syncing"));
+    userDoc=fdb.collection("eatwell").doc(u.uid);
+    userDoc.get().then(snap=>{
+     if(snap.exists&&snap.data()&&snap.data().sel)applyRemote(snap.data());
+     else pushRemote(true);
+     listen();setSync(t("syncDone"));
+    }).catch(e=>{setSync(t("syncErr"));console.error(e);});
+   }else{showForm(true);if(unsub){unsub();unsub=null;}userDoc=null;setSync("");
+    if(wipeOnSignOut){wipeOnSignOut=false;S.sel={};S.servings=2;savePrefs();}}
+   renderAll();});
+ }catch(e){console.error(e);box.style.display="none";}}
+function needLogin(){if(fbUser)return true;
+ const ae=$("authErr");if(ae){ae.textContent=t("needLogin");ae.scrollIntoView({block:"nearest",behavior:"smooth"});}
+ return false;}
+/* ================= TheMealDB ================= */
+async function apiFilter(area){const r=await fetch(API+"/filter.php?a="+encodeURIComponent(area));
+ if(!r.ok)throw new Error("http "+r.status);const j=await r.json();return j.meals||[];}
+async function apiLookup(id){if(S.detail[id])return S.detail[id];
+ const r=await fetch(API+"/lookup.php?i="+encodeURIComponent(id));
+ if(!r.ok)throw new Error("http "+r.status);
+ const j=await r.json();const m=(j.meals||[])[0];if(m)S.detail[id]=m;return m;}
+function mealIngredients(m){const out=[];
+ for(let i=1;i<=20;i++){const ing=(m["strIngredient"+i]||"").trim(),ms=(m["strMeasure"+i]||"").trim();
+  if(ing)out.push({ing,ms});}return out;}
+/* ================= browse ================= */
+function renderAreas(){$("areaBar").innerHTML=S.areas.map(a=>
+ '<button class="'+(a===S.area?"on":"")+'" data-a="'+a+'">'+a+"</button>").join("");
+ $("areaBar").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.area=b.dataset.a;savePrefs();renderAreas();loadArea();});}
+function filteredMeals(){const q=S.q.trim().toLowerCase();if(!q)return S.meals;
+ return S.meals.filter(m=>(m.strMeal||"").toLowerCase().includes(q));}
+function renderGrid(){const list=filteredMeals(),g=$("dishGrid");
+ $("browseCount").textContent=t("dishesCount")(list.length);
+ if(!list.length){g.innerHTML='<div class="empty" style="grid-column:1/-1;padding:30px;text-align:center">'+esc(t("planEmpty"))+"</div>";return;}
+ g.innerHTML=list.map(m=>{const sel=S.sel[m.idMeal];
+  return '<div class="card"><img class="thumb" loading="lazy" src="'+esc(m.strMealThumb)+'" alt="" onclick="openRecipe(\''+m.idMeal+'\')">'
+  +'<div class="body"><div class="nm" onclick="openRecipe(\''+m.idMeal+'\')">'+esc(m.strMeal)+'</div>'
+  +'<div class="row"><button class="btn '+(sel?"sel":"primary")+'" onclick="toggleSelect(\''+m.idMeal+'\')">'
+  +esc(sel?t("selected"):t("addDish"))+'</button><button class="btn" onclick="openRecipe(\''+m.idMeal+'\')">'+esc(t("recipe"))+"</button></div></div></div>";}).join("");}
+async function loadArea(){const g=$("dishGrid");
+ g.innerHTML='<div class="loading" style="grid-column:1/-1">'+esc(t("loading"))+"</div>";errBox("");
+ try{S.meals=await apiFilter(S.area);renderGrid();}
+ catch(e){errBox(t("loadFail"));g.innerHTML="";}}
+function toggleSelect(id){if(!needLogin())return;
+ if(S.sel[id])delete S.sel[id];
+ else S.sel[id]={day:(new Date().getDay()+6)%7,dbl:false};
+ pushRemote();renderGrid();renderPlan();}
+async function openRecipe(id){const ov=$("overlay"),mo=$("modal");
+ ov.classList.add("show");
+ mo.innerHTML='<div class="mbody"><button class="close" onclick="closeRecipe()">✕</button><div class="loading">'+esc(t("loading"))+"</div></div>";
+ try{const m=await apiLookup(id);if(!m)throw new Error("none");
+  const ings=mealIngredients(m);
+  let steps=(m.strInstructions||"").split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  if(steps.length<=1)steps=(m.strInstructions||"").split(/(?<=\.)\s+/).map(s=>s.trim()).filter(s=>s.length>3);
+  mo.innerHTML='<img class="hero" src="'+esc(m.strMealThumb)+'"><div class="mbody">'
+   +'<button class="close" onclick="closeRecipe()">✕</button>'
+   +"<h2>"+esc(m.strMeal)+"</h2>"
+   +'<div class="pill-note">'+esc([m.strArea,m.strCategory].filter(Boolean).join(" · "))+"</div>"
+   +'<h4 style="margin:14px 0 4px;color:var(--green-deep)">'+esc(t("ingredients"))+"</h4>"
+   +'<table class="ingtable">'+ings.map(o=>"<tr><td>"+esc(o.ing)+"</td><td>"+esc(o.ms||"—")+"</td></tr>").join("")+"</table>"
+   +'<h4 style="margin:12px 0 4px;color:var(--green-deep)">'+esc(t("steps"))+"</h4>"
+   +'<ol class="steps">'+steps.map(s=>"<li>"+esc(s)+"</li>").join("")+"</ol>"
+   +(m.strYoutube?'<a class="yt" href="'+esc(m.strYoutube)+'" target="_blank" rel="noopener">'+esc(t("watchVideo"))+"</a>":"")
+   +"</div>";
+ }catch(e){mo.innerHTML='<div class="mbody"><button class="close" onclick="closeRecipe()">✕</button><div class="err">'+esc(t("noDetail"))+"</div></div>";}}
+function closeRecipe(){$("overlay").classList.remove("show");}
+/* ================= plan ================= */
+function lockPanel(){return '<div class="lockpanel"><div class="big">🔒</div><h2>'+esc(t("lockTitle"))+"</h2><p>"+esc(t("lockBody"))+"</p></div>";}
+function selEntries(){return Object.keys(S.sel).map(id=>({id,day:S.sel[id].day,dbl:!!S.sel[id].dbl}));}
+function dishName(id){const d=S.detail[id];if(d)return d.strMeal;
+ const m=S.meals.find(x=>x.idMeal===id);return m?m.strMeal:id;}
+function dishThumb(id){const d=S.detail[id];if(d&&d.strMealThumb)return d.strMealThumb;
+ const m=S.meals.find(x=>x.idMeal===id);return m?m.strMealThumb:"";}
+function renderPlan(){const box=$("planList"),sv=$("servings");
+ sv.value=S.servings;
+ if(locked()){box.innerHTML=lockPanel();renderWeek();return;}
+ const es=selEntries();
+ if(!es.length){box.innerHTML='<div class="empty" style="padding:24px;text-align:center">'+esc(t("planEmpty"))+"</div>";renderWeek();return;}
+ box.innerHTML=es.map(e=>'<div class="planitem"><img src="'+esc(dishThumb(e.id))+'" alt="">'
+  +'<div><div class="nm">'+esc(dishName(e.id))+'</div>'
+  +'<label><input type="checkbox" '+(e.dbl?"checked":"")+' onchange="setDbl(\''+e.id+'\',this.checked)"> '+esc(t("nextDayLunch"))+"</label></div>"
+  +'<select onchange="setDay(\''+e.id+'\',this.value)">'+t("days").map((d,i)=>'<option value="'+i+'"'+(i===e.day?" selected":"")+">"+esc(d)+"</option>").join("")+"</select>"
+  +'<button class="rm" title="'+esc(t("remove"))+'" onclick="rmDish(\''+e.id+'\')">✕</button></div>').join("");
+ renderWeek();}
+function setDay(id,day){S.sel[id].day=+day;pushRemote();renderPlan();}
+function setDbl(id,v){S.sel[id].dbl=v;pushRemote();renderPlan();renderGrocery();}
+function rmDish(id){delete S.sel[id];pushRemote();renderGrid();renderPlan();renderGrocery();}
+function renderWeek(){const wg=$("weekGrid");if(!wg)return;
+ if(locked()){wg.innerHTML="";return;}
+ const es=selEntries(),days=t("days");
+ wg.innerHTML=days.map((d,i)=>{
+  const dinners=es.filter(e=>e.day===i),lunches=es.filter(e=>e.day===(i+6)%7&&e.dbl);
+  const chip=e=>'<div class="dishchip">'+(dishThumb(e.id)?'<img src="'+esc(dishThumb(e.id))+'" alt="">':"")+"<button class='x' onclick=\"rmDish('"+e.id+"')\">✕</button>"+esc(dishName(e.id))+"</div>";
+  return '<div class="daycol"><h3>'+esc(d)+"</h3>"
+   +'<div class="slot">'+esc(t("dinner"))+"</div>"
+   +(dinners.length?dinners.map(chip).join(""):'<div class="empty">—</div>')
+   +'<div class="slot">'+esc(t("lunch"))+"</div>"
+   +(lunches.length?lunches.map(e=>'<div class="dishchip"><span class="badge lunch">'+esc(t("lunchFrom"))+"</span><br>"+esc(dishName(e.id))+"</div>").join(""):'<div class="empty">—</div>')
+   +"</div>";}).join("");}
+/* ================= ingredient knowledge base ================= */
+const KB={
+"chicken breast":{cat:"catProtein",zh:"鸡胸肉",
+ buy:{en:"Pick plump, pink pieces with no grey spots or sour smell.",zh:"选肉质饱满、粉红、无灰斑、无酸味的。"},
+ store:{en:"Fridge 1–2 days; freeze up to 3 months. Thaw in the fridge, never on the counter.",zh:"冷藏1–2天，冷冻可存3个月；冷藏室解冻，不要室温解冻。"},
+ cook:{en:"Cook to 74°C/165°F inside; rest a few minutes so it stays juicy.",zh:"内部温度达到74°C；静置几分钟再切，更多汁。"}},
+"chicken":{cat:"catProtein",zh:"鸡肉",
+ buy:{en:"Skin should be pale and unbroken; avoid any slimy film or off smell.",zh:"鸡皮完整、颜色自然；发黏或有异味不要买。"},
+ store:{en:"Fridge 1–2 days; freeze up to 9 months in sealed bags.",zh:"冷藏1–2天；密封冷冻可存9个月。"},
+ cook:{en:"Cook to 74°C/165°F; wash hands and boards after handling raw chicken.",zh:"彻底加热至74°C；处理生鸡肉后洗手、洗菜板。"}},
+"beef":{cat:"catProtein",zh:"牛肉",
+ buy:{en:"Bright red with white marbling; meat should spring back when pressed.",zh:"选鲜红带雪花纹、按压能回弹的。"},
+ store:{en:"Fridge 3–4 days; freeze up to 6 months. Keep raw meat on the bottom shelf.",zh:"冷藏3–4天，冷冻6个月；生肉放冰箱最下层。"},
+ cook:{en:"Sear hot and fast; ground beef must be fully cooked through.",zh:"大火快煎锁住肉汁；绞肉/肉馅必须完全做熟。"}},
+"pork":{cat:"catProtein",zh:"猪肉",
+ buy:{en:"Pink-red, firm, with white fat — avoid pale watery or dark meat.",zh:"粉红紧实、脂肪洁白；发白发水或发暗不要买。"},
+ store:{en:"Fridge 3–4 days; freeze up to 6 months.",zh:"冷藏3–4天，冷冻6个月。"},
+ cook:{en:"Cook to 71°C/160°F; pork must never be served rare.",zh:"加热至71°C；猪肉不能吃生的，务必全熟。"}},
+"egg":{cat:"catProtein",zh:"鸡蛋",
+ buy:{en:"Check shells aren't cracked; check the date on the box.",zh:"蛋壳无裂纹；注意包装上的日期。"},
+ store:{en:"Keep in the fridge in the carton, not the door; use within 3 weeks.",zh:"连盒冷藏，不要放冰箱门上；3周内吃完。"},
+ cook:{en:"Cook whites and yolks firm unless using pasteurized eggs.",zh:"除巴氏杀菌蛋外，蛋清蛋黄都要做熟。"}},
+"eggs":{cat:"catProtein",zh:"鸡蛋",
+ buy:{en:"Check shells aren't cracked; check the date on the box.",zh:"蛋壳无裂纹；注意包装上的日期。"},
+ store:{en:"Keep in the fridge in the carton, not the door; use within 3 weeks.",zh:"连盒冷藏，不要放冰箱门上；3周内吃完。"},
+ cook:{en:"Cook whites and yolks firm unless using pasteurized eggs.",zh:"除巴氏杀菌蛋外，蛋清蛋黄都要做熟。"}},
+"tofu":{cat:"catProtein",zh:"豆腐",
+ buy:{en:"Check the date; package should be intact with clear liquid.",zh:"看生产日期；包装完好，盒内液体清澈。"},
+ store:{en:"Unopened in fridge to the date; opened tofu in fresh water, changed daily, 3 days max.",zh:"未开封冷藏至保质期；开封后泡清水每天换水，最多3天。"},
+ cook:{en:"Press out water first for crispier results; add late so it doesn't break.",zh:"先压出水分再煎更香；后放、下手轻，不易碎。"}},
+"fish":{cat:"catProtein",zh:"鱼",
+ buy:{en:"Clear eyes, red gills, firm flesh; should smell like the sea, not fishy.",zh:"眼睛清亮、鳃鲜红、肉有弹性；只有海水味、无腥臭。"},
+ store:{en:"Cook the same day if possible; fridge max 1–2 days on ice.",zh:"尽量当天吃；冷藏最多1–2天，垫冰块更好。"},
+ cook:{en:"Fish cooks fast — it flakes easily when done; don't overcook.",zh:"鱼熟得快，能轻松拨散即熟；别煮老了。"}},
+"shrimp":{cat:"catProtein",zh:"虾",
+ buy:{en:"Firm, translucent shells; avoid black spots on the shell.",zh:"壳硬半透明；壳上有黑斑的不新鲜。"},
+ store:{en:"Fridge 1 day; freeze in water in a sealed bag up to 3 months.",zh:"冷藏1天；加水密封冷冻可存3个月。"},
+ cook:{en:"Pink and curled = done; grey and straight = undercooked.",zh:"变红卷曲即熟；还发灰发直就是没熟。"}},
+"rice":{cat:"catStaple",zh:"大米",
+ buy:{en:"Grains should be whole and uniform; store-brand long grain is fine for daily use.",zh:"米粒完整均匀；日常吃普通长粒米即可。"},
+ store:{en:"Airtight container, cool and dark; keeps for months.",zh:"密封罐阴凉保存，可存数月。"},
+ cook:{en:"Rinse until water runs mostly clear; 1 rice : 1.2 water for fluffy grains.",zh:"淘洗至水基本清澈；米水比约1:1.2，口感松软。"}},
+"noodles":{cat:"catStaple",zh:"面条",
+ buy:{en:"Check for breakage in the pack; egg noodles add richness.",zh:"包装内断条少的更新鲜；鸡蛋面更香。"},
+ store:{en:"Dry noodles keep months in a sealed bag; fresh noodles go in the fridge.",zh:"干面密封存数月；鲜面条要冷藏。"},
+ cook:{en:"Boil in plenty of water; rinse cold for stir-fry to stop sticking.",zh:"宽水煮面；炒面先过冷水防粘。"}},
+"flour":{cat:"catStaple",zh:"面粉",
+ buy:{en:"All-purpose covers most home cooking; check for pantry moths in bulk bins.",zh:"家用选中筋面粉最通用；散装注意有无虫。"},
+ store:{en:"Airtight, cool and dark; fridge extends life in summer.",zh:"密封阴凉保存；夏天可冷藏防虫。"},
+ cook:{en:"Spoon into the cup when measuring — scooping packs it down.",zh:"量取时用勺舀入量杯，直接挖会压实偏多。"}},
+"bread":{cat:"catStaple",zh:"面包",
+ buy:{en:"Soft with no hard edges; check the date.",zh:"柔软无硬边；看保质期。"},
+ store:{en:"Room temp 2–3 days; fridge makes it stale faster — freeze for longer.",zh:"室温2–3天；冷藏反而易老化，久存请冷冻。"},
+ cook:{en:"Revive stale bread: sprinkle water, warm 5 min in the oven.",zh:"面包发干：喷点水，烤箱加热5分钟回软。"}},
+"potato":{cat:"catVeg",zh:"土豆",
+ buy:{en:"Firm, smooth skin; avoid green patches and sprouts.",zh:"硬实表皮光滑；发绿、发芽的不要。"},
+ store:{en:"Cool, dark, airy — NOT the fridge (turns sweet). Keep away from onions.",zh:"阴凉通风避光，别放冰箱（会变甜），远离洋葱。"},
+ cook:{en:"Cut out green parts and sprouts — they contain solanine.",zh:"绿色部分和芽要挖掉，含龙葵素。"}},
+"potatoes":{cat:"catVeg",zh:"土豆",
+ buy:{en:"Firm, smooth skin; avoid green patches and sprouts.",zh:"硬实表皮光滑；发绿、发芽的不要。"},
+ store:{en:"Cool, dark, airy — NOT the fridge (turns sweet). Keep away from onions.",zh:"阴凉通风避光，别放冰箱（会变甜），远离洋葱。"},
+ cook:{en:"Cut out green parts and sprouts — they contain solanine.",zh:"绿色部分和芽要挖掉，含龙葵素。"}},
+"tomato":{cat:"catVeg",zh:"番茄",
+ buy:{en:"Heavy for size, fragrant at the stem; avoid mushy spots.",zh:"掂着压手、蒂部有香味；软烂斑不要。"},
+ store:{en:"Room temp until ripe; fridge dulls flavor — only chill when fully ripe.",zh:"未熟放室温；冷藏会让香味变淡，全熟才冷藏。"},
+ cook:{en:"A pinch of sugar balances acidity; peel easily by scoring and blanching.",zh:"一小撮糖中和酸味；划十字烫一下好去皮。"}},
+"tomatoes":{cat:"catVeg",zh:"番茄",
+ buy:{en:"Heavy for size, fragrant at the stem; avoid mushy spots.",zh:"掂着压手、蒂部有香味；软烂斑不要。"},
+ store:{en:"Room temp until ripe; fridge dulls flavor — only chill when fully ripe.",zh:"未熟放室温；冷藏会让香味变淡，全熟才冷藏。"},
+ cook:{en:"A pinch of sugar balances acidity; peel easily by scoring and blanching.",zh:"一小撮糖中和酸味；划十字烫一下好去皮。"}},
+"onion":{cat:"catVeg",zh:"洋葱",
+ buy:{en:"Firm, dry papery skin; no soft spots or sprouting.",zh:"硬实、表皮干燥；发软发芽不要。"},
+ store:{en:"Cool, dark, airy; keep away from potatoes.",zh:"阴凉通风；远离土豆存放。"},
+ cook:{en:"Chill 15 min before chopping to cry less; sweat low and slow for sweetness.",zh:"切前冷藏15分钟少流泪；小火慢炒出甜味。"}},
+"onions":{cat:"catVeg",zh:"洋葱",
+ buy:{en:"Firm, dry papery skin; no soft spots or sprouting.",zh:"硬实、表皮干燥；发软发芽不要。"},
+ store:{en:"Cool, dark, airy; keep away from potatoes.",zh:"阴凉通风；远离土豆存放。"},
+ cook:{en:"Chill 15 min before chopping to cry less; sweat low and slow for sweetness.",zh:"切前冷藏15分钟少流泪；小火慢炒出甜味。"}},
+"carrot":{cat:"catVeg",zh:"胡萝卜",
+ buy:{en:"Firm, bright orange; limp carrots are old.",zh:"硬挺、橙亮；发软的是放久了。"},
+ store:{en:"Fridge in a bag, 2–3 weeks; cut tops off so they don't go limp.",zh:"装袋冷藏2–3周；去掉缨子防发软。"},
+ cook:{en:"A little oil helps your body absorb the beta-carotene.",zh:"加点油炒，β-胡萝卜素吸收更好。"}},
+"carrots":{cat:"catVeg",zh:"胡萝卜",
+ buy:{en:"Firm, bright orange; limp carrots are old.",zh:"硬挺、橙亮；发软的是放久了。"},
+ store:{en:"Fridge in a bag, 2–3 weeks; cut tops off so they don't go limp.",zh:"装袋冷藏2–3周；去掉缨子防发软。"},
+ cook:{en:"A little oil helps your body absorb the beta-carotene.",zh:"加点油炒，β-胡萝卜素吸收更好。"}},
+"broccoli":{cat:"catVeg",zh:"西兰花",
+ buy:{en:"Tight dark-green florets; yellowing means it's old.",zh:"花球紧实深绿；发黄就是老了。"},
+ store:{en:"Fridge unwashed in a loose bag, 3–5 days.",zh:"不洗装袋冷藏3–5天。"},
+ cook:{en:"Blanch 1–2 min for bright green; don't overcook or it smells.",zh:"焯水1–2分钟颜色翠绿；煮过头会有硫磺味。"}},
+"spinach":{cat:"catVeg",zh:"菠菜",
+ buy:{en:"Crisp dark leaves; avoid slimy or yellow bunches.",zh:"叶片脆绿；发黏发黄不要。"},
+ store:{en:"Fridge with a paper towel in the bag, 3–4 days.",zh:"垫厨房纸装袋冷藏3–4天。"},
+ cook:{en:"Wilts to almost nothing — buy more than you think; add at the very end.",zh:"一炒就缩水，多买点；最后再下锅。"}},
+"cabbage":{cat:"catVeg",zh:"白菜/卷心菜",
+ buy:{en:"Heavy, tight head; outer leaves should look fresh.",zh:"掂着沉、包得紧；外层叶子新鲜。"},
+ store:{en:"Fridge whole, 2–3 weeks; cut faces keep ~1 week wrapped.",zh:"整颗冷藏2–3周；切面裹好存1周。"},
+ cook:{en:"Salt briefly and squeeze for salads; don't overcook or it turns sulfurous.",zh:"凉拌先盐腌挤水；别久煮，会有硫磺味。"}},
+"bell pepper":{cat:"catVeg",zh:"青椒/彩椒",
+ buy:{en:"Firm, glossy skin; heavy for size.",zh:"硬实表皮发亮；掂着压手。"},
+ store:{en:"Fridge 1 week; slice and freeze for stir-fries.",zh:"冷藏1周；切好冷冻，炒菜直接用。"},
+ cook:{en:"High heat keeps them crisp; seeds and white ribs are the bitter part.",zh:"大火快炒保脆；籽和白色筋是苦味来源。"}},
+"mushroom":{cat:"catVeg",zh:"蘑菇",
+ buy:{en:"Firm caps, no slime; smaller buttons are fresher.",zh:"菌盖硬实无黏液；小个头的更新鲜。"},
+ store:{en:"Fridge in a paper bag, not plastic — 3–5 days.",zh:"纸袋冷藏3–5天，别用塑料袋闷。"},
+ cook:{en:"Don't crowd the pan or they steam; salt at the end for better browning.",zh:"别挤一锅否则出水；最后放盐上色更好。"}},
+"mushrooms":{cat:"catVeg",zh:"蘑菇",
+ buy:{en:"Firm caps, no slime; smaller buttons are fresher.",zh:"菌盖硬实无黏液；小个头的更新鲜。"},
+ store:{en:"Fridge in a paper bag, not plastic — 3–5 days.",zh:"纸袋冷藏3–5天，别用塑料袋闷。"},
+ cook:{en:"Don't crowd the pan or they steam; salt at the end for better browning.",zh:"别挤一锅否则出水；最后放盐上色更好。"}},
+"garlic":{cat:"catSeason",zh:"大蒜",
+ buy:{en:"Firm, heavy heads with tight skin; avoid sprouting cloves.",zh:"蒜头硬实沉手、表皮紧；发芽的不买。"},
+ store:{en:"Cool, dark, airy — never the fridge; keeps for weeks.",zh:"阴凉通风，别放冰箱，可存数周。"},
+ cook:{en:"Burns fast — add after onions; 30 seconds is often enough.",zh:"易糊，后于洋葱下锅；很多时候30秒就够。"}},
+"ginger":{cat:"catSeason",zh:"生姜",
+ buy:{en:"Firm, smooth skin; snap a piece — it should break cleanly.",zh:"硬实皮光；掰一小块，断面清脆。"},
+ store:{en:"Fridge unpeeled in a bag; freeze grated in portions.",zh:"不去皮装袋冷藏；擦碎分装冷冻最方便。"},
+ cook:{en:"Slice against the fibers for tender pieces; too much can overpower.",zh:"逆纹切片更嫩；别贪多，会抢味。"}},
+"soy sauce":{cat:"catSeason",zh:"酱油",
+ buy:{en:"Brewed (not chemically made) tastes better; light vs dark for different uses.",zh:"酿造的比配制的香；生抽调味、老抽上色。"},
+ store:{en:"Pantry is fine; fridge after opening keeps flavor longer.",zh:"未开封常温；开封后冷藏保香。"},
+ cook:{en:"Add late in stir-fries so it doesn't burn and turn bitter.",zh:"炒菜后放，不易糊、不发苦。"}},
+"oil":{cat:"catSeason",zh:"食用油",
+ buy:{en:"Neutral oil for high heat; check the date — old oil tastes off.",zh:"高温用中性油；看日期，陈油有哈喇味。"},
+ store:{en:"Cool and dark; heat and light make it go rancid.",zh:"阴凉避光；高温和光照会让油变质。"},
+ cook:{en:"Hot pan, then oil, then food — less sticking.",zh:"热锅再倒油，食材不粘锅。"}},
+"salt":{cat:"catSeason",zh:"盐",
+ buy:{en:"Fine salt for baking, kosher/coarse for cooking; iodized is fine daily.",zh:"烘焙用细盐，炒菜用粗盐；日常加碘盐即可。"},
+ store:{en:"Dry place; clumps mean moisture got in — still safe.",zh:"干燥保存；结块是受潮，仍可食用。"},
+ cook:{en:"Salt in layers as you cook, not all at the end.",zh:"分次放盐，味道更均匀。"}},
+"sugar":{cat:"catSeason",zh:"糖",
+ buy:{en:"White for clean sweetness; brown adds caramel notes.",zh:"白糖甜味纯粹；红糖/黄糖带焦香。"},
+ store:{en:"Airtight and dry; sugar never really expires.",zh:"密封防潮；糖几乎不会坏。"},
+ cook:{en:"A pinch balances salty/sour dishes without making them sweet.",zh:"一小撮能调和咸酸，不会变甜。"}},
+"milk":{cat:"catOther",zh:"牛奶",
+ buy:{en:"Check the date; pick the farthest one.",zh:"看日期，拿最远的。"},
+ store:{en:"Fridge at 4°C or below; don't leave out over 2 hours.",zh:"4°C以下冷藏；室温别超2小时。"},
+ cook:{en:"Scald gently — boiled milk can curdle in acidic dishes.",zh:"小火加热；滚沸后遇酸易结块。"}},
+"cheese":{cat:"catOther",zh:"奶酪",
+ buy:{en:"Check the date; pre-shredded has anti-caking starch.",zh:"看日期；碎芝士含抗结剂，整块更新鲜。"},
+ store:{en:"Wrap in wax paper then loose plastic; fridge.",zh:"蜡纸包再套袋冷藏。"},
+ cook:{en:"Grate your own for smoother melting; add off the heat.",zh:"现擦的融化更顺滑；离火再放。"}}};
+function kbLookup(name){const n=name.toLowerCase().trim();
+ if(KB[n])return KB[n];
+ for(const k in KB){if(n.includes(k)||k.includes(n))return KB[k];}
+ return null;}
+function kbName(name){const k=kbLookup(name);return k&&k.zh?k.zh:name;}
+/* ================= grocery ================= */
+function parseMeasure(ms){ms=(ms||"").trim().toLowerCase();if(!ms)return{qty:null,unit:"",raw:""};
+ const m=ms.match(/^(\d+)\s*\/\s*(\d+)\s*(.*)$/);
+ let qty=null,rest=ms;
+ if(m){qty=(+m[1])/(+m[2]);rest=m[3].trim();}
+ else{const m2=ms.match(/^(\d+(?:\.\d+)?)\s*(.*)$/);if(m2){qty=+m2[1];rest=m2[2].trim();}}
+ let unit=rest.replace(/[.,;]+$/,"").trim();
+ const conv={"kg":{u:"g",f:1000},"l":{u:"ml",f:1000},"litre":{u:"ml",f:1000},"liter":{u:"ml",f:1000}};
+ if(conv[unit]){qty=qty==null?null:qty*conv[unit].f;unit=conv[unit].u;}
+ unit=unit.replace(/s$/,"");
+ return{qty,unit,raw:ms};}
+function fmtQty(qty,unit){if(qty==null||!isFinite(qty))return"";
+ let q=Math.round(qty*10)/10;return(q+" "+unit).trim();}
+async function buildGrocery(){const es=selEntries(),agg={};
+ for(const e of es){let m;try{m=await apiLookup(e.id);}catch(_){continue;}if(!m)continue;
+  const mult=S.servings*(e.dbl?2:1);
+  for(const o of mealIngredients(m)){const p=parseMeasure(o.ms);
+   const key=o.ing.toLowerCase()+"|"+p.unit;
+   if(!agg[key])agg[key]={ing:o.ing,qty:0,unit:p.unit,raws:[],dishes:0,hasNum:false};
+   const a=agg[key];a.dishes++;
+   if(p.qty!=null&&isFinite(p.qty)){a.qty+=p.qty*mult;a.hasNum=true;}
+   else if(p.raw&&!a.raws.includes(p.raw))a.raws.push(p.raw);}}
+ return Object.values(agg).sort((a,b)=>a.ing.localeCompare(b.ing));}
+function kbHTML(name){const k=kbLookup(name),L=S.lang;
+ const buy=k?k.buy[L]:t("kbFBuy"),store=k?k.store[L]:t("kbFStore"),cook=k?k.cook[L]:t("kbFCook");
+ return "<h4>"+esc(t("buyTip"))+"</h4><p>"+esc(buy)+"</p><h4>"+esc(t("storeTip"))+"</h4><p>"+esc(store)+"</p><h4>"+esc(t("cookTip"))+"</h4><p>"+esc(cook)+"</p>";}
+let groceryCache=null;
+async function renderGrocery(){const box=$("groceryList");
+ if(locked()){box.innerHTML=lockPanel();$("groceryNote").textContent="";return;}
+ const es=selEntries();
+ if(!es.length){box.innerHTML='<div class="empty" style="padding:24px;text-align:center">'+esc(t("groceryEmpty"))+"</div>";$("groceryNote").textContent="";return;}
+ box.innerHTML='<div class="loading">'+esc(t("loading"))+"</div>";
+ $("groceryNote").textContent=t("groceryNote");
+ try{const items=await buildGrocery();groceryCache=items;
+  const cats={};
+  for(const it of items){const k=kbLookup(it.ing);const c=k?k.cat:"catOther";
+   (cats[c]=cats[c]||[]).push(it);}
+  const order=["catProtein","catVeg","catStaple","catSeason","catOther"];
+  box.innerHTML=order.filter(c=>cats[c]).map(c=>{
+   return '<div class="gcat"><h3>'+esc(t(c))+"</h3>"+cats[c].map((it,ix)=>{
+    const amt=it.hasNum?fmtQty(it.qty,it.unit):"";
+    const raw=it.raws.length?it.raws.join(" · "):"";
+    const show=amt||raw||"—";
+    const nm=S.lang==="zh"?kbName(it.ing):it.ing;
+    return '<div class="gitem" id="g_'+c+"_"+ix+'"><div class="head" onclick="this.parentNode.classList.toggle(\'open\')">'
+     +'<span class="in">'+esc(nm)+'</span><span class="pill-note">'+esc(t("usedIn")(it.dishes))+'</span>'
+     +'<span class="amt">'+esc(show)+'</span><span class="chev">▼</span></div>'
+     +'<div class="kb"><div class="pill-note" style="margin-bottom:6px">'+esc(it.ing)+'</div>'+kbHTML(it.ing)+"</div></div>";
+   }).join("")+"</div>";}).join("")
+   +'<div class="pill-note" style="margin-top:8px">'+esc(t("tapForTips"))+"</div>";
+ }catch(e){box.innerHTML='<div class="err">'+esc(t("loadFail"))+"</div>";}}
+/* ================= tabs / language / init ================= */
+function renderAll(){renderGrid();renderPlan();if(S.tab==="grocery")renderGrocery();}
+function switchTab(name){S.tab=name;
+ document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===name));
+ ["browse","plan","grocery"].forEach(n=>$("tab-"+n).style.display=n===name?"":"none");
+ if(name==="plan")renderPlan();if(name==="grocery")renderGrocery();}
+function applyI18n(){document.documentElement.lang=S.lang==="zh"?"zh-CN":"en";
+ document.querySelectorAll("[data-t]").forEach(el=>{const v=t(el.dataset.t);if(typeof v==="string")el.textContent=v;});
+ document.querySelectorAll("[data-t-ph]").forEach(el=>{const v=t(el.dataset.tPh);if(typeof v==="string")el.placeholder=v;});
+ document.querySelectorAll("#langSeg button").forEach(b=>b.classList.toggle("on",b.dataset.lang===S.lang));}
+function setLang(l){S.lang=l;savePrefs();applyI18n();renderAreas();renderGrid();renderPlan();if(S.tab==="grocery")renderGrocery();}
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+document.querySelectorAll("#langSeg button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+$("overlay").addEventListener("click",e=>{if(e.target===$("overlay"))closeRecipe();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRecipe();});
+let searchTimer=null;
+$("searchBox").addEventListener("input",e=>{clearTimeout(searchTimer);
+ searchTimer=setTimeout(()=>{S.q=e.target.value;renderGrid();},250);});
+$("servings").addEventListener("change",e=>{const v=Math.max(1,Math.min(8,+e.target.value||2));
+ S.servings=v;savePrefs();pushRemote();renderGrocery();});
+applyI18n();renderAreas();loadArea();initFirebase();switchTab("browse");
+</script>
+</body>
+</html>
