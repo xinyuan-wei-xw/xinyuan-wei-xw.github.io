@@ -286,8 +286,8 @@ function World() {
   const j = journals.find((x) => x.id === selected)!;
   return (
     <>
-      <color attach="background" args={["#eee5d6"]} />
-      <fog attach="fog" args={["#eee5d6", 18, 38]} />
+      <color attach="background" args={["#e8f2fc"]} />
+      <fog attach="fog" args={["#e8f2fc", 18, 38]} />
       <ambientLight intensity={light} />
       <directionalLight
         position={[-3, 9, 6]}
@@ -299,13 +299,13 @@ function World() {
         shadow-camera-top={8}
         shadow-camera-bottom={-8}
       />
-      <pointLight position={[-4, 3, -1]} intensity={8} color="#ffd58e" />
-      <Box at={[0, -0.18, 0]} size={[14, 0.3, 10]} color="#d8c6ad" />
-      <Box at={[0, 0.005, 0.7]} size={[8, 0.025, 4.6]} color="#c4cbb7" />
-      <Box at={[0, 2, -4.4]} size={[14, 4.2, 0.15]} color="#e6dac7" />
-      <Box at={[-4.3, 2.6, -4.24]} size={[2.6, 1.9, 0.08]} color="#b4c8c6" />
-      <Box at={[-4.3, 2.6, -4.13]} size={[0.08, 1.9, 0.08]} color="#f8efdc" />
-      <Box at={[-4.3, 2.6, -4.13]} size={[2.6, 0.08, 0.08]} color="#f8efdc" />
+      <pointLight position={[-4, 3, -1]} intensity={8} color="#d7ecff" />
+      <Box at={[0, -0.18, 0]} size={[14, 0.3, 10]} color="#dbe7f4" />
+      <Box at={[0, 0.005, 0.7]} size={[8, 0.025, 4.6]} color="#c5d8ed" />
+      <Box at={[0, 2, -4.4]} size={[14, 4.2, 0.15]} color="#f5f9fd" />
+      <Box at={[-4.3, 2.6, -4.24]} size={[2.6, 1.9, 0.08]} color="#b8d8f0" />
+      <Box at={[-4.3, 2.6, -4.13]} size={[0.08, 1.9, 0.08]} color="#fff" />
+      <Box at={[-4.3, 2.6, -4.13]} size={[2.6, 0.08, 0.08]} color="#fff" />
       <Box at={[-2.7, 1.05, -0.45]} size={[2.9, 0.16, 1.2]} color="#b28361" />
       {[-3.85, -1.55].map((x) => (
         <Box key={x} at={[x, 0.5, -0.45]} size={[0.13, 1, 1]} color="#715846" />
