@@ -351,10 +351,8 @@
   .toolbar button{font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--line);
     color:var(--ink-soft);padding:8px 13px;border-radius:9px;cursor:pointer;box-shadow:var(--shadow);transition:.15s}
   .toolbar button:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
-  .backlab{font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--line);
-    color:var(--ink-soft);padding:8px 13px;border-radius:9px;text-decoration:none;box-shadow:var(--shadow);
-    margin-right:auto;white-space:nowrap;transition:.15s}
-  .backlab:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+  .backlab{font-size:15px;color:#0039a6;text-decoration:none;margin-right:auto;white-space:nowrap}
+  .backlab:hover{text-decoration:underline}
   .savenote{font-size:11px;color:var(--teal);opacity:0;transition:.3s}.savenote.show{opacity:1}
 
   footer.credit{margin-top:32px;text-align:center;font-size:11px;color:var(--ink-soft);letter-spacing:.03em}
@@ -1293,13 +1291,13 @@ function initFirebase(){
     const creds=()=>({em:emailEl.value.trim(),pw:passEl.value});
     document.getElementById("authGo").onclick=()=>{
       err("");const{em,pw}=creds();
-      if(!em||!pw){err("Enter your email and password.");return;}
+      if(!em||!pw){err("Type your email and password in the two boxes, then click Unlock.");return;}
       fauth.signInWithEmailAndPassword(em,pw)
         .catch(e=>err("Sign-in failed: "+friendlyAuthError(e)));
     };
     document.getElementById("authNew").onclick=e=>{
       e.preventDefault();err("");const{em,pw}=creds();
-      if(em.length<3||pw.length<6){err("Enter an email and a password (6+ characters) first.");return;}
+      if(!em||!pw){err("Type the email and password you want to use, then click \u201cnew account\u201d.");return;}
       if(!confirm("Create a new planner account for "+em+"?"))return;
       fauth.createUserWithEmailAndPassword(em,pw)
         .catch(e=>err("Couldn't create account: "+friendlyAuthError(e)));
@@ -1328,10 +1326,10 @@ function initFirebase(){
 function friendlyAuthError(e){
   const c=(e&&e.code)||"";
   if(c==="auth/user-not-found"||c==="auth/wrong-password"||c==="auth/invalid-credential")
-    return "Wrong email or password.";
-  if(c==="auth/email-already-in-use")return "That email already has an account — just Unlock.";
-  if(c==="auth/weak-password")return "Password must be at least 6 characters.";
-  if(c==="auth/invalid-email")return "That email address looks invalid.";
+    return "Wrong email or password. Double-check both and click Unlock again — or click \u201cnew account\u201d if this email hasn't been registered yet.";
+  if(c==="auth/email-already-in-use")return "That email already has an account — type its password and click Unlock.";
+  if(c==="auth/weak-password")return "Google's sign-in system needs at least 6 characters — lengthen your password and click \u201cnew account\u201d again.";
+  if(c==="auth/invalid-email")return "That email looks incomplete — it should look like name@example.com. Fix it and try again.";
   if(c==="auth/operation-not-allowed")
     return "Email/password sign-in isn't enabled yet — enable it in Firebase console > Authentication > Sign-in method.";
   if(c==="auth/unauthorized-domain")
