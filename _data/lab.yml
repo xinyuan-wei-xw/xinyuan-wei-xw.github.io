@@ -6,6 +6,11 @@ projects:
     figure: "/images/lab/visitor-map.svg"
     figure_alt: "World map of website visits by country"
     url: "/visitor-map/"
+  - title: "[Productivity] X Planner"
+    description: "A fast, keyboard-friendly daily planner. Capture tasks, set priorities, and plan your day — all on one page."
+    figure: "/lab/planner/thumbnail.png"
+    figure_alt: "X Planner daily planner interface"
+    url: "/lab/planner/"
   - title: "Becoming a Researcher"
     draft: true
     description: "Learn through research, collaboration, and peer review in a single-player game about growing as a researcher."
