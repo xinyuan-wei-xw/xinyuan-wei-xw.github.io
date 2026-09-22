@@ -362,6 +362,24 @@
     .months-grid,.years-grid,.twocol{grid-template-columns:repeat(2,1fr)}
     .toolbar{position:static;justify-content:flex-end;margin-bottom:10px}
   }
+  /* ---------- private lock ---------- */
+  #authBox{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+  #authBox input{border:1px solid var(--line);border-radius:8px;padding:6px 9px;
+    font-size:12.5px;width:150px;background:var(--card);color:var(--ink)}
+  #authBox input:focus{outline:none;border-color:var(--blue-bright)}
+  #authBox button{border:1px solid var(--line);background:var(--card);border-radius:8px;
+    padding:6px 11px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer}
+  #authBox button:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+  #authGo{background:var(--blue-bright)!important;border-color:var(--blue-bright)!important;color:#fff!important}
+  #authNew{font-size:11.5px;color:var(--blue-bright);cursor:pointer;white-space:nowrap}
+  #authErr{font-size:11.5px;color:#b3402e;max-width:240px}
+  #authWho{font-size:12px;color:var(--ink-soft);font-weight:600}
+  .lockbanner{margin:0 0 18px;padding:28px 22px;text-align:center}
+  .lockbanner .lk{font-size:30px}
+  .lockbanner h2{font-size:19px;color:var(--blue-deep);margin:8px 0 6px}
+  .lockbanner p{font-size:13.5px;color:var(--ink-soft);max-width:540px;margin:0 auto}
+  body.locked .toolbar .only-unlocked{display:none!important}
+
   @media print{
     .toolbar,.zoomctl,.stepnav,.addbtn,.mini-add,.qadd,.del,.savenote,footer.credit,
     .navbtn,.pill{display:none!important}
@@ -378,12 +396,24 @@
 <div class="toolbar">
   <span class="savenote" id="savenote">Saved</span>
   <span id="syncStat" style="font-size:11px;color:var(--ink-soft);align-self:center"></span>
-  <button id="signBtn" style="display:none">Sign in to sync</button>
-  <button id="exportBtn">⭳ Backup</button>
-  <button id="importBtn">⭱ Restore</button>
+  <span id="authBox" style="display:none">
+    <span id="authForm">
+      <input type="email" id="authEmail" placeholder="Email" autocomplete="email">
+      <input type="password" id="authPass" placeholder="Password" autocomplete="current-password">
+      <button id="authGo">Unlock</button>
+      <a href="#" id="authNew">new account</a>
+    </span>
+    <span id="authOut" style="display:none">
+      <span id="authWho"></span>
+      <button id="authSignOut">Sign out</button>
+    </span>
+    <span id="authErr"></span>
+  </span>
+  <button id="exportBtn" class="only-unlocked">⭳ Backup</button>
+  <button id="importBtn" class="only-unlocked">⭱ Restore</button>
   <input type="file" id="importFile" accept="application/json,.json" style="display:none">
   <button id="downloadBtn" style="display:none">⬇ Files for GitHub</button>
-  <button id="resetBtn">Reset all</button>
+  <button id="resetBtn" class="only-unlocked">Reset all</button>
 </div>
 
 <div class="wrap">
@@ -432,6 +462,16 @@
 const LS="planner_zoom_v2";
 function loadAll(){try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}}
 let DB=loadAll();
+let locked=true; /* content stays hidden until password sign-in (when cloud sync is configured) */
+function emptyDB(){return{days:{},events:{},weeks:{},months:{},years:{},deadlines:[],projects:[],matrix:[],
+  vision:{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""}};}
+function lockBanner(){const d=document.createElement("div");d.className="panel lockbanner";
+  d.innerHTML='<div class="lk">🔒</div><h2>This planner is private</h2><p>Sign in with your password in the toolbar above to view and edit your plans.<br>Without signing in, only the empty structure is visible.</p>';return d;}
+function finishLocked(realDB){
+  if(!realDB)return;DB=realDB;
+  stage.querySelectorAll("input,textarea,button,select").forEach(el=>{el.disabled=true;});
+  stage.prepend(lockBanner());
+}
 DB.days=DB.days||{};
 DB.events=DB.events||{};
 DB.weeks=DB.weeks||{};
@@ -444,7 +484,7 @@ if(DB.matrix===undefined){/* migrate any old per-day tasks into the persistent m
 DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
 
 let saveTimer=null;
-function save(){localStorage.setItem(LS,JSON.stringify(DB));
+function save(){if(locked)return;localStorage.setItem(LS,JSON.stringify(DB));
   const n=document.getElementById("savenote");n.classList.add("show");
   clearTimeout(saveTimer);saveTimer=setTimeout(()=>n.classList.remove("show"),1000);
   pushRemote();}
@@ -1070,6 +1110,9 @@ const stage=document.getElementById("stage");
 const pageStyle=document.createElement("style");document.head.appendChild(pageStyle);
 function setLevel(l){level=l;mode="plan";render();}
 function render(){
+  let realDB=null;
+  if(locked){realDB=DB;DB=emptyDB();}
+  document.body.classList.toggle("locked",locked);
   const planMode=mode==="plan";
   document.querySelectorAll("#modetoggle button").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
   const zc=document.getElementById("zoomctl");if(zc)zc.style.display=planMode?"":"none";
@@ -1080,7 +1123,7 @@ function render(){
     if(bd)bd.textContent="Research projects";
     document.getElementById("printHead").innerHTML="<b>Projects</b>";
     pageStyle.textContent=`@media print{@page{size:landscape;margin:12mm}}`;
-    renderProjects();return;
+    renderProjects();finishLocked(realDB);return;
   }
   document.querySelectorAll("#zoomctl button").forEach(b=>b.classList.toggle("active",+b.dataset.lvl===level));
   renderCrumbs();
@@ -1090,6 +1133,7 @@ function render(){
   const names=["Day","Week","Month","Year","Years"];
   document.getElementById("printHead").innerHTML=`<b>${document.getElementById("mainTitle").textContent}</b> · ${names[level]} plan`;
   pageStyle.textContent=`@media print{@page{size:${level===0?"portrait":"landscape"};margin:12mm}}`;
+  finishLocked(realDB);
 }
 function step(dir){
   if(level===0)focus.setDate(focus.getDate()+dir);
@@ -1204,12 +1248,13 @@ document.getElementById("downloadBtn").addEventListener("click",async()=>{
 /* ============ cloud sync (Firebase) ============ */
 const CLIENT_ID=Math.random().toString(36).slice(2);
 const firebaseConfig={
-  apiKey:"PASTE_YOUR_API_KEY",
-  authDomain:"PASTE_YOUR_PROJECT.firebaseapp.com",
-  projectId:"PASTE_YOUR_PROJECT_ID",
-  appId:"PASTE_YOUR_APP_ID"
+  apiKey:"AIzaSyChNVlIv_TKx9DcJ-07Z5smNQNUIhxrQw",
+  authDomain:"x-planner-99dd3.firebaseapp.com",
+  projectId:"x-planner-99dd3",
+  appId:"1:146714833806:web:d1c4516985514f7c35eadf"
 };
 let fdb=null,fauth=null,userDoc=null,fbUser=null,unsub=null,pushTimer=null,applyingRemote=false;
+let wipeOnSignOut=false;
 function firebaseReady(){return typeof firebase!=="undefined"&&!firebaseConfig.apiKey.startsWith("PASTE");}
 function setSync(m){const el=document.getElementById("syncStat");if(el)el.textContent=m;}
 function applyRemote(d){
@@ -1231,44 +1276,77 @@ function listen(){if(!userDoc)return;if(unsub)unsub();
   unsub=userDoc.onSnapshot(snap=>{const d=snap.data();
     if(!d||!d.data||d.by===CLIENT_ID)return;applyRemote(d);setSync("Synced ✓");});}
 function initFirebase(){
-  const btn=document.getElementById("signBtn");
-  if(!firebaseReady()){btn.style.display="none";setSync("");return;}
+  const box=document.getElementById("authBox");
+  if(!firebaseReady()){locked=false;box.style.display="none";setSync("");return;}
   try{
     firebase.initializeApp(firebaseConfig);
-    fauth=firebase.auth();fdb=firebase.firestore();btn.style.display="";
+    fauth=firebase.auth();fdb=firebase.firestore();box.style.display="";
+    const emailEl=document.getElementById("authEmail"),passEl=document.getElementById("authPass");
+    const err=m=>{document.getElementById("authErr").textContent=m||"";};
+    const showForm=show=>{document.getElementById("authForm").style.display=show?"":"none";
+      document.getElementById("authOut").style.display=show?"none":"";};
+    const creds=()=>({em:emailEl.value.trim(),pw:passEl.value});
+    document.getElementById("authGo").onclick=()=>{
+      err("");const{em,pw}=creds();
+      if(!em||!pw){err("Enter your email and password.");return;}
+      fauth.signInWithEmailAndPassword(em,pw)
+        .catch(e=>err("Sign-in failed: "+friendlyAuthError(e)));
+    };
+    document.getElementById("authNew").onclick=e=>{
+      e.preventDefault();err("");const{em,pw}=creds();
+      if(em.length<3||pw.length<6){err("Enter an email and a password (6+ characters) first.");return;}
+      if(!confirm("Create a new planner account for "+em+"?"))return;
+      fauth.createUserWithEmailAndPassword(em,pw)
+        .catch(e=>err("Couldn't create account: "+friendlyAuthError(e)));
+    };
+    document.getElementById("authSignOut").onclick=()=>{wipeOnSignOut=true;fauth.signOut();};
+    passEl.addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("authGo").click();});
     fauth.onAuthStateChanged(u=>{
-      fbUser=u;
+      fbUser=u;locked=!u;err("");
       if(u){
-        btn.textContent="Sign out ("+(u.email||"account")+")";setSync("Syncing…");
+        document.getElementById("authWho").textContent=u.email||"Signed in";
+        showForm(false);setSync("Syncing…");
         userDoc=fdb.collection("planners").doc(u.uid);
         userDoc.get().then(snap=>{
           if(snap.exists&&snap.data()&&snap.data().data)applyRemote(snap.data());
           else pushRemote(true);
           listen();setSync("Synced ✓");
-        }).catch(err=>{setSync("Sync error");console.error(err);});
+        }).catch(e=>{setSync("Sync error");console.error(e);});
       }else{
-        btn.textContent="Sign in to sync";if(unsub){unsub();unsub=null;}userDoc=null;setSync("");
+        showForm(true);if(unsub){unsub();unsub=null;}userDoc=null;setSync("");
+        if(wipeOnSignOut){wipeOnSignOut=false;try{localStorage.removeItem(LS);}catch(e){}DB=emptyDB();}
       }
+      render();
     });
-    btn.onclick=()=>{
-      if(fbUser){fauth.signOut();}
-      else{fauth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-        .catch(err=>{setSync("Sign-in failed");console.error(err);});}
-    };
-  }catch(err){console.error(err);btn.style.display="none";setSync("");}
+  }catch(e){console.error(e);locked=false;box.style.display="none";setSync("");}
+}
+function friendlyAuthError(e){
+  const c=(e&&e.code)||"";
+  if(c==="auth/user-not-found"||c==="auth/wrong-password"||c==="auth/invalid-credential")
+    return "Wrong email or password.";
+  if(c==="auth/email-already-in-use")return "That email already has an account — just Unlock.";
+  if(c==="auth/weak-password")return "Password must be at least 6 characters.";
+  if(c==="auth/invalid-email")return "That email address looks invalid.";
+  if(c==="auth/operation-not-allowed")
+    return "Email/password sign-in isn't enabled yet — enable it in Firebase console > Authentication > Sign-in method.";
+  if(c==="auth/unauthorized-domain")
+    return "This domain isn't authorized — add it in Firebase console > Authentication > Settings > Authorized domains.";
+  return (e&&e.message)||c||"unknown error";
 }
 
 const README=[
 "# Zoomable Planner - deploy + cross-device sync","",
 "A single-page planner. It works offline in your browser (localStorage) and, once you add",
-"your free Firebase keys, syncs your plans across all your devices when you sign in with Google.","",
+"your free Firebase keys, locks behind your password and syncs your plans across all",
+"your devices when you sign in. Anyone visiting without signing in only sees the empty",
+"planner structure — never your plans.","",
 "## A. Put it online (GitHub Pages)","",
 "1. Create a new GitHub repo, e.g. \"planner\" (Public).",
 "2. Upload index.html (and this README) to the repo.",
 "3. Repo Settings > Pages > Source: Deploy from a branch > main > / (root) > Save.",
 "4. Your site: https://YOUR-USERNAME.github.io/planner/","",
-"At this point the planner already works for everyone. Each visitor's data stays private in",
-"their own browser. The Backup / Restore buttons export and re-import a .json file.","",
+"At this point the planner already works, but it is local-only. Add the password lock and",
+"cross-device sync with the Firebase steps below.","",
 "## B. Turn on cross-device sync (Firebase - free)","",
 "1. Go to https://console.firebase.google.com and click \"Add project\". Name it, finish.",
 "2. Click the web icon (</>) to add a web app. Register a nickname (e.g. planner-web).",
@@ -1281,8 +1359,8 @@ const README=[
 "       };","",
 "3. In index.html, search for PASTE_YOUR_API_KEY and replace the four PASTE... values with",
 "   yours. Save and re-upload index.html to GitHub.",
-"4. Enable Google login: Firebase console > Build > Authentication > Get started >",
-"   Sign-in method > Google > Enable > Save.",
+"4. Enable password login: Firebase console > Build > Authentication > Get started >",
+"   Sign-in method > Email/Password > Enable > Save.",
 "5. Add your domain: Authentication > Settings > Authorized domains > Add domain >",
 "   YOUR-USERNAME.github.io",
 "6. Create the database: Build > Firestore Database > Create database > Production mode.",
@@ -1296,9 +1374,11 @@ const README=[
 "         }",
 "       }","",
 "## C. Use it","",
-"- Open your site on any device, click \"Sign in to sync\", pick your Google account.",
+"- Open your site on any device, enter your email + password in the toolbar and click Unlock.",
+"- First time: click 'new account' to create your login (6+ character password).",
 "- Your plans now load and save to the cloud and stay in sync across laptop, iPad, phone.",
-"- Public visitors who do not sign in just use their own local copy - they never see yours.","",
+"- Visitors who are not signed in only see the empty planner structure - they never see",
+"  your plans and cannot edit anything.","",
 "## Notes","",
 "- The Firebase apiKey is safe to expose publicly; your data is protected by the rules above.",
 "- Live sync does not run inside the Dia preview (external scripts are blocked there).",
