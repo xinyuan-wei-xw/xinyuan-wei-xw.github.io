@@ -1330,6 +1330,8 @@ function friendlyAuthError(e){
   if(c==="auth/email-already-in-use")return "That email already has an account — type its password and click Unlock.";
   if(c==="auth/weak-password")return "Google's sign-in system needs at least 6 characters — lengthen your password and click \u201cnew account\u201d again.";
   if(c==="auth/invalid-email")return "That email looks incomplete — it should look like name@example.com. Fix it and try again.";
+  if(c==="auth/api-key-not-valid")
+    return "The Firebase API key in this page isn't valid — it was likely mistyped when copied. Copy the correct apiKey from Firebase console \u2192 Project settings \u2192 General (your web app's firebaseConfig) and update the page.";
   if(c==="auth/operation-not-allowed")
     return "Email/password sign-in isn't enabled yet — enable it in Firebase console > Authentication > Sign-in method.";
   if(c==="auth/unauthorized-domain")
