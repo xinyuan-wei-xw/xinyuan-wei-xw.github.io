@@ -20,8 +20,8 @@ export function Character() {
     const reduced = g.reducedMotion;
     const seated = ["ready", "writing", "revising"].includes(phase);
     let x = seated ? -2.7 : -2.5,
-      z = seated ? 0.48 : 1,
-      turn = seated ? 2.75 : 0.35,
+      z = seated ? -1.4 : 1,
+      turn = 0.35,
       lean = 0,
       la = 0.08,
       ra = -0.08,
