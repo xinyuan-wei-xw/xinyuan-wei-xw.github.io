@@ -173,6 +173,10 @@
   .qtask.done .qt-title{text-decoration:line-through;color:var(--faint)}
   .qtask .qt-del{border:none;background:none;color:var(--faint);cursor:pointer;font-size:14px}
   .qtask .qt-del:hover{color:var(--blue-bright)}
+  .qtask .qt-save{border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:6px;
+    font-size:10.5px;padding:2px 8px;cursor:pointer;font-family:var(--sans);flex-shrink:0}
+  .qtask .qt-save:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+  .qtask .qt-save:disabled{opacity:.75;cursor:default}
   .qtask .qt-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:5px}
   .qtask .qt-added{font-size:10px;color:var(--faint)}
   .qtask .qt-ddl{border:1px solid var(--line);border-radius:6px;font-size:10px;padding:2px 4px;color:var(--ink-soft);font-family:var(--sans)}
@@ -651,6 +655,10 @@ function renderDay(){
         if(t.due&&!t.d){const cd=document.createElement("span");cd.className="cd cd-live "+untilClass(t.due);
           cd.dataset.due=t.due;cd.textContent=untilText(t.due);top.appendChild(cd);}
         top.appendChild(ti);
+        const sv=document.createElement("button");sv.className="qt-save";sv.textContent="Save";sv.title="Save this task";
+        sv.addEventListener("click",()=>{save();sv.textContent="Saved ✓";sv.disabled=true;
+          setTimeout(()=>{sv.textContent="Save";sv.disabled=false;},1200);});
+        top.appendChild(sv);
         const del=document.createElement("button");del.className="qt-del";del.textContent="×";
         del.addEventListener("click",()=>{const gi=DB.matrix.indexOf(t);DB.matrix.splice(gi,1);save();drawTasks();});
         top.appendChild(del);li.appendChild(top);
