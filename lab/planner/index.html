@@ -405,6 +405,7 @@
       <input type="password" id="authPass" placeholder="Password" autocomplete="current-password">
       <button id="authGo">Unlock</button>
       <a href="#" id="authNew">new account</a>
+      <a href="#" id="authCheck" title="Test whether this page's Firebase API key is accepted by Google">check key</a>
     </span>
     <span id="authOut" style="display:none">
       <span id="authWho"></span>
@@ -1303,6 +1304,17 @@ function initFirebase(){
         .catch(e=>err("Couldn't create account: "+friendlyAuthError(e)));
     };
     document.getElementById("authSignOut").onclick=()=>{wipeOnSignOut=true;fauth.signOut();};
+    document.getElementById("authCheck").onclick=e=>{
+      e.preventDefault();err("Checking the Firebase key\u2026");
+      fauth.fetchSignInMethodsForEmail("key-check@example.invalid").then(()=>{
+        err("Key accepted \u2014 Google recognizes this page's Firebase key. If sign-in still fails, the cause is something else (e.g. the Email/Password provider or the authorized domain).");
+      }).catch(e2=>{
+        const c2=(e2&&e2.code)||"";
+        err(c2==="auth/api-key-not-valid"
+          ? "Key rejected: "+friendlyAuthError(e2)
+          : "Key accepted \u2014 Google recognizes this page's Firebase key. (Check returned: "+(c2||"ok")+")");
+      });
+    };
     passEl.addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("authGo").click();});
     fauth.onAuthStateChanged(u=>{
       fbUser=u;locked=!u;err("");
@@ -1331,7 +1343,7 @@ function friendlyAuthError(e){
   if(c==="auth/weak-password")return "Google's sign-in system needs at least 6 characters — lengthen your password and click \u201cnew account\u201d again.";
   if(c==="auth/invalid-email")return "That email looks incomplete — it should look like name@example.com. Fix it and try again.";
   if(c==="auth/api-key-not-valid")
-    return "The Firebase API key in this page isn't valid — it was likely mistyped when copied. Copy the correct apiKey from Firebase console \u2192 Project settings \u2192 General (your web app's firebaseConfig) and update the page.";
+    return "Google rejected this page's Firebase API key. Site owner checklist \u2014 Google Cloud Console \u2192 project x-planner-99dd3 \u2192 APIs & Services \u2192 Credentials \u2192 open \u201cBrowser key (auto created by Firebase)\u201d: 1) \u201cApplication restrictions\u201d \u2014 if \u201cHTTP referrers\u201d is selected, add https://xinyuan-wei-xw.github.io/* (or set it to None); 2) \u201cAPI restrictions\u201d \u2014 make sure \u201cIdentity Toolkit API\u201d is allowed. If the key was deleted or you want a fresh one: Credentials \u2192 \u201cCreate credentials\u201d \u2192 \u201cAPI key\u201d, copy the new key, and replace the apiKey value in this page's firebaseConfig. Key changes take a few minutes to take effect \u2014 then click \u201ccheck key\u201d above to test again.";
   if(c==="auth/operation-not-allowed")
     return "Email/password sign-in isn't enabled yet — enable it in Firebase console > Authentication > Sign-in method.";
   if(c==="auth/unauthorized-domain")
