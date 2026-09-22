@@ -137,7 +137,7 @@ footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
   <a class="backlink" href="../">← Back to Lab</a>
   <div class="brand"><span class="pot">🍲</span><h1><span data-t="appName">认真吃饭</span><small>Eat Well, Live Better</small></h1></div>
   <div class="seg" id="langSeg">
-    <button data-lang="zh" class="on">中文</button><button data-lang="en">EN</button>
+    <button data-lang="zh">中文</button><button data-lang="en" class="on">EN</button>
   </div>
 </div>
 <div class="authbar">
@@ -214,6 +214,7 @@ signOut:"Sign out",checkKey:"check key",emailPh:"Email",passPh:"Password",
 lockTitle:"Your week plan lives here",lockBody:"Sign in above with your X Planner account to pick dishes, plan the week, and get a grocery list. Your plan syncs across devices and stays private — just like the planner.",
 needLogin:"Please sign in above first — your dishes and grocery list sync to your account.",
 noDetail:"Couldn't load the recipe. Check your connection and try again.",
+ recipeNote:"Recipe steps are shown in the original English from the recipe source.",
 serves:"Best for",syncSaving:"Saving…",syncDone:"Synced ✓",syncErr:"Sync error",syncing:"Syncing…",
 confirmNew:p=>"Create a new account for "+p+"?",typeCreds:"Type the email and password you want to use, then click “new account”.",
 keyChecking:"Checking the Firebase key…",
@@ -240,6 +241,7 @@ signOut:"退出登录",checkKey:"检查密钥",emailPh:"邮箱",passPh:"密码",
 lockTitle:"你的本周计划在这里",lockBody:"用 X Planner 的账号在上方登录，就可以选菜、安排一周、自动生成采购清单。计划会同步到你的所有设备，且仅你可见——和 planner 一样。",
 needLogin:"请先在上方登录——你的选菜和采购清单会同步到你的账号。",
 noDetail:"菜谱加载失败，请检查网络后重试。",
+ recipeNote:"菜谱步骤暂仅提供英文原版。",
 serves:"份量",syncSaving:"保存中…",syncDone:"已同步 ✓",syncErr:"同步出错",syncing:"同步中…",
 confirmNew:p=>"为 "+p+" 创建新账号？",typeCreds:"输入想用的邮箱和密码，再点“新账号”。",
 keyChecking:"正在检查 Firebase 密钥…",
@@ -247,7 +249,7 @@ keyOk:"密钥有效——Google 识别本页的 Firebase 密钥。若登录仍�
 keyBad:"密钥被 Google 拒绝。"}};
 /* ================= state ================= */
 const API="https://www.themealdb.com/api/json/v1/1";
-const S={lang:"zh",area:"Chinese",
+const S={lang:"en",area:"Chinese",
  areas:["Chinese","American","Korean","Japanese","Thai","Italian","Mexican","Indian","French","Spanish","Vietnamese","British"],
  meals:[],sel:{},detail:{},servings:2,tab:"browse",q:""};
 const LS="eatwell-prefs";
@@ -365,10 +367,11 @@ async function openRecipe(id){const ov=$("overlay"),mo=$("modal");
   if(steps.length<=1)steps=(m.strInstructions||"").split(/(?<=\.)\s+/).map(s=>s.trim()).filter(s=>s.length>3);
   mo.innerHTML='<img class="hero" src="'+esc(m.strMealThumb)+'"><div class="mbody">'
    +'<button class="close" onclick="closeRecipe()">✕</button>'
-   +"<h2>"+esc(m.strMeal)+"</h2>"
+   +"<h2>"+esc(mealName(m.strMeal))+"</h2>"
    +'<div class="pill-note">'+esc([m.strArea,m.strCategory].filter(Boolean).join(" · "))+"</div>"
    +'<h4 style="margin:14px 0 4px;color:var(--green-deep)">'+esc(t("ingredients"))+"</h4>"
-   +'<table class="ingtable">'+ings.map(o=>"<tr><td>"+esc(o.ing)+"</td><td>"+esc(o.ms||"—")+"</td></tr>").join("")+"</table>"
+   +'<table class="ingtable">'+ings.map(o=>"<tr><td>"+esc(S.lang==="zh"?kbLookup(o.ing).zh:o.ing)+"</td><td>"+esc(o.ms||"—")+"</td></tr>").join("")+"</table>"
+   +(S.lang==="zh"?'<div class="pill-note" style="margin-top:10px">'+esc(t("recipeNote"))+"</div>":"")
    +'<h4 style="margin:12px 0 4px;color:var(--green-deep)">'+esc(t("steps"))+"</h4>"
    +'<ol class="steps">'+steps.map(s=>"<li>"+esc(s)+"</li>").join("")+"</ol>"
    +(m.strYoutube?'<a class="yt" href="'+esc(m.strYoutube)+'" target="_blank" rel="noopener">'+esc(t("watchVideo"))+"</a>":"")
@@ -408,6 +411,9 @@ function renderWeek(){const wg=$("weekGrid");if(!wg)return;
    +'<div class="slot">'+esc(t("lunch"))+"</div>"
    +(lunches.length?lunches.map(e=>'<div class="dishchip"><span class="badge lunch">'+esc(t("lunchFrom"))+"</span><br>"+esc(dishName(e.id))+"</div>").join(""):'<div class="empty">—</div>')
    +"</div>";}).join("");}
+/* ============ dish name translations (EN -> ZH) ============ */
+const DISH_ZH={"Air Fryer Egg Rolls": "空气炸锅春卷", "Beef and Broccoli Stir-Fry": "西兰花炒牛肉", "Beef Lo Mein": "牛肉捞面", "Chicken Congee": "鸡肉粥", "Chicken Fried Rice": "鸡肉炒饭", "Chinese Orange Chicken": "陈皮鸡", "Chinese Tomato Egg Stir Fry": "番茄炒蛋", "Egg Drop Soup": "蛋花汤", "Egg Foo Young": "芙蓉蛋", "General Tsos Chicken": "左宗棠鸡", "Hot and Sour Soup": "酸辣汤", "Kung Pao Chicken": "宫保鸡丁", "Kung Po Prawns": "宫保虾仁", "Ma Po Tofu": "麻婆豆腐", "Napa Cabbage with Dried Shrimp": "虾米白菜", "Ramen Noodles with Boiled Egg": "拉面配水煮蛋", "Sesame Cucumber Salad": "凉拌黄瓜", "Shrimp Chow Fun": "虾仁炒河粉", "Shrimp With Snow Peas": "荷兰豆炒虾仁", "Sichuan Eggplant": "鱼香茄子", "Sichuan Style Stir-Fried Chinese Long Beans": "干煸豆角", "Silken Tofu with Sesame Soy Sauce": "凉拌嫩豆腐", "Singapore Noodles with Shrimp": "星洲炒米粉", "Sweet and Sour Chicken": "糖醋鸡", "Sweet and Sour Pork": "糖醋里脊", "Szechuan Beef": "川香牛肉", "Wontons": "馄饨", "Chicken Karaage": "日式炸鸡块", "Honey Teriyaki Salmon": "蜂蜜照烧三文鱼", "Japanese gohan rice": "日式米饭", "Japanese Katsudon": "猪排盖饭", "Katsu Chicken curry": "炸鸡排咖喱饭", "Sushi": "寿司", "Teriyaki Chicken Casserole": "照烧鸡肉煲", "Tonkatsu pork": "日式炸猪排", "Yaki Udon": "日式炒乌冬", "Drunken noodles (pad kee mao)": "泰式醉面", "Lemongrass beef stew with noodles": "香茅牛肉汤面", "Massaman Beef curry": "玛莎曼牛肉咖喱", "Pad See Ew": "泰式炒河粉", "Pad Thai": "泰式炒粉", "Panang chicken curry (kaeng panang gai)": "帕南鸡肉咖喱", "Prawn stir-fry": "虾仁炒饭", "Red curry chicken kebabs": "红咖喱鸡肉串", "Spicy Thai prawn noodles": "泰式辣虾面", "Stir-fried chicken with chillies & basil": "泰式罗勒炒鸡", "Thai beef stir-fry": "泰式炒牛肉", "Thai chicken cakes with sweet chilli sauce": "泰式鸡肉饼", "Thai coconut & veg broth": "泰式椰香蔬菜汤", "Thai curry noodle soup": "泰式咖喱汤面", "Thai drumsticks": "泰式鸡腿", "Thai fried rice with prawns & peas": "泰式虾仁炒饭", "Thai green chicken soup": "泰式青咖喱鸡汤", "Thai Green Curry": "泰式绿咖喱", "Thai pork & peanut curry": "泰式猪肉花生咖喱", "Thai prawn curry": "泰式虾咖喱", "Thai pumpkin soup": "泰式南瓜汤", "Thai rice noodle salad": "泰式米粉沙拉", "Thai-style fish broth with greens": "泰式鱼汤", "Thai-style steamed fish": "泰式清蒸鱼", "Tom kha gai": "冬阴椰奶鸡汤", "Tom yum (hot & sour) soup with prawns": "冬阴功虾汤", "Tom yum soup with prawns": "冬阴功虾汤", "Budino Di Ricotta": "意式乳清奶酪布丁", "Chicken Alfredo Primavera": "奶油鸡肉意面", "Chilli prawn linguine": "香辣虾仁扁意面", "Fettuccine Alfredo": "奶油宽意面", "Fettucine alfredo": "奶油宽意面", "Lasagne": "千层面", "Mediterranean Pasta Salad": "地中海意面沙拉", "Osso Buco alla Milanese": "米兰式炖牛膝", "Pilchard puttanesca": "意式沙丁鱼番茄意面", "Pizza Express Margherita": "玛格丽特披萨", "Potato Gratin with Chicken": "鸡肉土豆焗饭", "Ribollita": "意式蔬菜浓汤", "Rigatoni with fennel sausage sauce": "茴香香肠酱通心粉", "Salmon Prawn Risotto": "三文鱼虾仁烩饭", "Spaghetti alla Carbonara": "意式培根蛋酱面", "Spaghetti Bolognese": "肉酱意面", "Spicy Arrabiata Penne": "香辣番茄酱通心粉", "Spinach & Ricotta Cannelloni": "菠菜乳清奶酪卷", "Squash linguine": "南瓜扁意面", "Vegan Lasagna": "素食千层面", "Venetian Duck Ragu": "威尼斯鸭肉酱", "Braised Beef Chilli": "炖牛肉辣椒", "Cajun spiced fish tacos": "卡真香料鱼肉塔可", "Chicken Enchilada Casserole": "鸡肉安吉拉卷焗盘", "Chickpea Fajitas": "鹰嘴豆法士达", "Crock Pot Chicken Baked Tacos": "慢炖鸡肉烤塔可", "Stuffed Bell Peppers with Quinoa and Black Beans": "藜麦黑豆酿甜椒", "Air fryer patatas bravas": "空气炸锅辣味土豆", "Ajo blanco": "西班牙冷杏仁汤", "Arroz al horno (baked rice)": "烤饭", "Arroz con gambas y calamar": "虾仁鱿鱼饭", "Chicken & chorizo rice pot": "鸡肉香肠烩饭", "Chicken with saffron, raisins & pine nuts": "藏红花葡萄干松子鸡", "Chickpea, chorizo & spinach stew": "鹰嘴豆香肠菠菜炖菜", "Chocolate churros with chocolate & salted caramel sauce": "巧克力吉拿棒配咸焦糖酱", "Chorizo & chickpea soup": "香肠鹰嘴豆汤", "Chorizo & soft-boiled egg salad": "香肠溏心蛋沙拉", "Chorizo & tomato salad": "香肠番茄沙拉", "Chorizo, potato & cheese omelette": "香肠土豆芝士蛋饼", "Churros": "吉拿棒", "Clam, chorizo & white bean stew": "蛤蜊香肠白豆炖菜", "Crema Catalana": "加泰罗尼亚奶油布丁", "Easy Spanish chicken": "简易西班牙鸡", "Ensaimada": "螺旋面包", "Fried calamari": "炸鱿鱼圈", "Gambas al ajillo": "蒜香橄榄油虾", "Garlicky prawns with sherry": "雪莉酒蒜香虾", "Ham croquetas": "火腿可乐饼", "Jamon & wild garlic croquetas": "火腿野蒜可乐饼", "Migas": "西班牙炒面包屑", "Padron peppers": "帕德龙青椒", "Paella": "西班牙海鲜饭", "Pan-fried hake, white bean & chorizo broth": "煎鳕鱼白豆香肠汤", "Patatas bravas": "辣味土豆", "Pisto con huevos": "西班牙炖菜配蛋", "Pollo en pepitoria": "杏仁酱炖鸡", "Prawns with Romesco sauce": "罗梅斯科酱虾", "Quick gazpacho": "快手西班牙冷汤", "Roast fennel and aubergine paella": "烤茴香茄子饭", "Salt cod tortilla": "盐鳕鱼蛋饼", "Seafood fideuà": "海鲜意面海鲜饭", "Seafood rice": "海鲜饭", "Spaghetti with Spanish flavours": "西班牙风味意面", "Spanish beans with chicken & chorizo": "西班牙豆炖鸡香肠", "Spanish Chicken": "西班牙烤鸡", "Spanish chicken pie": "西班牙鸡肉派", "Spanish fig & almond balls": "西班牙无花果杏仁球", "Bang bang prawn salad": "棒棒虾沙拉", "Barbecue pork buns": "叉烧包", "Beef Banh Mi Bowls with Sriracha Mayo, Carrot & Pickled Cucumber": "牛肉法棍碗", "Beef pho": "牛肉河粉", "Noodle bowl salad": "越式粉沙拉碗", "Prawn & noodle salad with crispy shallots": "虾仁粉沙拉", "Purple sprouting broccoli tempura with nuoc cham": "西兰花天妇罗配鱼露", "Rice paper dumplings": "越式米纸饺", "Salmon noodle soup": "三文鱼汤面", "Salmon noodle wraps": "三文鱼粉卷", "Salt & pepper squid": "椒盐鱿鱼", "Sea bass with sizzled ginger, chilli & spring onions": "姜葱辣椒蒸海鲈", "Steak & Vietnamese noodle salad": "牛排越式粉沙拉", "Tangy carrot, cabbage & onion salad": "酸甜胡萝卜卷心菜沙拉", "Tofu, greens & cashew stir-fry": "豆腐腰果炒青菜", "Turkey Bánh mì": "火鸡肉法棍三明治", "Turkish lahmacun": "土耳其薄饼披萨", "Vegan banh mi": "素食法棍三明治", "Vietnamese caramel trout": "越式焦糖鳟鱼", "Vietnamese chicken salad": "越式鸡肉沙拉", "Vietnamese Grilled Pork (bun-thit-nuong)": "越式烤猪肉粉", "Vietnamese lamb shanks with sweet potatoes": "越式羊膝配红薯", "Vietnamese pork salad": "越式猪肉沙拉", "Vietnamese prawn spiralized rolls": "越式虾春卷", "Vietnamese veg parcels": "越式蔬菜包", "Vietnamese-style caramel pork": "越式焦糖猪肉", "Vietnamese-style veggie hotpot": "越式素火锅", " Bubble & Squeak": "炸薯泥卷心菜饼", "Apple & Blackberry Crumble": "苹果黑莓酥", "Apple Frangipan Tart": "苹果杏仁挞", "Baked salmon with fennel & tomatoes": "烤三文鱼配茴香番茄", "Bakewell tart": "贝克韦尔挞", "Battenberg Cake": "巴滕伯格蛋糕", "Bean & Sausage Hotpot": "豆子香肠炖锅", "Beef and Mustard Pie": "牛肉芥末派", "Beef and Oyster pie": "牛肉牡蛎派", "Beef Dumpling Stew": "牛肉饺子炖菜", "Beef Sunday Roast": "周日烤牛肉", "Beef Wellington": "惠灵顿牛排", "Blackberry Fool": "黑莓奶油甜点", "Bread and Butter Pudding": "黄油面包布丁", "Broccoli & Stilton soup": "西兰花蓝纹芝士汤", "Carrot Cake": "胡萝卜蛋糕", "Chelsea Buns": "切尔西小面包", "Chicken & mushroom Hotpot": "鸡肉蘑菇炖锅", "Chicken Ham and Leek Pie": "鸡肉火腿韭葱派", "Chocolate Avocado Mousse": "巧克力牛油果慕斯", "Chocolate Caramel Crispy": "巧克力焦糖脆", "Christmas cake": "圣诞蛋糕", "Christmas Pudding Flapjack": "圣诞布丁燕麦棒", "Christmas Pudding Trifle": "圣诞布丁杯", "Classic Christmas pudding": "经典圣诞布丁", "Corned Beef Hash": "咸牛肉土豆饼", "Creamy Tomato Soup": "奶油番茄汤", "Cumberland Pie": "坎伯兰派", "Dundee cake": "邓迪蛋糕", "Eccles Cakes": "埃克尔斯蛋糕", "English Breakfast": "英式早餐", "Eton Mess": "伊顿麦斯", "Fish pie": "英式鱼派", "Full English Breakfast": "全套英式早餐", "Jam Roly-Poly": "果酱卷布丁", "Kedgeree": "英式咖喱鱼饭", "Lamb and Potato pie": "羊肉土豆派", "Lancashire hotpot": "兰开夏炖羊肉", "Madeira Cake": "马德拉蛋糕", "McSinghs Scotch pie": "苏格兰肉派"};
+function mealName(en){return S.lang==="zh"?(DISH_ZH[en]||en):en;}
 /* ================= ingredient knowledge base ================= */
 const KB={
 "chicken breast":{cat:"catProtein",zh:"鸡胸肉",
