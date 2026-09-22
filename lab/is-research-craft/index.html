@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IS Research Craft — A Learning Book for IS Researchers</title>
+<title>IS Research Craft — Study Notes for IS Researchers</title>
 <style>
 :root{--blue:#52adc8;--ink:#2b2f33;--soft:#5b636b;--line:#e3e6e8;--bg:#f7f8f8;}
 *{box-sizing:border-box}
@@ -28,6 +28,9 @@ main a{color:var(--blue)}
 .hero h1{border:none;font-size:2.4em;margin:.2em 0 .1em}
 .hero .sub{font-size:1.15em;color:var(--soft);margin:0 0 .2em}
 .hero .ed{font-size:.95em;color:var(--soft)}
+.coming-soon{margin:48px 0;padding:56px 32px;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+.coming-soon h2{margin:0 0 12px;color:var(--ink);font-size:1.6em}
+.coming-soon p{color:var(--soft);margin:0}
 .refs li{margin:.7em 0}
 .refs .note{color:var(--soft);font-size:.92em}
 footer{border-top:1px solid var(--line);background:var(--bg);margin-top:40px}
@@ -38,8 +41,9 @@ footer .wrap{display:block;padding:22px;font-size:13px;color:var(--soft)}
 <body>
 <div class="topbar"><div class="wrap"><a href="../">← Back to Lab</a></div></div>
 <div class="wrap">
-<nav class="toc"><h4>Contents</h4>
 
+<!-- PUBLISH NOTE: full study-notes content is hidden below (nav.toc and div.full-content carry the 'hidden' attribute). To publish: set COMING_SOON = False in build_page.py, re-run it, and redeploy index.html. -->
+<nav class="toc" hidden><h4>Contents</h4>
 <a class="h1" href="#preface-how-this-book-develops-a-researcher">Preface: How this book develops a researcher</a>
 <a class="h2" href="#the-purpose-and-status-of-examples">The purpose and status of examples</a>
 <a class="h2" href="#case-h-a-clinic-coordination-system">Case H: A clinic coordination system</a>
@@ -136,8 +140,13 @@ footer .wrap{display:block;padding:22px;font-size:13px;color:var(--soft)}
 </nav>
 <main>
 <div class="hero"><h1>IS Research Craft</h1>
-<p class="sub">A Bilingual Learning Book</p>
+<p class="sub">Study Notes</p>
 <p class="ed">Reader edition 3</p></div>
+<section class="coming-soon">
+<h2>Coming Soon</h2>
+<p>These study notes are being reviewed and will be published here shortly.</p>
+</section>
+<div class="full-content" hidden>
 <h1 id="preface-how-this-book-develops-a-researcher">Preface: How this book develops a researcher</h1>
 <p>This book begins with a simple difficulty: a technology can work as designed while the activity around it fails. A record is saved, but nobody acts on it. A recommendation is accurate, but a worker has reasons to disregard it. Information Systems (IS) research investigates such relationships among information, digital technologies, people, and organized activity. The field contains several intellectual traditions; the working explanations in this book introduce their questions without treating one approach as the definition of the entire discipline.</p>
 <p>IS</p>
@@ -1575,8 +1584,9 @@ footer .wrap{display:block;padding:22px;font-size:13px;color:var(--soft)}
 <li>Rai, A. (2017). Editor&rsquo;s comments: Avoiding Type III errors: Formulating IS research problems that matter. <em>MIS Quarterly, 41</em>(2), iii&ndash;vii. <a href="https://static1.squarespace.com/static/57d860b2ff7c5058ba601cb7/t/59a6d9e012abd9d5f992858f/1504106976542/EdCommentsV41N2+--+Avoiding+Type+III+Errrors+--+June+2017.pdf" target="_blank" rel="noopener">PDF</a><br><span class="note">Problem formulation.</span></li>
 
 </ol>
+</div>
 </main>
 </div>
-<footer><div class="wrap">IS Research Craft · English reader edition · References verified against publisher records.</div></footer>
+<footer><div class="wrap">IS Research Craft · Study notes · References verified against publisher records.</div></footer>
 </body>
 </html>
