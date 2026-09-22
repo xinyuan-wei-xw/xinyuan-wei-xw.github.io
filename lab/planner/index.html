@@ -351,6 +351,10 @@
   .toolbar button{font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--line);
     color:var(--ink-soft);padding:8px 13px;border-radius:9px;cursor:pointer;box-shadow:var(--shadow);transition:.15s}
   .toolbar button:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+  .backlab{font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--line);
+    color:var(--ink-soft);padding:8px 13px;border-radius:9px;text-decoration:none;box-shadow:var(--shadow);
+    margin-right:auto;white-space:nowrap;transition:.15s}
+  .backlab:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
   .savenote{font-size:11px;color:var(--teal);opacity:0;transition:.3s}.savenote.show{opacity:1}
 
   footer.credit{margin-top:32px;text-align:center;font-size:11px;color:var(--ink-soft);letter-spacing:.03em}
@@ -394,6 +398,7 @@
 </head>
 <body>
 <div class="toolbar">
+  <a class="backlab" href="../">← Back to Lab</a>
   <span class="savenote" id="savenote">Saved</span>
   <span id="syncStat" style="font-size:11px;color:var(--ink-soft);align-self:center"></span>
   <span id="authBox" style="display:none">
