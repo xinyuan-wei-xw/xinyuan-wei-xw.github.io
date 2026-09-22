@@ -2,7 +2,7 @@
 # figure: use an image path such as /images/lab/example.png
 projects:
   - title: "[Productivity] X Planner"
-    description: "A planning tool designed to help users keep organized. Create an account with your email and password."
+    description: "A planning tool designed to help users keep organized (Create your account with email address and password)"
     figure: "/lab/planner/thumbnail.png"
     figure_alt: "X Planner daily planner interface"
     url: "/lab/planner/"
