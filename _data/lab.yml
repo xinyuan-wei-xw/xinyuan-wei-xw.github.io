@@ -32,3 +32,8 @@ projects:
     figure: "/lab/is-research-craft/cover.jpg"
     figure_alt: "IS Research Craft study notes illustration"
     url: "/lab/is-research-craft/"
+  - title: "[Reading] Daily AI News Briefing"
+    description: "A daily briefing on AI news and research — one page per day, newest first."
+    figure: "/lab/ai-news/cover.jpg"
+    figure_alt: "Daily AI News Briefing illustration"
+    url: "/lab/ai-news/"
