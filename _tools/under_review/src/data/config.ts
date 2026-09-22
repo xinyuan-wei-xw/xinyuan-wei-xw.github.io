@@ -7,8 +7,10 @@ export const zero = (): Profile => ({
   writing: 0,
 });
 export const config = {
-  revisionBudget: 12,
   revisionGain: 2.15,
+  revisionSetbackChance: 0.15,
+  revisionSetbackMin: 1,
+  revisionSetbackMax: 4,
   assessmentNoise: 18,
   initialOptimism: 16,
   continuationBonus: 0.18,

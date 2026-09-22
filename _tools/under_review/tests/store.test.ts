@@ -26,7 +26,10 @@ test("Complete submission, revision, drawer recovery, rest and new paper flow", 
   g.papers[0].history[0].outcome = "Reject After Review";
   useGame.setState({ game: g });
   for (let i = 0; i < 15; i++) state().allocate("writing", 1);
-  assert.equal(state().game.effort.writing, 12);
+  assert.equal(
+    state().game.effort.writing,
+    state().game.papers[0].revisionBudget,
+  );
   state().act("revise");
   finish();
   assert.equal(state().game.papers[0].revision, 1);

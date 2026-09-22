@@ -313,6 +313,13 @@ function World() {
       <Box at={[-2.7, 1.53, -0.75]} size={[0.94, 0.65, 0.08]} color="#464a4c" />
       <Box at={[-2.7, 1.53, -0.69]} size={[0.8, 0.51, 0.01]} color="#c5dedb" />
       <Box at={[-2.7, 1.18, -0.25]} size={[0.7, 0.05, 0.29]} color="#4e5557" />
+      <group>
+        <Box at={[-2.7, 0.55, 0.52]} size={[0.72, 0.12, 0.72]} color="#315b93" />
+        <Box at={[-2.7, 0.98, 0.82]} size={[0.72, 0.76, 0.12]} color="#234877" />
+        {[-2.98, -2.42].map((x) => (
+          <Box key={x} at={[x, 0.25, 0.52]} size={[0.07, 0.55, 0.07]} color="#526b89" />
+        ))}
+      </group>
       <mesh position={[-3.55, 1.28, -0.2]}>
         <cylinderGeometry args={[0.1, 0.085, 0.25, 20]} />
         <meshStandardMaterial color="#f8edda" />

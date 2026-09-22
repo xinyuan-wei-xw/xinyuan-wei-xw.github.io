@@ -43,7 +43,7 @@ export const createGameStore = () => create<Store>()(
           if (!idle(g) || paper(g).status === "accepted") return {};
           const used = dimensions.reduce((n, k) => n + g.effort[k], 0);
           if (
-            (delta > 0 && used >= config.revisionBudget) ||
+            (delta > 0 && used >= paper(g).revisionBudget) ||
             g.effort[d] + delta < 0
           )
             return {};

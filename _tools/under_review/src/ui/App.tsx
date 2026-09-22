@@ -422,13 +422,15 @@ export default function App() {
                       <summary>
                         Shape the next revision{" "}
                         <span>
-                          {totalEffort}/{config.revisionBudget} effort{" "}
+                          {totalEffort}/{p.revisionBudget} effort{" "}
                           <ChevronDown size={14} />
                         </span>
                       </summary>
                       <p>
-                        Target the concerns that matter. Improvements vary; no
-                        allocation guarantees acceptance.
+                        <b>{p.revisionContext}:</b> {p.revisionBudget} effort
+                        points are available this round. Target the concerns that
+                        matter. Improvements vary; no allocation guarantees
+                        acceptance.
                       </p>
                       {dimensions.map((d) => (
                         <div className="effort-row" key={d}>
@@ -444,7 +446,7 @@ export default function App() {
                           <button
                             aria-label={`Increase ${labels[d]}`}
                             disabled={
-                              busy || totalEffort >= config.revisionBudget
+                              busy || totalEffort >= p.revisionBudget
                             }
                             onClick={() => allocate(d, 1)}
                           >
@@ -856,8 +858,10 @@ export default function App() {
                     <b>noisy assessment</b>.
                   </li>
                   <li>
-                    Spend up to 12 effort points to revise, redirect to a
-                    different gate, or file the paper for later.
+                    Outside commitments determine whether a revision round has
+                    protected writing time, a normal semester, or heavy
+                    teaching/service. This provides 8–14 effort points to
+                    allocate before you redirect or file the paper.
                   </li>
                   <li>
                     Take breaks to restore energy. Revisit dormant work as your

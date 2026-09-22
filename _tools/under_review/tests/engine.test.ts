@@ -47,6 +47,46 @@ test("Targeted revision preserves unallocated dimensions and consumes time and e
   assert.equal(p.revision, 1);
   assert.equal(g.researcher.careerMonth, 3);
 });
+test("Revision effort varies by round and remains within its visible limits", () => {
+  const budgets = new Set<number>();
+  const contexts = new Set<string>();
+  for (let seed = 1; seed <= 100; seed++) {
+    const g = initial(seed * 99991);
+    const p = g.papers[0];
+    budgets.add(p.revisionBudget);
+    contexts.add(p.revisionContext);
+    assert.ok(p.revisionBudget >= 8 && p.revisionBudget <= 14);
+    if (p.revisionContext === "Protected writing time")
+      assert.ok(p.revisionBudget >= 13);
+    else if (p.revisionContext === "Normal semester")
+      assert.ok(p.revisionBudget >= 10 && p.revisionBudget <= 12);
+    else {
+      assert.equal(p.revisionContext, "Heavy teaching/service");
+      assert.ok(p.revisionBudget <= 9);
+    }
+    g.effort = { ...zero(), writing: 1 };
+    revise(g, p);
+    assert.ok(p.revisionBudget >= 8 && p.revisionBudget <= 14);
+  }
+  assert.ok(budgets.size > 1);
+  assert.equal(contexts.size, 3);
+});
+test("A revision can misunderstand one funded dimension without changing others", () => {
+  let setbacks = 0;
+  for (let seed = 1; seed <= 500; seed++) {
+    const g = initial(seed);
+    const p = g.papers[0];
+    const before = { ...p.underlying };
+    g.effort = { ...zero(), rigor: 1, writing: 1 };
+    revise(g, p);
+    assert.equal(p.underlying.theory, before.theory);
+    assert.equal(p.underlying.novelty, before.novelty);
+    assert.equal(p.underlying.relevance, before.relevance);
+    if (p.underlying.rigor < before.rigor || p.underlying.writing < before.writing)
+      setbacks++;
+  }
+  assert.ok(setbacks > 0 && setbacks < 500);
+});
 test("All outcomes reachable; assessments bounded and waits finite", () => {
   const outcomes = new Set();
   for (let i = 1; i <= 3000; i++) {

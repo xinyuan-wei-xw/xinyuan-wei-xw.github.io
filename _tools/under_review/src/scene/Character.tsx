@@ -8,7 +8,9 @@ export function Character() {
     right = useRef<THREE.Group>(null),
     head = useRef<THREE.Group>(null),
     legL = useRef<THREE.Group>(null),
-    legR = useRef<THREE.Group>(null);
+    legR = useRef<THREE.Group>(null),
+    lowerLegL = useRef<THREE.Group>(null),
+    lowerLegR = useRef<THREE.Group>(null);
   useFrame(({ clock }, dt) => {
     const g = useGame.getState().game;
     const t = clock.elapsedTime;
@@ -16,15 +18,22 @@ export function Character() {
     const phase = g.phase;
     const f = Math.min(1, g.elapsed / g.duration);
     const reduced = g.reducedMotion;
-    let x = -2.5,
-      z = 1,
+    const seated = ["ready", "writing", "revising"].includes(phase);
+    let x = seated ? -2.7 : -2.5,
+      z = seated ? 0.48 : 1,
+      turn = seated ? 2.75 : 0.35,
       lean = 0,
       la = 0.08,
       ra = -0.08,
       nod = 0,
       walk = 0;
+    if (seated) {
+      la = -0.9 + Math.sin(t * 4) * 0.035;
+      ra = -0.9 + Math.cos(t * 4) * 0.035;
+      lean = 0.11;
+      nod = 0.06;
+    }
     if (phase === "writing" || phase === "revising") {
-      z = 0.35;
       la = -1.1 + Math.sin(t * 12) * 0.1;
       ra = -1.1 + Math.cos(t * 12) * 0.1;
       lean = 0.17;
@@ -107,6 +116,12 @@ export function Character() {
         6,
         dt,
       );
+      body.current.rotation.y = THREE.MathUtils.damp(
+        body.current.rotation.y,
+        turn,
+        6,
+        dt,
+      );
       body.current.position.y = reduced
         ? 0
         : 0.015 * Math.sin(t * 2) +
@@ -115,38 +130,58 @@ export function Character() {
             : 0);
       body.current.rotation.x = lean;
     }
-    if (left.current) left.current.rotation.x = reduced ? -0.3 : la;
-    if (right.current) right.current.rotation.x = reduced ? -0.3 : ra;
+    if (left.current)
+      left.current.rotation.x = reduced ? (seated ? -0.9 : -0.3) : la;
+    if (right.current)
+      right.current.rotation.x = reduced ? (seated ? -0.9 : -0.3) : ra;
     if (head.current) head.current.rotation.x = reduced ? 0 : nod;
-    if (legL.current) legL.current.rotation.x = reduced ? 0 : walk;
-    if (legR.current) legR.current.rotation.x = reduced ? 0 : -walk;
+    if (legL.current) legL.current.rotation.x = seated ? -1.25 : reduced ? 0 : walk;
+    if (legR.current) legR.current.rotation.x = seated ? -1.25 : reduced ? 0 : -walk;
+    if (lowerLegL.current) lowerLegL.current.rotation.x = seated ? 1.25 : 0;
+    if (lowerLegR.current) lowerLegR.current.rotation.x = seated ? 1.25 : 0;
   });
   const skin = "#dba781";
   return (
     <group ref={body} position={[-2.5, 0, 1]} rotation={[0, 0.35, 0]}>
       <group ref={legL} position={[-0.17, 0.62, 0]}>
-        <mesh position={[0, -0.23, 0]} castShadow>
-          <capsuleGeometry args={[0.11, 0.36, 6, 12]} />
+        <mesh position={[0, -0.18, 0]} castShadow>
+          <capsuleGeometry args={[0.11, 0.25, 6, 12]} />
           <meshStandardMaterial color="#33434e" />
         </mesh>
-        <mesh position={[0, -0.53, 0.08]} castShadow>
-          <boxGeometry args={[0.23, 0.13, 0.37]} />
-          <meshStandardMaterial color="#714e3d" />
-        </mesh>
+        <group ref={lowerLegL} position={[0, -0.39, 0]}>
+          <mesh position={[0, -0.18, 0]} castShadow>
+            <capsuleGeometry args={[0.1, 0.25, 6, 12]} />
+            <meshStandardMaterial color="#33434e" />
+          </mesh>
+          <mesh position={[0, -0.39, 0.08]} castShadow>
+            <boxGeometry args={[0.23, 0.13, 0.37]} />
+            <meshStandardMaterial color="#714e3d" />
+          </mesh>
+        </group>
       </group>
       <group ref={legR} position={[0.17, 0.62, 0]}>
-        <mesh position={[0, -0.23, 0]} castShadow>
-          <capsuleGeometry args={[0.11, 0.36, 6, 12]} />
+        <mesh position={[0, -0.18, 0]} castShadow>
+          <capsuleGeometry args={[0.11, 0.25, 6, 12]} />
           <meshStandardMaterial color="#33434e" />
         </mesh>
-        <mesh position={[0, -0.53, 0.08]} castShadow>
-          <boxGeometry args={[0.23, 0.13, 0.37]} />
-          <meshStandardMaterial color="#714e3d" />
-        </mesh>
+        <group ref={lowerLegR} position={[0, -0.39, 0]}>
+          <mesh position={[0, -0.18, 0]} castShadow>
+            <capsuleGeometry args={[0.1, 0.25, 6, 12]} />
+            <meshStandardMaterial color="#33434e" />
+          </mesh>
+          <mesh position={[0, -0.39, 0.08]} castShadow>
+            <boxGeometry args={[0.23, 0.13, 0.37]} />
+            <meshStandardMaterial color="#714e3d" />
+          </mesh>
+        </group>
       </group>
       <mesh position={[0, 1, 0]} castShadow>
         <capsuleGeometry args={[0.29, 0.38, 8, 16]} />
-        <meshStandardMaterial color="#619789" />
+        <meshStandardMaterial color="#315b93" />
+      </mesh>
+      <mesh position={[0, 1.31, -0.14]} scale={[1.45, 0.8, 0.72]} castShadow>
+        <sphereGeometry args={[0.25, 20, 16]} />
+        <meshStandardMaterial color="#315b93" />
       </mesh>
       <mesh position={[0, 1.04, 0.25]}>
         <boxGeometry args={[0.16, 0.49, 0.05]} />
@@ -163,7 +198,7 @@ export function Character() {
         >
           <mesh position={[0, -0.19, 0]} castShadow>
             <capsuleGeometry args={[0.1, 0.28, 6, 12]} />
-            <meshStandardMaterial color="#619789" />
+            <meshStandardMaterial color="#315b93" />
           </mesh>
           <mesh position={[0, -0.42, 0.01]} castShadow>
             <sphereGeometry args={[0.105, 12, 12]} />
@@ -180,19 +215,23 @@ export function Character() {
           <sphereGeometry args={[0.295, 24, 20]} />
           <meshStandardMaterial color="#4e3932" />
         </mesh>
-        {/* Swept hair, shoulder-length sides, and a visible low ponytail. */}
+        {/* Swept dark hair, face-framing strands, and a high ponytail. */}
+        <mesh position={[0.12, 0.2, -0.22]} castShadow>
+          <sphereGeometry args={[0.15, 20, 16]} />
+          <meshStandardMaterial color="#302b35" />
+        </mesh>
         <mesh
-          position={[0.22, -0.22, -0.23]}
-          rotation={[0.2, 0, 0.3]}
+          position={[0.22, -0.02, -0.34]}
+          rotation={[0.35, 0, 0.28]}
           castShadow
         >
-          <capsuleGeometry args={[0.12, 0.36, 8, 16]} />
-          <meshStandardMaterial color="#4e3932" />
+          <capsuleGeometry args={[0.13, 0.42, 8, 16]} />
+          <meshStandardMaterial color="#302b35" />
         </mesh>
         {[-0.24, 0.24].map((x) => (
           <mesh key={x} position={[x, -0.08, 0.015]} castShadow>
             <capsuleGeometry args={[0.075, 0.22, 8, 16]} />
-            <meshStandardMaterial color="#4e3932" />
+            <meshStandardMaterial color="#302b35" />
           </mesh>
         ))}
         <mesh
@@ -202,11 +241,11 @@ export function Character() {
           castShadow
         >
           <sphereGeometry args={[0.16, 20, 16]} />
-          <meshStandardMaterial color="#4e3932" />
+          <meshStandardMaterial color="#302b35" />
         </mesh>
         <mesh position={[0.255, 0.12, 0.17]} rotation={[0, 0, 0.35]}>
           <capsuleGeometry args={[0.018, 0.075, 4, 8]} />
-          <meshStandardMaterial color="#c8b079" />
+          <meshStandardMaterial color="#416fad" />
         </mesh>
         <mesh position={[0, -0.04, 0.17]} scale={[0.92, 0.8, 0.7]}>
           <sphereGeometry args={[0.255, 24, 20]} />

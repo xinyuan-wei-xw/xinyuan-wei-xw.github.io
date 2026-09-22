@@ -62,6 +62,8 @@ export interface Manuscript {
   perception: Profile;
   status: "draft" | "revision" | "rejected" | "accepted" | "dormant";
   revision: number;
+  revisionBudget: number;
+  revisionContext: string;
   history: Review[];
   target: string | null;
   rejectionStreak: number;

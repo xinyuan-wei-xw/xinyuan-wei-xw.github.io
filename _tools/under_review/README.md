@@ -32,10 +32,11 @@ required. This project is not automatically published by the homepage workflow.
 Enter the office, inspect your manuscript's perceived profile, choose a journal,
 and submit. The automatic throw passes through a review field. Its assessment
 can differ from the author's view. Wait a few seconds for a simulated editorial
-letter. Revise with up to twelve effort points, redirect rejected work, or set it
-aside in the File Drawer. Rest to recover energy. Retrieve dormant papers any
-time; occasional reminders make them salient again. Write new manuscripts and
-build a publication shelf. A career notebook records decisions.
+letter. Each revision round provides 8–14 effort points based on the author's
+other commitments. Redirect rejected work or set it aside in the File Drawer.
+Rest to recover energy. Retrieve dormant papers any time; occasional reminders
+make them salient again. Write new manuscripts and build a publication shelf. A
+career notebook records decisions.
 
 Sound is optional. Speed can be doubled and character/camera motion reduced.
 Rotate the scene by dragging; scroll to zoom. Ordinary HTML controls operate all
@@ -52,7 +53,8 @@ mechanics and remain available if WebGL initialization fails.
 - Outcomes combine weighted quality, normalized profile fit, fictional
   selectivity, development, revision history, continuation status, and chance.
 - All five decisions are possible. R&R improves continuation but never guarantees
-  publication. Targeted revision consumes energy/time and yields variable gains.
+  publication. Targeted revision usually yields variable gains; a simulated
+  misunderstanding can reduce one funded dimension.
 - Skill and confidence can diverge. Resource exhaustion cannot soft-lock a career:
   taking a break is always available between actions.
 

@@ -21,8 +21,19 @@ export function mapProfile(
 ): Profile {
   return Object.fromEntries(dimensions.map((d) => [d, fn(d)])) as Profile;
 }
+export function drawRevisionCapacity(g: { seed: number }) {
+  const draw = random(g);
+  const [context, min, max] =
+    draw < 0.25
+      ? (["Protected writing time", 13, 14] as const)
+      : draw < 0.75
+        ? (["Normal semester", 10, 12] as const)
+        : (["Heavy teaching/service", 8, 9] as const);
+  return { context, budget: min + Math.floor(random(g) * (max - min + 1)) };
+}
 export function makePaper(g: Game): Manuscript {
   const id = g.nextId++;
+  const capacity = drawRevisionCapacity(g);
   const underlying = mapProfile(() =>
     clamp(28 + g.researcher.researchSkill * 0.48 + random(g) * 34),
   );
@@ -36,6 +47,8 @@ export function makePaper(g: Game): Manuscript {
     ),
     status: "draft",
     revision: 0,
+    revisionBudget: capacity.budget,
+    revisionContext: capacity.context,
     history: [],
     target: null,
     rejectionStreak: 0,
@@ -246,17 +259,35 @@ export function revise(g: Game, p: Manuscript) {
   const spent = dimensions.reduce((s, d) => s + g.effort[d], 0);
   if (!spent) return;
   const skill = g.researcher.researchSkill;
+  const before = { ...p.underlying };
+  const funded = dimensions.filter((d) => g.effort[d] > 0);
+  const setback =
+    random(g) < config.revisionSetbackChance
+      ? funded[Math.floor(random(g) * funded.length)]
+      : null;
+  const setbackLoss = setback
+    ? config.revisionSetbackMin +
+      Math.floor(
+        random(g) *
+          (config.revisionSetbackMax - config.revisionSetbackMin + 1),
+      )
+    : 0;
   p.underlying = mapProfile((d) =>
-    clamp(
-      p.underlying[d] +
-        g.effort[d] *
-          config.revisionGain *
-          (0.55 + random(g) * 0.8) *
-          (1 + skill * 0.003) *
-          (1 - p.underlying[d] / 145),
-    ),
+    setback === d
+      ? clamp(before[d] - setbackLoss)
+      : clamp(
+          before[d] +
+            g.effort[d] *
+              config.revisionGain *
+              (0.55 + random(g) * 0.8) *
+              (1 + skill * 0.003) *
+              (1 - before[d] / 145),
+        ),
   );
   p.revision++;
+  const capacity = drawRevisionCapacity(g);
+  p.revisionBudget = capacity.budget;
+  p.revisionContext = capacity.context;
   p.perception = mapProfile((d) =>
     clamp(p.perception[d] * 0.35 + p.underlying[d] * 0.65 + 5 + random(g) * 4),
   );
@@ -266,7 +297,15 @@ export function revise(g: Game, p: Manuscript) {
   g.researcher.confidence = clamp(g.researcher.confidence + 9);
   advance(g.researcher, Math.max(1, Math.ceil(spent / 6)));
   g.effort = zero();
-  g.message = "“Okay… now this is good.”";
+  g.message = setback
+    ? `“I may have misunderstood the feedback on ${labels[setback].toLowerCase()}.”`
+    : "“Okay… now this is good.”";
+  if (setback) {
+    g.log.unshift(
+      `Y${g.researcher.careerYear} M${g.researcher.careerMonth} · Revision setback in ${labels[setback]} · ${p.title}`,
+    );
+    g.log = g.log.slice(0, 30);
+  }
 }
 
 export function advanceDays(r: ResearcherState, days: number) {
