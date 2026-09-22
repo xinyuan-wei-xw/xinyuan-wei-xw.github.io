@@ -245,7 +245,7 @@ fNameZh:"Dish name (Chinese) *",fNameEn:"English name (optional)",fPhoto:"Photo"
 fPhotoUrl:"…or paste an image URL",fArea:"Cuisine",fCat:"Category",fIngs:"Ingredients",
 fIngName:"Ingredient (Chinese or English)",fIngAmt:"Amount",fAddIng:"+ Add ingredient row",
 fSteps:"Steps",fStepsPh:"One step per line…",fSave:"Save dish",fCancel:"Cancel",
-fDelete:"Delete dish",fEdit:"Edit",customBadge:"Homemade",customSrc:"My own recipe",
+fDelete:"Delete dish",fEdit:"Edit",customBadge:"Homemade",customSrc:"My own recipe",curatedSrc:"Curated by Muse",
 needName:"Please enter the dish name.",
 confirmDel:function(d){return "Delete \u201c"+d+"\u201d? It will also be removed from your week plan."}},
 zh:{appName:"认真吃饭",tagline:"好好吃饭，好好生活",tabBrowse:"选菜",tabPlan:"本周计划",
@@ -280,7 +280,7 @@ fNameZh:"菜名（中文）*",fNameEn:"英文名（选填）",fPhoto:"照片",
 fPhotoUrl:"…或粘贴图片链接",fArea:"菜系",fCat:"分类",fIngs:"配料",
 fIngName:"配料名（中文或英文）",fIngAmt:"用量",fAddIng:"+ 加一行配料",
 fSteps:"做法",fStepsPh:"每行写一步…",fSave:"保存",fCancel:"取消",
-fDelete:"删除这道菜",fEdit:"编辑",customBadge:"自制",customSrc:"自制菜谱",
+fDelete:"删除这道菜",fEdit:"编辑",customBadge:"自制",customSrc:"自制菜谱",curatedSrc:"Muse 整理",
 needName:"请填写菜名。",
 confirmDel:function(d){return "删除“"+d+"”？它也会从本周计划中移除。"}}};
 /* ================= state ================= */
@@ -449,7 +449,7 @@ async function openRecipe(id){const ov=$("overlay"),mo=$("modal");
   const isC=String(id).indexOf("custom-")===0;
   const hero=m.strMealThumb?'<img class="hero" src="'+esc(m.strMealThumb)+'">':'<div class="hero-fb">🍲</div>';
   const srcNote=isC?esc(t("customSrc"))
-   :(m.strSrc==="cn"?esc(t("recipeSource"))+" "+esc(t("appName"))
+   :(m.strSrc==="cn"?esc(t("recipeSource"))+" "+esc(t("curatedSrc"))
    :esc(t("recipeSource"))+' <a href="https://www.themealdb.com" target="_blank" rel="noopener">TheMealDB</a>'+(zh?" · "+esc(t("transCredit")):""));
   const instr=(zh&&m.strInstructionsZh)?m.strInstructionsZh:(m.strInstructions||"");
   let steps=instr.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
