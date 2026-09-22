@@ -27,3 +27,8 @@ projects:
     figure: "/images/lab/becoming-a-researcher.svg"
     figure_alt: "A research notebook: ask a better question, follow the evidence, carry the lesson forward"
     url: "/lab/becoming-a-researcher/"
+  - title: "[Learning] IS Research Craft"
+    description: "Learning how to think and work as an IS researcher."
+    figure: "/lab/is-research-craft/cover.jpg"
+    figure_alt: "IS Research Craft cover illustration"
+    url: "/lab/is-research-craft/"
