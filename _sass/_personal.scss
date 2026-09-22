@@ -2,6 +2,7 @@
 // Preserve all existing typography, dimensions, spacing, and layout.
 $personal-blue: #0039a6;
 
+
 html, body { background-color: #e8f2fc; }
 body { color: #39434f; }
 .masthead, .greedy-nav { background-color: #e8f2fc; }
@@ -11,6 +12,7 @@ body { color: #39434f; }
 .greedy-nav .visible-links a:before { background-color: $personal-blue; }
 .greedy-nav button { background-color: $personal-blue; }
 .greedy-nav .hidden-links { background-color: #e8f2fc; border-color: #dce3ee; }
+
 
 .page__title, .sidebar .author__name { color: #18345a; }
 .page__content h2, .page__content h3 { color: #234877; }
@@ -24,3 +26,6 @@ a:hover, .page__content a:hover { color: #00266f; }
 .page__footer { background-color: #e1edf9; border-color: #dce3ee; color: #636e7d; }
 .page__footer a { color: #43536b; }
 ::selection { background-color: #dce7fb; color: #18345a; }
+
+/* Bio typesetting: keep inline links in page paragraphs flowing with the text. */
+.page__content p a { display: inline; }
