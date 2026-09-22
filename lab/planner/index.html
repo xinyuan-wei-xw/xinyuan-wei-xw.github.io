@@ -203,6 +203,10 @@
   .mini-task input{margin-top:2px;accent-color:var(--blue-bright);width:13px;height:13px;flex-shrink:0;cursor:pointer}
   .mini-task .tt{flex:1;color:var(--ink);word-break:break-word}
   .mini-task.done .tt{text-decoration:line-through;color:var(--faint)}
+  .mini-task .msv{border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:5px;
+    font-size:10px;padding:1px 6px;cursor:pointer;font-family:var(--sans);flex-shrink:0}
+  .mini-task .msv:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+  .mini-task .msv:disabled{opacity:.75;cursor:default}
   .mini-add{margin-top:7px;border:none;background:var(--paper-2);color:var(--ink-soft);font-size:11px;
     font-weight:600;padding:5px;border-radius:7px;cursor:pointer}
   .mini-add:hover{background:var(--blue-soft);color:var(--blue-bright)}
@@ -713,8 +717,10 @@ function renderWeek(){
     const ul=document.createElement("ul");ul.className="mini-tasks";
     DB.matrix.filter(t=>t.due&&t.due.slice(0,10)===dk).forEach(t=>{
       const li=document.createElement("li");li.className="mini-task"+(t.d?" done":"");
-      li.innerHTML=`<input type="checkbox" ${t.d?"checked":""}><span class="tt" contenteditable="true">${esc(t.t)}</span><button class="del">×</button>`;
+      li.innerHTML=`<input type="checkbox" ${t.d?"checked":""}><span class="tt" contenteditable="true">${esc(t.t)}</span><button class="msv">Save</button><button class="del">×</button>`;
       li.querySelector("input").addEventListener("change",e=>{t.d=e.target.checked;li.classList.toggle("done",t.d);save();});
+      const msv=li.querySelector(".msv");msv.addEventListener("click",()=>{save();msv.textContent="Saved ✓";msv.disabled=true;
+        setTimeout(()=>{msv.textContent="Save";msv.disabled=false;},1200);});
       const tt=li.querySelector(".tt");tt.addEventListener("input",()=>{t.t=tt.textContent;save();});
       tt.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();tt.blur();}});
       li.querySelector(".del").addEventListener("click",()=>{const gi=DB.matrix.indexOf(t);DB.matrix.splice(gi,1);save();renderWeek();});
