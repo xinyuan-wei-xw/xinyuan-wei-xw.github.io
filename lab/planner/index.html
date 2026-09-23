@@ -525,6 +525,21 @@ function purgeFromDayLists(id){for(const k in DB.days){const arr=DB.days[k]&&DB.
 ensureIds();
 DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
 
+/* On refresh, merge any matrix tasks that never made it into the list (added before
+   the two-way sync, from week view, or via backup restore) into today's Tasks Today.
+   Same shared objects as the matrix, so edits stay in sync; skips finished and
+   untitled tasks. Idempotent: runs again whenever fresh data arrives. */
+function backfillToday(){
+  const day=getDay(new Date());
+  const have=new Set((day.top3||[]).map(r=>r&&r.id).filter(Boolean));
+  let added=false;
+  (DB.matrix||[]).forEach(t=>{
+    if(!t||!t.id||have.has(t.id)||t.d||!(t.t&&t.t.trim()))return;
+    day.top3.push(t);have.add(t.id);added=true;
+  });
+  if(added)save();
+}
+
 let saveTimer=null;
 function save(){if(locked)return;localStorage.setItem(LS,JSON.stringify(DB));
   const n=document.getElementById("savenote");n.classList.add("show");
@@ -817,7 +832,9 @@ function renderWeek(){
     });
     col.appendChild(ul);
     const add=document.createElement("button");add.className="mini-add";add.textContent="+ task";
-    add.addEventListener("click",()=>{DB.matrix.push({t:"",d:false,quad:0,added:Date.now(),due:dk+"T09:00",notes:""});save();renderWeek();});
+    add.addEventListener("click",()=>{const nt={id:newMid(),t:"",d:false,quad:0,added:Date.now(),due:dk+"T09:00",notes:""};
+      DB.matrix.push(nt);day.top3.push(nt); /* same task also appears in that day's Tasks Today */
+      save();renderWeek();});
     col.appendChild(add);
     const nb=Object.keys(day.blocks||{}).filter(k=>day.blocks[k]).length;
     if(nb){const f=document.createElement("div");f.style.cssText="margin-top:6px;font-size:11px;color:var(--ink-soft);cursor:pointer";
@@ -1273,6 +1290,7 @@ function applyImport(text,skipConfirm){
     DB.months=DB.months||{};DB.years=DB.years||{};DB.deadlines=DB.deadlines||[];DB.projects=DB.projects||[];DB.matrix=DB.matrix||[];
     DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
     ensureIds();
+    backfillToday();
     save();render();return true;
   }catch(err){alert("That isn't valid planner backup JSON.");return false;}
 }
@@ -1374,6 +1392,7 @@ function applyRemote(d){
   DB.months=DB.months||{};DB.years=DB.years||{};DB.deadlines=DB.deadlines||[];DB.projects=DB.projects||[];DB.matrix=DB.matrix||[];
   DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
   ensureIds();
+  backfillToday();
   localStorage.setItem(LS,JSON.stringify(DB));render();applyingRemote=false;
 }
 function pushRemote(now){
@@ -1521,6 +1540,7 @@ const README=[
   const b=document.getElementById("downloadBtn");if(b)b.style.display=showOwnerTools?"":"none";
 })();
 
+backfillToday(); /* refresh: pull any unsynced matrix tasks into today's list */
 initFirebase();
 render();
 setInterval(()=>{document.querySelectorAll(".cd-live").forEach(el=>{const d=el.dataset.due;if(!d)return;
