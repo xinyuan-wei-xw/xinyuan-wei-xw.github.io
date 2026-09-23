@@ -427,7 +427,10 @@
     body[data-level="2"] .cell{min-height:66px;break-inside:avoid}
     /* week print: 7 days in a 4+3 grid + one blank cell, nothing else */
     body[data-level="1"] #stage>:not(.weekgrid){display:none!important}
-    body[data-level="1"] .weekgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+    body[data-level="1"] .topbar,body[data-level="1"] .navrow,body[data-level="1"] #deadlineBar,
+    body[data-level="1"] #printBtn{display:none!important}
+    body[data-level="1"] .weekgrid{grid-template-columns:repeat(4,minmax(0,1fr));
+      grid-template-rows:repeat(2,1fr);min-height:165mm} /* 2 equal rows fill the page */
     body[data-level="1"] .daycol{min-height:0;break-inside:avoid}
     body[data-level="1"] .daycol.blankcell{display:flex!important}
     body[data-level="1"] .msv{display:none!important}
