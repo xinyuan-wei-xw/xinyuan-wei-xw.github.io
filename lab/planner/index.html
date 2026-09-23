@@ -127,9 +127,14 @@
   .ev .evt:focus{outline:none}
   .ev .evx{flex:1;border:none;background:transparent;font-size:14px;color:var(--ink)}
   .ev .evx:focus{outline:none}
-  .ev .del,.task .del,.mini-task .del{opacity:0;border:none;background:none;color:var(--faint);
+  .ev .del,.task .del,.mini-task .del,.prow .del{opacity:0;border:none;background:none;color:var(--faint);
     cursor:pointer;font-size:15px;line-height:1}
-  .ev:hover .del,.task:hover .del,.mini-task:hover .del{opacity:1}
+  .ev:hover .del,.task:hover .del,.mini-task:hover .del,.prow:hover .del{opacity:1}
+  .prow .drag-handle{cursor:grab;color:var(--faint);font-size:11px;letter-spacing:2px;
+    user-select:none;-webkit-user-select:none;flex-shrink:0;padding:4px 2px;touch-action:none}
+  .prow .drag-handle:active{cursor:grabbing}
+  .prow.dragging{opacity:.35}
+  .prow.drop-target{box-shadow:inset 0 2px 0 var(--blue-bright)}
   .del:hover{color:var(--blue-bright)}
   .addbtn{margin-top:10px;border:none;background:var(--paper-2);color:var(--ink-soft);font-size:12px;
     font-weight:600;padding:7px 12px;border-radius:9px;cursor:pointer;transition:.15s}
@@ -391,7 +396,7 @@
   body.locked .toolbar .only-unlocked{display:none!important}
 
   @media print{
-    .toolbar,.zoomctl,.stepnav,.addbtn,.mini-add,.qadd,.del,.savenote,footer.credit,
+    .toolbar,.zoomctl,.stepnav,.addbtn,.mini-add,.qadd,.del,.drag-handle,.savenote,footer.credit,
     .navbtn,.pill{display:none!important}
     body{background:#fff}.wrap{max-width:100%;padding:0}
     .panel,.daycol,.cal,.mcard,.ycard,.quad{box-shadow:none}
@@ -493,6 +498,11 @@ DB.deadlines=DB.deadlines||[];
 DB.projects=DB.projects||[];
 if(DB.matrix===undefined){/* migrate any old per-day tasks into the persistent matrix */
   DB.matrix=[];for(const k in DB.days){(DB.days[k].tasks||[]).forEach(t=>{if(t&&(t.t||t.d))DB.matrix.push({t:t.t||"",d:!!t.d,quad:t.quad||0,due:""});});}}
+function newMid(){return "m"+Date.now().toString(36)+Math.floor(Math.random()*46656).toString(36);}
+function ensureIds(){(DB.matrix||[]).forEach(t=>{if(!t.id)t.id=newMid();});}
+function purgeFromDayLists(id){for(const k in DB.days){const arr=DB.days[k]&&DB.days[k].top3;
+  if(arr)for(let i=arr.length-1;i>=0;i--){if(arr[i]&&arr[i].id===id)arr.splice(i,1);}}}
+ensureIds();
 DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
 
 let saveTimer=null;
@@ -564,6 +574,60 @@ function checkRows(container,arr,ph){
     container.appendChild(r);
   });
 }
+/* Tasks Today list: editable rows (add/delete) + drag-to-reorder.
+   Rows that came from the matrix share the same object, so edits stay in sync;
+   after a JSON reload they are re-linked to the live matrix task by id. */
+function tasksTodayPanel(d,syncMatrix){
+  const day=getDay(d);
+  day.top3.forEach((r,i)=>{if(r&&r.id){const live=(DB.matrix||[]).find(m=>m.id===r.id);
+    if(live&&live!==r)day.top3[i]=live;}});
+  const p=document.createElement("div");p.className="panel";
+  p.innerHTML=`<div class="sec-lbl">Tasks today<span class="dash"></span></div>`;
+  const list=document.createElement("div");p.appendChild(list);
+  let mxT=null;
+  function draw(){
+    list.innerHTML="";
+    day.top3.forEach((t,idx)=>{
+      const r=document.createElement("div");r.className="prow";
+      const handle=document.createElement("span");handle.className="drag-handle";
+      handle.title="Drag to reorder";handle.textContent="\u22EE\u22EE";handle.draggable=true;
+      const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!t.d;
+      const star=document.createElement("span");star.className="star";star.textContent="\u2605";
+      const tx=document.createElement("input");tx.type="text";tx.placeholder="Most important\u2026";tx.value=t.t||"";
+      if(t.d)tx.style.cssText="text-decoration:line-through;color:var(--ink-soft)";
+      const del=document.createElement("button");del.className="del";del.textContent="\u00D7";del.title="Remove";
+      cb.addEventListener("change",()=>{t.d=cb.checked;
+        tx.style.cssText=t.d?"text-decoration:line-through;color:var(--ink-soft)":"";save();syncMatrix();});
+      tx.addEventListener("input",()=>{t.t=tx.value;save();clearTimeout(mxT);mxT=setTimeout(syncMatrix,800);});
+      del.addEventListener("click",()=>{
+        day.top3.splice(idx,1);
+        if(t.id){const gi=(DB.matrix||[]).findIndex(m=>m.id===t.id);if(gi>=0)DB.matrix.splice(gi,1);}
+        save();draw();syncMatrix();
+      });
+      handle.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",String(idx));
+        e.dataTransfer.effectAllowed="move";r.classList.add("dragging");});
+      handle.addEventListener("dragend",()=>{r.classList.remove("dragging");
+        list.querySelectorAll(".drop-target").forEach(x=>x.classList.remove("drop-target"));});
+      r.addEventListener("dragover",e=>{e.preventDefault();e.dataTransfer.dropEffect="move";r.classList.add("drop-target");});
+      r.addEventListener("dragleave",()=>{r.classList.remove("drop-target");});
+      r.addEventListener("drop",e=>{
+        e.preventDefault();r.classList.remove("drop-target");
+        const from=parseInt(e.dataTransfer.getData("text/plain"),10);
+        if(isNaN(from)||from===idx)return;
+        const mv=day.top3.splice(from,1)[0];day.top3.splice(idx,0,mv);
+        save();draw();
+      });
+      r.appendChild(handle);r.appendChild(cb);r.appendChild(star);r.appendChild(tx);r.appendChild(del);
+      list.appendChild(r);
+    });
+  }
+  draw();
+  const add=document.createElement("button");add.className="addbtn";add.textContent="+ add task";
+  add.addEventListener("click",()=>{day.top3.push({t:"",d:false});save();draw();
+    const xs=list.querySelectorAll('input[type="text"]');if(xs.length)xs[xs.length-1].focus();});
+  p.appendChild(add);
+  return {el:p,redraw:draw};
+}
 function noteField(obj,key,ph){const ta=document.createElement("textarea");ta.className="note";ta.placeholder=ph;ta.value=obj[key]||"";
   ta.addEventListener("input",()=>{obj[key]=ta.value;save();});return ta;}
 function themeField(obj,ph){const i=document.createElement("input");i.className="theme-input";i.placeholder=ph;i.value=obj.theme||"";
@@ -611,12 +675,11 @@ function renderDay(){
     sched.appendChild(row);
   }
 
-  // right stack: top3, events, notes
+  // right stack: tasks today, events, notes
   const right=document.createElement("div");right.className="stack";
-  const p3=document.createElement("div");p3.className="panel";
-  p3.innerHTML=`<div class="sec-lbl">Top 3 today<span class="dash"></span></div>`;
-  checkRows(p3,day.top3,"Most important…");
-  right.appendChild(p3);
+  const quadDraws=[];
+  const tt=tasksTodayPanel(d,()=>quadDraws.forEach(f=>f()));
+  right.appendChild(tt.el);
   right.appendChild(eventsPanel(d));
   const pn=document.createElement("div");pn.className="panel";
   pn.innerHTML=`<div class="sec-lbl">Notes<span class="dash"></span></div>`;
@@ -652,9 +715,10 @@ function renderDay(){
         const li=document.createElement("li");li.className="qtask"+(t.d?" done":"");
         const top=document.createElement("div");top.className="qt-top";
         const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!t.d;
-        cb.addEventListener("change",()=>{t.d=cb.checked;save();drawTasks();});
+        cb.addEventListener("change",()=>{t.d=cb.checked;save();drawTasks();tt.redraw();});
         const ti=document.createElement("input");ti.className="qt-title";ti.placeholder="Task title…";ti.value=t.t||"";
-        ti.addEventListener("input",()=>{t.t=ti.value;save();});
+        let rtT=null;
+        ti.addEventListener("input",()=>{t.t=ti.value;save();clearTimeout(rtT);rtT=setTimeout(()=>tt.redraw(),800);});
         top.appendChild(cb);
         if(t.due&&!t.d){const cd=document.createElement("span");cd.className="cd cd-live "+untilClass(t.due);
           cd.dataset.due=t.due;cd.textContent=untilText(t.due);top.appendChild(cd);}
@@ -664,7 +728,8 @@ function renderDay(){
           setTimeout(()=>{sv.textContent="Save";sv.disabled=false;},1200);});
         top.appendChild(sv);
         const del=document.createElement("button");del.className="qt-del";del.textContent="×";
-        del.addEventListener("click",()=>{const gi=DB.matrix.indexOf(t);DB.matrix.splice(gi,1);save();drawTasks();});
+        del.addEventListener("click",()=>{DB.matrix.splice(DB.matrix.indexOf(t),1);purgeFromDayLists(t.id);
+          save();drawTasks();tt.redraw();});
         top.appendChild(del);li.appendChild(top);
         const meta=document.createElement("div");meta.className="qt-meta";
         const ad=document.createElement("span");ad.className="qt-added";ad.textContent=t.added?"added "+fmtStamp(t.added):"";
@@ -677,10 +742,14 @@ function renderDay(){
         ul.appendChild(li);
       });
     }
+    quadDraws.push(drawTasks);
     drawTasks();
     quad.appendChild(ul);
     const add=document.createElement("button");add.className="qadd";add.textContent="+ task";
-    add.addEventListener("click",()=>{DB.matrix.push({t:"",d:false,quad:def.q,added:Date.now(),due:"",notes:""});save();drawTasks();
+    add.addEventListener("click",()=>{
+      const nt={id:newMid(),t:"",d:false,quad:def.q,added:Date.now(),due:"",notes:""};
+      DB.matrix.push(nt);day.top3.push(nt); /* the same task also appears in Tasks Today */
+      save();drawTasks();tt.redraw();
       const items=ul.querySelectorAll(".qt-title");if(items.length)items[items.length-1].focus();});
     quad.appendChild(add);slot.replaceWith(quad);
   });
@@ -723,7 +792,7 @@ function renderWeek(){
         setTimeout(()=>{msv.textContent="Save";msv.disabled=false;},1200);});
       const tt=li.querySelector(".tt");tt.addEventListener("input",()=>{t.t=tt.textContent;save();});
       tt.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();tt.blur();}});
-      li.querySelector(".del").addEventListener("click",()=>{const gi=DB.matrix.indexOf(t);DB.matrix.splice(gi,1);save();renderWeek();});
+      li.querySelector(".del").addEventListener("click",()=>{DB.matrix.splice(DB.matrix.indexOf(t),1);purgeFromDayLists(t.id);save();renderWeek();});
       ul.appendChild(li);
     });
     col.appendChild(ul);
@@ -1180,6 +1249,7 @@ function applyImport(text,skipConfirm){
     DB=parsed;DB.days=DB.days||{};DB.events=DB.events||{};DB.weeks=DB.weeks||{};
     DB.months=DB.months||{};DB.years=DB.years||{};DB.deadlines=DB.deadlines||[];DB.projects=DB.projects||[];DB.matrix=DB.matrix||[];
     DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
+    ensureIds();
     save();render();return true;
   }catch(err){alert("That isn't valid planner backup JSON.");return false;}
 }
@@ -1280,6 +1350,7 @@ function applyRemote(d){
   DB.days=DB.days||{};DB.events=DB.events||{};DB.weeks=DB.weeks||{};
   DB.months=DB.months||{};DB.years=DB.years||{};DB.deadlines=DB.deadlines||[];DB.projects=DB.projects||[];DB.matrix=DB.matrix||[];
   DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
+  ensureIds();
   localStorage.setItem(LS,JSON.stringify(DB));render();applyingRemote=false;
 }
 function pushRemote(now){
