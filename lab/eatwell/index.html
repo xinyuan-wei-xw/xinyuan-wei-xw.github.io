@@ -144,6 +144,16 @@ a{color:var(--green)}
 .lockpanel .big{font-size:40px;margin-bottom:10px}
 .lockpanel h2{font-size:18px;margin-bottom:8px}
 .lockpanel p{font-size:14px;color:var(--ink-soft);line-height:1.7}
+.intro{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);padding:18px 20px 16px;margin:14px 12px}
+.intro h2{font-size:16px;margin:0 0 10px}
+.intro-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.intro-steps b{display:block;font-size:14px;margin-bottom:4px}
+.intro-steps p{font-size:13px;color:var(--ink-soft);line-height:1.65;margin:0}
+.intro-tip{font-size:13px;color:var(--ink-soft);margin:12px 0 0;line-height:1.6}
+.intro-x{position:absolute;top:6px;right:8px;border:0;background:none;font-size:20px;line-height:1;color:var(--faint);cursor:pointer;padding:6px 10px}
+.intro-x:hover{color:var(--ink)}
+@media(max-width:640px){.intro-steps{grid-template-columns:1fr;gap:10px}}
 footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
 </style>
 </head>
@@ -154,6 +164,16 @@ footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
   <div class="seg" id="langSeg">
     <button data-lang="zh">中文</button><button data-lang="en" class="on">EN</button>
   </div>
+</div>
+<div class="intro" id="intro">
+  <button class="intro-x" id="introX" aria-label="close">×</button>
+  <h2 data-t="introTitle">How to use</h2>
+  <div class="intro-steps">
+    <div><b data-t="introS1t">1 · Browse dishes</b><p data-t="introS1d"></p></div>
+    <div><b data-t="introS2t">2 · Plan your week</b><p data-t="introS2d"></p></div>
+    <div><b data-t="introS3t">3 · Shop from the list</b><p data-t="introS3d"></p></div>
+  </div>
+  <p class="intro-tip" data-t="introTip"></p>
 </div>
 <div class="authbar">
   <span id="authBox" style="display:none">
@@ -247,7 +267,7 @@ fIngName:"Ingredient (Chinese or English)",fIngAmt:"Amount",fAddIng:"+ Add ingre
 fSteps:"Steps",fStepsPh:"One step per line…",fSave:"Save dish",fCancel:"Cancel",
 fDelete:"Delete dish",fEdit:"Edit",customBadge:"Homemade",customSrc:"My own recipe",curatedSrc:"Curated by Muse",
 needName:"Please enter the dish name.",
-confirmDel:function(d){return "Delete \u201c"+d+"\u201d? It will also be removed from your week plan."}},
+confirmDel:function(d){return "Delete \u201c"+d+"\u201d? It will also be removed from your week plan."},introTitle:"How to use",introS1t:"1 \u00b7 Browse dishes",introS1d:"Search 800+ dishes and filter by cuisine. Tap any dish for the recipe, then \u201c+ Select\u201d to add it to your week.",introS2t:"2 \u00b7 Plan your week",introS2d:"Set servings per meal, drop dishes into the 7-day plan, and pick a start date.",introS3t:"3 \u00b7 Shop from the list",introS3d:"The grocery list totals everything up, scaled by servings. You can also add your own dishes with \u201c+ Add my dish\u201d.",introTip:"Tip: sign in above to sync your plan across devices."},
 zh:{appName:"认真吃饭",tagline:"好好吃饭，好好生活",tabBrowse:"选菜",tabPlan:"本周计划",
 tabGrocery:"采购清单",backToLab:"← 返回 Lab",credit:"菜谱来源",allDishes:"全部",loadMore:"加载更多",emptyResult:"没有符合的菜，换个关键词试试。",searchPh:"搜索菜名…",servings:"每餐份数",
 servingsNote:"采购量会按份数折算",weekView:"7天计划",startDate:"起始日期",noDate:"未定日期",
@@ -282,7 +302,7 @@ fIngName:"配料名（中文或英文）",fIngAmt:"用量",fAddIng:"+ 加一行�
 fSteps:"做法",fStepsPh:"每行写一步…",fSave:"保存",fCancel:"取消",
 fDelete:"删除这道菜",fEdit:"编辑",customBadge:"自制",customSrc:"自制菜谱",curatedSrc:"Muse 整理",
 needName:"请填写菜名。",
-confirmDel:function(d){return "删除“"+d+"”？它也会从本周计划中移除。"}}};
+confirmDel:function(d){return "删除“"+d+"”？它也会从本周计划中移除。"},introTitle:"使用方法",introS1t:"1 \u00b7 选菜",introS1d:"搜索 800+ 道菜，按菜系筛选。点开看做法，点\u300c+ \u9009\u8fd9\u9053\u300d加入本周。",introS2t:"2 \u00b7 安排一周",introS2d:"设置每餐份数，把菜排进 7 天，选定起始日期。",introS3t:"3 \u00b7 照单采购",introS3d:"采购清单按份数自动汇总。用\u300c+ \u81ea\u5df1\u52a0\u83dc\u300d还能添加自己的菜。",introTip:"小提示：在上方登录，计划会自动同步到你的所有设备。"}};
 /* ================= state ================= */
 const API="https://www.themealdb.com/api/json/v1/1";
 const ALL_AREAS="__all";
@@ -857,6 +877,8 @@ $("searchBox").addEventListener("input",e=>{clearTimeout(searchTimer);S.shown=60
 $("servings").addEventListener("change",e=>{const v=Math.max(1,Math.min(8,+e.target.value||2));
  S.servings=v;savePrefs();pushRemote();renderGrocery();});
 $("weekStart").addEventListener("change",e=>{S.weekStart=e.target.value||mondayISO();savePrefs();pushRemote();renderPlan();});
+try{if(localStorage.getItem("ew_intro_off"))$("intro").style.display="none";}catch(e){}
+$("introX").onclick=()=>{try{localStorage.setItem("ew_intro_off","1");}catch(e){}$("intro").style.display="none";};
 applyI18n();renderAreas();loadArea();initFirebase();switchTab("browse");
 </script>
 </body>
