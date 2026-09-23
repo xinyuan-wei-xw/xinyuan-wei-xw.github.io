@@ -528,7 +528,8 @@ DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
 /* On refresh, merge any matrix tasks that never made it into the list (added before
    the two-way sync, from week view, or via backup restore) into today's Tasks Today.
    Same shared objects as the matrix, so edits stay in sync; skips finished and
-   untitled tasks. Idempotent: runs again whenever fresh data arrives. */
+   untitled tasks. Also moves rows with text above blank rows.
+   Idempotent: runs again whenever fresh data arrives. */
 function backfillToday(){
   const day=getDay(new Date());
   const have=new Set((day.top3||[]).map(r=>r&&r.id).filter(Boolean));
@@ -537,6 +538,11 @@ function backfillToday(){
     if(!t||!t.id||have.has(t.id)||t.d||!(t.t&&t.t.trim()))return;
     day.top3.push(t);have.add(t.id);added=true;
   });
+  /* refresh tidy: rows with text float to the top, blank rows sink to the bottom */
+  const rows=day.top3||[];
+  const withText=rows.filter(r=>r&&r.t&&r.t.trim());
+  const blanks=rows.filter(r=>!(r&&r.t&&r.t.trim()));
+  if(withText.length&&blanks.length){day.top3=withText.concat(blanks);added=true;}
   if(added)save();
 }
 
