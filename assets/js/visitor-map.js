@@ -7,7 +7,7 @@
   var citySelect = document.getElementById('map-city');
   var status = document.getElementById('visitor-status');
   var note = document.getElementById('visitor-location-note');
-  var data = {countries: [], regions: [], cities: []}, regions = [], svg, stateLayer, cityLayer, uniLayer;
+  var data = {countries: [], regions: [], cities: []}, regions = [], svg, stateLayer, cityLayer;
   var box = [0, 0, 900, 506.25], country = '', region = '', city = '';
   var ns = 'http://www.w3.org/2000/svg', dragged = false;
   function norm(s) { return (s || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
@@ -17,12 +17,7 @@
   function setBox(value) {
     box = value;
     svg.setAttribute('viewBox', box.join(' '));
-    var base = Math.max(0.06, box[2] * 0.006);
-    cityLayer.querySelectorAll('circle').forEach(function (p) { p.setAttribute('r', base); });
-    if (uniLayer) uniLayer.querySelectorAll('circle').forEach(function (p) {
-      var n = parseInt(p.dataset.visits || '0', 10);
-      p.setAttribute('r', (base * 1.6 * (1 + 0.35 * Math.log1p(n))).toFixed(3));
-    });
+    cityLayer.querySelectorAll('circle').forEach(function (p) { p.setAttribute('r', Math.max(0.06, box[2] * 0.006)); });
   }
   function fit(elements) {
     var boxes = elements.map(function (e) { return e.getBBox(); }).filter(function (b) { return b.width || b.height; });
@@ -122,29 +117,9 @@
   countrySelect.addEventListener('change',function(){chooseCountry(this.value);});
   regionSelect.addEventListener('change',function(){chooseRegion(this.value);});
   citySelect.addEventListener('change',function(){chooseCity(this.value);});
-  var uniData = [], uniCounts = {}, uniOn = true;
-  function uniXY(lat, lng) { return [(lng + 180) * 2.5, (85 - lat) * 2.5 + 25]; }
-  function uniTitle(u) {
-    var n = uniCounts[u.slug] || 0;
-    return u.name + (n ? ' \u00b7 ' + n.toLocaleString() + ' university visit' + (n === 1 ? '' : 's') : ' \u00b7 no university visits recorded yet');
-  }
-  function drawUniversities() {
-    if (!uniLayer) return;
-    uniLayer.replaceChildren();
-    if (!uniOn) return;
-    uniData.forEach(function (u) {
-      var xy = uniXY(u.lat, u.lng);
-      var dot = document.createElementNS(ns, 'circle');
-      dot.setAttribute('cx', xy[0].toFixed(2)); dot.setAttribute('cy', xy[1].toFixed(2));
-      dot.setAttribute('fill', '#e8a020'); dot.setAttribute('stroke', '#fff');
-      dot.setAttribute('stroke-width', '1'); dot.setAttribute('vector-effect', 'non-scaling-stroke');
-      dot.dataset.visits = uniCounts[u.slug] || 0;
-      var title = document.createElementNS(ns, 'title'); title.textContent = uniTitle(u); dot.appendChild(title);
-      dot.addEventListener('click', function () { if (!dragged) setBox([xy[0] - 6, xy[1] - 3.375, 12, 6.75]); });
-      uniLayer.appendChild(dot);
-    });
-    setBox(box);
-  }
+
+  // --- University visit counts (logged by visit-log.js) ---
+  var uniData = [], uniCounts = {};
   function loadUniCounts() {
     return load('assets/js/visit-log.js', 'text').then(function (t) {
       var m = t.match(/[?&]key=([A-Za-z0-9_\-]{20,})/);
@@ -158,28 +133,64 @@
         counts[slug] = v ? parseInt(v.integerValue || '0', 10) : 0;
       });
       return counts;
-    }).catch(function () { return {}; });
+    }).catch(function () { return null; });
   }
-  function initUniversities() {
-    var toolbar = document.querySelector('.visitor-toolbar');
-    if (toolbar && !document.getElementById('map-universities')) {
-      var lab = document.createElement('label'); lab.className = 'visitor-uni-toggle';
-      lab.title = 'Show Carnegie R1/R2 universities. Gold markers are matched by visitor network (aggregate counts only; no IP addresses or individual visits are shown).';
-      var chk = document.createElement('input'); chk.type = 'checkbox'; chk.id = 'map-universities'; chk.checked = true;
-      chk.addEventListener('change', function () { uniOn = chk.checked; drawUniversities(); });
-      lab.appendChild(chk); lab.appendChild(document.createTextNode(' Universities'));
-      toolbar.appendChild(lab);
-      var legend = document.createElement('span'); legend.className = 'visitor-legend';
-      legend.innerHTML = '<svg width="10" height="10" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#0039a6"/></svg> City visits (GA4) <svg width="10" height="10" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#e8a020"/></svg> University (network)';
-      toolbar.appendChild(legend);
-      var priv = document.querySelector('p.visitor-note:not([id])');
-      if (priv) priv.textContent += ' Gold markers show Carnegie R1/R2 universities matched by visitor network; counts are aggregate only.';
-    }
+  function initUniversityTable() {
+    var anchor = document.getElementById('visitor-table-wrap');
+    if (!anchor || document.getElementById('visitor-uni-wrap')) return;
+    var wrap = document.createElement('div'); wrap.id = 'visitor-uni-wrap';
+    var h = document.createElement('h2'); h.textContent = 'Visits from university networks'; wrap.appendChild(h);
+    var note = document.createElement('p'); note.className = 'visitor-note';
+    note.textContent = 'Universities are matched by visitor network. IP addresses are not shown or stored; counts update live.';
+    wrap.appendChild(note);
+    var status = document.createElement('p'); status.className = 'visitor-note'; status.textContent = 'Loading university visits…';
+    wrap.appendChild(status);
+    anchor.after(wrap);
     Promise.all([load('assets/data/universities.json', 'json'), loadUniCounts()]).then(function (res) {
-      uniData = res[0] || []; uniCounts = res[1] || {};
-      drawUniversities();
-    }).catch(function () { /* markers stay hidden if data fails to load */ });
+      uniData = res[0] || []; uniCounts = res[1];
+      renderUniversityTable(wrap, status);
+    }).catch(function () { status.textContent = 'University visit data is temporarily unavailable.'; });
   }
+  function renderUniversityTable(wrap, status) {
+    if (uniCounts === null) { status.textContent = 'University visit data is temporarily unavailable.'; return; }
+    var visited = uniData.filter(function (u) { return (uniCounts[u.slug] || 0) > 0; });
+    if (!visited.length) { status.textContent = 'No university visits recorded yet.'; return; }
+    status.remove();
+    var byCity = {};
+    visited.forEach(function (u) {
+      var key = (u.city || '') + '||' + (u.state || '');
+      (byCity[key] = byCity[key] || []).push(u);
+    });
+    var cities = Object.keys(byCity).sort();
+    var table = document.createElement('table'); table.className = 'visitor-table';
+    table.innerHTML = '<thead><tr><th scope="col">University</th><th scope="col">Visits</th></tr></thead>';
+    var tbody = document.createElement('tbody');
+    var total = 0;
+    cities.forEach(function (key) {
+      var parts = key.split('||');
+      var list = byCity[key].sort(function (a, b) {
+        return ((uniCounts[b.slug] || 0) - (uniCounts[a.slug] || 0)) || a.name.localeCompare(b.name);
+      });
+      var ctr = document.createElement('tr'); ctr.className = 'visitor-uni-city';
+      var cth = document.createElement('th'); cth.colSpan = 2; cth.scope = 'rowgroup';
+      cth.textContent = parts[0] + (parts[1] ? ', ' + parts[1] : '');
+      ctr.appendChild(cth); tbody.appendChild(ctr);
+      list.forEach(function (u) {
+        var n = uniCounts[u.slug] || 0; total += n;
+        var tr = document.createElement('tr');
+        var th = document.createElement('th'); th.scope = 'row'; th.textContent = u.name;
+        var td = document.createElement('td'); td.textContent = n.toLocaleString();
+        tr.appendChild(th); tr.appendChild(td); tbody.appendChild(tr);
+      });
+    });
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    var sum = document.createElement('p'); sum.className = 'visitor-note';
+    sum.textContent = total.toLocaleString() + ' visits from ' + visited.length +
+      (visited.length === 1 ? ' university' : ' universities') + '.';
+    wrap.appendChild(sum);
+  }
+
   function load(path,type){return fetch(new URL(path,root),{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error('Load failed');return type==='text'?r.text():r.json();});}
   Promise.all([load('assets/data/visitor-map.json'),load('assets/data/map-regions.json'),load('images/lab/visitor-map.svg','text')]).then(function(results){
     data=results[0];data.countries=data.countries||[];data.regions=data.regions||[];data.cities=data.cities||[];regions=results[1];
@@ -187,7 +198,7 @@
     if(svg.localName!=='svg')throw new Error('Invalid map');
     var caption=svg.querySelector('#map-caption');if(caption)caption.remove();
     svg.querySelectorAll('path').forEach(function(p){p.setAttribute('vector-effect','non-scaling-stroke');p.addEventListener('click',function(){if(!dragged)chooseCountry(p.dataset.country);});});
-    stateLayer=document.createElementNS(ns,'g');cityLayer=document.createElementNS(ns,'g');uniLayer=document.createElementNS(ns,'g');svg.append(stateLayer,cityLayer,uniLayer);canvas.replaceChildren(svg);
+    stateLayer=document.createElementNS(ns,'g');cityLayer=document.createElementNS(ns,'g');svg.append(stateLayer,cityLayer);canvas.replaceChildren(svg);
     var names=new Map();svg.querySelectorAll('path[data-country]').forEach(function(p){if(/^[A-Z]{2}$/.test(p.dataset.country))names.set(p.dataset.country,p.dataset.name);});
     data.countries.forEach(function(c){names.set(c.code,c.name);});Array.from(names).sort(function(a,b){return a[1].localeCompare(b[1]);}).forEach(function(a){option(countrySelect,a[0],label(a[1]));});
     if(data.status==='ready'){
@@ -198,7 +209,7 @@
       if(data.thresholded)status.textContent+=' · Some results are withheld by Google Analytics.';
     }
     chooseCountry('');
-    initUniversities();
+    initUniversityTable();
     var start;
     svg.addEventListener('pointerdown',function(e){if(e.button!==0)return;dragged=false;start={x:e.clientX,y:e.clientY,box:box.slice()};});
     svg.addEventListener('pointermove',function(e){if(!start)return;var dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)+Math.abs(dy)>5){dragged=true;svg.setPointerCapture(e.pointerId);var scale=start.box[2]/svg.getBoundingClientRect().width;setBox([start.box[0]-dx*scale,start.box[1]-dy*scale,start.box[2],start.box[3]]);}});
