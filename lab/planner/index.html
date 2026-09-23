@@ -191,11 +191,11 @@
   .qtask .qt-notes:focus{outline:none;border-color:var(--blue-bright);height:60px}
 
   /* ---------- WEEK ---------- */
-  .weekgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+  .weekgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
   .daycol{background:var(--card);border:1px solid var(--line-soft);border-radius:12px;padding:10px;
     box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:200px}
   .daycol.today{border-color:var(--blue-bright);box-shadow:0 0 0 2px var(--blue-soft),var(--shadow)}
-  .daycol.blankcell{display:none} /* shown only in week print, as the 8th cell */
+  /* .daycol.blankcell is the 8th cell completing the 4x2 week grid (visible on screen and in print) */
   .daycol .dh{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;
     margin-bottom:8px;border-bottom:1px solid var(--line-soft);cursor:pointer}
   .daycol .dh:hover .dn{color:var(--blue-bright)}
@@ -848,7 +848,7 @@ function renderWeek(){
     grid.appendChild(col);
   }
   const blank=document.createElement("div");blank.className="daycol blankcell";blank.setAttribute("aria-hidden","true");
-  grid.appendChild(blank); /* 8th cell: 4+3 days + one blank cell in print */
+  grid.appendChild(blank); /* 8th cell: completes the 4x2 week grid */
   stage.appendChild(grid);
 
   stage.appendChild(divider("Weekly plan"));
