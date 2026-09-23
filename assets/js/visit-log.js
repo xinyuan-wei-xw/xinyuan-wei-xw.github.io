@@ -49,7 +49,7 @@ function matchOrg(org){
     var slug = matchOrg(org);
     if (!slug) return;
     try { sessionStorage.setItem('uvl','1'); } catch(e){}
-    var url = 'https://firestore.googleapis.com/v1/projects/x-planner-99dd3/databases/(default)/documents:commit?key=__FIREBASE_API_KEY__';
+    var url = 'https://firestore.googleapis.com/v1/projects/x-planner-99dd3/databases/(default)/documents:commit?key=AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw';
     fetch(url, {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({writes:[{transform:{
         document:'projects/x-planner-99dd3/databases/(default)/documents/uni_visits/'+slug,
