@@ -1,7 +1,7 @@
 // Components scoped to Lab; existing pages retain their typography and layout.
 .lab-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   margin: 24px 0;
 }
@@ -36,6 +36,9 @@
   outline-offset: 4px;
 }
 .page__content .lab-card--pending .lab-card__action { color: #69717c; }
+@media (max-width: 960px) {
+  .lab-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 640px) {
   .lab-grid { grid-template-columns: 1fr; }
 }
