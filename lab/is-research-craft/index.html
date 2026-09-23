@@ -31,6 +31,11 @@ main a{color:var(--blue)}
 .coming-soon{margin:48px 0;padding:56px 32px;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:12px}
 .coming-soon h2{margin:0 0 12px;color:var(--ink);font-size:1.6em}
 .coming-soon p{color:var(--soft);margin:0}
+.structure h2{margin-top:0}
+.structure .vol{font-size:1.2em;color:#1f6f86;margin:1.7em 0 .3em}
+.structure .chaps{list-style:none;margin:0 0 1em;padding:0}
+.structure .chaps li{padding:5px 0;border-bottom:1px solid var(--line);color:var(--soft)}
+.struct-note{margin-top:2em;padding:14px 18px;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--soft);font-size:.95em}
 .refs li{margin:.7em 0}
 .refs .note{color:var(--soft);font-size:.92em}
 footer{border-top:1px solid var(--line);background:var(--bg);margin-top:40px}
@@ -42,7 +47,7 @@ footer .wrap{display:block;padding:22px;font-size:13px;color:var(--soft)}
 <div class="topbar"><div class="wrap"><a href="../">← Back to Lab</a></div></div>
 <div class="wrap">
 
-<!-- PUBLISH NOTE: the full study-notes text (TOC + article body) is commented out below. The editable source lives at lab/is-research-craft/study-notes.md in the repo. To publish: set COMING_SOON = False in build_page.py, re-run it, and redeploy index.html. -->
+<!-- PUBLISH NOTE: the full study-notes text (TOC + article body) is commented out below. The editable source lives at lab/is-research-craft/study-notes.md in the repo. To publish the full text: set PUBLISH_MODE = "full" in build_page.py, re-run it, and redeploy index.html. -->
 <!-- TOC-START
 <nav class="toc"><h4>Contents</h4>
 <a class="h1" href="#preface-how-this-book-develops-a-researcher">Preface: How this book develops a researcher</a>
@@ -144,9 +149,111 @@ TOC-END -->
 <main>
 <div class="hero"><h1>IS Research Craft</h1>
 <p class="sub">Study Notes</p>
-<p class="ed">Last updated September 22, 2026</p></div>
-<section class="coming-soon">
-<h2>Coming Soon</h2>
+<p class="ed">Last updated September 23, 2026</p></div>
+<section class="structure"><h2>Contents</h2>
+<h3 class="vol">Preface: How this book develops a researcher</h3><ul class="chaps">
+<li>The purpose and status of examples</li>
+<li>Case H: A clinic coordination system</li>
+<li>Four recurring cases for later volumes</li>
+<li>Reading route</li>
+</ul>
+<h3 class="vol">Volume 1: Entering the discipline</h3><ul class="chaps">
+<li>Chapter 01: What is an information system?</li>
+<li>Chapter 02: Technology and the IS research object</li>
+<li>Chapter 03: IS and its neighboring disciplines</li>
+<li>Chapter 04: Research traditions and knowledge claims</li>
+<li>Chapter 05: The language of research</li>
+<li>Chapter 06: Academic communities and publication</li>
+<li>Chapter 07: What makes a contribution?</li>
+<li>Chapter 08: Learning to become a researcher</li>
+</ul>
+<h3 class="vol">Volume 2: Questions, literature, and theory</h3><ul class="chaps">
+<li>Chapter 09: Observing phenomena and finding puzzles</li>
+<li>Chapter 10: Formulating research questions</li>
+<li>Chapter 11: Searching and verifying literature</li>
+<li>Chapter 12: Reading and synthesizing research</li>
+<li>Chapter 13: Gaps, assumptions, and problematization</li>
+<li>Chapter 14: Constructs and levels of analysis</li>
+<li>Chapter 15: Theorizing mechanisms and boundaries</li>
+<li>Chapter 16: Building a research proposal</li>
+</ul>
+<h3 class="vol">Volume 3: Research design and methodological routes</h3><ul class="chaps">
+<li>Chapter 17: Matching questions to research designs</li>
+<li>Chapter 18: Measurement, sampling, and ethics</li>
+<li>Chapter 19: Archival and quasi-experimental research</li>
+<li>Chapter 20: Experiments and behavioral research</li>
+<li>Chapter 21: Surveys and latent-variable research</li>
+<li>Chapter 22: Qualitative and process research</li>
+<li>Chapter 23: Design science and mixed methods</li>
+<li>Chapter 24: Computational, analytical, and synthesis routes</li>
+</ul>
+<h3 class="vol">Volume 4: From observations to credible knowledge</h3><ul class="chaps">
+<li>Chapter 25: Understanding data generation</li>
+<li>Chapter 26: Exploration and analysis planning</li>
+<li>Chapter 27: Estimation and statistical reasoning</li>
+<li>Chapter 28: Diagnostics and model adequacy</li>
+<li>Chapter 29: Robustness, sensitivity, and falsification</li>
+<li>Chapter 30: Mechanisms and heterogeneous findings</li>
+<li>Chapter 31: Prediction, generalization, and AI measurement</li>
+<li>Chapter 32: Reproducibility and evidential synthesis</li>
+</ul>
+<h3 class="vol">Volume 5: Writing, reviewing, and communicating</h3><ul class="chaps">
+<li>Chapter 33: Architecting the paper’s argument</li>
+<li>Chapter 34: Titles, abstracts, and introductions</li>
+<li>Chapter 35: Writing theory and related work</li>
+<li>Chapter 36: Writing methods, findings, and discussion</li>
+<li>Chapter 37: Figures, tables, references, and language</li>
+<li>Chapter 38: Reviewer judgment and editorial decisions</li>
+<li>Chapter 39: Revisions, rebuttals, and rejection</li>
+<li>Chapter 40: Presentations, defenses, and research dialogue</li>
+</ul>
+<h3 class="vol">Volume 6: Independent research and AI collaboration</h3><ul class="chaps">
+<li>Chapter 41: Research projects and decision records</li>
+<li>Chapter 42: Advising, collaboration, and authorship</li>
+<li>Chapter 43: AI-assisted research workflows</li>
+<li>Chapter 44: AI as object, instrument, and participant</li>
+<li>Chapter 45: Knowledge management and reusable skills</li>
+<li>Chapter 46: Building a research agenda</li>
+<li>Chapter 47: Integrated capstone project</li>
+<li>Chapter 48: Assessing independent research competence</li>
+</ul>
+<h3 class="vol">Extended workshops and discipline map</h3><ul class="chaps">
+<li>W1. Choosing a worthwhile topic</li>
+<li>W2. Developing an RQ through successive repairs</li>
+<li>W3. A worked measurement and inference problem</li>
+<li>W4. Reviewer clinic: two reasonable reviews</li>
+</ul>
+<h3 class="vol">Research-stream atlas</h3><ul class="chaps">
+<li>S01. Technology adoption, use, and continuance</li>
+<li>S02. IT value, strategy, and organizational performance</li>
+<li>S03. Digital innovation, entrepreneurship, and transformation</li>
+<li>S04. Platforms, ecosystems, and digital markets</li>
+<li>S05. Online communities, knowledge, and collaboration</li>
+<li>S06. Social media, diffusion, and collective attention</li>
+<li>S07. Digital work, algorithmic management, and human–AI collaboration</li>
+<li>S08. AI, analytics, and decision support</li>
+<li>S09. Privacy, security, trust, and digital governance</li>
+<li>S10. Digital health, public services, and social welfare</li>
+<li>S11. Digital inequality, inclusion, and sustainability</li>
+<li>S12. Systems development, implementation, and design science</li>
+</ul>
+<h3 class="vol">Representative papers and researcher entry points</h3><ul class="chaps">
+<li>P01. Constructs and technology acceptance</li>
+<li>P02. Theory and knowledge claims</li>
+<li>P03. Design-science framework</li>
+<li>P04. Interpretive evaluation</li>
+<li>P05. Technology and organizing</li>
+<li>P06. Prediction and explanation</li>
+<li>P07. Network field experiment</li>
+<li>P08. Archival network research</li>
+<li>P09. Mixed-method design</li>
+<li>P10. Analytical modeling</li>
+<li>P11. Problem formulation</li>
+<li>How to study a researcher through their work</li>
+<li>Article anatomy worksheet</li>
+<li>Route coverage still requiring full exemplars</li>
+</ul>
+<p class="struct-note">The full text of these study notes is being finalized — it will appear here when it's ready.</p>
 </section>
 <!-- CONTENT-START
 <h1 id="preface-how-this-book-develops-a-researcher">Preface: How this book develops a researcher</h1>
