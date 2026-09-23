@@ -102,6 +102,13 @@
   .prow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
   .prow:last-child{border-bottom:none}
   .prow .star{color:var(--gold);font-size:14px;flex-shrink:0}
+  .prow .qblock{width:12px;height:12px;border-radius:4px;flex:none;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .prow .qblock.q0{background:#c0503f} /* Do now */
+  .prow .qblock.q1{background:#4a8a5f} /* Schedule */
+  .prow .qblock.q2{background:#c99022} /* Delegate */
+  .prow .qblock.q3{background:var(--slate)} /* Drop / later */
+  .prow .qblock.qx{background:var(--line)} /* no quadrant */
   .prow input[type=checkbox]{accent-color:var(--blue-bright);width:16px;height:16px;cursor:pointer;flex-shrink:0}
   .prow input[type=text]{flex:1;border:none;background:transparent;font-size:15px;color:var(--ink)}
   .prow input[type=text]:focus{outline:none}
@@ -632,6 +639,10 @@ function tasksTodayPanel(d,syncMatrix){
       const r=document.createElement("div");r.className="prow";
       const handle=document.createElement("span");handle.className="drag-handle";
       handle.title="Drag to reorder";handle.textContent="\u22EE\u22EE";handle.draggable=true;
+      const qb=document.createElement("span");
+      const qq=(t.quad===0||t.quad===1||t.quad===2||t.quad===3)?t.quad:"x";
+      qb.className="qblock q"+qq;
+      const qn=["Do now","Schedule","Delegate","Drop / later"][t.quad];if(qn)qb.title=qn;
       const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!t.d;
       const star=document.createElement("span");star.className="star";star.textContent="\u2605";
       const tx=document.createElement("input");tx.type="text";tx.placeholder="Most important\u2026";tx.value=t.t||"";
@@ -658,7 +669,7 @@ function tasksTodayPanel(d,syncMatrix){
         const mv=day.top3.splice(from,1)[0];day.top3.splice(idx,0,mv);
         save();draw();
       });
-      r.appendChild(handle);r.appendChild(cb);r.appendChild(star);r.appendChild(tx);r.appendChild(del);
+      r.appendChild(handle);r.appendChild(qb);r.appendChild(cb);r.appendChild(star);r.appendChild(tx);r.appendChild(del);
       list.appendChild(r);
     });
   }
