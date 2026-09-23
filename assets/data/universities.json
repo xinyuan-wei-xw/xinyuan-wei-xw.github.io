@@ -1,0 +1,2284 @@
+[
+ {
+  "name": "Abilene Christian University",
+  "slug": "abilene-christian-university",
+  "lat": 32.4699728,
+  "lng": -99.7073595,
+  "cls": "R2"
+ },
+ {
+  "name": "Air Force Institute of Technology Graduate School of Engineering & Management",
+  "slug": "air-force-institute-of-technology-graduate-school-of-engineering-management",
+  "lat": 39.781,
+  "lng": -84.083,
+  "cls": "R2"
+ },
+ {
+  "name": "Albert Einstein College of Medicine",
+  "slug": "albert-einstein-college-of-medicine",
+  "lat": 40.8542807,
+  "lng": -73.8456159,
+  "cls": "R2"
+ },
+ {
+  "name": "American University",
+  "slug": "american-university",
+  "lat": 38.9377662,
+  "lng": -77.0894641,
+  "cls": "R1"
+ },
+ {
+  "name": "Appalachian State University",
+  "slug": "appalachian-state-university",
+  "lat": 36.2113525,
+  "lng": -81.6860913,
+  "cls": "R2"
+ },
+ {
+  "name": "Arizona State University",
+  "slug": "arizona-state-university",
+  "lat": 33.4213174,
+  "lng": -111.9331631,
+  "cls": "R1"
+ },
+ {
+  "name": "Arkansas State University",
+  "slug": "arkansas-state-university",
+  "lat": 35.8441163,
+  "lng": -90.6726325,
+  "cls": "R2"
+ },
+ {
+  "name": "Auburn University",
+  "slug": "auburn-university",
+  "lat": 32.5919529,
+  "lng": -85.4959775,
+  "cls": "R1"
+ },
+ {
+  "name": "Augusta University",
+  "slug": "augusta-university",
+  "lat": 33.4694103,
+  "lng": -81.9884196,
+  "cls": "R2"
+ },
+ {
+  "name": "Azusa Pacific University",
+  "slug": "azusa-pacific-university",
+  "lat": 34.1304082,
+  "lng": -117.8875838,
+  "cls": "R2"
+ },
+ {
+  "name": "Ball State University",
+  "slug": "ball-state-university",
+  "lat": 40.2097296,
+  "lng": -85.4112151,
+  "cls": "R2"
+ },
+ {
+  "name": "Baylor College of Medicine",
+  "slug": "baylor-college-of-medicine",
+  "lat": 29.7105439,
+  "lng": -95.3958079,
+  "cls": "R1"
+ },
+ {
+  "name": "Baylor University",
+  "slug": "baylor-university",
+  "lat": 31.5504341,
+  "lng": -97.1102906,
+  "cls": "R1"
+ },
+ {
+  "name": "Binghamton University",
+  "slug": "binghamton-university",
+  "lat": 42.0877998,
+  "lng": -75.9706607,
+  "cls": "R1"
+ },
+ {
+  "name": "Boise State University",
+  "slug": "boise-state-university",
+  "lat": 43.6032821,
+  "lng": -116.1994141,
+  "cls": "R2"
+ },
+ {
+  "name": "Boston College",
+  "slug": "boston-college",
+  "lat": 42.3354481,
+  "lng": -71.1682665,
+  "cls": "R1"
+ },
+ {
+  "name": "Boston University",
+  "slug": "boston-university",
+  "lat": 42.3504215,
+  "lng": -71.1032247,
+  "cls": "R1"
+ },
+ {
+  "name": "Bowling Green State University",
+  "slug": "bowling-green-state-university",
+  "lat": 41.3795005,
+  "lng": -83.629789,
+  "cls": "R2"
+ },
+ {
+  "name": "Brandeis University",
+  "slug": "brandeis-university",
+  "lat": 42.3665095,
+  "lng": -71.2580196,
+  "cls": "R1"
+ },
+ {
+  "name": "Brigham Young University",
+  "slug": "brigham-young-university",
+  "lat": 40.2498073,
+  "lng": -111.6499458,
+  "cls": "R1"
+ },
+ {
+  "name": "Brown University",
+  "slug": "brown-university",
+  "lat": 41.8186395,
+  "lng": -71.4088009,
+  "cls": "R1"
+ },
+ {
+  "name": "CUNY City College",
+  "slug": "cuny-city-college",
+  "lat": 40.82,
+  "lng": -73.949,
+  "cls": "R2"
+ },
+ {
+  "name": "CUNY Graduate School and University Center",
+  "slug": "cuny-graduate-school-and-university-center",
+  "lat": 40.7485188,
+  "lng": -73.9836393,
+  "cls": "R1"
+ },
+ {
+  "name": "CUNY Hunter College",
+  "slug": "cuny-hunter-college",
+  "lat": 40.769,
+  "lng": -73.964,
+  "cls": "R2"
+ },
+ {
+  "name": "California Institute of Technology",
+  "slug": "california-institute-of-technology",
+  "lat": 34.1370138,
+  "lng": -118.1252883,
+  "cls": "R1"
+ },
+ {
+  "name": "California State Polytechnic University, Pomona",
+  "slug": "california-state-polytechnic-university-pomona",
+  "lat": 34.0556686,
+  "lng": -117.8239282,
+  "cls": "R2"
+ },
+ {
+  "name": "California State University, Fresno",
+  "slug": "california-state-university-fresno",
+  "lat": 36.8209963,
+  "lng": -119.7372976,
+  "cls": "R2"
+ },
+ {
+  "name": "California State University, Fullerton",
+  "slug": "california-state-university-fullerton",
+  "lat": 33.8830939,
+  "lng": -117.8852152,
+  "cls": "R2"
+ },
+ {
+  "name": "California State University, Long Beach",
+  "slug": "california-state-university-long-beach",
+  "lat": 33.7817709,
+  "lng": -118.1152001,
+  "cls": "R2"
+ },
+ {
+  "name": "California State University, Los Angeles",
+  "slug": "california-state-university-los-angeles",
+  "lat": 33.7817709,
+  "lng": -118.1152001,
+  "cls": "R2"
+ },
+ {
+  "name": "California State University, Sacramento",
+  "slug": "california-state-university-sacramento",
+  "lat": 38.5664697,
+  "lng": -121.4284035,
+  "cls": "R2"
+ },
+ {
+  "name": "Carnegie Mellon University",
+  "slug": "carnegie-mellon-university",
+  "lat": 40.4439193,
+  "lng": -79.9428267,
+  "cls": "R1"
+ },
+ {
+  "name": "Case Western Reserve University",
+  "slug": "case-western-reserve-university",
+  "lat": 41.5013869,
+  "lng": -81.6007022,
+  "cls": "R1"
+ },
+ {
+  "name": "Catholic University of America",
+  "slug": "catholic-university-of-america",
+  "lat": 38.9391024,
+  "lng": -76.9999642,
+  "cls": "R1"
+ },
+ {
+  "name": "Central Michigan University",
+  "slug": "central-michigan-university",
+  "lat": 43.58355,
+  "lng": -84.7746308,
+  "cls": "R2"
+ },
+ {
+  "name": "Chapman University",
+  "slug": "chapman-university",
+  "lat": 33.7933817,
+  "lng": -117.8516959,
+  "cls": "R2"
+ },
+ {
+  "name": "Claremont Graduate University",
+  "slug": "claremont-graduate-university",
+  "lat": 34.1103852,
+  "lng": -117.7175884,
+  "cls": "R2"
+ },
+ {
+  "name": "Clark Atlanta University",
+  "slug": "clark-atlanta-university",
+  "lat": 33.7501248,
+  "lng": -84.411589,
+  "cls": "R2"
+ },
+ {
+  "name": "Clark University",
+  "slug": "clark-university",
+  "lat": 42.2514681,
+  "lng": -71.8229509,
+  "cls": "R2"
+ },
+ {
+  "name": "Clarkson University",
+  "slug": "clarkson-university",
+  "lat": 44.6595888,
+  "lng": -75.0062397,
+  "cls": "R2"
+ },
+ {
+  "name": "Clemson University",
+  "slug": "clemson-university",
+  "lat": 34.6686916,
+  "lng": -82.8374348,
+  "cls": "R1"
+ },
+ {
+  "name": "Cleveland State University",
+  "slug": "cleveland-state-university",
+  "lat": 41.5025834,
+  "lng": -81.6750871,
+  "cls": "R2"
+ },
+ {
+  "name": "Colorado School of Mines",
+  "slug": "colorado-school-of-mines",
+  "lat": 39.7386338,
+  "lng": -105.2246389,
+  "cls": "R1"
+ },
+ {
+  "name": "Colorado State University-Fort Collins",
+  "slug": "colorado-state-university-fort-collins",
+  "lat": 40.5706567,
+  "lng": -105.0853995,
+  "cls": "R1"
+ },
+ {
+  "name": "Columbia University in the City of New York",
+  "slug": "columbia-university-in-the-city-of-new-york",
+  "lat": 40.8077507,
+  "lng": -73.9624901,
+  "cls": "R1"
+ },
+ {
+  "name": "Cornell University",
+  "slug": "cornell-university",
+  "lat": 42.452916,
+  "lng": -76.4800635,
+  "cls": "R1"
+ },
+ {
+  "name": "Creighton University",
+  "slug": "creighton-university",
+  "lat": 41.2658565,
+  "lng": -95.9450555,
+  "cls": "R2"
+ },
+ {
+  "name": "Dartmouth College",
+  "slug": "dartmouth-college",
+  "lat": 43.7015443,
+  "lng": -72.2802055,
+  "cls": "R1"
+ },
+ {
+  "name": "DePaul University",
+  "slug": "depaul-university",
+  "lat": 41.9245803,
+  "lng": -87.6507223,
+  "cls": "R2"
+ },
+ {
+  "name": "Delaware State University",
+  "slug": "delaware-state-university",
+  "lat": 39.1867993,
+  "lng": -75.5423583,
+  "cls": "R2"
+ },
+ {
+  "name": "Drexel University",
+  "slug": "drexel-university",
+  "lat": 39.9545335,
+  "lng": -75.1865653,
+  "cls": "R1"
+ },
+ {
+  "name": "Duke University",
+  "slug": "duke-university",
+  "lat": 36.0001557,
+  "lng": -78.9442297,
+  "cls": "R1"
+ },
+ {
+  "name": "Duquesne University",
+  "slug": "duquesne-university",
+  "lat": 40.4365311,
+  "lng": -79.9904817,
+  "cls": "R2"
+ },
+ {
+  "name": "East Carolina University",
+  "slug": "east-carolina-university",
+  "lat": 35.6328512,
+  "lng": -77.4852672,
+  "cls": "R1"
+ },
+ {
+  "name": "East Tennessee State University",
+  "slug": "east-tennessee-state-university",
+  "lat": 36.3024236,
+  "lng": -82.3692822,
+  "cls": "R2"
+ },
+ {
+  "name": "East Texas A&M University",
+  "slug": "east-texas-a-m-university",
+  "lat": 33.2399911,
+  "lng": -95.9182528,
+  "cls": "R2"
+ },
+ {
+  "name": "Eastern Michigan University",
+  "slug": "eastern-michigan-university",
+  "lat": 42.252349,
+  "lng": -83.6228413,
+  "cls": "R2"
+ },
+ {
+  "name": "Eastern Virginia Medical School (EVMS ceased being a separate institution on July 1, 2024. It is now part of Old Dominion University.)",
+  "slug": "eastern-virginia-medical-school-evms-ceased-being-a-separate-institution-on-july-1-2024-it-is-now-part-of-old-dominion-university",
+  "lat": 36.862,
+  "lng": -76.303,
+  "cls": "R2"
+ },
+ {
+  "name": "Embry-Riddle Aeronautical University-Daytona Beach",
+  "slug": "embry-riddle-aeronautical-university-daytona-beach",
+  "lat": 29.1917532,
+  "lng": -81.0495839,
+  "cls": "R2"
+ },
+ {
+  "name": "Emory University",
+  "slug": "emory-university",
+  "lat": 33.8004547,
+  "lng": -84.3172378,
+  "cls": "R1"
+ },
+ {
+  "name": "Florida Agricultural and Mechanical University",
+  "slug": "florida-agricultural-and-mechanical-university",
+  "lat": 30.428,
+  "lng": -84.286,
+  "cls": "R2"
+ },
+ {
+  "name": "Florida Atlantic University",
+  "slug": "florida-atlantic-university",
+  "lat": 26.3743445,
+  "lng": -80.1027236,
+  "cls": "R1"
+ },
+ {
+  "name": "Florida Institute of Technology",
+  "slug": "florida-institute-of-technology",
+  "lat": 28.064271,
+  "lng": -80.623004,
+  "cls": "R2"
+ },
+ {
+  "name": "Florida International University",
+  "slug": "florida-international-university",
+  "lat": 25.7553898,
+  "lng": -80.3762833,
+  "cls": "R1"
+ },
+ {
+  "name": "Florida State University",
+  "slug": "florida-state-university",
+  "lat": 30.442216,
+  "lng": -84.297453,
+  "cls": "R1"
+ },
+ {
+  "name": "Fordham University",
+  "slug": "fordham-university",
+  "lat": 40.8617344,
+  "lng": -73.8860317,
+  "cls": "R2"
+ },
+ {
+  "name": "George Mason University",
+  "slug": "george-mason-university",
+  "lat": 38.8313333,
+  "lng": -77.3079884,
+  "cls": "R1"
+ },
+ {
+  "name": "George Washington University",
+  "slug": "george-washington-university",
+  "lat": 38.899865,
+  "lng": -77.0474485,
+  "cls": "R1"
+ },
+ {
+  "name": "Georgetown University",
+  "slug": "georgetown-university",
+  "lat": 38.9089393,
+  "lng": -77.0745796,
+  "cls": "R1"
+ },
+ {
+  "name": "Georgia Institute of Technology",
+  "slug": "georgia-institute-of-technology-main-campus",
+  "lat": 33.7760948,
+  "lng": -84.3988077,
+  "cls": "R1"
+ },
+ {
+  "name": "Georgia Southern University",
+  "slug": "georgia-southern-university",
+  "lat": 32.4214381,
+  "lng": -81.7845053,
+  "cls": "R2"
+ },
+ {
+  "name": "Georgia State University",
+  "slug": "georgia-state-university",
+  "lat": 33.7535889,
+  "lng": -84.3854209,
+  "cls": "R1"
+ },
+ {
+  "name": "Hampton University",
+  "slug": "hampton-university",
+  "lat": 37.0210096,
+  "lng": -76.3386255,
+  "cls": "R2"
+ },
+ {
+  "name": "Harvard University",
+  "slug": "harvard-university",
+  "lat": 42.3657432,
+  "lng": -71.1222139,
+  "cls": "R1"
+ },
+ {
+  "name": "Hofstra University",
+  "slug": "hofstra-university",
+  "lat": 40.7169083,
+  "lng": -73.6000225,
+  "cls": "R2"
+ },
+ {
+  "name": "Howard University",
+  "slug": "howard-university",
+  "lat": 38.9221121,
+  "lng": -77.0196303,
+  "cls": "R1"
+ },
+ {
+  "name": "Icahn School of Medicine at Mount Sinai",
+  "slug": "icahn-school-of-medicine-at-mount-sinai",
+  "lat": 40.789793,
+  "lng": -73.9532536,
+  "cls": "R2"
+ },
+ {
+  "name": "Idaho State University",
+  "slug": "idaho-state-university",
+  "lat": 42.862415,
+  "lng": -112.4322962,
+  "cls": "R2"
+ },
+ {
+  "name": "Illinois Institute of Technology",
+  "slug": "illinois-institute-of-technology",
+  "lat": 41.8370671,
+  "lng": -87.6250265,
+  "cls": "R2"
+ },
+ {
+  "name": "Illinois State University",
+  "slug": "illinois-state-university",
+  "lat": 40.5179938,
+  "lng": -89.0084607,
+  "cls": "R2"
+ },
+ {
+  "name": "Indiana University Bloomington",
+  "slug": "indiana-university-bloomington",
+  "lat": 39.1802358,
+  "lng": -86.5093526,
+  "cls": "R1"
+ },
+ {
+  "name": "Indiana University Indianapolis",
+  "slug": "indiana-university-indianapolis",
+  "lat": 39.7744829,
+  "lng": -86.1765471,
+  "cls": "R1"
+ },
+ {
+  "name": "Indiana University of Pennsylvania",
+  "slug": "indiana-university-of-pennsylvania",
+  "lat": 40.6141908,
+  "lng": -79.1609813,
+  "cls": "R2"
+ },
+ {
+  "name": "Iowa State University",
+  "slug": "iowa-state-university",
+  "lat": 42.0279608,
+  "lng": -93.6447375,
+  "cls": "R1"
+ },
+ {
+  "name": "Jackson State University",
+  "slug": "jackson-state-university",
+  "lat": 32.2964092,
+  "lng": -90.2074376,
+  "cls": "R2"
+ },
+ {
+  "name": "James Madison University",
+  "slug": "james-madison-university",
+  "lat": 38.4362412,
+  "lng": -78.8687576,
+  "cls": "R2"
+ },
+ {
+  "name": "Johns Hopkins University",
+  "slug": "johns-hopkins-university",
+  "lat": 39.3302023,
+  "lng": -76.6218536,
+  "cls": "R1"
+ },
+ {
+  "name": "Kansas State University",
+  "slug": "kansas-state-university",
+  "lat": 39.2086412,
+  "lng": -96.5884966,
+  "cls": "R1"
+ },
+ {
+  "name": "Kean University",
+  "slug": "kean-university",
+  "lat": 40.6792525,
+  "lng": -74.2351927,
+  "cls": "R2"
+ },
+ {
+  "name": "Kennesaw State University",
+  "slug": "kennesaw-state-university",
+  "lat": 34.0383452,
+  "lng": -84.5831053,
+  "cls": "R2"
+ },
+ {
+  "name": "Kent State University at Kent",
+  "slug": "kent-state-university-at-kent",
+  "lat": 41.1441814,
+  "lng": -81.3398329,
+  "cls": "R1"
+ },
+ {
+  "name": "Lamar University",
+  "slug": "lamar-university",
+  "lat": 30.0388947,
+  "lng": -94.0758929,
+  "cls": "R2"
+ },
+ {
+  "name": "Lehigh University",
+  "slug": "lehigh-university",
+  "lat": 40.6068028,
+  "lng": -75.3782488,
+  "cls": "R1"
+ },
+ {
+  "name": "Loma Linda University",
+  "slug": "loma-linda-university",
+  "lat": 34.0514446,
+  "lng": -117.2628176,
+  "cls": "R2"
+ },
+ {
+  "name": "Long Island University",
+  "slug": "long-island-university",
+  "lat": 40.815158,
+  "lng": -73.5886898,
+  "cls": "R2"
+ },
+ {
+  "name": "Louisiana State University Health Sciences Center, New Orleans",
+  "slug": "louisiana-state-university-health-sciences-center-new-orleans",
+  "lat": 29.956837,
+  "lng": -90.083135,
+  "cls": "R2"
+ },
+ {
+  "name": "Louisiana State University New Orleans",
+  "slug": "louisiana-state-university-new-orleans",
+  "lat": 29.9911944,
+  "lng": -90.0835067,
+  "cls": "R2"
+ },
+ {
+  "name": "Louisiana State University and Agricultural & Mechanical College",
+  "slug": "louisiana-state-university-and-agricultural-mechanical-college",
+  "lat": 30.4062005,
+  "lng": -91.1854129,
+  "cls": "R1"
+ },
+ {
+  "name": "Louisiana Tech University",
+  "slug": "louisiana-tech-university",
+  "lat": 32.526106,
+  "lng": -92.6481217,
+  "cls": "R2"
+ },
+ {
+  "name": "Loyola Marymount University",
+  "slug": "loyola-marymount-university",
+  "lat": 33.9687824,
+  "lng": -118.4182021,
+  "cls": "R2"
+ },
+ {
+  "name": "Loyola University Chicago",
+  "slug": "loyola-university-chicago",
+  "lat": 41.9990955,
+  "lng": -87.6572748,
+  "cls": "R1"
+ },
+ {
+  "name": "Marquette University",
+  "slug": "marquette-university",
+  "lat": 43.0374344,
+  "lng": -87.9294774,
+  "cls": "R2"
+ },
+ {
+  "name": "Marshall University",
+  "slug": "marshall-university",
+  "lat": 38.4236258,
+  "lng": -82.4274024,
+  "cls": "R2"
+ },
+ {
+  "name": "Massachusetts Institute of Technology",
+  "slug": "massachusetts-institute-of-technology",
+  "lat": 42.3582529,
+  "lng": -71.0966272,
+  "cls": "R1"
+ },
+ {
+  "name": "Medical College of Wisconsin",
+  "slug": "medical-college-of-wisconsin",
+  "lat": 43.0438671,
+  "lng": -88.0224532,
+  "cls": "R2"
+ },
+ {
+  "name": "Medical University of South Carolina",
+  "slug": "medical-university-of-south-carolina",
+  "lat": 32.7902452,
+  "lng": -79.9576415,
+  "cls": "R1"
+ },
+ {
+  "name": "Mercer University",
+  "slug": "mercer-university",
+  "lat": 32.8289341,
+  "lng": -83.6506702,
+  "cls": "R2"
+ },
+ {
+  "name": "Miami University, Oxford",
+  "slug": "miami-university-oxford",
+  "lat": 39.5094198,
+  "lng": -84.7311546,
+  "cls": "R2"
+ },
+ {
+  "name": "Michigan State University",
+  "slug": "michigan-state-university",
+  "lat": 42.7023794,
+  "lng": -84.4803869,
+  "cls": "R1"
+ },
+ {
+  "name": "Michigan Technological University",
+  "slug": "michigan-technological-university",
+  "lat": 47.1099114,
+  "lng": -88.5511513,
+  "cls": "R1"
+ },
+ {
+  "name": "Middle Tennessee State University",
+  "slug": "middle-tennessee-state-university",
+  "lat": 35.8486008,
+  "lng": -86.3609036,
+  "cls": "R2"
+ },
+ {
+  "name": "Mississippi State University",
+  "slug": "mississippi-state-university",
+  "lat": 33.4386876,
+  "lng": -88.7943232,
+  "cls": "R1"
+ },
+ {
+  "name": "Missouri University of Science and Technology",
+  "slug": "missouri-university-of-science-and-technology",
+  "lat": 37.9532435,
+  "lng": -91.7742667,
+  "cls": "R1"
+ },
+ {
+  "name": "Montana State University",
+  "slug": "montana-state-university",
+  "lat": 45.6639222,
+  "lng": -111.079277,
+  "cls": "R1"
+ },
+ {
+  "name": "Montclair State University",
+  "slug": "montclair-state-university",
+  "lat": 40.8646878,
+  "lng": -74.1969213,
+  "cls": "R2"
+ },
+ {
+  "name": "Morgan State University",
+  "slug": "morgan-state-university",
+  "lat": 39.3446663,
+  "lng": -76.5836094,
+  "cls": "R2"
+ },
+ {
+  "name": "New Jersey Institute of Technology",
+  "slug": "new-jersey-institute-of-technology",
+  "lat": 40.7421254,
+  "lng": -74.1790316,
+  "cls": "R1"
+ },
+ {
+  "name": "New Mexico State University",
+  "slug": "new-mexico-state-university-main-campus",
+  "lat": 32.2729032,
+  "lng": -106.7434927,
+  "cls": "R1"
+ },
+ {
+  "name": "New York University",
+  "slug": "new-york-university",
+  "lat": 40.7292053,
+  "lng": -73.9950148,
+  "cls": "R1"
+ },
+ {
+  "name": "North Carolina A&T State University",
+  "slug": "north-carolina-a-t-state-university",
+  "lat": 36.072,
+  "lng": -79.776,
+  "cls": "R2"
+ },
+ {
+  "name": "North Carolina State University at Raleigh",
+  "slug": "north-carolina-state-university-at-raleigh",
+  "lat": 35.7718497,
+  "lng": -78.674087,
+  "cls": "R1"
+ },
+ {
+  "name": "North Dakota State University",
+  "slug": "north-dakota-state-university-main-campus",
+  "lat": 46.897155,
+  "lng": -96.8182654,
+  "cls": "R1"
+ },
+ {
+  "name": "Northeastern University",
+  "slug": "northeastern-university",
+  "lat": 42.3351065,
+  "lng": -71.0892575,
+  "cls": "R1"
+ },
+ {
+  "name": "Northern Arizona University",
+  "slug": "northern-arizona-university",
+  "lat": 35.1830867,
+  "lng": -111.654961,
+  "cls": "R1"
+ },
+ {
+  "name": "Northern Illinois University",
+  "slug": "northern-illinois-university",
+  "lat": 41.9370934,
+  "lng": -88.7826784,
+  "cls": "R2"
+ },
+ {
+  "name": "Northwestern University",
+  "slug": "northwestern-university",
+  "lat": 42.0557157,
+  "lng": -87.6752945,
+  "cls": "R1"
+ },
+ {
+  "name": "Nova Southeastern University",
+  "slug": "nova-southeastern-university",
+  "lat": 26.0875789,
+  "lng": -80.1496886,
+  "cls": "R1"
+ },
+ {
+  "name": "Oakland University",
+  "slug": "oakland-university",
+  "lat": 42.6666333,
+  "lng": -83.2065575,
+  "cls": "R2"
+ },
+ {
+  "name": "Ohio State University",
+  "slug": "ohio-state-university-main-campus",
+  "lat": 40.0056982,
+  "lng": -83.0286573,
+  "cls": "R1"
+ },
+ {
+  "name": "Ohio University",
+  "slug": "ohio-university-main-campus",
+  "lat": 39.3241782,
+  "lng": -82.1015648,
+  "cls": "R1"
+ },
+ {
+  "name": "Oklahoma State University",
+  "slug": "oklahoma-state-university",
+  "lat": 36.1313523,
+  "lng": -97.0890651,
+  "cls": "R1"
+ },
+ {
+  "name": "Oklahoma State University Center for Health Sciences",
+  "slug": "oklahoma-state-university-center-for-health-sciences",
+  "lat": 36.1386179,
+  "lng": -96.0051038,
+  "cls": "R2"
+ },
+ {
+  "name": "Old Dominion University",
+  "slug": "old-dominion-university",
+  "lat": 36.8862699,
+  "lng": -76.3097248,
+  "cls": "R1"
+ },
+ {
+  "name": "Oregon Health & Science University",
+  "slug": "oregon-health-science-university",
+  "lat": 45.4981929,
+  "lng": -122.6864957,
+  "cls": "R2"
+ },
+ {
+  "name": "Oregon State University",
+  "slug": "oregon-state-university",
+  "lat": 44.563056,
+  "lng": -123.2839234,
+  "cls": "R1"
+ },
+ {
+  "name": "Pepperdine University",
+  "slug": "pepperdine-university",
+  "lat": 34.0430103,
+  "lng": -118.7093459,
+  "cls": "R2"
+ },
+ {
+  "name": "Portland State University",
+  "slug": "portland-state-university",
+  "lat": 45.5118121,
+  "lng": -122.686121,
+  "cls": "R2"
+ },
+ {
+  "name": "Prairie View A&M University",
+  "slug": "prairie-view-a-m-university",
+  "lat": 30.0960955,
+  "lng": -95.9870007,
+  "cls": "R2"
+ },
+ {
+  "name": "Princeton University",
+  "slug": "princeton-university",
+  "lat": 40.3386752,
+  "lng": -74.6583655,
+  "cls": "R1"
+ },
+ {
+  "name": "Purdue University",
+  "slug": "purdue-university",
+  "lat": 40.430028,
+  "lng": -86.9264211,
+  "cls": "R1"
+ },
+ {
+  "name": "Rensselaer Polytechnic Institute",
+  "slug": "rensselaer-polytechnic-institute",
+  "lat": 42.7298969,
+  "lng": -73.6796678,
+  "cls": "R1"
+ },
+ {
+  "name": "Rice University",
+  "slug": "rice-university",
+  "lat": 29.7167915,
+  "lng": -95.4047811,
+  "cls": "R1"
+ },
+ {
+  "name": "Rochester Institute of Technology",
+  "slug": "rochester-institute-of-technology",
+  "lat": 43.0826701,
+  "lng": -77.6729322,
+  "cls": "R2"
+ },
+ {
+  "name": "Rockefeller University",
+  "slug": "rockefeller-university",
+  "lat": 40.7624395,
+  "lng": -73.9557565,
+  "cls": "R2"
+ },
+ {
+  "name": "Rowan University",
+  "slug": "rowan-university",
+  "lat": 39.7103526,
+  "lng": -75.1193267,
+  "cls": "R2"
+ },
+ {
+  "name": "Rush University",
+  "slug": "rush-university",
+  "lat": 41.8746441,
+  "lng": -87.669135,
+  "cls": "R2"
+ },
+ {
+  "name": "Rutgers University-New Brunswick",
+  "slug": "rutgers-university-new-brunswick",
+  "lat": 40.496895,
+  "lng": -74.4490361,
+  "cls": "R1"
+ },
+ {
+  "name": "Rutgers University\u2013Camden",
+  "slug": "rutgers-university-camden",
+  "lat": 39.9483613,
+  "lng": -75.1226986,
+  "cls": "R2"
+ },
+ {
+  "name": "Rutgers University\u2013Newark",
+  "slug": "rutgers-university-newark",
+  "lat": 40.7406871,
+  "lng": -74.174889,
+  "cls": "R2"
+ },
+ {
+  "name": "SUNY College of Environmental Science and Forestry",
+  "slug": "suny-college-of-environmental-science-and-forestry",
+  "lat": 43.037,
+  "lng": -76.135,
+  "cls": "R2"
+ },
+ {
+  "name": "Saint Joseph's University",
+  "slug": "saint-joseph-s-university",
+  "lat": 39.9459273,
+  "lng": -75.2066484,
+  "cls": "R2"
+ },
+ {
+  "name": "Saint Louis University",
+  "slug": "saint-louis-university",
+  "lat": 38.635359,
+  "lng": -90.231845,
+  "cls": "R1"
+ },
+ {
+  "name": "Sam Houston State University",
+  "slug": "sam-houston-state-university",
+  "lat": 30.7133471,
+  "lng": -95.5449136,
+  "cls": "R2"
+ },
+ {
+  "name": "San Diego State University",
+  "slug": "san-diego-state-university",
+  "lat": 32.7761529,
+  "lng": -117.0733037,
+  "cls": "R1"
+ },
+ {
+  "name": "San Francisco State University",
+  "slug": "san-francisco-state-university",
+  "lat": 37.7245167,
+  "lng": -122.4799957,
+  "cls": "R2"
+ },
+ {
+  "name": "San Jose State University",
+  "slug": "san-jose-state-university",
+  "lat": 37.3351902,
+  "lng": -121.881225,
+  "cls": "R2"
+ },
+ {
+  "name": "Seton Hall University",
+  "slug": "seton-hall-university",
+  "lat": 40.7433314,
+  "lng": -74.2468921,
+  "cls": "R2"
+ },
+ {
+  "name": "South Carolina State University",
+  "slug": "south-carolina-state-university",
+  "lat": 33.4987851,
+  "lng": -80.8468434,
+  "cls": "R2"
+ },
+ {
+  "name": "South Dakota State University",
+  "slug": "south-dakota-state-university",
+  "lat": 44.344449,
+  "lng": -96.7982371,
+  "cls": "R2"
+ },
+ {
+  "name": "Southern Connecticut State University",
+  "slug": "southern-connecticut-state-university",
+  "lat": 41.3342104,
+  "lng": -72.9450826,
+  "cls": "R2"
+ },
+ {
+  "name": "Southern Illinois University-Carbondale",
+  "slug": "southern-illinois-university-carbondale",
+  "lat": 37.7083423,
+  "lng": -89.2275556,
+  "cls": "R1"
+ },
+ {
+  "name": "Southern Methodist University",
+  "slug": "southern-methodist-university",
+  "lat": 32.8418011,
+  "lng": -96.7815281,
+  "cls": "R1"
+ },
+ {
+  "name": "Southern University",
+  "slug": "southern-university",
+  "lat": 30.5258157,
+  "lng": -91.194946,
+  "cls": "R2"
+ },
+ {
+  "name": "Stanford University",
+  "slug": "stanford-university",
+  "lat": 37.4313138,
+  "lng": -122.1693654,
+  "cls": "R1"
+ },
+ {
+  "name": "Stevens Institute of Technology",
+  "slug": "stevens-institute-of-technology",
+  "lat": 40.7448096,
+  "lng": -74.0252392,
+  "cls": "R2"
+ },
+ {
+  "name": "Stony Brook University",
+  "slug": "stony-brook-university",
+  "lat": 40.9090809,
+  "lng": -73.1205518,
+  "cls": "R1"
+ },
+ {
+  "name": "Syracuse University",
+  "slug": "syracuse-university",
+  "lat": 43.0171129,
+  "lng": -76.1185536,
+  "cls": "R1"
+ },
+ {
+  "name": "Tarleton State University",
+  "slug": "tarleton-state-university",
+  "lat": 32.214673,
+  "lng": -98.2196882,
+  "cls": "R2"
+ },
+ {
+  "name": "Teachers College, Columbia University",
+  "slug": "teachers-college-columbia-university",
+  "lat": 40.81,
+  "lng": -73.962,
+  "cls": "R2"
+ },
+ {
+  "name": "Temple University",
+  "slug": "temple-university",
+  "lat": 39.981188,
+  "lng": -75.1562828,
+  "cls": "R1"
+ },
+ {
+  "name": "Tennessee State University",
+  "slug": "tennessee-state-university",
+  "lat": 36.1679249,
+  "lng": -86.8271487,
+  "cls": "R2"
+ },
+ {
+  "name": "Tennessee Technological University",
+  "slug": "tennessee-technological-university",
+  "lat": 36.1748736,
+  "lng": -85.5089051,
+  "cls": "R2"
+ },
+ {
+  "name": "Texas A & M University-College Station",
+  "slug": "texas-a-m-university-college-station",
+  "lat": 30.6108618,
+  "lng": -96.3520606,
+  "cls": "R1"
+ },
+ {
+  "name": "Texas A&M University\u2013Corpus Christi",
+  "slug": "texas-a-m-university-corpus-christi",
+  "lat": 27.7127514,
+  "lng": -97.3233877,
+  "cls": "R2"
+ },
+ {
+  "name": "Texas A&M University\u2013Kingsville",
+  "slug": "texas-a-m-university-kingsville",
+  "lat": 27.5279817,
+  "lng": -97.8836721,
+  "cls": "R2"
+ },
+ {
+  "name": "Texas Christian University",
+  "slug": "texas-christian-university",
+  "lat": 32.7080148,
+  "lng": -97.3611939,
+  "cls": "R2"
+ },
+ {
+  "name": "Texas Southern University",
+  "slug": "texas-southern-university",
+  "lat": 29.7209058,
+  "lng": -95.3596267,
+  "cls": "R2"
+ },
+ {
+  "name": "Texas State University",
+  "slug": "texas-state-university",
+  "lat": 29.8910885,
+  "lng": -97.9376214,
+  "cls": "R2"
+ },
+ {
+  "name": "Texas Tech University",
+  "slug": "texas-tech-university",
+  "lat": 33.5937526,
+  "lng": -101.8995955,
+  "cls": "R1"
+ },
+ {
+  "name": "Texas Tech University Health Sciences Center",
+  "slug": "texas-tech-university-health-sciences-center",
+  "lat": 33.58,
+  "lng": -101.89,
+  "cls": "R2"
+ },
+ {
+  "name": "Texas Woman's University",
+  "slug": "texas-woman-s-university",
+  "lat": 33.2272894,
+  "lng": -97.1243272,
+  "cls": "R2"
+ },
+ {
+  "name": "The New School",
+  "slug": "the-new-school",
+  "lat": 40.7354792,
+  "lng": -73.9970709,
+  "cls": "R2"
+ },
+ {
+  "name": "The Pennsylvania State University",
+  "slug": "the-pennsylvania-state-university",
+  "lat": 40.8128971,
+  "lng": -77.8710571,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Alabama",
+  "slug": "the-university-of-alabama",
+  "lat": 33.2109652,
+  "lng": -87.5172922,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Montana",
+  "slug": "the-university-of-montana",
+  "lat": 46.0112076,
+  "lng": -112.5596027,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Tennessee Health Science Center",
+  "slug": "the-university-of-tennessee-health-science-center",
+  "lat": 35.1407144,
+  "lng": -90.0296716,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Tennessee-Knoxville",
+  "slug": "the-university-of-tennessee-knoxville",
+  "lat": 35.955,
+  "lng": -83.925,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas Health Science Center at Houston",
+  "slug": "the-university-of-texas-health-science-center-at-houston",
+  "lat": 29.7029914,
+  "lng": -95.4031517,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas Health Science Center at San Antonio",
+  "slug": "the-university-of-texas-health-science-center-at-san-antonio",
+  "lat": 29.7029914,
+  "lng": -95.4031517,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas Medical Branch at Galveston",
+  "slug": "the-university-of-texas-medical-branch-at-galveston",
+  "lat": 29.312,
+  "lng": -94.775,
+  "cls": "R2"
+ },
+ {
+  "name": "The University of Texas Rio Grande Valley",
+  "slug": "the-university-of-texas-rio-grande-valley",
+  "lat": 25.8958142,
+  "lng": -97.4881916,
+  "cls": "R2"
+ },
+ {
+  "name": "The University of Texas Southwestern Medical Center",
+  "slug": "the-university-of-texas-southwestern-medical-center",
+  "lat": 32.812043,
+  "lng": -96.8417201,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas at Arlington",
+  "slug": "the-university-of-texas-at-arlington",
+  "lat": 32.7284713,
+  "lng": -97.1120213,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas at Austin",
+  "slug": "the-university-of-texas-at-austin",
+  "lat": 30.2764054,
+  "lng": -97.7340459,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas at Dallas",
+  "slug": "the-university-of-texas-at-dallas",
+  "lat": 32.9785262,
+  "lng": -96.7553288,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas at El Paso",
+  "slug": "the-university-of-texas-at-el-paso",
+  "lat": 31.7757794,
+  "lng": -106.5078711,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas at San Antonio",
+  "slug": "the-university-of-texas-at-san-antonio",
+  "lat": 29.5833311,
+  "lng": -98.6194451,
+  "cls": "R1"
+ },
+ {
+  "name": "The University of Texas at Tyler",
+  "slug": "the-university-of-texas-at-tyler",
+  "lat": 32.3163078,
+  "lng": -95.2536994,
+  "cls": "R2"
+ },
+ {
+  "name": "The University of West Florida",
+  "slug": "the-university-of-west-florida",
+  "lat": 30.548,
+  "lng": -87.217,
+  "cls": "R2"
+ },
+ {
+  "name": "Thomas Jefferson University",
+  "slug": "thomas-jefferson-university",
+  "lat": 39.9489114,
+  "lng": -75.1580566,
+  "cls": "R2"
+ },
+ {
+  "name": "Tufts University",
+  "slug": "tufts-university",
+  "lat": 42.4064499,
+  "lng": -71.1180771,
+  "cls": "R1"
+ },
+ {
+  "name": "Tulane University of Louisiana",
+  "slug": "tulane-university-of-louisiana",
+  "lat": 29.94,
+  "lng": -90.12,
+  "cls": "R1"
+ },
+ {
+  "name": "University at Albany",
+  "slug": "university-at-albany",
+  "lat": 42.6840271,
+  "lng": -73.8258773,
+  "cls": "R1"
+ },
+ {
+  "name": "University at Buffalo",
+  "slug": "university-at-buffalo",
+  "lat": 42.9002153,
+  "lng": -78.869362,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Akron",
+  "slug": "university-of-akron-main-campus",
+  "lat": 41.0757383,
+  "lng": -81.5114532,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Alabama at Birmingham",
+  "slug": "university-of-alabama-at-birmingham",
+  "lat": 33.5016153,
+  "lng": -86.8060476,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Alabama, Huntsville",
+  "slug": "university-of-alabama-huntsville",
+  "lat": 34.7257273,
+  "lng": -86.6409329,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Alaska Fairbanks",
+  "slug": "university-of-alaska-fairbanks",
+  "lat": 64.8671599,
+  "lng": -147.8507674,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Arizona",
+  "slug": "university-of-arizona",
+  "lat": 32.2356985,
+  "lng": -110.951744,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Arkansas",
+  "slug": "university-of-arkansas",
+  "lat": 36.0970389,
+  "lng": -94.1703322,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Arkansas at Little Rock",
+  "slug": "university-of-arkansas-at-little-rock",
+  "lat": 34.7223681,
+  "lng": -92.3383026,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Arkansas for Medical Sciences",
+  "slug": "university-of-arkansas-for-medical-sciences",
+  "lat": 34.748041,
+  "lng": -92.3223096,
+  "cls": "R2"
+ },
+ {
+  "name": "University of California, Berkeley",
+  "slug": "university-of-california-berkeley",
+  "lat": 37.8707751,
+  "lng": -122.2656754,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, Davis",
+  "slug": "university-of-california-davis",
+  "lat": 38.5337904,
+  "lng": -121.7907544,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, Irvine",
+  "slug": "university-of-california-irvine",
+  "lat": 33.6458956,
+  "lng": -117.842799,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, Los Angeles",
+  "slug": "university-of-california-los-angeles",
+  "lat": 34.0708777,
+  "lng": -118.4468503,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, Merced",
+  "slug": "university-of-california-merced",
+  "lat": 37.365182,
+  "lng": -120.4225275,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, Riverside",
+  "slug": "university-of-california-riverside",
+  "lat": 33.9642576,
+  "lng": -117.3398097,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, San Diego",
+  "slug": "university-of-california-san-diego",
+  "lat": 32.8792438,
+  "lng": -117.2311247,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, San Francisco",
+  "slug": "university-of-california-san-francisco",
+  "lat": 37.7627257,
+  "lng": -122.4582568,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, Santa Barbara",
+  "slug": "university-of-california-santa-barbara",
+  "lat": 34.4146025,
+  "lng": -119.84581,
+  "cls": "R1"
+ },
+ {
+  "name": "University of California, Santa Cruz",
+  "slug": "university-of-california-santa-cruz",
+  "lat": 37.0001245,
+  "lng": -122.0622122,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Central Florida",
+  "slug": "university-of-central-florida",
+  "lat": 28.599591,
+  "lng": -81.1971284,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Chicago",
+  "slug": "university-of-chicago",
+  "lat": 41.7913274,
+  "lng": -87.6008421,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Cincinnati",
+  "slug": "university-of-cincinnati",
+  "lat": 39.1315542,
+  "lng": -84.5202952,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Colorado Boulder",
+  "slug": "university-of-colorado-boulder",
+  "lat": 40.0070061,
+  "lng": -105.2664423,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Colorado Colorado Springs",
+  "slug": "university-of-colorado-colorado-springs",
+  "lat": 38.8924932,
+  "lng": -104.7996978,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Colorado Denver/Anschutz Medical Campus",
+  "slug": "university-of-colorado-denver-anschutz-medical-campus",
+  "lat": 39.743,
+  "lng": -104.838,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Connecticut",
+  "slug": "university-of-connecticut",
+  "lat": 41.8119263,
+  "lng": -72.2647704,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Dayton",
+  "slug": "university-of-dayton",
+  "lat": 39.7383807,
+  "lng": -84.1791678,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Delaware",
+  "slug": "university-of-delaware",
+  "lat": 39.6802837,
+  "lng": -75.7530984,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Denver",
+  "slug": "university-of-denver",
+  "lat": 39.6766157,
+  "lng": -104.9623745,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Florida",
+  "slug": "university-of-florida",
+  "lat": 29.6411884,
+  "lng": -82.3562296,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Georgia",
+  "slug": "university-of-georgia",
+  "lat": 33.9404278,
+  "lng": -83.3730682,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Hawaii at Manoa",
+  "slug": "university-of-hawaii-at-manoa",
+  "lat": 21.2982795,
+  "lng": -157.8186932,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Houston",
+  "slug": "university-of-houston",
+  "lat": 29.7207902,
+  "lng": -95.3440627,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Idaho",
+  "slug": "university-of-idaho",
+  "lat": 46.7237978,
+  "lng": -117.0206648,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Illinois Chicago",
+  "slug": "university-of-illinois-chicago",
+  "lat": 41.8748613,
+  "lng": -87.6519866,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Illinois Urbana-Champaign",
+  "slug": "university-of-illinois-urbana-champaign",
+  "lat": 40.0761545,
+  "lng": -88.2233134,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Iowa",
+  "slug": "university-of-iowa",
+  "lat": 41.6311024,
+  "lng": -91.540752,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Kansas",
+  "slug": "university-of-kansas",
+  "lat": 38.9535052,
+  "lng": -95.263093,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Kentucky",
+  "slug": "university-of-kentucky",
+  "lat": 38.0266291,
+  "lng": -84.5047222,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Louisiana at Lafayette",
+  "slug": "university-of-louisiana-at-lafayette",
+  "lat": 30.2117256,
+  "lng": -92.0195772,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Louisville",
+  "slug": "university-of-louisville",
+  "lat": 38.2133224,
+  "lng": -85.7577075,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Maine",
+  "slug": "university-of-maine",
+  "lat": 44.9015188,
+  "lng": -68.6617222,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Maryland, Baltimore",
+  "slug": "university-of-maryland-baltimore",
+  "lat": 39.252377,
+  "lng": -76.7089181,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Maryland-Baltimore County",
+  "slug": "university-of-maryland-baltimore-county",
+  "lat": 39.252377,
+  "lng": -76.7089181,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Maryland-College Park",
+  "slug": "university-of-maryland-college-park",
+  "lat": 38.990612,
+  "lng": -76.937331,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Massachusetts Chan Medical School",
+  "slug": "university-of-massachusetts-chan-medical-school",
+  "lat": 42.276,
+  "lng": -71.761,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Massachusetts Dartmouth",
+  "slug": "university-of-massachusetts-dartmouth",
+  "lat": 41.6225037,
+  "lng": -71.0073448,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Massachusetts-Amherst",
+  "slug": "university-of-massachusetts-amherst",
+  "lat": 42.3893259,
+  "lng": -72.5283614,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Massachusetts-Boston",
+  "slug": "university-of-massachusetts-boston",
+  "lat": 42.314068,
+  "lng": -71.0387132,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Massachusetts-Lowell",
+  "slug": "university-of-massachusetts-lowell",
+  "lat": 42.6518734,
+  "lng": -71.3172611,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Memphis",
+  "slug": "university-of-memphis",
+  "lat": 35.1189387,
+  "lng": -89.9372196,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Miami",
+  "slug": "university-of-miami",
+  "lat": 25.7172725,
+  "lng": -80.2787069,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Michigan-Ann Arbor",
+  "slug": "university-of-michigan-ann-arbor",
+  "lat": 42.2942142,
+  "lng": -83.7100389,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Michigan-Dearborn",
+  "slug": "university-of-michigan-dearborn",
+  "lat": 42.3172294,
+  "lng": -83.2319394,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Minnesota-Twin Cities",
+  "slug": "university-of-minnesota-twin-cities",
+  "lat": 44.973,
+  "lng": -93.228,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Mississippi",
+  "slug": "university-of-mississippi",
+  "lat": 34.3646125,
+  "lng": -89.5396349,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Missouri-Columbia",
+  "slug": "university-of-missouri-columbia",
+  "lat": 38.9364147,
+  "lng": -92.329703,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Missouri-Kansas City",
+  "slug": "university-of-missouri-kansas-city",
+  "lat": 39.0342326,
+  "lng": -94.5780133,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Missouri\u2013St. Louis",
+  "slug": "university-of-missouri-st-louis",
+  "lat": 38.7086398,
+  "lng": -90.3117145,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Nebraska Medical Center",
+  "slug": "university-of-nebraska-medical-center",
+  "lat": 41.2550772,
+  "lng": -95.9769529,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Nebraska Omaha",
+  "slug": "university-of-nebraska-omaha",
+  "lat": 41.2577933,
+  "lng": -96.0104971,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Nebraska-Lincoln",
+  "slug": "university-of-nebraska-lincoln",
+  "lat": 40.8305567,
+  "lng": -96.6697373,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Nevada-Las Vegas",
+  "slug": "university-of-nevada-las-vegas",
+  "lat": 36.1079411,
+  "lng": -115.1439051,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Nevada-Reno",
+  "slug": "university-of-nevada-reno",
+  "lat": 39.5442688,
+  "lng": -119.8163105,
+  "cls": "R1"
+ },
+ {
+  "name": "University of New England",
+  "slug": "university-of-new-england",
+  "lat": 43.4572089,
+  "lng": -70.3833235,
+  "cls": "R2"
+ },
+ {
+  "name": "University of New Hampshire",
+  "slug": "university-of-new-hampshire-main-campus",
+  "lat": 43.1355411,
+  "lng": -70.9461816,
+  "cls": "R1"
+ },
+ {
+  "name": "University of New Mexico",
+  "slug": "university-of-new-mexico-main-campus",
+  "lat": 35.0866328,
+  "lng": -106.6202094,
+  "cls": "R1"
+ },
+ {
+  "name": "University of North Carolina Wilmington",
+  "slug": "university-of-north-carolina-wilmington",
+  "lat": 34.2249827,
+  "lng": -77.8690774,
+  "cls": "R2"
+ },
+ {
+  "name": "University of North Carolina at Chapel Hill",
+  "slug": "university-of-north-carolina-at-chapel-hill",
+  "lat": 35.9046729,
+  "lng": -79.0533595,
+  "cls": "R1"
+ },
+ {
+  "name": "University of North Carolina at Charlotte",
+  "slug": "university-of-north-carolina-at-charlotte",
+  "lat": 35.3064945,
+  "lng": -80.7349705,
+  "cls": "R1"
+ },
+ {
+  "name": "University of North Carolina at Greensboro",
+  "slug": "university-of-north-carolina-at-greensboro",
+  "lat": 36.0683549,
+  "lng": -79.8105812,
+  "cls": "R2"
+ },
+ {
+  "name": "University of North Dakota",
+  "slug": "university-of-north-dakota",
+  "lat": 47.9265412,
+  "lng": -97.0721209,
+  "cls": "R1"
+ },
+ {
+  "name": "University of North Florida",
+  "slug": "university-of-north-florida",
+  "lat": 30.2689865,
+  "lng": -81.5096561,
+  "cls": "R2"
+ },
+ {
+  "name": "University of North Texas",
+  "slug": "university-of-north-texas",
+  "lat": 33.2098922,
+  "lng": -97.1514763,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Northern Colorado",
+  "slug": "university-of-northern-colorado",
+  "lat": 40.4028503,
+  "lng": -104.7017242,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Notre Dame",
+  "slug": "university-of-notre-dame",
+  "lat": 41.7045677,
+  "lng": -86.2382203,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Oklahoma-Health Sciences Center",
+  "slug": "university-of-oklahoma-health-sciences-center",
+  "lat": 35.4842868,
+  "lng": -97.498633,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Oklahoma-Norman Campus",
+  "slug": "university-of-oklahoma-norman-campus",
+  "lat": 35.205,
+  "lng": -97.445,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Oregon",
+  "slug": "university-of-oregon",
+  "lat": 44.0444197,
+  "lng": -123.0717603,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Pennsylvania",
+  "slug": "university-of-pennsylvania",
+  "lat": 39.9522148,
+  "lng": -75.1955729,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Pittsburgh-Pittsburgh Campus",
+  "slug": "university-of-pittsburgh-pittsburgh-campus",
+  "lat": 40.444,
+  "lng": -79.958,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Puerto Rico, Mayaguez",
+  "slug": "university-of-puerto-rico-mayaguez",
+  "lat": 18.2138235,
+  "lng": -67.142568,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Puerto Rico, Rio Piedras",
+  "slug": "university-of-puerto-rico-rio-piedras",
+  "lat": 18.4046351,
+  "lng": -66.0478486,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Rhode Island",
+  "slug": "university-of-rhode-island",
+  "lat": 41.4875129,
+  "lng": -71.5343094,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Rochester",
+  "slug": "university-of-rochester",
+  "lat": 43.129864,
+  "lng": -77.628784,
+  "cls": "R1"
+ },
+ {
+  "name": "University of San Diego",
+  "slug": "university-of-san-diego",
+  "lat": 32.7726302,
+  "lng": -117.1891347,
+  "cls": "R2"
+ },
+ {
+  "name": "University of San Francisco",
+  "slug": "university-of-san-francisco",
+  "lat": 37.7793627,
+  "lng": -122.4514473,
+  "cls": "R2"
+ },
+ {
+  "name": "University of South Alabama",
+  "slug": "university-of-south-alabama",
+  "lat": 30.6972412,
+  "lng": -88.1892334,
+  "cls": "R2"
+ },
+ {
+  "name": "University of South Carolina-Columbia",
+  "slug": "university-of-south-carolina-columbia",
+  "lat": 33.9928841,
+  "lng": -81.0268676,
+  "cls": "R1"
+ },
+ {
+  "name": "University of South Dakota",
+  "slug": "university-of-south-dakota",
+  "lat": 42.7913704,
+  "lng": -96.9254235,
+  "cls": "R2"
+ },
+ {
+  "name": "University of South Florida",
+  "slug": "university-of-south-florida",
+  "lat": 28.0599999,
+  "lng": -82.4138362,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Southern California",
+  "slug": "university-of-southern-california",
+  "lat": 34.021869,
+  "lng": -118.2858579,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Southern Mississippi",
+  "slug": "university-of-southern-mississippi",
+  "lat": 31.3292985,
+  "lng": -89.3364747,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Toledo",
+  "slug": "university-of-toledo",
+  "lat": 41.6583953,
+  "lng": -83.6147907,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Tulsa",
+  "slug": "university-of-tulsa",
+  "lat": 36.1523306,
+  "lng": -95.9459602,
+  "cls": "R2"
+ },
+ {
+  "name": "University of Utah",
+  "slug": "university-of-utah",
+  "lat": 40.7628137,
+  "lng": -111.8368719,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Vermont",
+  "slug": "university-of-vermont",
+  "lat": 44.4737365,
+  "lng": -73.1941468,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Virginia",
+  "slug": "university-of-virginia-main-campus",
+  "lat": 38.0324342,
+  "lng": -78.4990607,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Washington-Seattle Campus",
+  "slug": "university-of-washington-seattle-campus",
+  "lat": 47.6554303,
+  "lng": -122.3001692,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Wisconsin-Madison",
+  "slug": "university-of-wisconsin-madison",
+  "lat": 43.0722814,
+  "lng": -89.3977663,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Wisconsin-Milwaukee",
+  "slug": "university-of-wisconsin-milwaukee",
+  "lat": 43.077639,
+  "lng": -87.8819425,
+  "cls": "R1"
+ },
+ {
+  "name": "University of Wyoming",
+  "slug": "university-of-wyoming",
+  "lat": 41.314986,
+  "lng": -105.5643222,
+  "cls": "R1"
+ },
+ {
+  "name": "Upstate Medical University",
+  "slug": "upstate-medical-university",
+  "lat": 43.0408184,
+  "lng": -76.1391437,
+  "cls": "R2"
+ },
+ {
+  "name": "Utah State University",
+  "slug": "utah-state-university",
+  "lat": 41.7526959,
+  "lng": -111.808733,
+  "cls": "R1"
+ },
+ {
+  "name": "Vanderbilt University",
+  "slug": "vanderbilt-university",
+  "lat": 36.1438011,
+  "lng": -86.8028189,
+  "cls": "R1"
+ },
+ {
+  "name": "Villanova University",
+  "slug": "villanova-university",
+  "lat": 40.0396086,
+  "lng": -75.3395217,
+  "cls": "R2"
+ },
+ {
+  "name": "Virginia Commonwealth University",
+  "slug": "virginia-commonwealth-university",
+  "lat": 37.5461246,
+  "lng": -77.4540609,
+  "cls": "R1"
+ },
+ {
+  "name": "Virginia Polytechnic Institute and State University",
+  "slug": "virginia-polytechnic-institute-and-state-university",
+  "lat": 37.2219268,
+  "lng": -80.4272818,
+  "cls": "R1"
+ },
+ {
+  "name": "Virginia State University",
+  "slug": "virginia-state-university",
+  "lat": 37.2383399,
+  "lng": -77.4195035,
+  "cls": "R2"
+ },
+ {
+  "name": "Wake Forest University",
+  "slug": "wake-forest-university",
+  "lat": 36.133893,
+  "lng": -80.2755578,
+  "cls": "R2"
+ },
+ {
+  "name": "Washington State University",
+  "slug": "washington-state-university",
+  "lat": 46.7337716,
+  "lng": -117.1498035,
+  "cls": "R1"
+ },
+ {
+  "name": "Washington University in St Louis",
+  "slug": "washington-university-in-st-louis",
+  "lat": 38.6472402,
+  "lng": -90.3084017,
+  "cls": "R1"
+ },
+ {
+  "name": "Wayne State University",
+  "slug": "wayne-state-university",
+  "lat": 42.3571895,
+  "lng": -83.0709436,
+  "cls": "R1"
+ },
+ {
+  "name": "Weill Cornell Medicine",
+  "slug": "weill-cornell-medicine",
+  "lat": 40.767009,
+  "lng": -73.9547002,
+  "cls": "R1"
+ },
+ {
+  "name": "West Chester University of Pennsylvania",
+  "slug": "west-chester-university-of-pennsylvania",
+  "lat": 39.9519084,
+  "lng": -75.5972947,
+  "cls": "R2"
+ },
+ {
+  "name": "West Virginia University",
+  "slug": "west-virginia-university",
+  "lat": 39.6348398,
+  "lng": -79.9542095,
+  "cls": "R1"
+ },
+ {
+  "name": "Western Michigan University",
+  "slug": "western-michigan-university",
+  "lat": 42.2832928,
+  "lng": -85.6102812,
+  "cls": "R2"
+ },
+ {
+  "name": "Wichita State University",
+  "slug": "wichita-state-university",
+  "lat": 37.719343,
+  "lng": -97.2898878,
+  "cls": "R2"
+ },
+ {
+  "name": "William & Mary",
+  "slug": "william-mary",
+  "lat": 37.2679042,
+  "lng": -76.7179167,
+  "cls": "R1"
+ },
+ {
+  "name": "Worcester Polytechnic Institute",
+  "slug": "worcester-polytechnic-institute",
+  "lat": 42.274315,
+  "lng": -71.8084567,
+  "cls": "R1"
+ },
+ {
+  "name": "Wright State University",
+  "slug": "wright-state-university",
+  "lat": 39.7842039,
+  "lng": -84.0567799,
+  "cls": "R2"
+ },
+ {
+  "name": "Yale University",
+  "slug": "yale-university",
+  "lat": 41.3135727,
+  "lng": -72.9231731,
+  "cls": "R1"
+ },
+ {
+  "name": "Yeshiva University",
+  "slug": "yeshiva-university",
+  "lat": 40.8489807,
+  "lng": -73.9298403,
+  "cls": "R2"
+ }
+]
