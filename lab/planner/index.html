@@ -404,6 +404,18 @@
     .print-head{display:block;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--blue-deep)}
     .print-head b{font-size:18px;color:var(--blue-deep)}
     .navrow{margin-top:0}
+    /* day print: task list on page 1, time blocks (7:00-22:00) on a new page */
+    body[data-level="0"] .matrix-panel,body[data-level="0"] .ev-panel,
+    body[data-level="0"] .notes-panel{display:none!important}
+    body[data-level="0"] .day-grid{display:flex;flex-direction:column}
+    body[data-level="0"] .day-grid .stack{order:1;width:100%}
+    body[data-level="0"] .day-grid .sched{order:2;width:100%;break-before:page;page-break-before:always}
+    body[data-level="0"] .sched .block-row{height:7mm;min-height:0}
+    body[data-level="0"] .sched .block-row .bt{padding:2px 8px 2px 0;font-size:10px}
+    body[data-level="0"] .sched .block-row .bi{padding:2px 10px;font-size:12px}
+    /* month print: calendar only */
+    body[data-level="2"] .split{display:block}
+    body[data-level="2"] .split .side{display:none!important}
   }
 </style>
 </head>
@@ -581,7 +593,7 @@ function tasksTodayPanel(d,syncMatrix){
   const day=getDay(d);
   day.top3.forEach((r,i)=>{if(r&&r.id){const live=(DB.matrix||[]).find(m=>m.id===r.id);
     if(live&&live!==r)day.top3[i]=live;}});
-  const p=document.createElement("div");p.className="panel";
+  const p=document.createElement("div");p.className="panel tasks-panel";
   p.innerHTML=`<div class="sec-lbl">Tasks today<span class="dash"></span></div>`;
   const list=document.createElement("div");p.appendChild(list);
   let mxT=null;
@@ -637,7 +649,7 @@ function divider(label){const d=document.createElement("div");d.className="divid
 
 function eventsPanel(d){
   const evs=getEvents(d);
-  const p=document.createElement("div");p.className="panel";
+  const p=document.createElement("div");p.className="panel ev-panel";
   p.innerHTML=`<div class="sec-lbl">Events<span class="dash"></span></div>`;
   const list=document.createElement("div");p.appendChild(list);
   function draw(){list.innerHTML="";evs.forEach((e,idx)=>{
@@ -663,10 +675,10 @@ function renderDay(){
   document.getElementById("mainTitle").textContent=DOW[(d.getDay()+6)%7]+" "+d.getDate();
   const grid=document.createElement("div");grid.className="day-grid";
 
-  // schedule (30-min blocks 6:00–22:30)
+  // schedule (30-min blocks 7:00–22:00)
   const sched=document.createElement("div");sched.className="panel sched";
   sched.innerHTML=`<div class="sec-lbl">Time blocks · 30 min<span class="dash"></span></div>`;
-  for(let m=6*60;m<=22*60+30;m+=30){
+  for(let m=7*60;m<=22*60;m+=30){
     const hh=Math.floor(m/60),mm=m%60;const key=pad(hh)+":"+pad(mm);const onHour=mm===0;
     const row=document.createElement("div");row.className="block-row"+(onHour?" hour":"");
     row.innerHTML=`<div class="bt">${key}</div><input class="bi" value="${esc(day.blocks[key])}">`;
@@ -681,7 +693,7 @@ function renderDay(){
   const tt=tasksTodayPanel(d,()=>quadDraws.forEach(f=>f()));
   right.appendChild(tt.el);
   right.appendChild(eventsPanel(d));
-  const pn=document.createElement("div");pn.className="panel";
+  const pn=document.createElement("div");pn.className="panel notes-panel";
   pn.innerHTML=`<div class="sec-lbl">Notes<span class="dash"></span></div>`;
   pn.appendChild(noteField(day,"note","Anything on your mind today…"));
   right.appendChild(pn);
@@ -689,7 +701,7 @@ function renderDay(){
   grid.appendChild(sched);grid.appendChild(right);
 
   // Eisenhower matrix (full width, top of the day page)
-  const mp=document.createElement("div");mp.className="panel";mp.style.marginBottom="20px";
+  const mp=document.createElement("div");mp.className="panel matrix-panel";mp.style.marginBottom="20px";
   mp.innerHTML=`<div class="sec-lbl">Eisenhower Matrix · Important vs Urgent<span class="dash"></span></div>`;
   const mx=document.createElement("div");mx.className="matrix";
   const QDEF=[
@@ -859,7 +871,7 @@ function renderMonth(){
   cal.querySelectorAll(".cell").forEach(c=>c.addEventListener("click",()=>{
     const[y,m,dd]=c.dataset.k.split("-").map(Number);focus=new Date(y,m-1,dd);setLevel(0);}));
 
-  const side=document.createElement("div");
+  const side=document.createElement("div");side.className="side";
   const p1=document.createElement("div");p1.className="panel";
   p1.innerHTML=`<div class="sec-lbl">Month intentions<span class="dash"></span></div>`;
   p1.appendChild(themeField(mo,"Theme for the month…"));
@@ -1214,6 +1226,7 @@ function render(){
   }
   document.querySelectorAll("#zoomctl button").forEach(b=>b.classList.toggle("active",+b.dataset.lvl===level));
   renderCrumbs();
+  document.body.dataset.level=level;
   [renderDay,renderWeek,renderMonth,renderYear,renderYears][level]();
   if(bd)bd.textContent=currentRangeLabel();
   renderDeadlines();
