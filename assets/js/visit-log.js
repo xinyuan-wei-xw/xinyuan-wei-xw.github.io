@@ -50,7 +50,7 @@ function matchOrg(org){
 
 
 /* ---- visit logger: university-IP visits -> Firestore counter ----
-   Org-name match first; otherwise every university within 50 km of the
+   Org-name match first; otherwise every university within 35 miles of the
    visitor's approximate location gets a +1 (one batched commit). */
 (function(){
   try {
@@ -69,7 +69,7 @@ function matchOrg(org){
     if (s) { slugs = [s]; }
     else {
       var la = d && parseFloat(d.latitude), ln = d && parseFloat(d.longitude);
-      if (isFinite(la) && isFinite(ln)) slugs = geoMatch(la, ln, 50);
+      if (isFinite(la) && isFinite(ln)) slugs = geoMatch(la, ln, 35 * 1.60934); /* 35 miles in km */
     }
     if (!slugs.length) return;
     try { sessionStorage.setItem('uvl','1'); } catch(e){}
@@ -77,7 +77,7 @@ function matchOrg(org){
     var writes = slugs.map(function(slug){ return {transform:{
       document: base + slug,
       fieldTransforms:[{fieldPath:'visits', increment:{integerValue:'1'}}]}}; });
-    var url = 'https://firestore.googleapis.com/v1/projects/x-planner-99dd3/databases/(default)/documents:commit?key=AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw';
+    var url = 'https://firestore.googleapis.com/v1/projects/x-planner-99dd3/databases/(default)/documents:commit?key=__FIREBASE_API_KEY__';
     fetch(url, {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({writes: writes})}).catch(function(){});
   }).catch(function(){});

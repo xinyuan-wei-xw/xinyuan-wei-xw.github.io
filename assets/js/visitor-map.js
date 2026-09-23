@@ -80,6 +80,7 @@
     else if(!fit(Array.from(svg.querySelectorAll('path[data-country]')).filter(function(p){return p.dataset.country===code;}))) {
       setBox([0,0,900,506.25]);note.textContent='Map outline unavailable for this location; available counts are listed below.';
     }
+    refreshUniversityTable();
     table();
   }
   function chooseRegion(name) {
@@ -96,6 +97,7 @@
     var shapes=Array.from(stateLayer.children).filter(function(p){return norm(p.dataset.region)===norm(region);});
     if(!fit(shapes)){note.textContent='State/province outline unavailable; counts are listed below.';}
     if(records.some(function(r){return !r.location;}))note.textContent+=' Some cities have counts but no matched map coordinates.';
+    refreshUniversityTable();
     table();
   }
   function chooseCity(name) {
@@ -119,7 +121,9 @@
   citySelect.addEventListener('change',function(){chooseCity(this.value);});
 
   // --- University visit counts (logged by visit-log.js) ---
-  var uniData = [], uniCounts = {};
+  // The table is shown only on the state page, listing visited universities in that state.
+  var uniData = [], uniCounts = {}, uniWrap = null, uniContent = null, uniReady = false;
+  var US_STATE_CODES = {alabama:'AL',alaska:'AK',arizona:'AZ',arkansas:'AR',california:'CA',colorado:'CO',connecticut:'CT',delaware:'DE',districtofcolumbia:'DC',florida:'FL',georgia:'GA',hawaii:'HI',idaho:'ID',illinois:'IL',indiana:'IN',iowa:'IA',kansas:'KS',kentucky:'KY',louisiana:'LA',maine:'ME',maryland:'MD',massachusetts:'MA',michigan:'MI',minnesota:'MN',mississippi:'MS',missouri:'MO',montana:'MT',nebraska:'NE',nevada:'NV',newhampshire:'NH',newjersey:'NJ',newmexico:'NM',newyork:'NY',northcarolina:'NC',northdakota:'ND',ohio:'OH',oklahoma:'OK',oregon:'OR',pennsylvania:'PA',puertorico:'PR',rhodeisland:'RI',southcarolina:'SC',southdakota:'SD',tennessee:'TN',texas:'TX',utah:'UT',vermont:'VT',virginia:'VA',washington:'WA',westvirginia:'WV',wisconsin:'WI',wyoming:'WY'};
   function loadUniCounts() {
     return load('assets/js/visit-log.js', 'text').then(function (t) {
       var m = t.match(/[?&]key=([A-Za-z0-9_\-]{20,})/);
@@ -137,25 +141,41 @@
   }
   function initUniversityTable() {
     var anchor = document.getElementById('visitor-table-wrap');
-    if (!anchor || document.getElementById('visitor-uni-wrap')) return;
-    var wrap = document.createElement('div'); wrap.id = 'visitor-uni-wrap';
-    var h = document.createElement('h2'); h.textContent = 'Universities near visitors'; wrap.appendChild(h);
+    if (!anchor || uniWrap) return;
+    uniWrap = document.createElement('div'); uniWrap.id = 'visitor-uni-wrap'; uniWrap.hidden = true;
+    var h = document.createElement('h2'); h.textContent = 'Universities near visitors'; uniWrap.appendChild(h);
     var note = document.createElement('p'); note.className = 'visitor-note';
-    note.textContent = 'Matched by visitor network, or by approximate location (within 50 km) when the network does not match a university. IP addresses are not shown or stored; counts update live.';
-    wrap.appendChild(note);
-    var status = document.createElement('p'); status.className = 'visitor-note'; status.textContent = 'Loading university visits…';
-    wrap.appendChild(status);
-    anchor.after(wrap);
+    note.textContent = 'Matched by visitor network, or by approximate location (within 35 miles) when the network does not match a university. IP addresses are not shown or stored; counts update live.';
+    uniWrap.appendChild(note);
+    uniContent = document.createElement('div'); uniWrap.appendChild(uniContent);
+    var loading = document.createElement('p'); loading.className = 'visitor-note'; loading.textContent = 'Loading university visits…';
+    uniContent.appendChild(loading);
+    anchor.after(uniWrap);
     Promise.all([load('assets/data/universities.json', 'json'), loadUniCounts()]).then(function (res) {
-      uniData = res[0] || []; uniCounts = res[1];
-      renderUniversityTable(wrap, status);
-    }).catch(function () { status.textContent = 'University visit data is temporarily unavailable.'; });
+      uniData = res[0] || []; uniCounts = res[1]; uniReady = true;
+      refreshUniversityTable();
+    }).catch(function () {
+      uniData = []; uniCounts = null; uniReady = true;
+      refreshUniversityTable();
+    });
   }
-  function renderUniversityTable(wrap, status) {
-    if (uniCounts === null) { status.textContent = 'University visit data is temporarily unavailable.'; return; }
-    var visited = uniData.filter(function (u) { return (uniCounts[u.slug] || 0) > 0; });
-    if (!visited.length) { status.textContent = 'No university visits recorded yet.'; return; }
-    status.remove();
+  function refreshUniversityTable() {
+    if (!uniWrap || !uniReady) return;
+    uniContent.replaceChildren();
+    if (!region) { uniWrap.hidden = true; return; }
+    uniWrap.hidden = false;
+    if (uniCounts === null) {
+      var err = document.createElement('p'); err.className = 'visitor-note';
+      err.textContent = 'University visit data is temporarily unavailable.';
+      uniContent.appendChild(err); return;
+    }
+    var code = US_STATE_CODES[norm(region)];
+    var visited = uniData.filter(function (u) { return code && u.state === code && (uniCounts[u.slug] || 0) > 0; });
+    if (!visited.length) {
+      var none = document.createElement('p'); none.className = 'visitor-note';
+      none.textContent = 'No university visits recorded yet.';
+      uniContent.appendChild(none); return;
+    }
     var byCity = {};
     visited.forEach(function (u) {
       var key = (u.city || '') + '||' + (u.state || '');
@@ -184,13 +204,12 @@
       });
     });
     table.appendChild(tbody);
-    wrap.appendChild(table);
+    uniContent.appendChild(table);
     var sum = document.createElement('p'); sum.className = 'visitor-note';
     sum.textContent = total.toLocaleString() + ' visits · ' + visited.length +
       (visited.length === 1 ? ' university' : ' universities') + '.';
-    wrap.appendChild(sum);
+    uniContent.appendChild(sum);
   }
-
   function load(path,type){return fetch(new URL(path,root),{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error('Load failed');return type==='text'?r.text():r.json();});}
   Promise.all([load('assets/data/visitor-map.json'),load('assets/data/map-regions.json'),load('images/lab/visitor-map.svg','text')]).then(function(results){
     data=results[0];data.countries=data.countries||[];data.regions=data.regions||[];data.cities=data.cities||[];regions=results[1];
