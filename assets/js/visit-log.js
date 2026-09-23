@@ -77,7 +77,7 @@ function matchOrg(org){
     var writes = slugs.map(function(slug){ return {transform:{
       document: base + slug,
       fieldTransforms:[{fieldPath:'visits', increment:{integerValue:'1'}}]}}; });
-    var url = 'https://firestore.googleapis.com/v1/projects/x-planner-99dd3/databases/(default)/documents:commit?key=__FIREBASE_API_KEY__';
+    var url = 'https://firestore.googleapis.com/v1/projects/x-planner-99dd3/databases/(default)/documents:commit?key=AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw';
     fetch(url, {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({writes: writes})}).catch(function(){});
   }).catch(function(){});
