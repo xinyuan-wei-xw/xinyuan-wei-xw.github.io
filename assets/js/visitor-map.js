@@ -139,9 +139,9 @@
     var anchor = document.getElementById('visitor-table-wrap');
     if (!anchor || document.getElementById('visitor-uni-wrap')) return;
     var wrap = document.createElement('div'); wrap.id = 'visitor-uni-wrap';
-    var h = document.createElement('h2'); h.textContent = 'Visits from university networks'; wrap.appendChild(h);
+    var h = document.createElement('h2'); h.textContent = 'Universities near visitors'; wrap.appendChild(h);
     var note = document.createElement('p'); note.className = 'visitor-note';
-    note.textContent = 'Universities are matched by visitor network. IP addresses are not shown or stored; counts update live.';
+    note.textContent = 'Matched by visitor network, or by approximate location (within 50 km) when the network does not match a university. IP addresses are not shown or stored; counts update live.';
     wrap.appendChild(note);
     var status = document.createElement('p'); status.className = 'visitor-note'; status.textContent = 'Loading university visits…';
     wrap.appendChild(status);
@@ -186,7 +186,7 @@
     table.appendChild(tbody);
     wrap.appendChild(table);
     var sum = document.createElement('p'); sum.className = 'visitor-note';
-    sum.textContent = total.toLocaleString() + ' visits from ' + visited.length +
+    sum.textContent = total.toLocaleString() + ' visits · ' + visited.length +
       (visited.length === 1 ? ' university' : ' universities') + '.';
     wrap.appendChild(sum);
   }
