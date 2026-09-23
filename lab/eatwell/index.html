@@ -20,7 +20,7 @@
 body{font-family:var(--sans);background:var(--cream);color:var(--ink);min-height:100vh}
 a{color:var(--green)}
 .topbar{background:var(--paper);border-bottom:1px solid var(--line);padding:10px 18px;
-  display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:50}
 .backlink{color:#52adc8;text-decoration:none;font-size:14px;white-space:nowrap}
 .brand{display:flex;align-items:center;gap:9px;margin-right:auto}
 .brand .pot{font-size:26px}
@@ -124,21 +124,23 @@ a{color:var(--green)}
 .yt{display:inline-block;margin-top:12px;font-size:13.5px}
 .loading{text-align:center;padding:40px;color:var(--ink-soft)}
 .err{background:#fdeeee;border:1px solid #f3c1b8;color:#a33d31;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:14px}
-/* auth bar (same account as X Planner) */
-.authbar{background:var(--paper);border-bottom:1px solid var(--line);padding:8px 18px;
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}
-#authBox{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}
-#authBox input{border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;
-  font-family:var(--sans);width:170px;background:#fff}
-#authBox input:focus{outline:none;border-color:var(--green)}
-#authBox button{border:1px solid var(--line);background:var(--paper);border-radius:8px;
+/* auth (same account as X Planner) — sits in the topbar, right of the title */
+.topauth{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px}
+.topauth input{border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;
+  font-family:var(--sans);width:140px;background:#fff}
+.topauth input:focus{outline:none;border-color:var(--green)}
+.topauth button{border:1px solid var(--line);background:#fff;border-radius:8px;
   padding:6px 12px;font-size:13px;cursor:pointer;color:var(--ink);font-family:var(--sans)}
-#authBox button:hover{border-color:var(--green);color:var(--green-deep)}
-#authBox a{font-size:12.5px;color:var(--green);text-decoration:none}
-#authBox a:hover{text-decoration:underline}
-#authErr{color:#a33d31;font-size:12.5px;flex-basis:100%}
-#authWho{color:var(--green-deep);font-weight:600}
+.topauth button:hover{border-color:var(--green);color:var(--green-deep)}
+.topauth a{font-size:12.5px;color:var(--green);text-decoration:none}
+.topauth a:hover{text-decoration:underline}
+#authErr{color:#a33d31;font-size:12.5px}
+#authWho{color:var(--green-deep);font-weight:600;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #syncStat{font-size:11.5px;color:var(--ink-soft)}
+@media(max-width:720px){
+  .topauth{flex-basis:100%;order:9}
+  .topauth input{flex:1;min-width:0}
+}
 .lockpanel{background:var(--paper);border:1px solid var(--line);border-radius:14px;
   padding:34px 26px;text-align:center;box-shadow:var(--shadow);max-width:520px;margin:30px auto}
 .lockpanel .big{font-size:40px;margin-bottom:10px}
@@ -161,22 +163,7 @@ footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
 <div class="topbar">
   <a class="backlink" href="../" data-t="backToLab">← Back to Lab</a>
   <div class="brand"><span class="pot">🍲</span><h1><span data-t="appName">Eat Well</span><small data-t="tagline">Eat Well, Live Better</small><small class="srcline"><span data-t="credit">Recipes from</span> <a href="https://www.themealdb.com" target="_blank" rel="noopener">TheMealDB</a></small></h1></div>
-  <div class="seg" id="langSeg">
-    <button data-lang="zh">中文</button><button data-lang="en" class="on">EN</button>
-  </div>
-</div>
-<div class="intro" id="intro">
-  <button class="intro-x" id="introX" aria-label="close">×</button>
-  <h2 data-t="introTitle">How to use</h2>
-  <div class="intro-steps">
-    <div><b data-t="introS1t">1 · Browse dishes</b><p data-t="introS1d"></p></div>
-    <div><b data-t="introS2t">2 · Plan your week</b><p data-t="introS2d"></p></div>
-    <div><b data-t="introS3t">3 · Shop from the list</b><p data-t="introS3d"></p></div>
-  </div>
-  <p class="intro-tip" data-t="introTip"></p>
-</div>
-<div class="authbar">
-  <span id="authBox" style="display:none">
+  <span id="authBox" class="topauth" style="display:none">
     <span id="authForm">
       <input type="email" id="authEmail" data-t-ph="emailPh" placeholder="Email" autocomplete="email">
       <input type="password" id="authPass" data-t-ph="passPh" placeholder="Password" autocomplete="current-password">
@@ -191,6 +178,19 @@ footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
     <span id="authErr"></span>
   </span>
   <span id="syncStat"></span>
+  <div class="seg" id="langSeg">
+    <button data-lang="zh">中文</button><button data-lang="en" class="on">EN</button>
+  </div>
+</div>
+<div class="intro" id="intro">
+  <button class="intro-x" id="introX" aria-label="close">×</button>
+  <h2 data-t="introTitle">How to use</h2>
+  <div class="intro-steps">
+    <div><b data-t="introS1t">1 · Browse dishes</b><p data-t="introS1d"></p></div>
+    <div><b data-t="introS2t">2 · Plan your week</b><p data-t="introS2d"></p></div>
+    <div><b data-t="introS3t">3 · Shop from the list</b><p data-t="introS3d"></p></div>
+  </div>
+  <p class="intro-tip" data-t="introTip"></p>
 </div>
 <div class="tabs" id="tabs">
   <button data-tab="browse" class="on" data-t="tabBrowse">选菜</button>
