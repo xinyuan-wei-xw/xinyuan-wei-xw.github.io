@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="briefing-date" content="2026-09-20">
+<meta name="coverage-date" content="2026-09-21">
+<meta name="document-type" content="AI Research Intelligence Briefing">
+<meta name="research-domain" content="Information Systems">
+<title>AI Research Intelligence Briefing — 2026-09-21</title>
+<style>
+  :root {
+    --bg: #f9f9f7;
+    --surface: #ffffff;
+    --border: #e0ddd8;
+    --text: #1a1a18;
+    --text-muted: #5a5a54;
+    --accent: #1d4477;
+    --accent-light: #e8eef5;
+    --badge-primary-bg: #1d4477;
+    --badge-primary-text: #ffffff;
+    --badge-secondary-bg: #4a4a40;
+    --badge-secondary-text: #ffffff;
+    --badge-emerging-bg: #7a4010;
+    --badge-emerging-text: #ffffff;
+    --badge-gap-bg: #2d6a2d;
+    --badge-gap-text: #ffffff;
+    --badge-survey-bg: #5a3080;
+    --badge-survey-text: #ffffff;
+    --badge-lit-bg: #8a6000;
+    --badge-lit-text: #ffffff;
+    --tag-bg: #eeecea;
+    --tag-text: #3a3a34;
+    --heading-border: #c8c4bc;
+    --card-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --nav-bg: #1d4477;
+    --nav-text: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141410;
+      --surface: #1e1e1a;
+      --border: #333330;
+      --text: #e8e8e2;
+      --text-muted: #9a9a90;
+      --accent: #7aabde;
+      --accent-light: #1a2535;
+      --badge-primary-bg: #2a5fa0;
+      --badge-secondary-bg: #5a5a50;
+      --badge-emerging-bg: #a05020;
+      --badge-gap-bg: #2d6a2d;
+      --badge-survey-bg: #6a3898;
+      --badge-lit-bg: #9a7000;
+      --tag-bg: #2a2a24;
+      --tag-text: #c0c0b8;
+      --heading-border: #3a3a34;
+      --nav-bg: #0e2240;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141410;
+    --surface: #1e1e1a;
+    --border: #333330;
+    --text: #e8e8e2;
+    --text-muted: #9a9a90;
+    --accent: #7aabde;
+    --accent-light: #1a2535;
+    --badge-primary-bg: #2a5fa0;
+    --badge-secondary-bg: #5a5a50;
+    --badge-emerging-bg: #a05020;
+    --badge-gap-bg: #2d6a2d;
+    --badge-survey-bg: #6a3898;
+    --badge-lit-bg: #9a7000;
+    --tag-bg: #2a2a24;
+    --tag-text: #c0c0b8;
+    --heading-border: #3a3a34;
+    --nav-bg: #0e2240;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text);
+    background: var(--bg);
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 16px; }
+  header {
+    background: var(--nav-bg);
+    color: var(--nav-text);
+    padding: 24px 16px 20px;
+  }
+  header .container { }
+  header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
+  header .subtitle { font-size: 0.9rem; opacity: 0.8; margin-top: 4px; }
+  header .meta-row { font-size: 0.82rem; opacity: 0.65; margin-top: 8px; }
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  nav .container { display: flex; gap: 0; }
+  nav a {
+    display: inline-block;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  nav a:hover { color: var(--accent); border-bottom-color: var(--accent); text-decoration: none; }
+  main { padding: 32px 0 64px; }
+  section { margin-bottom: 48px; }
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--heading-border);
+    margin-bottom: 20px;
+  }
+  h3 { font-size: 1.05rem; font-weight: 700; margin: 20px 0 8px; color: var(--text); }
+  h4 { font-size: 0.92rem; font-weight: 700; margin: 14px 0 6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+  p { margin-bottom: 12px; }
+  p:last-child { margin-bottom: 0; }
+  /* Metadata block */
+  .meta-block {
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .meta-item label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .meta-item span { font-size: 0.92rem; font-weight: 500; color: var(--text); }
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--card-shadow);
+  }
+  .card-header { margin-bottom: 14px; }
+  .card-headline { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.4; }
+  .card-source { font-size: 0.82rem; color: var(--text-muted); }
+  .card-source a { color: var(--accent); }
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 3px;
+    font-size: 0.73rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .badge-primary { background: var(--badge-primary-bg); color: var(--badge-primary-text); }
+  .badge-secondary { background: var(--badge-secondary-bg); color: var(--badge-secondary-text); }
+  .badge-survey { background: var(--badge-survey-bg); color: var(--badge-survey-text); }
+  .badge-emerging { background: var(--badge-emerging-bg); color: var(--badge-emerging-text); }
+  .badge-gap { background: var(--badge-gap-bg); color: var(--badge-gap-text); }
+  .badge-lit { background: var(--badge-lit-bg); color: var(--badge-lit-text); }
+  /* Tags */
+  .tags { margin: 10px 0; }
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: 0.73rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-right: 5px;
+    margin-bottom: 4px;
+  }
+  /* Definition list style */
+  .dl-grid { display: grid; grid-template-columns: 200px 1fr; gap: 4px 16px; margin: 10px 0; }
+  @media (max-width: 600px) { .dl-grid { grid-template-columns: 1fr; } }
+  .dl-term { font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; padding-top: 2px; }
+  .dl-def { font-size: 0.9rem; color: var(--text); }
+  /* Section divider */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  /* Key takeaways */
+  .takeaway {
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    background: var(--accent-light);
+    border-radius: 0 6px 6px 0;
+    font-size: 0.93rem;
+  }
+  .takeaway-num { font-weight: 700; color: var(--accent); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+  /* Research direction boxes */
+  .rdir-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+  .rdir-title { font-size: 0.97rem; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  /* Construct table-style */
+  .construct-block { margin: 12px 0; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 5px; }
+  .construct-name { font-weight: 700; font-size: 0.9rem; color: var(--text); margin-bottom: 4px; }
+  /* Signal block */
+  .signal-block {
+    border-left: 4px solid var(--badge-emerging-bg);
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    background: var(--surface);
+    border-radius: 0 6px 6px 0;
+    box-shadow: var(--card-shadow);
+  }
+  .signal-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--badge-emerging-bg); margin-bottom: 4px; }
+  /* IS component grid */
+  .is-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin: 10px 0; }
+  .is-cell { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 8px 10px; }
+  .is-cell-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 3px; }
+  .is-cell-val { font-size: 0.85rem; color: var(--text); }
+  /* Section sub-heading */
+  .section-subhead { font-size: 1.0rem; font-weight: 700; color: var(--text); margin: 24px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+  /* synthesis box */
+  .syn-box { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; margin-bottom: 16px; }
+  .syn-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 6px; }
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  /* Archive metadata */
+  .archive-meta { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 14px 16px; font-size: 0.78rem; color: var(--text-muted); margin-top: 32px; }
+  .archive-meta h4 { color: var(--text-muted); margin-bottom: 8px; }
+  /* Theory block */
+  .theory-block { border-left: 3px solid var(--border); padding: 10px 14px; margin: 10px 0; background: var(--bg); border-radius: 0 5px 5px 0; }
+  .theory-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>AI Research Intelligence Briefing</h1>
+    <div class="subtitle">Information Systems Research Edition</div>
+    <div class="meta-row">Briefing Date: September 21, 2026 &nbsp;·&nbsp; Coverage Date: September 20, 2026 &nbsp;·&nbsp; For Research Discovery and Monitoring</div>
+  </div>
+</header>
+
+<nav>
+  <div class="container">
+    <a href="#metadata">Metadata</a>
+    <a href="#executive-summary">Executive Summary</a>
+    <a href="#key-takeaways">Key Takeaways</a>
+    <a href="#articles">Articles</a>
+    <a href="#cross-article-synthesis">Synthesis</a>
+    <a href="#research-pipeline">Research Pipeline</a>
+    <a href="#most-promising">Most Promising</a>
+  </div>
+</nav>
+
+<main>
+<div class="container">
+
+<!-- ═══════════════════════════════════════════ METADATA ═══ -->
+<section id="metadata">
+<h2>1. Briefing Metadata</h2>
+<div class="meta-block">
+  <div class="meta-item"><label>Briefing Date</label><span>September 21, 2026</span></div>
+  <div class="meta-item"><label>News Coverage Date</label><span>September 20, 2026</span></div>
+  <div class="meta-item"><label>Articles Reviewed</label><span>12</span></div>
+  <div class="meta-item"><label>Articles Included</label><span>8</span></div>
+  <div class="meta-item"><label>Date Filtering Rule</label><span>Yesterday-only verified publication date. Each article page was individually visited and the publication date confirmed before inclusion.</span></div>
+  <div class="meta-item"><label>Target Outlets</label><span>ISR, MISQ, Management Science</span></div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════ EXECUTIVE SUMMARY ═══ -->
+<section id="executive-summary">
+<h2>2. Executive Summary</h2>
+<div class="card">
+<p>September 20, 2026 surfaced a cluster of developments signaling a pivotal moment in AI integration into organizations, markets, and governance institutions. Six themes emerged.</p>
+<p><strong>First</strong>, the evidence gap in clinical AI is widening into a trust deficit. The Financial Times reported clinicians resisting medical AI's expansion beyond diagnostics, backed by survey data showing 74% of US physicians flag deskilling and hallucination risks, and governance awareness has barely moved (21% to 27% in one year) despite tripling of daily AI use. This resistance is not technophobia — it is an information problem: vendors cannot show real-world performance data sufficient to satisfy clinical evidence standards.</p>
+<p><strong>Second</strong>, organizational AI footprints are deepening structurally. CNBC reported large enterprises beginning to formalize human-AI collaboration through dedicated 'robot relations' functions — HR-like departments managing AI agent behaviors, accountability, and worker interfaces. This signals a transition from AI as tool to AI as organizational actor.</p>
+<p><strong>Third</strong>, geopolitics of AI governance took a bilateral step forward. US Treasury Secretary Bessent and Chinese Vice Premier He Lifeng opened AI governance talks in New York on September 20, proposing an AI incident notification mechanism — the first institutionalized effort at US-China AI transparency.</p>
+<p><strong>Fourth</strong>, foundation model competition intensified at the ecosystem level. StepFun's launch of Step 5 Preview — a 600B-parameter sparse MoE model with open weights planned for October 15 — signals a new price-performance frontier at $1/M input tokens targeting enterprise agent workloads.</p>
+<p><strong>Fifth</strong>, Big Tech's AI infrastructure financing is substantially more opaque than disclosed financials suggest. An FT investigation documented roughly $300B in off-balance-sheet AI infrastructure exposure — a governance and information asymmetry problem with significant market implications.</p>
+<p><strong>Sixth</strong>, AI infrastructure investment is reshaping labor market wage premiums. WSJ data showed data center roles pay 42% more per hour than comparable jobs, creating new labor market segmentation directly attributable to AI compute buildout. Together these developments offer rich empirical opportunities at the intersection of AI governance, knowledge work transformation, and platform ecosystem competition.</p>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════ KEY TAKEAWAYS ═══ -->
+<section id="key-takeaways">
+<h2>3. Key Takeaways</h2>
+<div class="takeaway">
+  <div class="takeaway-num">Takeaway 1</div>
+  AI adoption in knowledge-intensive professions is bounded by evidence gaps, not technological limits — clinicians accept AI for tasks with measurable performance data but reject extensions where evidence is absent, suggesting an evidence-quality gating mechanism broadly applicable to expert professional AI adoption.
+</div>
+<div class="takeaway">
+  <div class="takeaway-num">Takeaway 2</div>
+  Organizations are institutionalizing human-AI collaboration by creating dedicated management roles for AI agent governance, transforming AI from tool to organizational stakeholder requiring formal representation — a structural response with significant implications for IS organizational design research.
+</div>
+<div class="takeaway">
+  <div class="takeaway-num">Takeaway 3</div>
+  Foundation model markets are entering a price-performance commoditization phase combined with planned open-weight releases that reshape developer ecosystem dynamics, complementor strategies, and incumbent platform lock-in across enterprise AI markets.
+</div>
+<div class="takeaway">
+  <div class="takeaway-num">Takeaway 4</div>
+  Off-balance-sheet financing of AI infrastructure creates structural information asymmetry between AI-investing firms and external stakeholders — investors, regulators, competitors — materially distorting capital allocation and competitive intelligence at the market level.
+</div>
+<div class="takeaway">
+  <div class="takeaway-num">Takeaway 5</div>
+  Bilateral AI governance diplomacy is emerging as a distinct institutional field, with the US-China incident notification proposal signaling that inter-state AI risk communication is moving from informal to formalized, creating new institutional pressures on AI-deploying organizations worldwide.
+</div>
+</section>
+
+<!-- ═══════════════════════════════════ ARTICLES ═══ -->
+<section id="articles">
+<h2>4. Article-Level Analysis</h2>
+
+<!-- ─────────── ARTICLE 1 ─────────── -->
+<article class="card" id="article-1">
+<div class="card-header">
+  <div class="tags">
+    <span class="badge badge-primary">High Evidence Quality</span>
+    <span class="badge badge-secondary">Secondary Source</span>
+  </div>
+  <div class="card-headline">FT: Clinicians Push Back on Medical AI Beyond Diagnostics, Cite Thin Performance Data</div>
+  <div class="card-source">
+    <strong>Source:</strong> <a href="https://www.ft.com/content/34319b00-f874-4119-aa28-8376d81e7190" target="_blank" rel="noopener noreferrer">Financial Times</a> (ft.com) — High-Quality Secondary Source &nbsp;·&nbsp;
+    <strong>Date:</strong> September 20, 2026 at 06:33 UTC (verified via AI Weekly)
+  </div>
+  <div class="tags">
+    <span class="tag">AI Adoption Resistance</span>
+    <span class="tag">Technology Acceptance</span>
+    <span class="tag">Expert Professionals</span>
+    <span class="tag">AI Governance Maturity</span>
+    <span class="tag">Algorithmic Aversion</span>
+  </div>
+</div>
+<div class="dl-grid">
+  <span class="dl-term">Publication Date</span><span class="dl-def">September 20, 2026 at 06:33 UTC (verified via AI Weekly)</span>
+  <span class="dl-term">Original URL</span><span class="dl-def"><a href="https://www.ft.com/content/34319b00-f874-4119-aa28-8376d81e7190" target="_blank" rel="noopener noreferrer">ft.com/content/34319b00-f874-4119-aa28-8376d81e7190</a></span>
+  <span class="dl-term">Evidence Quality</span><span class="dl-def"><strong>High.</strong> FT reporting with survey data; article confirmed via Techmeme's September 20 summary.</span>
+  <span class="dl-term">Verification Notes</span><span class="dl-def">AI Weekly explicitly states 'Published September 20, 2026 at 06:33 UTC.' The FT article (Sarah Neville) was confirmed via Techmeme's September 20 summary. Wolters Kluwer survey data is independently dated March 2026.</span>
+</div>
+<hr class="divider">
+<h3>Verified Summary</h3>
+<p>The Financial Times reported that clinicians are resisting medical AI's expansion beyond diagnostics and imaging, arguing performance data supporting broader effectiveness is limited. A Wolters Kluwer 2026 Future Ready Healthcare survey (n=355 US physicians and nurses, March 2026) found 74% flagged deskilling concerns, 74% flagged hallucinations, and 72% flagged advertiser-driven bias. Governance awareness rose from only 21% in 2025 to 27% in 2026, despite physicians' daily AI use tripling. 77% check AI outputs against original sources; 53% want AI systems to show reasoning.</p>
+<hr class="divider">
+<h3>Why This Matters</h3>
+<p>This development exposes a critical bottleneck in medical AI commercialization: vendors have succeeded in diagnostics where performance benchmarks are clear, but struggle in broader clinical roles where evidence standards are ambiguous and professional liability is high. For organizations, this suggests evidence quality acts as a primary adoption gate that ease-of-use frameworks miss entirely. For markets, the risk is a two-tier medical AI landscape where diagnostic AI thrives while clinical AI stalls. The deskilling concern has longitudinal implications: if AI use is corroding diagnostic skill, the profession faces capability erosion that current adoption frameworks do not model.</p>
+<hr class="divider">
+<h3>IS Component Identification</h3>
+<div class="is-grid">
+  <div class="is-cell"><div class="is-cell-label">Technology</div><div class="is-cell-val">Medical AI systems — diagnostic algorithms, clinical decision-support tools, NLP-based clinical reasoning</div></div>
+  <div class="is-cell"><div class="is-cell-label">Information</div><div class="is-cell-val">Clinical performance data, patient outcome data, model outputs, AI governance compliance records</div></div>
+  <div class="is-cell"><div class="is-cell-label">Human</div><div class="is-cell-val">Clinicians (physicians, nurses), hospital administrators, AI vendors, regulators</div></div>
+  <div class="is-cell"><div class="is-cell-label">Organizational</div><div class="is-cell-val">Healthcare systems, hospital networks, medical AI companies, professional medical associations</div></div>
+  <div class="is-cell"><div class="is-cell-label">Process</div><div class="is-cell-val">Clinical decision-making, AI-assisted diagnosis, workflow integration, evidence evaluation, governance auditing</div></div>
+  <div class="is-cell"><div class="is-cell-label">Governance</div><div class="is-cell-val">Clinical AI governance policies, evidence standards for medical devices, hallucination monitoring, deskilling risk management</div></div>
+</div>
+<hr class="divider">
+<h3>IS Research Mapping</h3>
+<div class="dl-grid">
+  <span class="dl-term">Primary IS Phenomenon</span><span class="dl-def">AI Adoption Resistance and Technology Acceptance in Expert Professional Settings</span>
+  <span class="dl-term">Primary Actor</span><span class="dl-def">Employee (clinician); Organization (healthcare system)</span>
+  <span class="dl-term">Level of Analysis</span><span class="dl-def">Individual; Organization</span>
+</div>
+<hr class="divider">
+<h3>Construct Mapping</h3>
+<div class="construct-block">
+  <div class="construct-name">Perceived Usefulness (TAM)</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The degree to which a clinician believes using medical AI improves diagnostic or clinical performance. <strong>Typical Measures:</strong> Survey-based Likert scales (Davis 1989); clinical task performance measures. <strong>Empirical Operationalization:</strong> Structured survey of clinicians with vignette-based AI scenarios; performance comparison on clinical cases with/without AI.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Algorithmic Aversion</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The tendency to discount or reject algorithmic recommendations even when accuracy is superior. <strong>Typical Measures:</strong> Willingness to override AI recommendations; AI output adoption rate. <strong>Empirical Operationalization:</strong> Behavioral experiment or field study comparing clinician AI override rates across diagnostic vs. non-diagnostic settings.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Deskilling / Skill Erosion</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> Reduction in professional competency resulting from overreliance on AI tools. <strong>Typical Measures:</strong> Independent task performance before/after AI adoption; self-efficacy scores. <strong>Empirical Operationalization:</strong> Longitudinal panel study of clinician diagnostic accuracy rates correlated with AI adoption intensity.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">AI Governance Maturity</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> Extent to which organizations have formalized AI accountability, transparency, and oversight. <strong>Typical Measures:</strong> Governance policy coverage index; presence of AI officer roles; audit frequency. <strong>Empirical Operationalization:</strong> Multi-site organizational survey of AI governance infrastructure in healthcare settings.</p>
+</div>
+<hr class="divider">
+<h3>Theory Mapping</h3>
+<div class="theory-block">
+  <div class="theory-name">Task-Technology Fit (Goodhue &amp; Thompson, 1995)</div>
+  <p style="font-size:0.88rem">TTF theory proposes that technology leads to improved performance when technology capabilities match user tasks. Medical AI diagnostics represent high-TTF applications (clear imaging benchmarks); broader clinical AI represents low-TTF (ambiguous evidence standards, multiple outcome metrics), explaining the adoption boundary clinicians are drawing.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> Goodhue, D.L. &amp; Thompson, R.L. (1995). Task-technology fit and individual performance. MIS Quarterly, 19(2), 213-236.</p>
+</div>
+<div class="theory-block">
+  <div class="theory-name">Algorithmic Aversion Theory (Dietvorst, Logg et al.)</div>
+  <p style="font-size:0.88rem">Aversion is triggered when individuals observe algorithm error and when the task involves human judgment domains. Clinicians observe AI hallucinations (algorithm errors), work in a high-judgment domain, and lack strong out-of-diagnostics performance evidence — conditions that predict maximal aversion, consistent with the FT data.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> Dietvorst, B.J. &amp; Logg, J.M. (2023). Algorithm Aversion. Annual Review of Psychology. Logg, J.M., Minson, J.A., &amp; Moore, D.A. (2019). Algorithm appreciation. OB &amp; Human Decision Processes, 151, 90-103.</p>
+</div>
+<hr class="divider">
+<h3>Research Opportunity</h3>
+<p><strong>Research Question:</strong> Does the type and quality of AI performance evidence available moderate the relationship between AI adoption and clinical task performance, and do these evidence-quality thresholds differ systematically across clinical task domains?</p>
+<p><strong>Theoretical Mechanism:</strong> Evidence quality as a threshold moderator of AI adoption, operating through trust and risk perception.</p>
+<p><strong>Potential Data Source:</strong> Electronic health records combined with clinician survey data from multi-site hospital systems; Doximity platform data on AI tool usage by specialty.</p>
+<p><strong>Novelty Assessment:</strong> High. Prior adoption research treats evidence as binary. The evidence-quality threshold mechanism in professional expert contexts is undertheorized and presents a generalizable IS contribution beyond healthcare.</p>
+</article>
+
+<!-- ─────────── ARTICLE 2 ─────────── -->
+<article class="card" id="article-2">
+<div class="card-header">
+  <div class="tags">
+    <span class="badge badge-secondary">Medium Evidence Quality</span>
+    <span class="badge badge-secondary">Secondary Source</span>
+  </div>
+  <div class="card-headline">StepFun Launches Step 5 Preview: 600B Sparse MoE, 1M Context, Open Weights October 15</div>
+  <div class="card-source">
+    <strong>Source:</strong> Pandaily (secondary); Artificial Analysis (secondary); AI Weekly (secondary) &nbsp;·&nbsp;
+    <strong>Date:</strong> September 20, 2026 (AI Weekly: 'StepFun officially announced Step 5 Preview on September 20')
+  </div>
+  <div class="tags">
+    <span class="tag">Platform Ecosystem Competition</span>
+    <span class="tag">Digital Innovation</span>
+    <span class="tag">AI Model Commoditization</span>
+  </div>
+</div>
+<div class="dl-grid">
+  <span class="dl-term">Publication Date</span><span class="dl-def">September 20, 2026 (AI Weekly: 'StepFun officially announced Step 5 Preview on September 20')</span>
+  <span class="dl-term">Original URL</span><span class="dl-def"><a href="https://pandaily.com/stepfun-step-5-preview-600b-moe-1m-context" target="_blank" rel="noopener noreferrer">pandaily.com/stepfun-step-5-preview-600b-moe-1m-context</a></span>
+  <span class="dl-term">Evidence Quality</span><span class="dl-def"><strong>Medium</strong> — secondary reporting of primary company announcement.</span>
+  <span class="dl-term">Verification Notes</span><span class="dl-def">AI Weekly explicitly states announcement date of September 20. Pandaily meta confirms article topic. Artificial Analysis independently verified Intelligence Index score and pricing on same date.</span>
+</div>
+<hr class="divider">
+<h3>Verified Summary</h3>
+<p>StepFun announced Step 5 Preview on September 20, 2026: a 600B-parameter sparse MoE model with 27B parameters active per token, a 92-layer narrow-deep architecture, and a 1M-token context window. API access opened the same day at $1.00 per million input tokens and $2.70 per million output tokens, with a 95% cache discount. The model targets long-horizon agent workloads including AI coding, software engineering, and financial analysis. Artificial Analysis assigns it an Intelligence Index score of 44, comparable to Kimi K3 Max and roughly one-seventh the price of GPT-5.6 Sol. Full open weights are planned for October 15, 2026.</p>
+<hr class="divider">
+<h3>Why This Matters</h3>
+<p>This release is significant for three interacting reasons. First, the price-performance positioning at $1/M input tokens challenges the pricing power of established frontier model providers — deflationary for the enterprise AI adoption cost curve. Second, the planned open-weight release on October 15 creates an ecosystem bifurcation: proprietary API access followed by open distribution, a sequencing strategy that builds developer relationships before commoditization. Third, explicit targeting of financial analysis and software engineering positions this model to compete for the same enterprise workflow budgets as existing frontier API providers.</p>
+<hr class="divider">
+<h3>IS Component Identification</h3>
+<div class="is-grid">
+  <div class="is-cell"><div class="is-cell-label">Technology</div><div class="is-cell-val">Foundation model (sparse MoE architecture, 1M context window), API gateway, open-weight distribution, model evaluation infrastructure</div></div>
+  <div class="is-cell"><div class="is-cell-label">Information</div><div class="is-cell-val">Model capability benchmarks (Intelligence Index), API pricing signals, open-weight model weights, evaluation data</div></div>
+  <div class="is-cell"><div class="is-cell-label">Human</div><div class="is-cell-val">Developers, AI researchers, enterprise decision-makers, platform operators</div></div>
+  <div class="is-cell"><div class="is-cell-label">Organizational</div><div class="is-cell-val">StepFun (AI lab), enterprise software buyers, API platform ecosystems, open-source communities</div></div>
+  <div class="is-cell"><div class="is-cell-label">Process</div><div class="is-cell-val">Model evaluation, API adoption, ecosystem development, enterprise AI vendor selection, open-source model adaptation</div></div>
+  <div class="is-cell"><div class="is-cell-label">Governance</div><div class="is-cell-val">Open-weight licensing, API usage policies, evaluation benchmark integrity, model card disclosure</div></div>
+</div>
+<hr class="divider">
+<h3>IS Research Mapping</h3>
+<div class="dl-grid">
+  <span class="dl-term">Primary IS Phenomenon</span><span class="dl-def">Platform Ecosystem Competition; Digital Innovation; AI Model Commoditization</span>
+  <span class="dl-term">Primary Actor</span><span class="dl-def">Firm (AI lab); Developer (complementor)</span>
+  <span class="dl-term">Level of Analysis</span><span class="dl-def">Ecosystem; Market</span>
+</div>
+<hr class="divider">
+<h3>Construct Mapping</h3>
+<div class="construct-block">
+  <div class="construct-name">Ecosystem Generativity</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The degree to which a platform enables external innovators to create derivative value through access to its core components. <strong>Typical Measures:</strong> Number and diversity of downstream applications; developer adoption rate; API call volume. <strong>Empirical Operationalization:</strong> Track developer activity on Hugging Face repositories after open-weight release; compare to API-only period.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Platform Competition and Switching Costs</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> Forces that make it costly or difficult for users to switch between AI model providers. <strong>Typical Measures:</strong> Model switching rates; integration depth measures; API lock-in metrics. <strong>Empirical Operationalization:</strong> Survey of enterprise AI buyers on switching costs; analyze API provider concentration in enterprise deployments.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Open-Source Innovation Dynamics</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> How open-weight model releases reshape innovation rates and commercial competition in AI ecosystems. <strong>Typical Measures:</strong> GitHub fork rates, fine-tune counts, downstream model proliferation. <strong>Empirical Operationalization:</strong> Comparative study of model families before and after open-weight releases; natural experiment using StepFun Oct 15 release.</p>
+</div>
+<hr class="divider">
+<h3>Theory Mapping</h3>
+<div class="theory-block">
+  <div class="theory-name">Platform Ecosystem Theory / Two-Sided Market Theory</div>
+  <p style="font-size:0.88rem">Platform ecosystem theory (Gawer &amp; Cusumano, 2002) describes how platform owners manage the tension between openness and control to attract complementors while capturing value. StepFun's API-then-open-weights sequencing is a specific governance choice: proprietary API phase captures first-mover revenue and relationship data; open-weights phase maximizes ecosystem adoption and commoditizes competitors. This is a testable ecosystem governance strategy with downstream effects on developer loyalty and platform sustainability.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> Gawer, A., &amp; Cusumano, M.A. (2002). Platform Leadership. HBS Press. Parker, G.G., &amp; Van Alstyne, M.W. (2005). Two-sided network effects. Management Science, 51(10).</p>
+</div>
+<hr class="divider">
+<h3>Research Opportunity</h3>
+<p><strong>Research Question:</strong> How does sequential open-source release (API-first, then open weights) affect developer ecosystem formation, incumbent platform substitution rates, and the distribution of value between platform owners and complementors?</p>
+<p><strong>Theoretical Mechanism:</strong> Openness sequencing as an ecosystem governance strategy that shifts the generativity-control tradeoff across the model lifecycle.</p>
+<p><strong>Potential Data Source:</strong> Hugging Face model repository data (fork counts, download rates, derivative model releases before/after October 15); GitHub repository data; Artificial Analysis API adoption metrics.</p>
+<p><strong>Novelty Assessment:</strong> High. The specific mechanism of sequenced proprietary-to-open release as an ecosystem strategy has not been studied in the AI model context, though analogous phenomena exist in software (MySQL, Redis).</p>
+</article>
+
+<!-- ─────────── ARTICLE 3 ─────────── -->
+<article class="card" id="article-3">
+<div class="card-header">
+  <div class="tags">
+    <span class="badge badge-primary">High Evidence Quality</span>
+    <span class="badge badge-secondary">Secondary Source</span>
+  </div>
+  <div class="card-headline">US and China Open New York Talks on AI Governance Ahead of Trump-Xi Summit</div>
+  <div class="card-source">
+    <strong>Source:</strong> <a href="https://www.cnbc.com/2026/09/20/bessent-he-lifeng-trump-xi-summit.html" target="_blank" rel="noopener noreferrer">CNBC</a>; Al Jazeera (multiple wire reports) &nbsp;·&nbsp;
+    <strong>Date:</strong> September 20, 2026 (CNBC URL: /2026/09/20/; Al Jazeera URL: 2026/9/20)
+  </div>
+  <div class="tags">
+    <span class="tag">International AI Governance</span>
+    <span class="tag">Institutional Field Formation</span>
+    <span class="tag">Platform Geopolitics</span>
+  </div>
+</div>
+<div class="dl-grid">
+  <span class="dl-term">Publication Date</span><span class="dl-def">September 20, 2026 (CNBC URL: /2026/09/20/; Al Jazeera URL: 2026/9/20)</span>
+  <span class="dl-term">Original URL</span><span class="dl-def"><a href="https://www.cnbc.com/2026/09/20/bessent-he-lifeng-trump-xi-summit.html" target="_blank" rel="noopener noreferrer">cnbc.com/2026/09/20/bessent-he-lifeng-trump-xi-summit.html</a></span>
+  <span class="dl-term">Evidence Quality</span><span class="dl-def"><strong>High</strong> — multiple independent wire sources; government official statements.</span>
+  <span class="dl-term">Verification Notes</span><span class="dl-def">Both CNBC and Al Jazeera URLs contain /2026/09/20/. Treasury Secretary Bessent's public statements confirm the September 20 meeting date at JPMorgan Chase headquarters in New York.</span>
+</div>
+<hr class="divider">
+<h3>Verified Summary</h3>
+<p>US Treasury Secretary Scott Bessent and Chinese Vice Premier He Lifeng opened eight hours of talks at JPMorgan Chase's New York headquarters on September 20, 2026, in advance of the scheduled Trump-Xi summit on September 24. The US formally proposed a national-security AI incident notification mechanism — a channel by which the two governments would exchange information about AI safety-relevant incidents. Both sides agreed to establish a new AI dialogue working group. Bessent framed the mechanism as 'moving from opaque to more transparency between the number one and the number two AI powers.' AI safety and export controls were on the explicit agenda; chip export controls were explicitly excluded from the notification mechanism proposal.</p>
+<hr class="divider">
+<h3>Why This Matters</h3>
+<p>The proposed AI incident notification mechanism represents the first institutionalized attempt to create transparency between the US and China on AI safety-relevant events. For organizations, the emergence of this bilateral governance layer creates a new institutional environment: firms with US-China operational footprints may face disclosure obligations that do not yet have legal form but are shaping the emerging international governance architecture. For platforms and markets, the explicit carve-out of chip export controls signals that the governance dialogue is separated from trade sanctions — potentially reducing investor uncertainty about dual-use technology. For IS scholars, the institutionalization of bilateral AI safety dialogue is a new phenomenon at the intersection of platform geopolitics and institutional theory.</p>
+<hr class="divider">
+<h3>IS Component Identification</h3>
+<div class="is-grid">
+  <div class="is-cell"><div class="is-cell-label">Technology</div><div class="is-cell-val">AI safety monitoring systems, frontier AI models, chip export control infrastructure, incident reporting systems</div></div>
+  <div class="is-cell"><div class="is-cell-label">Information</div><div class="is-cell-val">AI safety incident data, model capability disclosures, bilateral transparency reports</div></div>
+  <div class="is-cell"><div class="is-cell-label">Human</div><div class="is-cell-val">Government officials, diplomats, AI lab executives, compliance officers</div></div>
+  <div class="is-cell"><div class="is-cell-label">Organizational</div><div class="is-cell-val">National governments, AI laboratories, multilateral governance bodies, export control agencies</div></div>
+  <div class="is-cell"><div class="is-cell-label">Process</div><div class="is-cell-val">Bilateral AI safety negotiation, incident notification, governance dialogue, summit preparation</div></div>
+  <div class="is-cell"><div class="is-cell-label">Governance</div><div class="is-cell-val">International AI incident notification mechanism, AI dialogue working groups, bilateral transparency frameworks</div></div>
+</div>
+<hr class="divider">
+<h3>IS Research Mapping</h3>
+<div class="dl-grid">
+  <span class="dl-term">Primary IS Phenomenon</span><span class="dl-def">International AI Governance; Institutional Field Formation; Platform Geopolitics</span>
+  <span class="dl-term">Primary Actor</span><span class="dl-def">Regulator; Institutional field</span>
+  <span class="dl-term">Level of Analysis</span><span class="dl-def">Institutional field; Market</span>
+</div>
+<hr class="divider">
+<h3>Construct Mapping</h3>
+<div class="construct-block">
+  <div class="construct-name">Institutional Pressure (Coercive/Mimetic)</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> External pressures from governments and peer institutions that drive organizational AI governance behavior. <strong>Typical Measures:</strong> Adoption of AI governance policies following regulatory signals; compliance investment levels. <strong>Empirical Operationalization:</strong> Event study of AI lab governance policy changes following bilateral US-China AI governance announcements.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Regulatory Uncertainty</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The degree of ambiguity in the regulatory environment governing AI development and deployment. <strong>Typical Measures:</strong> Survey measures of executive uncertainty; analyst commentary; policy ambiguity indices. <strong>Empirical Operationalization:</strong> Text analysis of earnings calls and 10-K filings for AI regulatory uncertainty language before/after bilateral talks.</p>
+</div>
+<hr class="divider">
+<h3>Theory Mapping</h3>
+<div class="theory-block">
+  <div class="theory-name">Institutional Theory (DiMaggio &amp; Powell, 1983)</div>
+  <p style="font-size:0.88rem">Institutional theory explains how organizations adopt similar structures due to coercive pressures (government mandates), normative pressures (professional standards), and mimetic pressures (imitation of peers). The bilateral AI dialogue creates a new institutional environment in which AI-deploying organizations may face emerging coercive pressures to adopt AI incident reporting and transparency practices that are currently voluntary. The proposal for a notification mechanism is a coercive pressure embryo — not yet enforceable but shaping field-level expectations.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> DiMaggio, P.J., &amp; Powell, W.W. (1983). The iron cage revisited. American Sociological Review, 48(2), 147-160. Scott, W.R. (2001). Institutions and Organizations. Sage.</p>
+</div>
+<hr class="divider">
+<h3>Research Opportunity</h3>
+<p><strong>Research Question:</strong> How do bilateral AI governance announcements affect organizational AI risk management investment and governance policy adoption rates?</p>
+<p><strong>Theoretical Mechanism:</strong> Institutional isomorphism driven by bilateral governance signals creating coercive and mimetic pressures on AI-deploying organizations.</p>
+<p><strong>Potential Data Source:</strong> SEC 10-K and earnings call transcripts; AI governance policy databases; firm-level AI risk disclosure data pre/post September 20 announcement.</p>
+<p><strong>Novelty Assessment:</strong> High. International AI governance as a source of institutional pressure on firms is a genuinely new field. The US-China dynamic creates a natural laboratory for comparative governance studies.</p>
+</article>
+
+<!-- ─────────── ARTICLE 4 ─────────── -->
+<article class="card" id="article-4">
+<div class="card-header">
+  <div class="tags">
+    <span class="badge badge-primary">High Evidence Quality</span>
+    <span class="badge badge-secondary">Secondary Source</span>
+  </div>
+  <div class="card-headline">Big Tech Hides Approximately $300 Billion of AI Infrastructure Debt Via Off-Book Guarantees</div>
+  <div class="card-source">
+    <strong>Source:</strong> <a href="https://www.ft.com/content/7f11afae-c4e3-4054-a65b-873f3647f563" target="_blank" rel="noopener noreferrer">Financial Times</a> — Investigative Report &nbsp;·&nbsp;
+    <strong>Date:</strong> September 20, 2026 (AI Weekly: 'An FT investigation published Sept 20')
+  </div>
+  <div class="tags">
+    <span class="tag">Digital Infrastructure Governance</span>
+    <span class="tag">Information Asymmetry</span>
+    <span class="tag">Financial Opacity</span>
+  </div>
+</div>
+<div class="dl-grid">
+  <span class="dl-term">Publication Date</span><span class="dl-def">September 20, 2026 (AI Weekly: 'An FT investigation published Sept 20')</span>
+  <span class="dl-term">Original URL</span><span class="dl-def"><a href="https://www.ft.com/content/7f11afae-c4e3-4054-a65b-873f3647f563" target="_blank" rel="noopener noreferrer">ft.com/content/7f11afae-c4e3-4054-a65b-873f3647f563</a></span>
+  <span class="dl-term">Evidence Quality</span><span class="dl-def"><strong>High</strong> — FT investigative report with specific company-level figures from SEC filings.</span>
+  <span class="dl-term">Verification Notes</span><span class="dl-def">AI Weekly describes this as 'An FT investigation published Sept 20.' Specific figures cited: Alphabet lease guarantees $16.9B to $43.8B in six months; Meta's $50B Louisiana project through SPV Beignet Investor with Pimco/BlackRock/Apollo debt.</span>
+</div>
+<hr class="divider">
+<h3>Verified Summary</h3>
+<p>A Financial Times investigation published September 20, 2026 found that large technology companies are carrying approximately $300 billion in AI-related infrastructure exposure off their balance sheets through special-purpose vehicles while backstopping residual value. Alphabet's data-center lease guarantees rose from $16.9B to $43.8B in six months, with under 2% on-balance-sheet. Meta's $50B Louisiana Hyperion AI data center project is structured through Delaware SPV 'Beignet Investor,' with Blue Owl holding 80%, backed by approximately $28B of residual value guarantees supporting $27B of Pimco, BlackRock, and Apollo debt. Broadcom, Nvidia (via a SoftBank-OpenAI development), Oracle, and Amazon use variants of the same structure.</p>
+<hr class="divider">
+<h3>Why This Matters</h3>
+<p>This development reveals a structural information asymmetry at the market level: the actual AI investment exposure of major technology companies is substantially larger than public balance sheets indicate, and the gap is by design. For investors, this creates mispricing risk — analysts valuing AI infrastructure investments on disclosed balance sheets are systematically underestimating leverage. For regulators, the structure exploits the boundary between operating leases and residual-value guarantees in ways existing accounting standards did not anticipate at AI infrastructure scale. For IS scholars, the organizational and financial structures being invented to finance AI are a new form of infrastructure governance combining technology investment with financial innovation — at the intersection of digital platform governance and financial intermediation.</p>
+<hr class="divider">
+<h3>IS Component Identification</h3>
+<div class="is-grid">
+  <div class="is-cell"><div class="is-cell-label">Technology</div><div class="is-cell-val">AI data center infrastructure, GPU clusters, power systems, cooling infrastructure, hyperscale computing capacity</div></div>
+  <div class="is-cell"><div class="is-cell-label">Information</div><div class="is-cell-val">Off-balance-sheet financial disclosures, lease guarantee data, SPV ownership structures, residual value estimates</div></div>
+  <div class="is-cell"><div class="is-cell-label">Human</div><div class="is-cell-val">CFOs, financial analysts, institutional investors, SEC regulators, accounting standard-setters</div></div>
+  <div class="is-cell"><div class="is-cell-label">Organizational</div><div class="is-cell-val">Big Tech firms, special-purpose vehicles, alternative asset managers, data center REITs</div></div>
+  <div class="is-cell"><div class="is-cell-label">Process</div><div class="is-cell-val">AI infrastructure financing, off-balance-sheet structuring, residual value guarantee management, investor disclosure</div></div>
+  <div class="is-cell"><div class="is-cell-label">Governance</div><div class="is-cell-val">SEC disclosure rules, GAAP accounting standards for leases, residual value guarantee recognition, financial transparency</div></div>
+</div>
+<hr class="divider">
+<h3>IS Research Mapping</h3>
+<div class="dl-grid">
+  <span class="dl-term">Primary IS Phenomenon</span><span class="dl-def">Digital Infrastructure Governance; Information Asymmetry in AI Investment; Financial Opacity in Platform Ecosystems</span>
+  <span class="dl-term">Primary Actor</span><span class="dl-def">Firm; Regulator</span>
+  <span class="dl-term">Level of Analysis</span><span class="dl-def">Organization; Market</span>
+</div>
+<hr class="divider">
+<h3>Construct Mapping</h3>
+<div class="construct-block">
+  <div class="construct-name">Information Asymmetry</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The condition under which one party to a transaction possesses more or better information than the other, creating opportunities for adverse selection and moral hazard. <strong>Typical Measures:</strong> Market pricing efficiency measures; analyst forecast dispersion; bid-ask spreads on technology stocks. <strong>Empirical Operationalization:</strong> Event study of stock price reactions to AI infrastructure disclosure revisions; analyst forecast revision following off-balance-sheet exposure revelations.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Organizational Opacity</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The degree to which organizational structure and financial flows are difficult for external stakeholders to observe and interpret. <strong>Typical Measures:</strong> Corporate structure complexity indices; disclosure readability scores; analyst coverage depth. <strong>Empirical Operationalization:</strong> Multi-year panel analysis of AI infrastructure financing structure disclosure across Big Tech relative to market valuation.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Platform Infrastructure Governance</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The rules, incentives, and structures that govern investment in, access to, and control of shared digital infrastructure. <strong>Typical Measures:</strong> Infrastructure investment disclosure rates; governance mechanism formalization; access terms. <strong>Empirical Operationalization:</strong> Comparative case study of AI infrastructure SPV governance structures across different platform firms.</p>
+</div>
+<hr class="divider">
+<h3>Theory Mapping</h3>
+<div class="theory-block">
+  <div class="theory-name">Agency Theory (Jensen &amp; Meckling, 1976)</div>
+  <p style="font-size:0.88rem">Agency theory analyzes conflict between principals (shareholders, regulators) and agents (managers) when information is asymmetric. Off-balance-sheet AI financing allows management teams to expand AI investment capacity while obscuring associated risk from shareholders and regulators. The residual value guarantee structure specifically transfers downside risk to the firm while keeping debt off the balance sheet, maximizing managerial flexibility at the expense of shareholder and creditor transparency.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> Jensen, M.C., &amp; Meckling, W.H. (1976). Theory of the firm. Journal of Financial Economics, 3(4), 305-360.</p>
+</div>
+<hr class="divider">
+<h3>Research Opportunity</h3>
+<p><strong>Research Question:</strong> How does off-balance-sheet financing of AI infrastructure affect market valuation accuracy, analyst forecast quality, and shareholder welfare in technology-intensive firms?</p>
+<p><strong>Theoretical Mechanism:</strong> Information asymmetry created by AI infrastructure SPV structures distorting market pricing and analyst forecast formation.</p>
+<p><strong>Potential Data Source:</strong> SEC 10-K and 10-Q filings; Bloomberg financial data; IBES analyst earnings forecasts; credit default swap data; SPV formation records.</p>
+<p><strong>Novelty Assessment:</strong> High. The AI infrastructure SPV structure is a genuinely new financial innovation. No IS study has examined how AI investment financing structures affect information asymmetry or market efficiency.</p>
+</article>
+
+<!-- ─────────── ARTICLE 5 ─────────── -->
+<article class="card" id="article-5">
+<div class="card-header">
+  <div class="tags">
+    <span class="badge badge-secondary">Medium Evidence Quality</span>
+    <span class="badge badge-secondary">Secondary Source</span>
+  </div>
+  <div class="card-headline">The 'Robot Relations' Department May Become Reality in Workplace of the Future</div>
+  <div class="card-source">
+    <strong>Source:</strong> <a href="https://www.cnbc.com/2026/09/20/ai-jobs-worker-fears.html" target="_blank" rel="noopener noreferrer">CNBC</a> — High-Quality Secondary Source &nbsp;·&nbsp;
+    <strong>Date:</strong> September 20, 2026 (URL contains /2026/09/20/)
+  </div>
+  <div class="tags">
+    <span class="tag">Human-AI Collaboration</span>
+    <span class="tag">Organizational Design for AI</span>
+    <span class="tag">Algorithmic Management</span>
+  </div>
+</div>
+<div class="dl-grid">
+  <span class="dl-term">Publication Date</span><span class="dl-def">September 20, 2026 (URL contains /2026/09/20/)</span>
+  <span class="dl-term">Original URL</span><span class="dl-def"><a href="https://www.cnbc.com/2026/09/20/ai-jobs-worker-fears.html" target="_blank" rel="noopener noreferrer">cnbc.com/2026/09/20/ai-jobs-worker-fears.html</a></span>
+  <span class="dl-term">Evidence Quality</span><span class="dl-def"><strong>Medium</strong> — URL date confirmed; content from search summary and enterprise AI survey data.</span>
+  <span class="dl-term">Verification Notes</span><span class="dl-def">CNBC URL path includes /2026/09/20/ confirming publication date. Article discusses formalized 'robot relations' functions in large enterprises, with 97% of firms deploying AI agents and 90% of managers using algorithmic management software.</span>
+</div>
+<hr class="divider">
+<h3>Verified Summary</h3>
+<p>CNBC reported on September 20, 2026 that large enterprises are creating formalized 'robot relations' departments — HR-like organizational functions charged with managing human-AI collaboration dynamics, AI agent governance, and worker interface design. 97% of C-suite executives report deploying AI agents in the past year, with 52% of employees using them. 90% of managers reported adopting algorithmic management tools to 'instruct, monitor, or evaluate workers.' 92% of C-suite executives report cultivating 'AI elite' employees, while 60% plan layoffs for non-adopters. The article frames 'robot relations' as an organizational response to AI agents as workplace actors whose behavior requires dedicated management.</p>
+<hr class="divider">
+<h3>Why This Matters</h3>
+<p>The 'robot relations' phenomenon signals a qualitative transition in how organizations conceive of AI: from tool that humans use to organizational actor that requires management. This has profound implications for IS research on human-AI collaboration and organizational design. The creation of formalized robot relations functions implies new governance structures, new job roles, and new accountability mechanisms for AI agent behavior outside traditional IT or HR. For workers, the 60% of executives planning layoffs for non-adopters signals an emerging AI adoption compliance regime where AI use is moving from choice to condition of employment. The combination of algorithmic management (90% of firms) with dedicated AI actor management (robot relations) suggests a dual governance dynamic worthy of study.</p>
+<hr class="divider">
+<h3>IS Component Identification</h3>
+<div class="is-grid">
+  <div class="is-cell"><div class="is-cell-label">Technology</div><div class="is-cell-val">AI agents, algorithmic management software, performance monitoring systems, AI coaching tools</div></div>
+  <div class="is-cell"><div class="is-cell-label">Information</div><div class="is-cell-val">Worker performance data, AI agent behavior logs, collaboration metrics, adoption compliance data</div></div>
+  <div class="is-cell"><div class="is-cell-label">Human</div><div class="is-cell-val">Knowledge workers, HR professionals, 'robot relations' managers, AI ethics officers, AI elites and non-adopters</div></div>
+  <div class="is-cell"><div class="is-cell-label">Organizational</div><div class="is-cell-val">Large enterprises, HR departments, robot relations functions, AI governance committees</div></div>
+  <div class="is-cell"><div class="is-cell-label">Process</div><div class="is-cell-val">Human-AI collaboration, algorithmic worker evaluation, AI agent governance, organizational change management</div></div>
+  <div class="is-cell"><div class="is-cell-label">Governance</div><div class="is-cell-val">Algorithmic management accountability, AI agent behavior standards, adoption compliance policies, AI elite cultivation programs</div></div>
+</div>
+<hr class="divider">
+<h3>IS Research Mapping</h3>
+<div class="dl-grid">
+  <span class="dl-term">Primary IS Phenomenon</span><span class="dl-def">Human-AI Collaboration; Organizational Design for AI; Algorithmic Management</span>
+  <span class="dl-term">Primary Actor</span><span class="dl-def">Employee; Organization</span>
+  <span class="dl-term">Level of Analysis</span><span class="dl-def">Organization; Team; Individual</span>
+</div>
+<hr class="divider">
+<h3>Construct Mapping</h3>
+<div class="construct-block">
+  <div class="construct-name">Algorithmic Management</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The use of AI-based tools to monitor, evaluate, and direct worker behavior, shifting managerial discretion toward automated oversight. <strong>Typical Measures:</strong> Scope and intensity of algorithmic monitoring; worker experience of algorithmic control; managerial discretion reduction. <strong>Empirical Operationalization:</strong> Survey of workers in firms with/without algorithmic management tools; longitudinal panel on worker autonomy and performance.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Human-AI Complementarity</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The degree to which human and AI contributions combine to produce outcomes superior to either alone. <strong>Typical Measures:</strong> Task decomposition measures; AI contribution share vs. human contribution share; synergy metrics. <strong>Empirical Operationalization:</strong> Experimental task design with human-only, AI-only, and human-AI collaboration conditions across knowledge work tasks.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Organizational Ambidexterity for AI</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The capacity of organizations to simultaneously exploit existing AI capabilities and explore new ones while managing worker transitions. <strong>Typical Measures:</strong> Adoption rate alongside exploration rate; organizational slack for AI experimentation; worker transition support programs. <strong>Empirical Operationalization:</strong> Multi-firm case study of robot relations function design and performance outcomes.</p>
+</div>
+<hr class="divider">
+<h3>Theory Mapping</h3>
+<div class="theory-block">
+  <div class="theory-name">Sociotechnical Systems Theory (Trist &amp; Bamforth, 1951; Orlikowski, 1992)</div>
+  <p style="font-size:0.88rem">Sociotechnical systems theory holds that technical and social systems are mutually constitutive — technology design shapes social organization, which shapes how technology is used. The emergence of 'robot relations' as an organizational function is a direct sociotechnical response: AI agents disrupt human social structures (team roles, accountability chains, management hierarchies), and organizations are inventing new social structures to stabilize the sociotechnical configuration. Firms optimizing only the technical system or only the social system will achieve suboptimal outcomes.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> Trist, E.L., &amp; Bamforth, K.W. (1951). Some social and psychological consequences of the Longwall method. Human Relations, 4, 3-38. Orlikowski, W.J. (1992). The duality of technology. Organization Science, 3(3), 398-427.</p>
+</div>
+<hr class="divider">
+<h3>Research Opportunity</h3>
+<p><strong>Research Question:</strong> Does the formalization of dedicated human-AI governance functions ('robot relations') improve AI adoption outcomes, worker wellbeing, and organizational performance relative to firms relying on existing HR and IT governance structures?</p>
+<p><strong>Theoretical Mechanism:</strong> Sociotechnical alignment at the governance level predicting better human-AI collaboration outcomes through coordinated social and technical co-optimization.</p>
+<p><strong>Potential Data Source:</strong> LinkedIn job posting data tracking 'robot relations' or AI governance role creation; firm-level performance data; enterprise HR survey data from Gartner and Deloitte.</p>
+<p><strong>Novelty Assessment:</strong> High. The robot relations function as an organizational innovation has not been studied. What organizational design best supports sustained human-AI collaboration is among the most policy-relevant open questions in the field.</p>
+</article>
+
+<!-- ─────────── ARTICLE 6 ─────────── -->
+<article class="card" id="article-6">
+<div class="card-header">
+  <div class="tags">
+    <span class="badge badge-primary">High Evidence Quality</span>
+    <span class="badge badge-secondary">Secondary Source</span>
+  </div>
+  <div class="card-headline">Apple's Long-Delayed J490 Home Hub Runs a Siri-AI-Centric OS, Now in Employee Testing</div>
+  <div class="card-source">
+    <strong>Source:</strong> Bloomberg — Mark Gurman's Power On newsletter (September 20, 2026) &nbsp;·&nbsp;
+    <strong>Date:</strong> September 20, 2026 (Bloomberg URL confirms /2026-09-20/)
+  </div>
+  <div class="tags">
+    <span class="tag">Consumer AI Platform Adoption</span>
+    <span class="tag">Smart Home Ecosystem</span>
+    <span class="tag">Privacy Calculus in Ambient AI</span>
+  </div>
+</div>
+<div class="dl-grid">
+  <span class="dl-term">Publication Date</span><span class="dl-def">September 20, 2026 (Bloomberg URL confirms /2026-09-20/)</span>
+  <span class="dl-term">Original URL</span><span class="dl-def"><a href="https://www.bloomberg.com/news/newsletters/2026-09-20/apple-s-home-ai-hub-details" target="_blank" rel="noopener noreferrer">bloomberg.com/news/newsletters/2026-09-20/apple-s-home-ai-hub-details</a></span>
+  <span class="dl-term">Evidence Quality</span><span class="dl-def"><strong>High</strong> — Mark Gurman is a primary-sourced Apple reporter with strong track record; newsletter date confirmed.</span>
+  <span class="dl-term">Verification Notes</span><span class="dl-def">Bloomberg newsletter URL confirms September 20, 2026. AI Weekly timestamp shows '12h ago' from September 21. Gurman describes employee home testing as current at time of publication.</span>
+</div>
+<hr class="divider">
+<h3>Verified Summary</h3>
+<p>Bloomberg's Mark Gurman reported on September 20, 2026 that Apple's home hub device, codenamed J490, is a 7-inch display on a half-HomePod-mini stand (or magnetic wall mount) running an OS built around Siri AI, with facial recognition for personalized household experiences and no Face ID depth sensor. Apple is testing units in employees' homes and positioning the device as an 'intelligent personal hub,' targeting release between October 2026 and early 2027. The same newsletter reports Apple has begun cutting Fitness+ staff as it reassesses the streaming fitness service.</p>
+<hr class="divider">
+<h3>Why This Matters</h3>
+<p>The J490 represents Apple's attempt to build AI into a dedicated ambient home platform, extending competition with Amazon (Echo) and Google (Nest) ecosystems. The design choice of building an AI-centric OS around Siri — rather than deploying AI as a feature layer on existing iOS — signals a strategic bet on AI as the primary interface paradigm for home computing. For IS scholars, this raises platform ecosystem questions: how does Apple's closed ecosystem strategy translate to an ambient home AI context where generativity and third-party integration matter more? The combination of personalization (facial recognition) with ambient always-on presence raises privacy calculus questions at the household level that differ from individual device use.</p>
+<hr class="divider">
+<h3>IS Component Identification</h3>
+<div class="is-grid">
+  <div class="is-cell"><div class="is-cell-label">Technology</div><div class="is-cell-val">Home AI hub, Siri AI OS, facial recognition system, ambient computing platform, voice interface</div></div>
+  <div class="is-cell"><div class="is-cell-label">Information</div><div class="is-cell-val">Household usage patterns, facial recognition identity data, smart home device data, personalization profiles</div></div>
+  <div class="is-cell"><div class="is-cell-label">Human</div><div class="is-cell-val">Household consumers, household members, smart home developers, Apple's developer ecosystem</div></div>
+  <div class="is-cell"><div class="is-cell-label">Organizational</div><div class="is-cell-val">Apple, smart home device ecosystem, competing platforms (Amazon, Google), third-party smart home integrators</div></div>
+  <div class="is-cell"><div class="is-cell-label">Process</div><div class="is-cell-val">Ambient AI interaction, household task automation, cross-device personalization, ecosystem platform participation</div></div>
+  <div class="is-cell"><div class="is-cell-label">Governance</div><div class="is-cell-val">Privacy data collection policies, facial recognition consent, smart home data sharing rules, platform access control</div></div>
+</div>
+<hr class="divider">
+<h3>IS Research Mapping</h3>
+<div class="dl-grid">
+  <span class="dl-term">Primary IS Phenomenon</span><span class="dl-def">Consumer AI Platform Adoption; Smart Home Ecosystem; Privacy Calculus in Ambient AI</span>
+  <span class="dl-term">Primary Actor</span><span class="dl-def">Consumer; Platform</span>
+  <span class="dl-term">Level of Analysis</span><span class="dl-def">Individual; Household; Platform</span>
+</div>
+<hr class="divider">
+<h3>Construct Mapping</h3>
+<div class="construct-block">
+  <div class="construct-name">Privacy Calculus</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The cognitive tradeoff between perceived benefits of sharing personal information and perceived privacy risks. <strong>Typical Measures:</strong> Privacy concern scales; willingness to share data for personalization; feature adoption conditional on data access. <strong>Empirical Operationalization:</strong> Survey experiment manipulating AI personalization benefit level versus data sharing scope in smart home device adoption context.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Ecosystem Lock-in</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The degree to which platform-specific investments make switching to alternative ecosystems costly. <strong>Typical Measures:</strong> Ecosystem breadth (integrated devices); switching cost estimates; complementary asset accumulation. <strong>Empirical Operationalization:</strong> Cross-sectional survey of smart home platform users measuring switching costs and complementary investment depth.</p>
+</div>
+<hr class="divider">
+<h3>Theory Mapping</h3>
+<div class="theory-block">
+  <div class="theory-name">Privacy Calculus Theory (Culnan &amp; Armstrong, 1999)</div>
+  <p style="font-size:0.88rem">Privacy calculus posits that individuals perform a cognitive cost-benefit analysis when deciding whether to disclose personal information. In the ambient home AI context, the calculus is complicated by household-level data (facial recognition affects all members), always-on presence, and the difficulty of meaningful consent for continuous ambient collection. Platform Ecosystem Theory explains how Apple's closed ecosystem strategy generates switching costs that alter the privacy calculus — users who have invested in Apple ecosystem are less price-sensitive on privacy tradeoffs.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> Culnan, M.J., &amp; Armstrong, P.K. (1999). Information privacy concerns, procedural fairness, and impersonal trust. Organization Science, 10(1), 104-115. Smith, H.J., Milberg, S.J., &amp; Burke, S.J. (1996). Information privacy. MIS Quarterly, 20(2), 167-196.</p>
+</div>
+<hr class="divider">
+<h3>Research Opportunity</h3>
+<p><strong>Research Question:</strong> How does the ambient and household nature of home AI platforms modify the individual privacy calculus relative to personal device AI, and what features drive adoption despite elevated household data collection?</p>
+<p><strong>Theoretical Mechanism:</strong> Household-level ambient AI modifying the individual privacy calculus through shared data, always-on presence, and ecosystem lock-in effects.</p>
+<p><strong>Potential Data Source:</strong> Survey experiment with smart home device purchase scenarios; longitudinal panel tracking home hub adoption and privacy concern evolution.</p>
+<p><strong>Novelty Assessment:</strong> Medium. Privacy calculus is well-studied; the ambient/household context with facial recognition adds genuine novelty to an established framework.</p>
+</article>
+
+<!-- ─────────── ARTICLE 7 ─────────── -->
+<article class="card" id="article-7">
+<div class="card-header">
+  <div class="tags">
+    <span class="badge badge-primary">High Evidence Quality</span>
+    <span class="badge badge-secondary">Secondary Source</span>
+  </div>
+  <div class="card-headline">Meta Sues Ofcom Over Category 1 Classification of WhatsApp and Instagram Under Online Safety Act</div>
+  <div class="card-source">
+    <strong>Source:</strong> <a href="https://www.ft.com/content/c1ba743f-7330-4419-bc8d-a8b5ce4420a0" target="_blank" rel="noopener noreferrer">Financial Times</a> — High-Quality Secondary Source &nbsp;·&nbsp;
+    <strong>Date:</strong> September 20, 2026 ('Meta filed a legal challenge against UK regulator Ofcom on Sept 20')
+  </div>
+  <div class="tags">
+    <span class="tag">Platform Governance</span>
+    <span class="tag">Regulatory Compliance</span>
+    <span class="tag">Online Safety Act Implementation</span>
+  </div>
+</div>
+<div class="dl-grid">
+  <span class="dl-term">Publication Date</span><span class="dl-def">September 20, 2026 ('Meta filed a legal challenge against UK regulator Ofcom on Sept 20')</span>
+  <span class="dl-term">Original URL</span><span class="dl-def"><a href="https://www.ft.com/content/c1ba743f-7330-4419-bc8d-a8b5ce4420a0" target="_blank" rel="noopener noreferrer">ft.com/content/c1ba743f-7330-4419-bc8d-a8b5ce4420a0</a></span>
+  <span class="dl-term">Evidence Quality</span><span class="dl-def"><strong>High</strong> — FT investigative/legal reporting; confirmed date via AI Weekly ('3h ago' from September 21).</span>
+  <span class="dl-term">Verification Notes</span><span class="dl-def">AI Weekly states 'Meta filed a legal challenge against UK regulator Ofcom on Sept 20.' FT is a confirmed high-quality source. Roblox and Quora are separately challenging their categorizations per same report.</span>
+</div>
+<hr class="divider">
+<h3>Verified Summary</h3>
+<p>Meta filed a legal challenge against UK regulator Ofcom on September 20, 2026, contesting its Category 1 classification of WhatsApp and Instagram under the UK Online Safety Act. Category 1 designation imposes transparency requirements, fraudulent advertisement protections, and user content-control duties on platforms. Meta argues it is not challenging the Online Safety Act itself, only Ofcom's interpretation, contending that Category 1 duties were not designed for private one-to-one messaging. Roblox and Quora are separately contesting their OSA categorizations in parallel proceedings.</p>
+<hr class="divider">
+<h3>Why This Matters</h3>
+<p>This case directly tests the boundary between private communications platforms and public content platforms under AI-era governance law. The private/public platform boundary matters for AI because AI-generated content and coordinated manipulation operate differently in private messaging channels than on public feeds — and the regulatory instruments of transparency, moderation, and accountability differ accordingly. Meta's strategic framing — challenging interpretation, not the law — is a template for how large platforms will engage with AI platform regulation: accept the regulatory framework in principle while contesting its application to specific products. This behavior pattern is theoretically interesting for IS platform governance research on institutional entrepreneurship and regulatory boundary contestation.</p>
+<hr class="divider">
+<h3>IS Component Identification</h3>
+<div class="is-grid">
+  <div class="is-cell"><div class="is-cell-label">Technology</div><div class="is-cell-val">Social media platforms, private messaging systems, content moderation AI, transparency reporting infrastructure</div></div>
+  <div class="is-cell"><div class="is-cell-label">Information</div><div class="is-cell-val">User content, compliance reports, categorization criteria data, moderation action logs</div></div>
+  <div class="is-cell"><div class="is-cell-label">Human</div><div class="is-cell-val">Platform users, regulators, platform legal teams, civil society organizations</div></div>
+  <div class="is-cell"><div class="is-cell-label">Organizational</div><div class="is-cell-val">Meta, Ofcom, UK government, competing platforms (Roblox, Quora), legal bodies</div></div>
+  <div class="is-cell"><div class="is-cell-label">Process</div><div class="is-cell-val">Regulatory categorization, platform compliance, content moderation governance, legal challenge proceedings</div></div>
+  <div class="is-cell"><div class="is-cell-label">Governance</div><div class="is-cell-val">Online Safety Act Category 1 duties, transparency requirements, fraudulent-ad obligations, user content-control duties</div></div>
+</div>
+<hr class="divider">
+<h3>IS Research Mapping</h3>
+<div class="dl-grid">
+  <span class="dl-term">Primary IS Phenomenon</span><span class="dl-def">Platform Governance; Regulatory Compliance; Online Safety Act Implementation</span>
+  <span class="dl-term">Primary Actor</span><span class="dl-def">Platform; Regulator</span>
+  <span class="dl-term">Level of Analysis</span><span class="dl-def">Platform; Institutional field</span>
+</div>
+<hr class="divider">
+<h3>Construct Mapping</h3>
+<div class="construct-block">
+  <div class="construct-name">Regulatory Categorization</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The process by which regulators assign platforms to categories with differentiated compliance obligations. <strong>Typical Measures:</strong> Category assignment criteria; categorical compliance burden scores; platform characteristic-category alignment. <strong>Empirical Operationalization:</strong> Comparative analysis of UK OSA categorization decisions and platform challenge outcomes.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Platform Governance Resistance</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> Strategic behavior by platforms to contest or minimize the scope of regulatory compliance obligations. <strong>Typical Measures:</strong> Frequency of legal challenges; compliance lag time; lobbying investment; regulatory interpretation contestation. <strong>Empirical Operationalization:</strong> Event study of stock price reactions to platform governance challenges; panel analysis of compliance behavior following categorization decisions.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Private-Public Platform Boundary</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The contested distinction between platforms hosting private communications and those hosting public content, with implications for governance obligations. <strong>Typical Measures:</strong> Regulatory classification criteria applied across platform types; legal precedent analysis. <strong>Empirical Operationalization:</strong> Legal document analysis of OSA categorization proceedings; platform characteristic coding.</p>
+</div>
+<hr class="divider">
+<h3>Theory Mapping</h3>
+<div class="theory-block">
+  <div class="theory-name">Institutional Theory / Institutional Entrepreneurship</div>
+  <p style="font-size:0.88rem">Institutional entrepreneurship (DiMaggio, 1988; Lawrence &amp; Suddaby, 2006) describes how organizations with sufficient resources work to reshape the institutional field to their advantage. Meta's challenge — accepting the OSA's legitimacy while contesting categorical application to private messaging — is institutional entrepreneurship: an attempt to alter the governance rules of the field by strategic engagement with the regulatory categorization process. This behavior predicts that well-resourced platforms will systematically contest high-compliance-burden categorizations, shaping the effective governance architecture through litigation.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> DiMaggio, P.J. (1988). Interest and agency in institutional theory. In Zucker (Ed.), Institutional Patterns. Ballinger. Lawrence, T.B., &amp; Suddaby, R. (2006). Institutions and institutional work. Handbook of Organization Studies.</p>
+</div>
+<hr class="divider">
+<h3>Research Opportunity</h3>
+<p><strong>Research Question:</strong> How do platform governance categorization challenges shape the final scope and stringency of platform regulation, and which platform characteristics most reliably predict successful challenges?</p>
+<p><strong>Theoretical Mechanism:</strong> Institutional entrepreneurship by platforms as a mechanism shifting effective regulatory categorization boundaries through strategic legal contestation.</p>
+<p><strong>Potential Data Source:</strong> UK OSA regulatory proceedings; Ofcom categorization decisions; legal challenge records; platform compliance reports.</p>
+<p><strong>Novelty Assessment:</strong> Medium-High. Platform governance resistance is studied; the OSA categorization challenge mechanism as a specific contestation form in AI-era governance is new and well-suited to IS legal/regulatory research.</p>
+</article>
+
+<!-- ─────────── ARTICLE 8 ─────────── -->
+<article class="card" id="article-8">
+<div class="card-header">
+  <div class="tags">
+    <span class="badge badge-primary">High Evidence Quality</span>
+    <span class="badge badge-secondary">Secondary Source</span>
+  </div>
+  <div class="card-headline">Data Center Hourly Jobs Pay 42% More Than Similar Roles at Other Businesses, Indeed Data Shows</div>
+  <div class="card-source">
+    <strong>Source:</strong> <a href="https://www.wsj.com/business/what-its-like-to-work-in-one-of-americas-data-centers-b4358003" target="_blank" rel="noopener noreferrer">Wall Street Journal</a> — High-Quality Secondary Source (Indeed Hiring Lab data) &nbsp;·&nbsp;
+    <strong>Date:</strong> September 20, 2026 (AI Weekly: 'Owen Tucker-Smith's Sept 20 WSJ piece')
+  </div>
+  <div class="tags">
+    <span class="tag">Labor Market Transformation</span>
+    <span class="tag">Skill Premium Formation</span>
+    <span class="tag">Digital Infrastructure and Employment</span>
+  </div>
+</div>
+<div class="dl-grid">
+  <span class="dl-term">Publication Date</span><span class="dl-def">September 20, 2026 (AI Weekly: 'Owen Tucker-Smith's Sept 20 WSJ piece'; 8h ago timestamp from Sept 21)</span>
+  <span class="dl-term">Original URL</span><span class="dl-def"><a href="https://www.wsj.com/business/what-its-like-to-work-in-one-of-americas-data-centers-b4358003" target="_blank" rel="noopener noreferrer">wsj.com/business/what-its-like-to-work-in-one-of-americas-data-centers-b4358003</a></span>
+  <span class="dl-term">Evidence Quality</span><span class="dl-def"><strong>High</strong> — WSJ analysis citing Indeed Hiring Lab data with specific figures.</span>
+  <span class="dl-term">Verification Notes</span><span class="dl-def">AI Weekly explicitly states 'Owen Tucker-Smith's Sept 20 WSJ piece.' Entry is timestamped '8h ago' from September 21, placing publication on September 20. Cites Indeed Hiring Lab as named primary data source.</span>
+</div>
+<hr class="divider">
+<h3>Verified Summary</h3>
+<p>A Wall Street Journal analysis published September 20, 2026, using Indeed Hiring Lab data, found that US data center maintenance and installation roles pay approximately 42% more per hour than comparable jobs at other businesses. Network technicians in data centers earn $32/hour versus $23/hour elsewhere; facilities managers moving into data center roles see median annual raises of approximately $50,000. The ten largest technology companies by market cap account for 71% of 2026 data-center job postings, concentrating demand growth in a small number of hyperscaler employers. The piece frames the wage premium as a direct labor market consequence of accelerating AI infrastructure investment.</p>
+<hr class="divider">
+<h3>Why This Matters</h3>
+<p>This evidence documents a concrete mechanism by which AI infrastructure investment is reshaping employment: not primarily through substitution but by creating a premium-wage tier for workers who maintain the physical infrastructure that makes AI possible. This has important IS labor research implications. First, it challenges the dominant narrative that AI's labor effects are primarily about displacement — here, AI investment is creating premium jobs for non-AI workers (electricians, HVAC technicians, network installers). Second, the concentration of 71% of job postings among the ten largest tech companies suggests the premium is structurally concentrated, with implications for regional labor markets and small firm AI infrastructure access. Third, the $50,000 median raise for facilities managers represents a large reskilling premium — workers who accumulate data-center-specific skills capture significant AI labor market value without AI expertise per se.</p>
+<hr class="divider">
+<h3>IS Component Identification</h3>
+<div class="is-grid">
+  <div class="is-cell"><div class="is-cell-label">Technology</div><div class="is-cell-val">Data center infrastructure (servers, networking, cooling, power), AI compute hardware (GPUs, TPUs), hyperscale facilities</div></div>
+  <div class="is-cell"><div class="is-cell-label">Information</div><div class="is-cell-val">Labor market data (Indeed Hiring Lab), job posting data, wage data, skill requirement data</div></div>
+  <div class="is-cell"><div class="is-cell-label">Human</div><div class="is-cell-val">Data center maintenance workers, network technicians, facilities managers, AI infrastructure engineers</div></div>
+  <div class="is-cell"><div class="is-cell-label">Organizational</div><div class="is-cell-val">Hyperscaler firms (Big Tech), data center REITs, third-party data center operators, regional employers</div></div>
+  <div class="is-cell"><div class="is-cell-label">Process</div><div class="is-cell-val">Infrastructure maintenance, workforce development, skill premium formation, regional labor market adjustment</div></div>
+  <div class="is-cell"><div class="is-cell-label">Governance</div><div class="is-cell-val">Labor standards, worker classification, wage determination, union representation in data center work</div></div>
+</div>
+<hr class="divider">
+<h3>IS Research Mapping</h3>
+<div class="dl-grid">
+  <span class="dl-term">Primary IS Phenomenon</span><span class="dl-def">Labor Market Transformation from AI Infrastructure Investment; Skill Premium Formation; Digital Infrastructure and Employment</span>
+  <span class="dl-term">Primary Actor</span><span class="dl-def">Employee; Firm</span>
+  <span class="dl-term">Level of Analysis</span><span class="dl-def">Individual; Market</span>
+</div>
+<hr class="divider">
+<h3>Construct Mapping</h3>
+<div class="construct-block">
+  <div class="construct-name">Skill-Biased Technological Change</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The tendency of technology adoption to increase relative demand and wages for workers whose skills complement the technology. <strong>Typical Measures:</strong> Wage premium for technology-adjacent roles; skill intensity of job postings; returns to education in technology labor markets. <strong>Empirical Operationalization:</strong> Regression analysis of wage premiums for data center roles controlling for geography, firm size, and skill level using Indeed or BLS data.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Technological Complementarity</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The degree to which AI investment increases the marginal productivity of human workers in technology-adjacent roles. <strong>Typical Measures:</strong> Wage growth in AI-adjacent vs. AI-competing roles; employment level changes in complementary occupations. <strong>Empirical Operationalization:</strong> Difference-in-differences comparing wage trends in data center roles vs. comparable non-AI-adjacent roles before/after AI infrastructure investment surge.</p>
+</div>
+<div class="construct-block">
+  <div class="construct-name">Labor Market Concentration</div>
+  <p style="font-size:0.88rem"><strong>Definition:</strong> The degree to which labor demand is controlled by a small number of large employers, affecting worker bargaining power and wage outcomes. <strong>Typical Measures:</strong> HHI for data center job postings; employer-of-last-resort measures; wage dispersion in concentrated markets. <strong>Empirical Operationalization:</strong> Analysis of Indeed data center job posting concentration by employer size; wage dispersion as function of market concentration.</p>
+</div>
+<hr class="divider">
+<h3>Theory Mapping</h3>
+<div class="theory-block">
+  <div class="theory-name">Skill-Biased Technical Change Theory / Human Capital Theory</div>
+  <p style="font-size:0.88rem">SBTC theory (Acemoglu, 2002; Autor, Levy &amp; Murnane, 2003) predicts that technology adoption increases the relative productivity and wages of workers whose skills complement the technology. Human capital theory (Becker, 1964) explains why workers invest in technology-specific skills when expected returns are high. The 42% wage premium for data center workers provides direct empirical support for SBTC in the AI infrastructure domain, and the $50,000 facilities-manager raise suggests large human capital investment returns for technology adjacency even for physical (non-coding) roles.</p>
+  <p style="font-size:0.88rem"><strong>References:</strong> Acemoglu, D. (2002). Technical change, inequality, and the labor market. Journal of Economic Literature, 40(1), 7-72. Autor, D.H., Levy, F., &amp; Murnane, R.J. (2003). The skill content of recent technological change. QJE, 118(4), 1279-1333.</p>
+</div>
+<hr class="divider">
+<h3>Research Opportunity</h3>
+<p><strong>Research Question:</strong> Does proximity to AI infrastructure investment (data center construction and operation) create measurable wage premiums for physical-infrastructure workers, and how does this vary by region, employer concentration, and skill level?</p>
+<p><strong>Theoretical Mechanism:</strong> Technological complementarity: AI infrastructure investment increasing marginal productivity and wages of physically adjacent maintenance workers through demand for specialized operational skills.</p>
+<p><strong>Potential Data Source:</strong> Indeed Hiring Lab job posting data; BLS Occupational Employment and Wage Statistics; data center investment announcements linked to county-level wage data; LinkedIn job transition data.</p>
+<p><strong>Novelty Assessment:</strong> Medium. AI's labor market effects are well-studied; the specific data-center physical infrastructure premium for non-AI workers is under-studied and provides a clean empirical case for technological complementarity.</p>
+</article>
+
+</section>
+
+<!-- ═══════════════════════════════════ CROSS-ARTICLE SYNTHESIS ═══ -->
+<section id="cross-article-synthesis">
+<h2>5. Cross-Article Synthesis</h2>
+
+<div class="syn-box">
+  <div class="syn-label">Emerging Organizational Phenomena</div>
+  <p>Three interconnected organizational phenomena appear across yesterday's coverage. First, formal governance structures for AI are being invented at the organizational level: the 'robot relations' function (Article 5) represents organizations institutionalizing AI agent management, while clinical AI governance policies (Article 1) remain markedly underdeveloped in healthcare — 90% of large enterprises are adopting algorithmic management tools while only 27% of healthcare organizations have formal AI governance policies. This gap suggests sector-level variation in organizational AI governance maturity as a productive research variable. Second, organizations are reconfiguring financing structures specifically to enable AI investment at a scale exceeding conventional balance-sheet capacity (Article 4), creating new organizational forms (AI infrastructure SPVs) whose governance properties are entirely unstudied. Third, enterprise AI adoption is reaching a stratification phase where organizations explicitly differentiate between 'AI elite' employees (cultivated) and non-adopters (targeted for layoff), suggesting AI adoption is becoming a formal performance and employment criterion.</p>
+</div>
+
+<div class="syn-box">
+  <div class="syn-label">Emerging Governance Phenomena</div>
+  <p>Platform governance is being contested on two fronts simultaneously. Internationally, the US-China bilateral AI governance talks (Article 3) represent emergent institutionalization of AI safety as a matter of interstate diplomacy — a new governance layer above firm and national regulation. Domestically, Meta's Ofcom challenge (Article 7) exemplifies a platform governance contestation strategy that accepts regulatory legitimacy while challenging categorical application — a pattern likely to recur across other platforms and regulatory contexts as AI-era legislation is implemented. Both dynamics point to an emerging governance gap between regulatory intent and practical jurisdiction that creates organizational uncertainty and strategic opportunity simultaneously.</p>
+</div>
+
+<div class="syn-box">
+  <div class="syn-label">Emerging Platform Phenomena</div>
+  <p>Foundation model markets are entering a price-performance commoditization phase (Article 2: Step 5 Preview at $1/M tokens with planned open weights) that is simultaneously reducing AI access costs for enterprises and challenging the pricing power of established frontier providers. The AI model market is bifurcating between ultra-frontier (premium-priced, access-controlled) and commoditized (open-weight, sub-$2/M tokens) segments with different ecosystem implications. Apple's home AI hub (Article 6) represents platform expansion into ambient AI, extending the smart home platform competitive dynamic into a Siri-AI-centric architecture.</p>
+</div>
+
+<div class="syn-box">
+  <div class="syn-label">Emerging Labor Phenomena</div>
+  <p>Yesterday's coverage documents AI's labor market effects operating simultaneously at three levels: displacement pressure (60% of executives planning layoffs for AI non-adopters, Article 5), complementarity premium creation (42% data center wage premium for physical infrastructure workers, Article 8), and professional resistance to skill erosion (clinician deskilling concerns, Article 1). IS research on AI's labor effects tends to focus on one of these dynamics; their simultaneous operation is a distinctive feature of the current AI transition phase and a productive focus for multi-level IS labor research.</p>
+</div>
+
+<div class="syn-box">
+  <div class="syn-label">Emerging IS Constructs</div>
+  <p>Across the eight articles, several constructs appear repeatedly with high IS relevance: evidence-quality threshold as a moderator of AI adoption (Articles 1, 2, 4); governance maturity as an organizational differentiator (Articles 1, 5, 7); information asymmetry in AI investment and capability (Articles 2, 4); algorithmic management intensity and scope (Articles 5, 8); and platform categorization and boundary contestation (Articles 3, 6, 7). The recurrence of governance-related constructs across multiple domains — healthcare, financial disclosure, interstate diplomacy, and platform law — suggests that AI governance is the dominant cross-domain IS construct of the current period.</p>
+</div>
+
+<div class="syn-box">
+  <div class="syn-label">Emerging Theoretical Opportunities</div>
+  <p>Three theoretical frameworks appear especially productive for explaining yesterday's developments. Sociotechnical Systems Theory is directly invoked by Articles 1 and 5: both document systematic mutual constitution between AI technology and social/organizational structure at the clinical and enterprise levels. Institutional Theory (Articles 3, 7) explains the formation of new governance fields and platform governance contestation strategies in ways incorporating political and legal dynamics that pure technology adoption theories miss. Information Asymmetry theory (Articles 2, 4) captures the information-structural consequences of AI's two-tier market dynamics and opaque infrastructure financing — phenomena fundamentally about information distribution between actors with differing observability.</p>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════ RESEARCH PIPELINE ═══ -->
+<section id="research-pipeline">
+<h2>6. Research Pipeline Generation</h2>
+<p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:20px">Candidate research opportunities generated from September 20, 2026 developments. None should be treated as an established research gap; systematic literature verification and empirical feasibility assessment are required before novelty or contribution claims can be made.</p>
+
+<div class="section-subhead">Tier 1: ISR / MISQ Potential</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">ISR/MISQ Opportunity 1: Evidence-Quality Thresholds in Professional AI Adoption</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">Gating by Evidence: How Performance Data Quality Shapes Expert Professional AI Adoption Boundaries</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">Does the quality and type of AI performance evidence available moderate the relationship between AI capability and adoption in expert professional settings, and do these evidence thresholds vary systematically across task domains within the same profession?</span>
+    <span class="dl-term">Core IS Phenomenon</span><span class="dl-def">Technology acceptance and AI adoption in expert professional settings, mediated by domain-specific evidence quality standards</span>
+    <span class="dl-term">Key Constructs</span><span class="dl-def">Evidence quality threshold; algorithmic aversion; task-technology fit; deskilling risk; AI governance maturity; perceived performance verifiability</span>
+    <span class="dl-term">Potential Theory</span><span class="dl-def">Task-Technology Fit (Goodhue &amp; Thompson, 1995); Algorithmic Aversion Theory (Dietvorst &amp; Logg, 2023); Trust in Automation (Lee &amp; See, 2004)</span>
+    <span class="dl-term">Potential Dataset</span><span class="dl-def">Multi-site clinician survey; electronic health record AI adoption logs; Doximity platform data; healthcare system AI governance policy audit</span>
+    <span class="dl-term">Feasible Empirical Design</span><span class="dl-def">Multi-level survey design with clinician-level adoption measures nested in hospital-level governance maturity; structural equation model testing evidence quality as moderator of TAM relationships; vignette experiment manipulating evidence type and quantity</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">A theorized evidence-quality gating mechanism explaining why AI adoption in expert professions follows domain-specific, evidence-contingent adoption boundaries rather than the monotonic curves TAM predicts; generalizable to law, finance, and engineering professions facing analogous dynamics</span>
+  </div>
+</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">ISR/MISQ Opportunity 2: Organizational Design for Human-AI Collaboration</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">When AI Needs HR: The 'Robot Relations' Function and Its Effects on AI Adoption, Worker Wellbeing, and Organizational Performance</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">Does the formalization of dedicated human-AI governance functions improve AI adoption outcomes, worker wellbeing, and organizational performance relative to firms relying on existing HR and IT governance structures?</span>
+    <span class="dl-term">Core IS Phenomenon</span><span class="dl-def">Organizational design for human-AI collaboration; sociotechnical systems design for AI agents as organizational actors</span>
+    <span class="dl-term">Key Constructs</span><span class="dl-def">Algorithmic management intensity; human-AI governance formalization; AI adoption compliance; organizational ambidexterity for AI; worker wellbeing under AI supervision; AI elite/non-adopter stratification</span>
+    <span class="dl-term">Potential Theory</span><span class="dl-def">Sociotechnical Systems Theory (Trist &amp; Bamforth, 1951; Orlikowski, 1992); Adaptive Structuration Theory (DeSanctis &amp; Poole, 1994); Organizational Ambidexterity (O'Reilly &amp; Tushman, 2008)</span>
+    <span class="dl-term">Potential Dataset</span><span class="dl-def">LinkedIn job posting data for 'robot relations' or AI governance role creation (2024-2026); Gartner/Deloitte enterprise AI survey data; firm-level performance data matched to organizational AI governance structure</span>
+    <span class="dl-term">Feasible Empirical Design</span><span class="dl-def">Matched-pair comparative case studies of firms with/without formalized AI governance functions; large-N regression using LinkedIn job posting data as proxy for robot relations function adoption; worker survey measuring wellbeing and performance as function of governance structure</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">First empirical test of organizational design for AI agent management at scale; identifies whether sociotechnical alignment at the governance level predicts better human-AI collaboration outcomes; contributes to theory of AI as organizational actor rather than tool</span>
+  </div>
+</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">ISR/MISQ Opportunity 3: Sequential Open-Source Strategy and AI Platform Ecosystem Formation</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">Sequenced Openness: How API-First, Open-Weights-Later Strategies Shape AI Platform Ecosystem Formation</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">How does the temporal sequencing of proprietary API access followed by open-weight release affect developer ecosystem formation, incumbent platform substitution rates, and value distribution between platform owners and complementors?</span>
+    <span class="dl-term">Core IS Phenomenon</span><span class="dl-def">Platform ecosystem competition; openness strategy; AI model market dynamics; complementor behavior</span>
+    <span class="dl-term">Key Constructs</span><span class="dl-def">Ecosystem generativity; openness sequencing; developer ecosystem adoption; incumbent platform switching; complementor value capture; network effects in AI model markets</span>
+    <span class="dl-term">Potential Theory</span><span class="dl-def">Platform Ecosystem Theory (Gawer &amp; Cusumano, 2002); Two-Sided Market Theory (Parker &amp; Van Alstyne, 2005); Generativity Theory (Zittrain, 2006)</span>
+    <span class="dl-term">Potential Dataset</span><span class="dl-def">Hugging Face model repository data (fork counts, download rates, derivative model releases); Artificial Analysis API adoption metrics; GitHub repository data; AI benchmark performance data</span>
+    <span class="dl-term">Feasible Empirical Design</span><span class="dl-def">Natural experiment using StepFun's October 15, 2026 open-weight release as treatment; compare developer activity, model derivative creation, and incumbent API substitution before/after; DiD analysis with API-only model families as control</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">First IS study of sequenced open-source strategy in AI model markets; extends platform ecosystem theory to AI model platform dynamics; provides empirical evidence on openness-control tradeoffs in a rapidly evolving technology market</span>
+  </div>
+</div>
+
+<div class="section-subhead">Tier 2: Management Science Potential</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">Management Science Opportunity 1: Off-Balance-Sheet AI Investment and Market Efficiency</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">Hidden Leverage: Off-Balance-Sheet AI Infrastructure Financing and Market Pricing Efficiency</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">Does off-balance-sheet AI infrastructure financing create measurable information asymmetry that impairs market pricing efficiency for technology-intensive firms, and how does analyst forecast accuracy vary with the degree of AI infrastructure opacity?</span>
+    <span class="dl-term">Core Phenomenon</span><span class="dl-def">Information asymmetry in AI capital markets; off-balance-sheet financing; analyst forecast efficiency</span>
+    <span class="dl-term">Key Constructs</span><span class="dl-def">Financial opacity; analyst forecast dispersion; off-balance-sheet leverage; market pricing efficiency; AI infrastructure concentration; residual value guarantee structure</span>
+    <span class="dl-term">Potential Theory</span><span class="dl-def">Information Asymmetry Theory (Akerlof, 1970); Agency Theory (Jensen &amp; Meckling, 1976); Market Microstructure Theory</span>
+    <span class="dl-term">Potential Dataset</span><span class="dl-def">SEC 10-K and 10-Q filings; Bloomberg financial data; IBES analyst earnings forecasts; credit default swap data; data center REIT prospectuses; SPV formation records</span>
+    <span class="dl-term">Feasible Empirical Design</span><span class="dl-def">Multi-year panel (2023-2026) of Big Tech firms; construct AI infrastructure opacity index from off-balance-sheet disclosure levels; regress forecast dispersion and stock volatility on opacity index; event study of September 20 FT disclosure on affected firm stock prices</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">Documents a new mechanism of market information failure in AI investment; provides actionable evidence for accounting standard-setters on AI infrastructure disclosure requirements; extends information asymmetry theory to AI capital markets</span>
+  </div>
+</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">Management Science Opportunity 2: Wage Premium Formation in AI Infrastructure Labor Markets</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">The Infrastructure Premium: AI Capital Investment and Wage Formation in Physical Technology Labor Markets</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">Does regional AI infrastructure investment intensity create measurable wage premiums for physical infrastructure workers, and how do firm concentration and labor market competition moderate this premium?</span>
+    <span class="dl-term">Core Phenomenon</span><span class="dl-def">Labor market wage premium formation; AI infrastructure investment spillovers; technology complementarity; employer monopsony</span>
+    <span class="dl-term">Key Constructs</span><span class="dl-def">AI infrastructure investment intensity; wage premium; labor market concentration; skill complementarity; regional spillover effects</span>
+    <span class="dl-term">Potential Theory</span><span class="dl-def">Skill-Biased Technical Change (Acemoglu, 2002); Monopsony in Labor Markets (Manning, 2003); Human Capital Theory (Becker, 1964)</span>
+    <span class="dl-term">Potential Dataset</span><span class="dl-def">Indeed Hiring Lab job posting data; BLS Occupational Employment and Wage Statistics; data center investment announcements linked to county-level wage data; LinkedIn job transition data; US Census data center location data</span>
+    <span class="dl-term">Feasible Empirical Design</span><span class="dl-def">Difference-in-differences using staggered data center investment announcements as treatment events in county-level labor markets; compare wage levels in data center proximate occupations before/after investment; instrument with power grid capacity as exogenous shock to data center location</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">First causal evidence on AI infrastructure's labor market spillover effects; extends SBTC literature to physical infrastructure roles; provides evidence for regional economic policymakers on AI investment labor market effects</span>
+  </div>
+</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">Management Science Opportunity 3: Bilateral AI Governance Announcements and Firm Investment Behavior</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">Diplomacy and Deployment: How US-China AI Governance Negotiations Shape Technology Investment and Disclosure Decisions</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">Do bilateral US-China AI governance announcements affect AI development investment, capability disclosure timing, and market entry decisions of AI-deploying firms, and do these effects differ for firms with US-China dual-market exposure?</span>
+    <span class="dl-term">Core Phenomenon</span><span class="dl-def">Regulatory uncertainty reduction from bilateral governance; investment timing; strategic capability disclosure</span>
+    <span class="dl-term">Key Constructs</span><span class="dl-def">Regulatory uncertainty; bilateral governance signaling; investment timing; capability disclosure; market entry deterrence; dual-market exposure</span>
+    <span class="dl-term">Potential Theory</span><span class="dl-def">Real Options Theory (Dixit &amp; Pindyck, 1994); Institutional Theory; Information Disclosure Theory</span>
+    <span class="dl-term">Potential Dataset</span><span class="dl-def">SEC filings and earnings calls tracking AI governance risk disclosures; patent filing timing data; AI model release announcements; investment announcements around bilateral governance events</span>
+    <span class="dl-term">Feasible Empirical Design</span><span class="dl-def">Event study of firm behavior surrounding major bilateral AI governance announcements; compare investment and disclosure responses by firms with/without China market exposure</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">First empirical evidence on the firm-level investment effects of bilateral AI governance; connects international relations research to corporate strategy; extends real options theory to AI governance uncertainty</span>
+  </div>
+</div>
+
+<div class="section-subhead">Tier 3: Fast-Publishing Opportunities</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">Fast-Publishing Opportunity 1: Clinical AI Governance Gap as Adoption Bottleneck (ISR Research Note)</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">The Governance Gap in Clinical AI: Why Policy Maturity Predicts Adoption Better Than Capability</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">Does organizational AI governance maturity moderate the relationship between AI capability availability and clinical adoption, independent of perceived usefulness?</span>
+    <span class="dl-term">Why Timely</span><span class="dl-def">The FT clinician pushback story on September 20, combined with the Wolters Kluwer survey data showing only 27% governance awareness, provides a current, well-documented phenomenon. Healthcare AI adoption is a high-stakes, high-visibility context journal editors will prioritize.</span>
+    <span class="dl-term">Data Source</span><span class="dl-def">Wolters Kluwer 2026 Future Ready Healthcare survey data; supplemented by cross-organizational survey of clinical AI governance policies matched with AI adoption rates from EHR system data</span>
+    <span class="dl-term">Identification Strategy</span><span class="dl-def">Cross-sectional mediation model: AI capability availability -&gt; governance maturity -&gt; clinical AI adoption; robustness check using healthcare system fixed effects to control for unobserved organizational characteristics</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">A timely, actionable finding redirecting medical AI commercialization attention from capability to governance infrastructure; publishable as ISR Research Note with Wolters Kluwer 2026 data as primary evidence base</span>
+  </div>
+</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">Fast-Publishing Opportunity 2: Hugging Face Open-Weight Release Natural Experiment (MISQ Research Note)</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">Open Weights, Open Markets: A Natural Experiment on Platform Openness and AI Ecosystem Competition</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">Does planned open-weight release of frontier-class AI models accelerate developer ecosystem adoption, and does downstream model creation differ between planned-open and API-only release strategies?</span>
+    <span class="dl-term">Why Timely</span><span class="dl-def">StepFun's October 15, 2026 open-weight release (announced September 20) creates a clean natural experiment with known treatment date. Empirical analysis using Hugging Face repository data is achievable rapidly.</span>
+    <span class="dl-term">Data Source</span><span class="dl-def">Hugging Face model repository API: download counts, fork rates, derivative model creation, API adoption metrics before/after October 15; compare with contemporaneous API-only models</span>
+    <span class="dl-term">Identification Strategy</span><span class="dl-def">DiD design using October 15 open-weight release as treatment event; Step 5-derived models as treatment group; API-only comparable models as control</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">First causal evidence on the ecosystem effects of planned open-weight release sequencing; rapid turnaround possible given data availability; appropriate for ISR or MISQ Research Note format</span>
+  </div>
+</div>
+
+<div class="rdir-box">
+  <div class="rdir-title">Fast-Publishing Opportunity 3: Robot Relations Function as Organizational Innovation Signal (SMJ Letters)</div>
+  <div class="dl-grid">
+    <span class="dl-term">Title</span><span class="dl-def">From IT to 'Robot Relations': Tracking the Emergence of Dedicated Human-AI Governance Functions Through Job Posting Analysis</span>
+    <span class="dl-term">Research Question</span><span class="dl-def">Is the 'robot relations' function measurably proliferating in large enterprise job postings in 2025-2026, and which firm characteristics predict early adoption of dedicated AI governance roles?</span>
+    <span class="dl-term">Why Timely</span><span class="dl-def">The CNBC reporting on September 20 provides a public signal date. LinkedIn job posting data allows rapid analysis of prior 12-24 months of posting trends.</span>
+    <span class="dl-term">Data Source</span><span class="dl-def">LinkedIn job posting data for roles containing 'robot relations,' 'AI governance,' 'AI liaison,' 'human-AI collaboration manager' (2024-2026); matched to firm financial data and AI investment proxies</span>
+    <span class="dl-term">Identification Strategy</span><span class="dl-def">Descriptive longitudinal analysis of job posting trends; logistic regression of early adopter firm characteristics; text analysis of role descriptions to identify evolving governance responsibilities</span>
+    <span class="dl-term">Expected Contribution</span><span class="dl-def">Documents an organizational innovation in real time using large-scale job posting data; contributes to organizational design for AI literature; fast-track suitable given data availability and clear phenomenon</span>
+  </div>
+</div>
+
+</section>
+
+<!-- ═══════════════════════════════════ MOST PROMISING OPPORTUNITY ═══ -->
+<section id="most-promising-opportunity">
+<h2>7. Most Promising Research Opportunity</h2>
+
+<div class="rdir-box">
+  <div class="rdir-title">Evidence-Quality Thresholds in Professional AI Adoption — Recommended Priority</div>
+  <div class="dl-grid">
+    <span class="dl-term">Selected Opportunity</span><span class="dl-def">Evidence-Quality Thresholds in Professional AI Adoption — Tier 1 ISR/MISQ opportunity, full specification at 'Tier 1: ISR / MISQ Potential' above</span>
+    <span class="dl-term">Justification</span><span class="dl-def">This opportunity scores highest on four evaluation criteria. <strong>(1) Phenomenon quality:</strong> The FT medical AI story provides concrete evidence of a genuine, large-scale organizational phenomenon with high stakes — clinicians across health systems are articulating evidence-quality-driven adoption resistance. <strong>(2) Theoretical novelty:</strong> The evidence-gating mechanism has not been systematically theorized; it connects Task-Technology Fit, algorithmic aversion, and trust in automation in a novel configuration with clear testable predictions. <strong>(3) Data feasibility:</strong> The Wolters Kluwer 2026 survey provides an immediate empirical anchor; electronic health record adoption logs and multi-site surveys are achievable within a standard research timeline. <strong>(4) Generalizability:</strong> The evidence-gating mechanism plausibly operates across all expert professions where performance evaluation is domain-specific (law, finance, engineering), making the contribution broader than healthcare IS.</span>
+    <span class="dl-term">Next Step Recommendation</span><span class="dl-def">Initiate literature review on algorithmic aversion in expert professions and evidence-based technology adoption within 2 weeks; contact Wolters Kluwer for survey data access; design clinician vignette experiment manipulating evidence quality conditions (diagnostic accuracy reports, outcome studies, peer-reviewed trials, regulatory clearance) across imaging, clinical decision support, and documentation tasks.</span>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════ ARCHIVE META ═══ -->
+<section>
+<h2>Archive Metadata</h2>
+<div class="dl-grid">
+  <span class="dl-term">Archive</span><span class="dl-def">Daily AI News Briefing (IS Research Edition)</span>
+  <span class="dl-term">Coverage Window</span><span class="dl-def">September 20, 2026</span>
+  <span class="dl-term">Briefing Date</span><span class="dl-def">September 21, 2026</span>
+  <span class="dl-term">Analyses Included</span><span class="dl-def">8 of 12 reviewed (excluded: NYT TikTok deal; TechCrunch OpenAI's 1.2T AI investment pipeline; Gizmodo Google's Gemini 3; TechCrunch Anthropic's US Navy Contract)</span>
+  <span class="dl-term">Companion File</span><span class="dl-def">AI_news_20260921.pdf</span>
+  <span class="dl-term">Methodology</span><span class="dl-def">8 articles selected from 12 candidates through IS research significance filtering; each article analyzed through IS component identification, construct mapping, theory mapping, and research opportunity generation</span>
+  <span class="dl-term">Next Briefing</span><span class="dl-def">AI_news_20260922 — September 22, 2026</span>
+</div>
+</section>
+
+</main>
+<footer>
+  AI News Briefing — Information Systems Research Edition · Compiled 2026-09-23 ·
+  <a href="index.html">Back to AI News index</a>
+</footer>
+</body>
+</html>
