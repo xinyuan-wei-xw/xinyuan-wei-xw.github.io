@@ -50,7 +50,7 @@ function matchOrg(org){
 
 
 /* ---- visit logger: university-IP visits -> Firestore counter ----
-   Org-name match first; otherwise every university within 35 miles of the
+   Org-name match first; otherwise every university within 20 miles of the
    visitor's approximate location gets a +1 (one batched commit). */
 (function(){
   try {
@@ -69,7 +69,7 @@ function matchOrg(org){
     if (s) { slugs = [s]; }
     else {
       var la = d && parseFloat(d.latitude), ln = d && parseFloat(d.longitude);
-      if (isFinite(la) && isFinite(ln)) slugs = geoMatch(la, ln, 35 * 1.60934); /* 35 miles in km */
+      if (isFinite(la) && isFinite(ln)) slugs = geoMatch(la, ln, 20 * 1.60934); /* 20 miles in km */
     }
     if (!slugs.length) return;
     try { sessionStorage.setItem('uvl','1'); } catch(e){}

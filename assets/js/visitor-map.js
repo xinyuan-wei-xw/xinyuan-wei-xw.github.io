@@ -145,7 +145,7 @@
     uniWrap = document.createElement('div'); uniWrap.id = 'visitor-uni-wrap'; uniWrap.hidden = true;
     var h = document.createElement('h2'); h.textContent = 'Universities near visitors'; uniWrap.appendChild(h);
     var note = document.createElement('p'); note.className = 'visitor-note';
-    note.textContent = 'Matched by visitor network, or by approximate location (within 35 miles) when the network does not match a university. IP addresses are not shown or stored; counts update live.';
+    note.textContent = 'Matched by visitor network, or by approximate location (within 20 miles) when the network does not match a university. IP addresses are not shown or stored; counts update live.';
     uniWrap.appendChild(note);
     uniContent = document.createElement('div'); uniWrap.appendChild(uniContent);
     var loading = document.createElement('p'); loading.className = 'visitor-note'; loading.textContent = 'Loading university visits…';
