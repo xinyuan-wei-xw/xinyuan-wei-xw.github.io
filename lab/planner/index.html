@@ -17,6 +17,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <style>
   :root{
     --paper:#f3f7fc;--paper-2:#e9f1fa;--card:#ffffff;
@@ -144,6 +145,20 @@
   .ev .del,.task .del,.mini-task .del,.prow .del{opacity:0;border:none;background:none;color:var(--faint);
     cursor:pointer;font-size:15px;line-height:1}
   .ev:hover .del,.task:hover .del,.mini-task:hover .del,.prow:hover .del{opacity:1}
+  .ev-wrap{padding:2px 0}
+  .ev .attach{border:none;background:none;cursor:pointer;font-size:14px;opacity:.55;padding:2px 4px}
+  .ev .attach:hover{opacity:1}
+  .ev .attach:disabled{opacity:.3;cursor:default}
+  .ev-sub{display:flex;align-items:center;gap:8px;padding:0 0 4px 60px}
+  .ev-sub .evl{flex:1;border:none;background:transparent;font-size:12px;color:var(--ink-soft)}
+  .ev-sub .evl:focus{outline:none}
+  .evfiles{display:flex;flex-wrap:wrap;gap:6px;padding:0 0 6px 60px}
+  .evfile{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:3px 8px;
+    border:1px solid var(--line-soft);border-radius:12px;font-size:12px}
+  .evfile a{color:var(--blue-bright);text-decoration:none;overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;max-width:220px}
+  .evfile button{border:none;background:none;color:var(--faint);cursor:pointer;font-size:13px;padding:0 2px}
+  .evfile button:hover{color:#c00}
   .prow .drag-handle{cursor:grab;color:var(--faint);font-size:11px;letter-spacing:2px;
     user-select:none;-webkit-user-select:none;flex-shrink:0;padding:4px 2px;touch-action:none}
   .prow .drag-handle:active{cursor:grabbing}
@@ -703,20 +718,62 @@ function eventsPanel(d){
   p.innerHTML=`<div class="sec-lbl">Events<span class="dash"></span></div>`;
   const list=document.createElement("div");p.appendChild(list);
   function draw(){list.innerHTML="";evs.forEach((e,idx)=>{
+    if(!e.id)e.id=newMid();
+    e.files=e.files||[];
+    const wrap=document.createElement("div");wrap.className="ev-wrap";
     const row=document.createElement("div");row.className="ev";
     row.innerHTML=`<input class="evt" placeholder="—:—" value="${esc(e.time)}">
       <input class="evx" placeholder="Event / appointment…" value="${esc(e.title)}">
+      <button class="attach" title="Attach a file">📎</button>
       <button class="del">×</button>`;
     row.querySelector(".evt").addEventListener("input",ev=>{e.time=ev.target.value;save();});
     row.querySelector(".evx").addEventListener("input",ev=>{e.title=ev.target.value;save();});
     row.querySelector(".del").addEventListener("click",()=>{evs.splice(idx,1);save();draw();});
-    list.appendChild(row);
+    const at=row.querySelector(".attach");
+    at.addEventListener("click",()=>{
+      const fi=document.createElement("input");fi.type="file";fi.style.display="none";
+      fi.onchange=()=>{if(fi.files.length)uploadEventFile(e,fi.files[0],at,draw);};
+      document.body.appendChild(fi);fi.click();setTimeout(()=>fi.remove(),60000);
+    });
+    wrap.appendChild(row);
+    const sub=document.createElement("div");sub.className="ev-sub";
+    sub.innerHTML=`<input class="evl" placeholder="Location…" value="${esc(e.loc)}">`;
+    sub.querySelector(".evl").addEventListener("input",ev=>{e.loc=ev.target.value;save();});
+    wrap.appendChild(sub);
+    const fc=document.createElement("div");fc.className="evfiles";
+    e.files.forEach(f=>{
+      const chip=document.createElement("span");chip.className="evfile";
+      const a=document.createElement("a");a.textContent="📄 "+f.name;
+      if(f.url){a.href=f.url;a.target="_blank";a.rel="noopener";}else{a.href="#";a.style.opacity=".5";}
+      const x=document.createElement("button");x.textContent="×";x.title="Remove file";
+      x.addEventListener("click",()=>removeEventFile(e,f,draw));
+      chip.appendChild(a);chip.appendChild(x);fc.appendChild(chip);
+    });
+    wrap.appendChild(fc);
+    list.appendChild(wrap);
   });}
   draw();
   const add=document.createElement("button");add.className="addbtn";add.textContent="+ add event";
-  add.addEventListener("click",()=>{evs.push({time:"",title:""});save();draw();
+  add.addEventListener("click",()=>{evs.push({id:newMid(),time:"",title:"",loc:"",files:[]});save();draw();
     const xs=list.querySelectorAll(".evx");if(xs.length)xs[xs.length-1].focus();});
   p.appendChild(add);return p;
+}
+/* Event file attachments: stored in the user's own Firebase Storage folder
+   (users/{uid}/event-files/{eventId}/…), so they stay private and sync across devices. */
+function uploadEventFile(e,file,btn,redraw){
+  if(!fbUser||!fstore){alert("File attachments need cloud sync — sign in first, then attach.");return;}
+  if(file.size>15*1024*1024){alert("That file is over the 15 MB limit.");return;}
+  btn.disabled=true;const old=btn.textContent;btn.textContent="…";
+  const path="users/"+fbUser.uid+"/event-files/"+e.id+"/"+file.name;
+  fstore.ref(path).put(file).then(snap=>snap.ref.getDownloadURL()).then(url=>{
+    e.files=e.files||[];
+    if(!e.files.some(f=>f.path===path))e.files.push({name:file.name,url:url,path:path});
+    save();redraw();
+  }).catch(err=>{alert("Upload failed: "+((err&&err.message)||err));btn.disabled=false;btn.textContent=old;});
+}
+function removeEventFile(e,f,redraw){
+  e.files=(e.files||[]).filter(x=>x!==f);save();redraw();
+  if(fstore&&f.path){try{fstore.ref(f.path).delete().catch(()=>{});}catch(_){}}
 }
 
 /* =============== DAY =============== */
@@ -1412,7 +1469,7 @@ const firebaseConfig={
   projectId:"x-planner-99dd3",
   appId:"1:146714833806:web:d1c4516985514f7c35eadf"
 };
-let fdb=null,fauth=null,userDoc=null,fbUser=null,unsub=null,pushTimer=null,applyingRemote=false;
+let fdb=null,fauth=null,fstore=null,userDoc=null,fbUser=null,unsub=null,pushTimer=null,applyingRemote=false;
 let wipeOnSignOut=false;
 function firebaseReady(){return typeof firebase!=="undefined"&&!firebaseConfig.apiKey.startsWith("PASTE");}
 function setSync(m){const el=document.getElementById("syncStat");if(el)el.textContent=m;}
@@ -1433,6 +1490,31 @@ function pushRemote(now){
       .then(()=>setSync("Synced ✓")).catch(err=>{setSync("Sync error");console.error(err);});};
   if(now)doPush();else pushTimer=setTimeout(doPush,900);
 }
+/* One-time seed: 3MxRiskAI workshop (Feb 5–6, 2027). Adds the two event days and,
+   when the CFP is present in the user's Storage, attaches it to each day.
+   Runs once per account, through the normal sync path, so it never duplicates. */
+function seedWorkshop(){
+  if(!fbUser||!fstore)return;
+  DB.seedFlags=DB.seedFlags||{};
+  if(DB.seedFlags.mxrisk2027)return;
+  DB.seedFlags.mxrisk2027=true;
+  const cfp="3MxRiskAI_202702_CallforPapers.pdf";
+  const t="3MxRiskAI Workshop: Measurement, Modeling & Management of Existential Risk (from AI)";
+  const loc="Georgia State University, Downtown Atlanta Campus";
+  [["2027-02-05","mxrisk-feb5",t+" — Day 1"],["2027-02-06","mxrisk-feb6",t+" — Day 2"]].forEach(function(cfg){
+    const k=cfg[0],id=cfg[1],title=cfg[2];
+    const arr=DB.events[k]=DB.events[k]||[];
+    let e=arr.find(x=>x&&x.id===id);
+    if(!e){e={id:id,time:"",title:title,loc:loc,files:[]};arr.push(e);}
+    e.files=e.files||[];
+    const path="users/"+fbUser.uid+"/event-files/"+id+"/"+cfp;
+    fstore.ref(path).getDownloadURL().then(url=>{
+      if(!e.files.some(f=>f.name===cfp))e.files.push({name:cfp,url:url,path:path});
+      save();render();
+    }).catch(()=>{});
+  });
+  save();
+}
 function listen(){if(!userDoc)return;if(unsub)unsub();
   unsub=userDoc.onSnapshot(snap=>{const d=snap.data();
     if(!d||!d.data||d.by===CLIENT_ID)return;applyRemote(d);setSync("Synced ✓");});}
@@ -1442,6 +1524,7 @@ function initFirebase(){
   try{
     firebase.initializeApp(firebaseConfig);
     fauth=firebase.auth();fdb=firebase.firestore();box.style.display="";
+    try{fstore=firebase.storage?firebase.storage():null;}catch(_){fstore=null;}
     const emailEl=document.getElementById("authEmail"),passEl=document.getElementById("authPass");
     const err=m=>{document.getElementById("authErr").textContent=m||"";};
     const showForm=show=>{document.getElementById("authForm").style.display=show?"":"none";
@@ -1482,7 +1565,7 @@ function initFirebase(){
         userDoc.get().then(snap=>{
           if(snap.exists&&snap.data()&&snap.data().data)applyRemote(snap.data());
           else pushRemote(true);
-          listen();setSync("Synced ✓");
+          listen();setSync("Synced ✓");seedWorkshop();
         }).catch(e=>{setSync("Sync error");console.error(e);});
       }else{
         showForm(true);if(unsub){unsub();unsub=null;}userDoc=null;setSync("");
@@ -1531,6 +1614,18 @@ const README=[
 "         projectId: \"yourproj\",",
 "         appId: \"1:...:web:...\"",
 "       };","",
+"8. Turn on file attachments: Firebase console > Build > Storage > Get started >",
+"   Production mode.",
+"9. Lock Storage so each person only sees their own files: Storage > Rules, paste and",
+"   Publish:","",
+"       rules_version = '2';",
+"       service firebase.storage {",
+"         match /b/{bucket}/o {",
+"           match /users/{uid}/{allPaths=**} {",
+"             allow read, write: if request.auth != null && request.auth.uid == uid;",
+"           }",
+"         }",
+"       }","",
 "3. In index.html, search for PASTE_YOUR_API_KEY and replace the four PASTE... values with",
 "   yours. Save and re-upload index.html to GitHub.",
 "4. Enable password login: Firebase console > Build > Authentication > Get started >",
