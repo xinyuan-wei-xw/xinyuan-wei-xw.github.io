@@ -1498,7 +1498,7 @@ function pushRemote(now){
    to each day's headline event. Runs once per account, through the normal sync
    path, so it never duplicates. */
 function seedWorkshop(){
-  if(!fbUser||!fstore)return;
+  if(!fbUser)return; /* events seed whenever signed in; the file attach below is best-effort */
   DB.seedFlags=DB.seedFlags||{};
   if(DB.seedFlags.mxrisk2027v3)return;
   try{
@@ -1522,11 +1522,13 @@ function seedWorkshop(){
       slots.forEach(function(s,si){
         arr.push({id:dayId+"-s"+si,time:s[0],title:s[1],loc:loc,files:[]});
       });
-      const path="users/"+fbUser.uid+"/event-files/"+dayId+"/"+cfp;
-      fstore.ref(path).getDownloadURL().then(url=>{
-        head.files.push({name:cfp,url:url,path:path});
-        save();render();
-      }).catch(()=>{});
+      if(fstore){
+        const path="users/"+fbUser.uid+"/event-files/"+dayId+"/"+cfp;
+        fstore.ref(path).getDownloadURL().then(url=>{
+          head.files.push({name:cfp,url:url,path:path});
+          save();render();
+        }).catch(()=>{});
+      }
     });
     DB.seedFlags.mxrisk2027v3=true;
     DB.seedFlags.mxrisk2027v2=true;
