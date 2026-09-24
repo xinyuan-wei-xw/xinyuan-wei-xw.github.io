@@ -1490,48 +1490,47 @@ function pushRemote(now){
       .then(()=>setSync("Synced ✓")).catch(err=>{setSync("Sync error");console.error(err);});};
   if(now)doPush();else pushTimer=setTimeout(doPush,900);
 }
-/* One-time seed: 3MxRiskAI workshop (Feb 5–6, 2027). Adds one headline event per day,
-   titled with the workshop name — this is what the week/month/year views show —
-   plus time-slot events (breakfast, presentation blocks, lunch, dinner) that appear
-   on the day pages. Slot titles/times are a standard template until the program is
-   published. Attaches the CFP from Storage to each day's headline event.
-   Runs once per account, through the normal sync path, so it never duplicates. */
+/* One-time seed: CEAR Workshop on Existential Risk from AI (Feb 5–6, 2027).
+   Adds one headline event per day, titled with the workshop name — this is what
+   the week/month/year views show — plus time-slot events (breakfast, presentation
+   blocks, lunch, dinner) that appear on the day pages. Slot titles/times are a
+   standard template until the program is published. Attaches the CFP from Storage
+   to each day's headline event. Runs once per account, through the normal sync
+   path, so it never duplicates. */
 function seedWorkshop(){
   if(!fbUser||!fstore)return;
   DB.seedFlags=DB.seedFlags||{};
-  if(DB.seedFlags.mxrisk2027v2)return;
+  if(DB.seedFlags.mxrisk2027v3)return;
   try{
     const cfp="3MxRiskAI_202702_CallforPapers.pdf";
-    const name="3MxRiskAI Workshop";
+    const name="CEAR Workshop on Existential Risk from AI";
     const loc="Georgia State University, Downtown Atlanta Campus";
     const slots=[
-      ["8:00","3MxRiskAI: Breakfast"],
-      ["9:00","3MxRiskAI: Presentations — morning (program TBA)"],
-      ["12:00","3MxRiskAI: Lunch"],
-      ["13:30","3MxRiskAI: Presentations — afternoon (program TBA)"],
-      ["18:00","3MxRiskAI: Dinner"]
+      ["8:00","CEAR Workshop: Breakfast"],
+      ["9:00","CEAR Workshop: Presentations — morning (program TBA)"],
+      ["12:00","CEAR Workshop: Lunch"],
+      ["13:30","CEAR Workshop: Presentations — afternoon (program TBA)"],
+      ["18:00","CEAR Workshop: Dinner"]
     ];
     [["2027-02-05","mxrisk-feb5"],["2027-02-06","mxrisk-feb6"]].forEach(function(pair){
       const k=pair[0],dayId=pair[1];
       let arr=DB.events[k]=DB.events[k]||[];
-      /* drop the v1 single-day events if they exist */
-      arr=DB.events[k]=arr.filter(x=>!(x&&x.id&&(x.id==="mxrisk-feb5"||x.id==="mxrisk-feb6")));
-      let head=arr.find(x=>x&&x.id===dayId+"-head");
-      if(!head){head={id:dayId+"-head",time:"",title:name,loc:loc,files:[]};arr.unshift(head);}
-      else{if(!head.title)head.title=name;head.loc=head.loc||loc;head.files=head.files||[];}
+      /* drop any earlier seeded mxrisk events on this day */
+      arr=DB.events[k]=arr.filter(x=>!(x&&x.id&&x.id.indexOf("mxrisk-")===0));
+      const head={id:dayId+"-head",time:"",title:name,loc:loc,files:[]};
+      arr.unshift(head);
       slots.forEach(function(s,si){
-        const id=dayId+"-s"+si;
-        if(!arr.find(x=>x&&x.id===id))arr.push({id:id,time:s[0],title:s[1],loc:loc,files:[]});
+        arr.push({id:dayId+"-s"+si,time:s[0],title:s[1],loc:loc,files:[]});
       });
       const path="users/"+fbUser.uid+"/event-files/"+dayId+"/"+cfp;
       fstore.ref(path).getDownloadURL().then(url=>{
-        head.files=head.files||[];
-        if(!head.files.some(f=>f.name===cfp))head.files.push({name:cfp,url:url,path:path});
+        head.files.push({name:cfp,url:url,path:path});
         save();render();
       }).catch(()=>{});
     });
+    DB.seedFlags.mxrisk2027v3=true;
     DB.seedFlags.mxrisk2027v2=true;
-    DB.seedFlags.mxrisk2027=true; /* v1 superseded */
+    DB.seedFlags.mxrisk2027=true; /* earlier versions superseded */
     save();
   }catch(err){console.error("workshop seed failed",err);}
 }
