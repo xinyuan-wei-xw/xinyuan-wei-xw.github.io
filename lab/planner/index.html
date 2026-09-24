@@ -1537,6 +1537,7 @@ function seedWorkshop(){
     DB.seedFlags.mxrisk2027=true; /* earlier versions superseded */
     try{localStorage.setItem(LS,JSON.stringify(DB));}catch(e){} /* persist even while locked */
     pushRemote(); /* no-op unless signed in; pushRemote guards userDoc */
+    render(); /* the seed runs after the initial render — redraw so the events show */
   }catch(err){console.error("workshop seed failed",err);}
 }
 function listen(){if(!userDoc)return;if(unsub)unsub();
