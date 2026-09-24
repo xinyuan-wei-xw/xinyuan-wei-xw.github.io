@@ -247,6 +247,12 @@
   /* Theory block */
   .theory-block { border-left: 3px solid var(--border); padding: 10px 14px; margin: 10px 0; background: var(--bg); border-radius: 0 5px 5px 0; }
   .theory-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+
+  /* Fix: long unbreakable strings (URLs) must wrap so text is never cut off at the viewport edge */
+  a { overflow-wrap: anywhere; }
+  .dl-def, .is-cell-val, .card-source, .archive-meta { overflow-wrap: anywhere; }
+  /* Fix: anchor jumps must clear the sticky nav so section headings are never hidden behind it */
+  section { scroll-margin-top: 64px; }
 </style>
 </head>
 <body>
