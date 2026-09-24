@@ -1490,30 +1490,50 @@ function pushRemote(now){
       .then(()=>setSync("Synced ✓")).catch(err=>{setSync("Sync error");console.error(err);});};
   if(now)doPush();else pushTimer=setTimeout(doPush,900);
 }
-/* One-time seed: 3MxRiskAI workshop (Feb 5–6, 2027). Adds the two event days and,
-   when the CFP is present in the user's Storage, attaches it to each day.
+/* One-time seed: 3MxRiskAI workshop (Feb 5–6, 2027). Adds one headline event per day,
+   titled with the workshop name — this is what the week/month/year views show —
+   plus time-slot events (breakfast, presentation blocks, lunch, dinner) that appear
+   on the day pages. Slot titles/times are a standard template until the program is
+   published. Attaches the CFP from Storage to each day's headline event.
    Runs once per account, through the normal sync path, so it never duplicates. */
 function seedWorkshop(){
   if(!fbUser||!fstore)return;
   DB.seedFlags=DB.seedFlags||{};
-  if(DB.seedFlags.mxrisk2027)return;
-  DB.seedFlags.mxrisk2027=true;
-  const cfp="3MxRiskAI_202702_CallforPapers.pdf";
-  const t="3MxRiskAI Workshop: Measurement, Modeling & Management of Existential Risk (from AI)";
-  const loc="Georgia State University, Downtown Atlanta Campus";
-  [["2027-02-05","mxrisk-feb5",t+" — Day 1"],["2027-02-06","mxrisk-feb6",t+" — Day 2"]].forEach(function(cfg){
-    const k=cfg[0],id=cfg[1],title=cfg[2];
-    const arr=DB.events[k]=DB.events[k]||[];
-    let e=arr.find(x=>x&&x.id===id);
-    if(!e){e={id:id,time:"",title:title,loc:loc,files:[]};arr.push(e);}
-    e.files=e.files||[];
-    const path="users/"+fbUser.uid+"/event-files/"+id+"/"+cfp;
-    fstore.ref(path).getDownloadURL().then(url=>{
-      if(!e.files.some(f=>f.name===cfp))e.files.push({name:cfp,url:url,path:path});
-      save();render();
-    }).catch(()=>{});
-  });
-  save();
+  if(DB.seedFlags.mxrisk2027v2)return;
+  try{
+    const cfp="3MxRiskAI_202702_CallforPapers.pdf";
+    const name="3MxRiskAI Workshop";
+    const loc="Georgia State University, Downtown Atlanta Campus";
+    const slots=[
+      ["8:00","3MxRiskAI: Breakfast"],
+      ["9:00","3MxRiskAI: Presentations — morning (program TBA)"],
+      ["12:00","3MxRiskAI: Lunch"],
+      ["13:30","3MxRiskAI: Presentations — afternoon (program TBA)"],
+      ["18:00","3MxRiskAI: Dinner"]
+    ];
+    [["2027-02-05","mxrisk-feb5"],["2027-02-06","mxrisk-feb6"]].forEach(function(pair){
+      const k=pair[0],dayId=pair[1];
+      let arr=DB.events[k]=DB.events[k]||[];
+      /* drop the v1 single-day events if they exist */
+      arr=DB.events[k]=arr.filter(x=>!(x&&x.id&&(x.id==="mxrisk-feb5"||x.id==="mxrisk-feb6")));
+      let head=arr.find(x=>x&&x.id===dayId+"-head");
+      if(!head){head={id:dayId+"-head",time:"",title:name,loc:loc,files:[]};arr.unshift(head);}
+      else{if(!head.title)head.title=name;head.loc=head.loc||loc;head.files=head.files||[];}
+      slots.forEach(function(s,si){
+        const id=dayId+"-s"+si;
+        if(!arr.find(x=>x&&x.id===id))arr.push({id:id,time:s[0],title:s[1],loc:loc,files:[]});
+      });
+      const path="users/"+fbUser.uid+"/event-files/"+dayId+"/"+cfp;
+      fstore.ref(path).getDownloadURL().then(url=>{
+        head.files=head.files||[];
+        if(!head.files.some(f=>f.name===cfp))head.files.push({name:cfp,url:url,path:path});
+        save();render();
+      }).catch(()=>{});
+    });
+    DB.seedFlags.mxrisk2027v2=true;
+    DB.seedFlags.mxrisk2027=true; /* v1 superseded */
+    save();
+  }catch(err){console.error("workshop seed failed",err);}
 }
 function listen(){if(!userDoc)return;if(unsub)unsub();
   unsub=userDoc.onSnapshot(snap=>{const d=snap.data();
