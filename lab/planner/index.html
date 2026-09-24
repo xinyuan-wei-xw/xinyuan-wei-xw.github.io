@@ -152,6 +152,10 @@
   .ev-sub{display:flex;align-items:center;gap:8px;padding:0 0 4px 60px}
   .ev-sub .evl{flex:1;border:none;background:transparent;font-size:12px;color:var(--ink-soft)}
   .ev-sub .evl:focus{outline:none}
+  .ev-sub .evn{flex:1;border:none;background:transparent;font-size:12px;color:var(--ink-soft);
+    resize:vertical;min-height:32px;font-family:var(--sans);line-height:1.5}
+  .ev-sub .evn:focus{outline:none}
+  .ev-sub .evn::placeholder{color:var(--faint)}
   .evfiles{display:flex;flex-wrap:wrap;gap:6px;padding:0 0 6px 60px}
   .evfile{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:3px 8px;
     border:1px solid var(--line-soft);border-radius:12px;font-size:12px}
@@ -740,6 +744,10 @@ function eventsPanel(d){
     sub.innerHTML=`<input class="evl" placeholder="Location…" value="${esc(e.loc)}">`;
     sub.querySelector(".evl").addEventListener("input",ev=>{e.loc=ev.target.value;save();});
     wrap.appendChild(sub);
+    const nsub=document.createElement("div");nsub.className="ev-sub";
+    nsub.innerHTML=`<textarea class="evn" placeholder="Note…" rows="2">${esc(e.note||"")}</textarea>`;
+    nsub.querySelector(".evn").addEventListener("input",ev=>{e.note=ev.target.value;save();});
+    wrap.appendChild(nsub);
     const fc=document.createElement("div");fc.className="evfiles";
     e.files.forEach(f=>{
       const chip=document.createElement("span");chip.className="evfile";
@@ -1361,7 +1369,7 @@ document.querySelectorAll("#zoomctl button").forEach(b=>b.addEventListener("clic
 document.querySelectorAll("#modetoggle button").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;render();}));
 document.getElementById("prev").addEventListener("click",()=>step(-1));
 document.getElementById("next").addEventListener("click",()=>step(1));
-document.getElementById("todayBtn").addEventListener("click",()=>{focus=new Date(NOW);yearsStart=null;render();});
+document.getElementById("todayBtn").addEventListener("click",()=>{const t=new Date();t.setHours(0,0,0,0);focus=t;level=0;yearsStart=null;render();});
 document.getElementById("printBtn").addEventListener("click",()=>window.print());
 document.getElementById("exportBtn").addEventListener("click",()=>{
   const json=JSON.stringify(DB,null,2);
@@ -1540,6 +1548,27 @@ function seedWorkshop(){
     render(); /* the seed runs after the initial render — redraw so the events show */
   }catch(err){console.error("workshop seed failed",err);}
 }
+/* One-time seed: Anqi's CIS research seminar (Wed Sep 30, 2026, 10:00 AM–12:00 PM).
+   Same pattern as the workshop seed: runs on page load, idempotent via flag,
+   syncs through the normal path when signed in. */
+function seedAnqiSeminar(){
+  DB.seedFlags=DB.seedFlags||{};
+  if(DB.seedFlags.anqiSeminar2026)return;
+  try{
+    const k="2026-09-30";
+    let arr=DB.events[k]=DB.events[k]||[];
+    arr=DB.events[k]=arr.filter(x=>!(x&&x.id&&x.id.indexOf("anqi-")===0));
+    arr.push({id:"anqi-seminar",time:"10:00\u201312:00",
+      title:"Anqi \u2014 The Privacy Asymmetry of Service Robots",
+      loc:"Room 1742, Conference Room, 55 Park Place",
+      note:"Anqi, a Ph.D. candidate in CIS, will present her research idea:\n\nTitle: The Privacy Asymmetry of Service Robots: Spatial and Data Privacy Concerns in Boundary-Spanning Service Encounters\n\nAbstract: Service robots are increasingly used in customer-facing encounters that occur at the boundary between customers\u2019 private spaces and surrounding public areas, such as hotel-room delivery and patient-room service. These encounters pose a distinctive managerial problem because customers may need to regulate both what they physically expose during the encounter and what personal data a sensing-capable agent may capture. Existing IS privacy research has primarily emphasized informational privacy in digital settings, leaving a limited understanding of how privacy concerns unfold in embodied, boundary-sensitive service encounters. Drawing on privacy regulation theory, we conceptualize robot-mediated threshold encounters as activating two distinct privacy channels: spatial privacy concerns, and data privacy concerns. Across three studies, we show that robot agents reduce spatial privacy concerns but increase data privacy concerns relative to human staff. We further find that data privacy concerns, but not spatial privacy concerns, negatively affect service quality assessments across professional and overfamiliar service styles.",
+      files:[]});
+    DB.seedFlags.anqiSeminar2026=true;
+    try{localStorage.setItem(LS,JSON.stringify(DB));}catch(e){} /* persist even while locked */
+    pushRemote(); /* no-op unless signed in; pushRemote guards userDoc */
+    render(); /* the seed runs after the initial render — redraw so the event shows */
+  }catch(err){console.error("seminar seed failed",err);}
+}
 function listen(){if(!userDoc)return;if(unsub)unsub();
   unsub=userDoc.onSnapshot(snap=>{const d=snap.data();
     if(!d||!d.data||d.by===CLIENT_ID)return;applyRemote(d);setSync("Synced ✓");});}
@@ -1590,7 +1619,7 @@ function initFirebase(){
         userDoc.get().then(snap=>{
           if(snap.exists&&snap.data()&&snap.data().data)applyRemote(snap.data());
           else pushRemote(true);
-          listen();setSync("Synced ✓");seedWorkshop();
+          listen();setSync("Synced ✓");seedWorkshop();seedAnqiSeminar();
         }).catch(e=>{setSync("Sync error");console.error(e);});
       }else{
         showForm(true);if(unsub){unsub();unsub=null;}userDoc=null;setSync("");
@@ -1692,6 +1721,7 @@ const README=[
 
 backfillToday(); /* refresh: pull any unsynced matrix tasks into today's list */
 seedWorkshop(); /* ensure the CEAR workshop events exist even without sign-in */
+seedAnqiSeminar(); /* one-time: Anqi's Sep 30 2026 CIS research seminar */
 initFirebase();
 render();
 setInterval(()=>{document.querySelectorAll(".cd-live").forEach(el=>{const d=el.dataset.due;if(!d)return;
