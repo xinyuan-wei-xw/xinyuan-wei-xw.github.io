@@ -20,6 +20,21 @@ function geoMatch(la, ln, km){
   }
   return out;
 }
+function geoNearest(la, ln, km){
+  var R = 6371, best = null, bestD = km, dLa, dLn, a, d, p, slug;
+  var laR = la * Math.PI / 180;
+  for (slug in UGEO){
+    p = UGEO[slug];
+    dLa = (p[0] - la) * Math.PI / 180;
+    dLn = (p[1] - ln) * Math.PI / 180;
+    a = Math.sin(dLa/2) * Math.sin(dLa/2) +
+        Math.cos(laR) * Math.cos(p[0] * Math.PI / 180) *
+        Math.sin(dLn/2) * Math.sin(dLn/2);
+    d = 2 * R * Math.asin(Math.sqrt(a));
+    if (d <= bestD){ bestD = d; best = slug; }
+  }
+  return best;
+}
 function unorm(s){ return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
 function ucore(name){
   var stop = {university:1,universities:1,college:1,institute:1,institutes:1,of:1,the:1,and:1,for:1,at:1,in:1,a:1,an:1,de:1,la:1,state:1,school:1,schools:1,campus:1,main:1,city:1};
@@ -50,8 +65,8 @@ function matchOrg(org){
 
 
 /* ---- visit logger: university-IP visits -> Firestore counter ----
-   Org-name match first; otherwise every university within 20 miles of the
-   visitor's approximate location gets a +1 (one batched commit). */
+   Org-name match first; otherwise the single closest university within 10 miles
+   of the visitor's approximate location gets a +1. */
 (function(){
   try {
     if (location.hostname.indexOf('github.io') === -1) return;
@@ -69,7 +84,8 @@ function matchOrg(org){
     if (s) { slugs = [s]; }
     else {
       var la = d && parseFloat(d.latitude), ln = d && parseFloat(d.longitude);
-      if (isFinite(la) && isFinite(ln)) slugs = geoMatch(la, ln, 20 * 1.60934); /* 20 miles in km */
+      var near = geoNearest(la, ln, 10 * 1.60934); /* 10 miles in km */
+      slugs = near ? [near] : [];
     }
     if (!slugs.length) return;
     try { sessionStorage.setItem('uvl','1'); } catch(e){}
