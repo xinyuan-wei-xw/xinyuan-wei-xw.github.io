@@ -9,6 +9,7 @@ layout: compress
       .lab-standalone { max-width: 1200px; margin: 0 auto; padding: 24px; }
       .lab-standalone__nav { margin-bottom: 32px; }
       .lab-standalone__nav a { color: #0039a6; }
+      .lab-standalone .byline { color: #586c86; font-size: .95em; }
       .lab-standalone figure { margin: 24px 0; }
       .lab-standalone figure img { display: block; width: 100%; height: auto; }
       .lab-standalone figcaption { color: #586c86; }
@@ -17,7 +18,7 @@ layout: compress
   </head>
   <body>
     <main class="lab-standalone">
-      <nav class="lab-standalone__nav" aria-label="Return to Lab"><a href="{{ '/lab/' | relative_url }}">&larr; Back to Lab</a></nav>
+      <nav class="lab-standalone__nav" aria-label="Return to Toolbox"><a href="{{ '/toolbox/' | relative_url }}">&larr; Back to Toolbox</a></nav>
       <h1 class="page__title">{{ page.title | escape }}</h1>
       <div class="page__content">{{ content }}</div>
     </main>
