@@ -1,0 +1,21 @@
+---
+layout: single
+title: "Xinyuan's Toolbox"
+permalink: /toolbox/
+redirect_from: /lab/
+author_profile: true
+---
+
+
+<p>Everything here is designed and built by me — Xinyuan Wei. These are small tools I made for my own research, teaching, and daily life; my students use them, and you're welcome to use them too. Original work throughout — not links collected from elsewhere.</p>
+
+
+<div class="lab-grid">
+  {% for project in site.data.toolbox.projects %}
+    {% unless project.draft %}
+      {% include lab/card.html project=project %}
+    {% endunless %}
+  {% else %}
+    {% include lab/card.html %}
+  {% endfor %}
+</div>
