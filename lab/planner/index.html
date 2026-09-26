@@ -426,7 +426,7 @@
   .lockbanner{margin:0 0 18px;padding:28px 22px;text-align:center}
   .lockbanner .lk{font-size:30px}
   .lockbanner h2{font-size:19px;color:var(--blue-deep);margin:8px 0 6px}
-  .lockbanner p{font-size:13.5px;color:var(--ink-soft);max-width:540px;margin:0 auto}
+  .lockbanner p{font-size:13.5px;color:var(--ink-soft);max-width:540px;margin:0 auto} .lockbanner .madeby{margin-top:12px;font-size:12.5px}
   body.locked .toolbar .only-unlocked{display:none!important}
 
   @media print{
@@ -465,7 +465,7 @@
 </head>
 <body>
 <div class="toolbar">
-  <a class="backlab" href="../">← Back to Lab</a>
+  <a class="backlab" href="/toolbox/">← Back to Toolbox</a>
   <span class="savenote" id="savenote">Saved</span>
   <span id="syncStat" style="font-size:11px;color:var(--ink-soft);align-self:center"></span>
   <span id="authBox" style="display:none">
@@ -539,7 +539,7 @@ let locked=true; /* content stays hidden until password sign-in (when cloud sync
 function emptyDB(){return{days:{},events:{},weeks:{},months:{},years:{},deadlines:[],projects:[],matrix:[],
   vision:{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""}};}
 function lockBanner(){const d=document.createElement("div");d.className="panel lockbanner";
-  d.innerHTML='<div class="lk">🔒</div><h2>This planner is private</h2><p>Sign in with your password in the toolbar above to view and edit your plans.<br>Without signing in, only the empty structure is visible.</p>';return d;}
+  d.innerHTML='<div class="lk">🔒</div><h2>This planner is private</h2><p>Sign in with your password in the toolbar above to view and edit your plans.<br>Without signing in, only the empty structure is visible.</p><p class="madeby">Designed and built by Xinyuan Wei — the planner I use to run my own days and weeks.</p>';return d;}</p><p class="madeby">Designed and built by Xinyuan Wei — the planner I use to run my own days and weeks.</p>';return d;}
 function finishLocked(realDB){
   if(!realDB)return;DB=realDB;
   stage.querySelectorAll("input,textarea,button,select").forEach(el=>{el.disabled=true;});
