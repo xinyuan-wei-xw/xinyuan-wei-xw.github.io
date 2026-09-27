@@ -164,8 +164,8 @@ export default function App() {
   return (
     <div className="app-shell">
       <nav className="lab-navigation" aria-label="Return to website">
-        <a href="https://xinyuan-wei-xw.github.io/lab/">
-          <span aria-hidden="true">←</span> Back to Lab
+        <a href="https://xinyuan-wei-xw.github.io/toolbox/">
+          <span aria-hidden="true">←</span> Back to Toolbox
         </a>
       </nav>
       <header className="mast">
@@ -793,7 +793,7 @@ export default function App() {
           UNDER REVIEW <i>·</i> Original game prototype by Xinyuan Wei
         </span>
         <div>
-          <a href="https://xinyuan-wei-xw.github.io/lab/">Back to Lab</a>
+          <a href="https://xinyuan-wei-xw.github.io/toolbox/">Back to Toolbox</a>
           <button onClick={() => setHelp(true)}>About the simulation</button>
           <button onClick={() => setReset(true)}>New career</button>
         </div>
@@ -883,7 +883,7 @@ export default function App() {
                 </p>
                 <p>
                   Progress lasts only while this page is open. Refreshing starts a new game. No account, AI API,
-                  or external asset service is required.
+                  or external asset service is required.</p><p>Designed and built by Xinyuan Wei — a simulation I made to help us get used to the peer-review process. Free to play and share.</p>
                 </p>
                 <button className="primary" onClick={() => setHelp(false)}>
                   Back to the office <ArrowUpRight size={17} />
