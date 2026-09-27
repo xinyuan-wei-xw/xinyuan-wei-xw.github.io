@@ -884,7 +884,6 @@ export default function App() {
                 <p>
                   Progress lasts only while this page is open. Refreshing starts a new game. No account, AI API,
                   or external asset service is required.</p><p>Designed and built by Xinyuan Wei — a simulation I made to help us get used to the peer-review process. Free to play and share.</p>
-                </p>
                 <button className="primary" onClick={() => setHelp(false)}>
                   Back to the office <ArrowUpRight size={17} />
                 </button>
