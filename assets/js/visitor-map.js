@@ -46,13 +46,14 @@
     } else {
       heading = 'City'; rows = data.cities.filter(function (r) { return r.country === country && r.region === region; }).map(function (r) { return {name:r.city,n:r.sessions,choose:function(){chooseCity(r.city);}}; });
     }
+    rows.sort(function(a,b){return (b.n-a.n) || a.name.localeCompare(b.name);});
     document.getElementById('visitor-table-title').textContent = 'Visits by ' + heading.toLowerCase();
     document.getElementById('visitor-table-place').textContent = heading;
     var body = document.getElementById('visitor-table-body'); body.replaceChildren();
-    rows.forEach(function (r) {
-      var tr=document.createElement('tr'), th=document.createElement('th'), td=document.createElement('td'), button=document.createElement('button');
+    rows.forEach(function (r, i) {
+      var tr=document.createElement('tr'), rank=document.createElement('td'), th=document.createElement('th'), td=document.createElement('td'), button=document.createElement('button');
       th.scope='row';button.type='button';button.className='visitor-place-link';button.textContent=label(r.name);button.addEventListener('click',r.choose);
-      th.appendChild(button);td.textContent=r.n.toLocaleString();tr.append(th,td);body.appendChild(tr);
+      th.appendChild(button);rank.textContent=i+1;td.textContent=r.n.toLocaleString();tr.append(rank,th,td);body.appendChild(tr);
     });
     document.getElementById('visitor-table-wrap').hidden = !rows.length;
   }
