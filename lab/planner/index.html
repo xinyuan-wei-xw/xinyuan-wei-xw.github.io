@@ -236,8 +236,15 @@
   .daycol.today .dn{color:var(--blue-bright)}
   .daycol .dd{font-size:15px;color:var(--ink-soft);font-weight:600}
   .mini-tasks{list-style:none;flex:1;display:flex;flex-direction:column;gap:4px}
-  .mini-ev{font-size:11px;color:var(--blue-bright);background:var(--blue-soft);border-radius:5px;
-    padding:2px 6px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mini-ev{font-size:11px;color:var(--blue-bright);background:var(--blue-soft);border-radius:5px;padding:2px 6px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .qtask .qt-place{flex:1;min-width:80px;border:1px solid var(--line-soft);border-radius:7px;padding:4px 7px;
+    font-size:12px;color:var(--ink-soft);font-family:var(--sans)}
+  .qtask .qt-place:focus{outline:none;border-color:var(--blue-bright)}
+  .tdedit{border:none;background:none;color:var(--faint);cursor:pointer;font-size:13px;padding:2px 4px;flex-shrink:0}
+  .tdedit:hover{color:var(--blue-bright)}
+  .tt-meta{font-size:11px;color:var(--ink-soft);padding:2px 0 2px 26px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .mini-meta{font-size:10.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+
   .mini-task{display:flex;gap:6px;font-size:12.5px;line-height:1.25;align-items:flex-start}
   .mini-task input{margin-top:2px;accent-color:var(--blue-bright);width:13px;height:13px;flex-shrink:0;cursor:pointer}
   .mini-task .tt{flex:1;color:var(--ink);word-break:break-word}
@@ -430,7 +437,7 @@
   body.locked .toolbar .only-unlocked{display:none!important}
 
   @media print{
-    .toolbar,.zoomctl,.stepnav,.addbtn,.mini-add,.qadd,.del,.drag-handle,.savenote,footer.credit,
+    .toolbar,.zoomctl,.stepnav,.addbtn,.mini-add,.qadd,.tdedit,.del,.drag-handle,.savenote,footer.credit,
     .navbtn,.pill{display:none!important}
     body{background:#fff}.wrap{max-width:100%;padding:0}
     .panel,.daycol,.cal,.mcard,.ycard,.quad{box-shadow:none}
@@ -698,14 +705,14 @@ function tasksTodayPanel(d,syncMatrix){
         const mv=day.top3.splice(from,1)[0];day.top3.splice(idx,0,mv);
         save();draw();
       });
-      r.appendChild(handle);r.appendChild(qb);r.appendChild(cb);r.appendChild(star);r.appendChild(tx);r.appendChild(del);
+      r.style.flexDirection="column";r.style.alignItems="stretch";r.style.gap="2px";const trow=document.createElement("div");trow.style.cssText="display:flex;align-items:center;gap:10px";trow.appendChild(handle);trow.appendChild(qb);trow.appendChild(cb);trow.appendChild(star);trow.appendChild(tx);const ed=document.createElement("button");ed.className="tdedit";ed.textContent="✎";ed.title="Edit task details";ed.addEventListener("click",()=>{const tk=("due" in t)?"due":"time";openTaskDialog({heading:"Edit task",context:"Tasks Today",title:t.t,place:t.place,time:t[tk],notes:t.notes,submitLabel:"Save",onSubmit:v=>{t.t=v.title;t.place=v.place;t[tk]=v.time;t.notes=v.notes;save();draw();syncMatrix();}});});trow.appendChild(ed);trow.appendChild(del);r.appendChild(trow);const tmeta=document.createElement("div");tmeta.className="tt-meta";(function(){tmeta.innerHTML="";const mk=("due" in t)?"due":"time";if(t.place){const s=document.createElement("span");s.textContent="📍 "+t.place;tmeta.appendChild(s);}if(t[mk]){const s=document.createElement("span");s.textContent="🕒 "+fmtTaskTime(t[mk]);tmeta.appendChild(s);}if(t.notes){const s=document.createElement("span");s.title=t.notes;s.textContent="📝 note";tmeta.appendChild(s);}tmeta.style.display=(t.place||t[mk]||t.notes)?"":"none";})();r.appendChild(tmeta);
       list.appendChild(r);
     });
   }
   draw();
   const add=document.createElement("button");add.className="addbtn";add.textContent="+ add task";
-  add.addEventListener("click",()=>{day.top3.push({t:"",d:false});save();draw();
-    const xs=list.querySelectorAll('input[type="text"]');if(xs.length)xs[xs.length-1].focus();});
+  add.addEventListener("click",()=>{openTaskDialog({heading:"Add a task",time:"",context:"Tasks Today · "+DOW[(d.getDay()+6)%7]+" "+(d.getMonth()+1)+"/"+d.getDate(),submitLabel:"Add task",onSubmit:v=>{day.top3.push({t:v.title,d:false,place:v.place,time:v.time,notes:v.notes});save();draw();}});
+  });
   p.appendChild(add);
   return {el:p,redraw:draw};
 }
@@ -856,13 +863,13 @@ function renderDay(){
         top.appendChild(sv);
         const del=document.createElement("button");del.className="qt-del";del.textContent="×";
         del.addEventListener("click",()=>{DB.matrix.splice(DB.matrix.indexOf(t),1);purgeFromDayLists(t.id);
-          save();drawTasks();tt.redraw();});
+    });
         top.appendChild(del);li.appendChild(top);
         const meta=document.createElement("div");meta.className="qt-meta";
         const ad=document.createElement("span");ad.className="qt-added";ad.textContent=t.added?"added "+fmtStamp(t.added):"";
         const ddl=document.createElement("input");ddl.type="datetime-local";ddl.className="qt-ddl";ddl.title="Deadline";ddl.value=t.due||"";
         ddl.addEventListener("input",()=>{t.due=ddl.value;save();drawTasks();});
-        meta.appendChild(ad);meta.appendChild(ddl);li.appendChild(meta);
+        const pl=document.createElement("input");pl.className="qt-place";pl.placeholder="Place…";pl.value=t.place||"";pl.addEventListener("input",()=>{t.place=pl.value;save();});meta.appendChild(ad);meta.appendChild(pl);meta.appendChild(ddl);li.appendChild(meta);
         const nt=document.createElement("textarea");nt.className="qt-notes";nt.placeholder="Notes…";nt.value=t.notes||"";
         nt.addEventListener("input",()=>{t.notes=nt.value;save();});
         li.appendChild(nt);
@@ -874,10 +881,10 @@ function renderDay(){
     quad.appendChild(ul);
     const add=document.createElement("button");add.className="qadd";add.textContent="+ task";
     add.addEventListener("click",()=>{
-      const nt={id:newMid(),t:"",d:false,quad:def.q,added:Date.now(),due:"",notes:""};
-      DB.matrix.push(nt);day.top3.push(nt); /* the same task also appears in Tasks Today */
-      save();drawTasks();tt.redraw();
-      const items=ul.querySelectorAll(".qt-title");if(items.length)items[items.length-1].focus();});
+      openTaskDialog({heading:"Add a task",context:"Quadrant: "+def.h,time:"",submitLabel:"Add task",onSubmit:v=>{const nt={id:newMid(),t:v.title,d:false,quad:def.q,added:Date.now(),due:v.time,notes:v.notes,place:v.place};DB.matrix.push(nt);day.top3.push(nt);save();drawTasks();tt.redraw();}});
+
+
+    });
     quad.appendChild(add);slot.replaceWith(quad);
   });
   mp.appendChild(mx);
@@ -916,7 +923,7 @@ function renderWeek(){
     DB.matrix.filter(t=>t.due&&t.due.slice(0,10)===dk).forEach(t=>{
       const li=document.createElement("li");li.className="mini-task"+(t.d?" done":"");
       const badge=top3Ids.has(t.id)?'<span style="color:var(--gold)" title="In Tasks Today">★</span>':"";
-      li.innerHTML=`${badge}<input type="checkbox" ${t.d?"checked":""}><span class="tt" contenteditable="true">${esc(t.t)}</span><button class="msv">Save</button><button class="del">×</button>`;
+      li.innerHTML=`${badge}<input type="checkbox" ${t.d?"checked":""}><span class="tt" contenteditable="true">${esc(t.t)}</span>`+(t.place?`<span class="mini-meta">📍 ${esc(t.place)}</span>`:"")+(t.due?`<span class="mini-meta">🕒 ${esc(fmtTaskTime(t.due))}</span>`:"")+(t.notes?`<span class="mini-meta" title="${esc(t.notes)}">📝 note</span>`:"")+`<button class="msv">Save</button><button class="tdedit" title="Edit task details">✎</button><button class="del">×</button>`;li.querySelector(".tdedit").addEventListener("click",()=>{openTaskDialog({heading:"Edit task",context:"Week view",title:t.t,place:t.place,time:t.due,notes:t.notes,submitLabel:"Save",onSubmit:v=>{t.t=v.title;t.place=v.place;t.due=v.time;t.notes=v.notes;save();renderWeek();}});});
       li.querySelector("input").addEventListener("change",e=>{t.d=e.target.checked;li.classList.toggle("done",t.d);save();});
       const msv=li.querySelector(".msv");msv.addEventListener("click",()=>{save();msv.textContent="Saved ✓";msv.disabled=true;
         setTimeout(()=>{msv.textContent="Save";msv.disabled=false;},1200);});
@@ -927,9 +934,9 @@ function renderWeek(){
     });
     col.appendChild(ul);
     const add=document.createElement("button");add.className="mini-add";add.textContent="+ task";
-    add.addEventListener("click",()=>{const nt={id:newMid(),t:"",d:false,quad:0,added:Date.now(),due:dk+"T09:00",notes:""};
-      DB.matrix.push(nt);day.top3.push(nt); /* same task also appears in that day's Tasks Today */
-      save();renderWeek();});
+    add.addEventListener("click",()=>{openTaskDialog({heading:"Add a task",time:dk+"T09:00",context:DOW[i]+" "+MON3[d.getMonth()]+" "+d.getDate(),submitLabel:"Add task",onSubmit:v=>{const nt={id:newMid(),t:v.title,d:false,quad:0,added:Date.now(),due:v.time,notes:v.notes,place:v.place};DB.matrix.push(nt);day.top3.push(nt);save();renderWeek();}});
+
+    });
     col.appendChild(add);
     const nb=Object.keys(day.blocks||{}).filter(k=>day.blocks[k]).length;
     if(nb){const f=document.createElement("div");f.style.cssText="margin-top:6px;font-size:11px;color:var(--ink-soft);cursor:pointer";
@@ -1151,7 +1158,7 @@ function showAddDeadline(){
   t.addEventListener("keydown",e=>{if(e.key==="Enter")go.onclick();});
 }
 
-/* =============== PROJECTS =============== */
+/* Shared add/edit task dialog: every task entry point collects the same four fields — Title, Place, Time, Notes. */ function fmtTaskTime(v){if(!v)return "";const m=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(v);if(!m)return v;let h=+m[4];const ap=h>=12?"PM":"AM";h=h%12||12;const t=h+":"+m[5]+" "+ap;if(m[1]+"-"+m[2]+"-"+m[3]===dayKey(new Date()))return t;return MON3[+m[2]-1]+" "+(+m[3])+", "+t;} function openTaskDialog(o){closeTaskDialog();const ov=document.createElement("div");ov.id="taskDialog";ov.style.cssText="position:fixed;inset:0;background:rgba(28,52,84,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px";const box=document.createElement("div");box.style.cssText="background:#fff;border-radius:14px;max-width:440px;width:100%;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3)";const labCss="display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2b5488;margin:12px 0 4px";const inCss="width:100%;padding:9px 11px;border:1px solid #d9e4f0;border-radius:9px;font-size:14px;font-family:var(--sans)";box.innerHTML='<b style="font-size:16px;color:#2b5488">'+esc(o.heading||"Add a task")+'</b>'+(o.context?'<div style="font-size:12.5px;color:#5a6875;margin-top:3px">'+esc(o.context)+'</div>':"")+'<label style="'+labCss+'">Title</label><input id="tdTitle" style="'+inCss+'" placeholder="What needs doing?" value="'+esc(o.title||"")+'"><label style="'+labCss+'">Place</label><input id="tdPlace" style="'+inCss+'" placeholder="Where? (optional)" value="'+esc(o.place||"")+'"><label style="'+labCss+'">Time</label><input id="tdTime" type="datetime-local" style="'+inCss+'" value="'+esc(o.time||"")+'"><label style="'+labCss+'">Notes</label><textarea id="tdNotes" rows="3" style="'+inCss+';resize:vertical" placeholder="Details, links, anything else…">'+esc(o.notes||"")+'</textarea>';const row=document.createElement("div");row.style.cssText="display:flex;gap:8px;justify-content:flex-end;margin-top:16px";const cancel=document.createElement("button");cancel.textContent="Cancel";cancel.style.cssText="border:1px solid #d9e4f0;background:#fff;border-radius:9px;padding:8px 14px;cursor:pointer;font-weight:600";const go=document.createElement("button");go.textContent=o.submitLabel||"Add task";go.style.cssText="border:1px solid #4183c4;background:#4183c4;color:#fff;border-radius:9px;padding:8px 16px;cursor:pointer;font-weight:600";row.appendChild(cancel);row.appendChild(go);box.appendChild(row);ov.appendChild(box);document.body.appendChild(ov);const titleEl=box.querySelector("#tdTitle");titleEl.focus();cancel.onclick=closeTaskDialog;ov.addEventListener("click",e=>{if(e.target===ov)closeTaskDialog();});function submit(){const v={title:box.querySelector("#tdTitle").value.trim(),place:box.querySelector("#tdPlace").value.trim(),time:box.querySelector("#tdTime").value,notes:box.querySelector("#tdNotes").value.trim()};if(!v.title){titleEl.focus();return;}closeTaskDialog();o.onSubmit(v);}go.onclick=submit;box.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.tagName!=="TEXTAREA")submit();if(e.key==="Escape")closeTaskDialog();});} function closeTaskDialog(){const ov=document.getElementById("taskDialog");if(ov)ov.remove();} /* =============== PROJECTS =============== */
 function projPanel(title){const d=document.createElement("div");d.className="panel";
   d.innerHTML=`<div class="sec-lbl">${title}<span class="dash"></span></div>`;return d;}
 function newProject(){const id="p"+Date.now();
@@ -1237,7 +1244,7 @@ function renderProjects(){
   const ul=document.createElement("ul");ul.className="tasklist";
   (p.nextTasks||[]).forEach((t,i)=>{
     const li=document.createElement("li");li.className="task"+(t.d?" done":"");
-    li.innerHTML=`<input type="checkbox" ${t.d?"checked":""}><span class="tt" contenteditable="true">${esc(t.t)}</span><button class="del">×</button>`;
+    li.style.flexDirection="column";li.style.alignItems="stretch";li.innerHTML=`<div style="display:flex;align-items:flex-start;gap:7px"><input type="checkbox" ${t.d?"checked":""}><span class="tt" contenteditable="true">${esc(t.t)}</span><button class="tdedit" title="Edit task details">✎</button><button class="del">×</button></div>`+(t.place||t.time||t.notes?`<span class="tt-meta" style="padding-left:0">`+(t.place?`📍 ${esc(t.place)} `:"")+(t.time?`🕒 ${esc(fmtTaskTime(t.time))} `:"")+(t.notes?`<span title="${esc(t.notes)}">📝 note</span>`:"")+`</span>`:"");li.querySelector(".tdedit").addEventListener("click",()=>{openTaskDialog({heading:"Edit task",context:"Project · "+(p.title||"Untitled project"),title:t.t,place:t.place,time:t.time,notes:t.notes,submitLabel:"Save",onSubmit:v=>{t.t=v.title;t.place=v.place;t.time=v.time;t.notes=v.notes;save();renderProjects();}});});
     li.querySelector("input").addEventListener("change",e=>{t.d=e.target.checked;li.classList.toggle("done",t.d);save();});
     const tt=li.querySelector(".tt");tt.addEventListener("input",()=>{t.t=tt.textContent;save();});
     tt.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();tt.blur();}});
@@ -1246,7 +1253,7 @@ function renderProjects(){
   });
   nt.appendChild(ul);
   const nadd=document.createElement("button");nadd.className="addbtn";nadd.textContent="+ add task";
-  nadd.addEventListener("click",()=>{(p.nextTasks=p.nextTasks||[]).push({t:"",d:false});save();renderProjects();});
+  nadd.addEventListener("click",()=>{openTaskDialog({heading:"Add a task",time:"",context:"Project · "+(p.title||"Untitled project"),submitLabel:"Add task",onSubmit:v=>{(p.nextTasks=p.nextTasks||[]).push({t:v.title,d:false,place:v.place,time:v.time,notes:v.notes});save();renderProjects();}});});
   nt.appendChild(nadd);colA.appendChild(nt);
 
   const tl=projPanel("Prospective timeline");
