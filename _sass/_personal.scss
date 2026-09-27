@@ -28,4 +28,5 @@ a:hover, .page__content a:hover { color: #00266f; }
 ::selection { background-color: #dce7fb; color: #18345a; }
 
 /* Bio typesetting: keep inline links in page paragraphs flowing with the text. */
-.page__content p a { display: inline; }
+/* Toolbox: reset spacing so inline links sit at normal word spacing. */
+.page__content p a { display: inline; margin: 0; padding: 0; border: 0; word-spacing: normal; letter-spacing: normal; }
