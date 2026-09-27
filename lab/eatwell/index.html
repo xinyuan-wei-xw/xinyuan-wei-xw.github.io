@@ -152,7 +152,7 @@ a{color:var(--green)}
 .intro-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .intro-steps b{display:block;font-size:14px;margin-bottom:4px}
 .intro-steps p{font-size:13px;color:var(--ink-soft);line-height:1.65;margin:0}
-.intro-tip{font-size:13px;color:var(--ink-soft);margin:12px 0 0;line-height:1.6}
+.intro-tip{font-size:13px;color:var(--ink-soft);margin:12px 0 0;line-height:1.6} .byline{font-size:13px;color:var(--ink-soft);margin:0 0 12px;line-height:1.65}
 .intro-x{position:absolute;top:6px;right:8px;border:0;background:none;font-size:20px;line-height:1;color:var(--faint);cursor:pointer;padding:6px 10px}
 .intro-x:hover{color:var(--ink)}
 @media(max-width:640px){.intro-steps{grid-template-columns:1fr;gap:10px}}
@@ -161,7 +161,7 @@ footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
 </head>
 <body>
 <div class="topbar">
-  <a class="backlink" href="../" data-t="backToLab">← Back to Lab</a>
+  <a class="backlink" href="/toolbox/" data-t="backToLab">← Back to Toolbox</a>
   <div class="brand"><span class="pot">🍲</span><h1><span data-t="appName">Eat Well</span><small data-t="tagline">Eat Well, Live Better</small><small class="srcline"><span data-t="credit">Recipes from</span> <a href="https://www.themealdb.com" target="_blank" rel="noopener">TheMealDB</a></small></h1></div>
   <span id="authBox" class="topauth" style="display:none">
     <span id="authForm">
@@ -184,7 +184,7 @@ footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
 </div>
 <div class="intro" id="intro">
   <button class="intro-x" id="introX" aria-label="close">×</button>
-  <h2 data-t="introTitle">How to use</h2>
+  <h2 data-t="introTitle">How to use</h2> <p class="byline" data-t="byline"></p>
   <div class="intro-steps">
     <div><b data-t="introS1t">1 · Browse dishes</b><p data-t="introS1d"></p></div>
     <div><b data-t="introS2t">2 · Plan your week</b><p data-t="introS2d"></p></div>
@@ -234,7 +234,7 @@ footer.credit{text-align:center;color:var(--faint);font-size:12px;padding:26px}
 /* ================= i18n ================= */
 const T={
 en:{appName:"Eat Well",tagline:"Eat Well, Live Better",tabBrowse:"Browse",tabPlan:"This Week",
-tabGrocery:"Grocery List",backToLab:"← Back to Lab",credit:"Recipes from",allDishes:"All",loadMore:"Load more",emptyResult:"No dishes match your search.",searchPh:"Search dishes…",servings:"Servings per meal",
+tabGrocery:"Grocery List",backToLab:"← Back to Toolbox",credit:"Recipes from",allDishes:"All",loadMore:"Load more",emptyResult:"No dishes match your search.",searchPh:"Search dishes…",servings:"Servings per meal",
 servingsNote:"Grocery amounts scale with servings",weekView:"7-day plan",startDate:"Start date",noDate:"No date",
 addDish:"+ Select",selected:"✓ Selected",recipe:"Recipe",loading:"Loading dishes…",
 loadFail:"Couldn't load dishes. Check your connection and retry.",retry:"Retry",
@@ -267,9 +267,9 @@ fIngName:"Ingredient (Chinese or English)",fIngAmt:"Amount",fAddIng:"+ Add ingre
 fSteps:"Steps",fStepsPh:"One step per line…",fSave:"Save dish",fCancel:"Cancel",
 fDelete:"Delete dish",fEdit:"Edit",customBadge:"Homemade",customSrc:"My own recipe",curatedSrc:"Curated by Muse",
 needName:"Please enter the dish name.",
-confirmDel:function(d){return "Delete \u201c"+d+"\u201d? It will also be removed from your week plan."},introTitle:"How to use",introS1t:"1 \u00b7 Browse dishes",introS1d:"Search 800+ dishes and filter by cuisine. Tap any dish for the recipe, then \u201c+ Select\u201d to add it to your week.",introS2t:"2 \u00b7 Plan your week",introS2d:"Set servings per meal, drop dishes into the 7-day plan, and pick a start date.",introS3t:"3 \u00b7 Make a grocery list",introS3d:"The Grocery tab totals everything up into one list, scaled by servings. It's a checklist for your shopping trip, not a store. You can also add your own dishes with \u201c+ Add my dish\u201d.",introTip:"Tip: sign in above to sync your plan across devices."},
+confirmDel:function(d){return "Delete \u201c"+d+"\u201d? It will also be removed from your week plan."},introTitle:"How to use",introS1t:"1 \u00b7 Browse dishes",introS1d:"Search 800+ dishes and filter by cuisine. Tap any dish for the recipe, then \u201c+ Select\u201d to add it to your week.",introS2t:"2 \u00b7 Plan your week",introS2d:"Set servings per meal, drop dishes into the 7-day plan, and pick a start date.",introS3t:"3 \u00b7 Make a grocery list",introS3d:"The Grocery tab totals everything up into one list, scaled by servings. It's a checklist for your shopping trip, not a store. You can also add your own dishes with \u201c+ Add my dish\u201d.",introTip:"Tip: sign in above to sync your plan across devices.",byline:"Built by Xinyuan Wei — I made Eat Well to turn a week of meal ideas into one grocery list. I use it for my own cooking, and I hope it makes your week easier too."},
 zh:{appName:"认真吃饭",tagline:"好好吃饭，好好生活",tabBrowse:"选菜",tabPlan:"本周计划",
-tabGrocery:"采购清单",backToLab:"← 返回 Lab",credit:"菜谱来源",allDishes:"全部",loadMore:"加载更多",emptyResult:"没有符合的菜，换个关键词试试。",searchPh:"搜索菜名…",servings:"每餐份数",
+tabGrocery:"采购清单",backToLab:"← 返回 Toolbox",credit:"菜谱来源",allDishes:"全部",loadMore:"加载更多",emptyResult:"没有符合的菜，换个关键词试试。",searchPh:"搜索菜名…",servings:"每餐份数",
 servingsNote:"采购量会按份数折算",weekView:"7天计划",startDate:"起始日期",noDate:"未定日期",
 addDish:"+ 选这道",selected:"✓ 已选",recipe:"做法",loading:"正在加载菜谱…",
 loadFail:"菜谱加载失败，请检查网络后重试。",retry:"重试",
@@ -302,7 +302,7 @@ fIngName:"配料名（中文或英文）",fIngAmt:"用量",fAddIng:"+ 加一行�
 fSteps:"做法",fStepsPh:"每行写一步…",fSave:"保存",fCancel:"取消",
 fDelete:"删除这道菜",fEdit:"编辑",customBadge:"自制",customSrc:"自制菜谱",curatedSrc:"Muse 整理",
 needName:"请填写菜名。",
-confirmDel:function(d){return "删除“"+d+"”？它也会从本周计划中移除。"},introTitle:"使用方法",introS1t:"1 \u00b7 选菜",introS1d:"搜索 800+ 道菜，按菜系筛选。点开看做法，点\u300c+ \u9009\u8fd9\u9053\u300d加入本周。",introS2t:"2 \u00b7 安排一周",introS2d:"设置每餐份数，把菜排进 7 天，选定起始日期。",introS3t:"3 · 生成采购清单",introS3d:"采购清单按份数把食材汇总成一张清单，方便你去买菜——我们只帮你列好要买什么，不卖菜。用「+ 自己加菜」还能添加自己的菜。",introTip:"小提示：在上方登录，计划会自动同步到你的所有设备。"}};
+confirmDel:function(d){return "删除“"+d+"”？它也会从本周计划中移除。"},introTitle:"使用方法",introS1t:"1 \u00b7 选菜",introS1d:"搜索 800+ 道菜，按菜系筛选。点开看做法，点\u300c+ \u9009\u8fd9\u9053\u300d加入本周。",introS2t:"2 \u00b7 安排一周",introS2d:"设置每餐份数，把菜排进 7 天，选定起始日期。",introS3t:"3 · 生成采购清单",introS3d:"采购清单按份数把食材汇总成一张清单，方便你去买菜——我们只帮你列好要买什么，不卖菜。用「+ 自己加菜」还能添加自己的菜。",introTip:"小提示：在上方登录，计划会自动同步到你的所有设备。",byline:"由 Xinyuan Wei 制作——我做 Eat Well 是为了把一周想吃的菜变成一张采购清单。我自己做饭也在用，希望它也能让你的生活更方便。"}};
 /* ================= state ================= */
 const API="https://www.themealdb.com/api/json/v1/1";
 const ALL_AREAS="__all";
