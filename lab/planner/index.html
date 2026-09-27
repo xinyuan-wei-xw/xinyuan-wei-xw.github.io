@@ -842,7 +842,7 @@ function renderDay(){
     quad.innerHTML=`<h4>${def.h}</h4><div class="qsub">${def.s}</div>`;
     const ul=document.createElement("ul");ul.className="qtasks";
     function drawTasks(){ul.innerHTML="";
-      const dk=dayKey(d);const items=DB.matrix.filter(t=>(t.quad||0)===def.q&&(!t.due||t.due.slice(0,10)<=dk));
+      const dk=dayKey(d);const items=DB.matrix.filter(t=>(t.quad||0)===def.q&&!t.d&&(!t.due||t.due.slice(0,10)<=dk));
       items.sort((a,b)=>{if(!!a.d!==!!b.d)return a.d?1:-1;
         return (a.due||"9999").localeCompare(b.due||"9999");});
       items.forEach(t=>{
