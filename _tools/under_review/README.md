@@ -24,7 +24,7 @@ npm run preview
 ```
 
 `dist/` contains a static, self-contained build with relative asset paths. It can
-later be hosted beneath a Lab route; no backend, account, token, or paid API is
+later be hosted beneath a Toolbox route; no backend, account, token, or paid API is
 required. This project is not automatically published by the homepage workflow.
 
 ## Play
