@@ -17,7 +17,7 @@
   function setBox(value) {
     box = value;
     svg.setAttribute('viewBox', box.join(' '));
-    cityLayer.querySelectorAll('circle').forEach(function (p) { p.setAttribute('r', Math.max(0.06, box[2] * 0.006)); });cityLayer.querySelectorAll('text').forEach(function (t) { var fs = Math.max(0.4, box[2] * 0.028); t.setAttribute('font-size', fs.toFixed(2)); t.setAttribute('x', (+t.dataset.x + fs * 0.45).toFixed(2)); t.setAttribute('y', (+t.dataset.y - fs * 0.45).toFixed(2)); t.setAttribute('stroke-width', (fs * 0.12).toFixed(2)); });
+    cityLayer.querySelectorAll('circle').forEach(function (p) { p.setAttribute('r', Math.max(0.06, box[2] * 0.006)); });cityLayer.querySelectorAll('text').forEach(function (t) { var fs = Math.max(0.3, box[2] * 0.018); t.setAttribute('font-size', fs.toFixed(2)); t.setAttribute('x', (+t.dataset.x + fs * 0.45).toFixed(2)); t.setAttribute('y', (+t.dataset.y - fs * 0.45).toFixed(2)); t.setAttribute('stroke-width', (fs * 0.12).toFixed(2)); });
   }
   function fit(elements) {
     var boxes = elements.map(function (e) { return e.getBBox(); }).filter(function (b) { return b.width || b.height; });
@@ -93,7 +93,7 @@
     records.forEach(function(r){
       if(!r.location)return;
       var dot=document.createElementNS(ns,'circle');dot.setAttribute('cx',(r.location.longitude+180)*2.5);dot.setAttribute('cy',(85-r.location.latitude)*2.5+25);dot.setAttribute('r','0.2');dot.setAttribute('fill','#0039a6');dot.setAttribute('stroke','#fff');dot.setAttribute('stroke-width','1');dot.setAttribute('vector-effect','non-scaling-stroke');dot.dataset.city=r.city;
-      var title=document.createElementNS(ns,'title');title.textContent=r.city+': '+r.sessions+' sessions';dot.appendChild(title);dot.addEventListener('click',function(){if(!dragged)chooseCity(r.city);});cityLayer.appendChild(dot);var lx=(r.location.longitude+180)*2.5,ly=(85-r.location.latitude)*2.5+25;var lab=document.createElementNS(ns,'text');lab.dataset.x=lx;lab.dataset.y=ly;lab.dataset.city=r.city;lab.setAttribute('x',(lx+0.5).toFixed(2));lab.setAttribute('y',(ly-0.5).toFixed(2));lab.setAttribute('font-size','1');lab.setAttribute('stroke-width','0.12');lab.setAttribute('fill','#1a3a5c');lab.setAttribute('paint-order','stroke');lab.setAttribute('stroke','#ffffff');lab.setAttribute('font-weight','400');lab.setAttribute('style','user-select:none');lab.textContent=r.city;lab.addEventListener('click',function(){if(!dragged)chooseCity(r.city);});cityLayer.appendChild(lab);
+      var title=document.createElementNS(ns,'title');title.textContent=r.city+': '+r.sessions+' sessions';dot.appendChild(title);dot.addEventListener('click',function(){if(!dragged)chooseCity(r.city);});cityLayer.appendChild(dot)
     });
     var shapes=Array.from(stateLayer.children).filter(function(p){return norm(p.dataset.region)===norm(region);});
     if(!fit(shapes)){note.textContent='State/province outline unavailable; counts are listed below.';}
@@ -105,7 +105,7 @@
     if(!name){chooseRegion(region);return;}
     city=name;citySelect.value=name;
     var r=data.cities.find(function(r){return r.country===country&&r.region===region&&r.city===city;});
-    if(r&&r.location){var x=(r.location.longitude+180)*2.5,y=(85-r.location.latitude)*2.5+25;setBox([x-6,y-3.375,12,6.75]);cityLayer.querySelectorAll('text').forEach(function(t){t.setAttribute('font-weight',t.dataset.city===name?'700':'400');});cityLayer.querySelectorAll('circle').forEach(function(p){p.setAttribute('fill',p.dataset.city===name?'#d43d2a':'#0039a6');});note.textContent=r.city+' · '+r.sessions+' visits. Marker indicates the city center, not a visitor address.';}
+    if(r&&r.location){var x=(r.location.longitude+180)*2.5,y=(85-r.location.latitude)*2.5+25;cityLayer.querySelectorAll('text').forEach(function(t){t.remove();});cityLayer.querySelectorAll('circle').forEach(function(p){p.setAttribute('fill',p.dataset.city===name?'#d43d2a':'#0039a6');});var lab=document.createElementNS(ns,'text');lab.dataset.x=x;lab.dataset.y=y;lab.dataset.city=r.city;lab.setAttribute('fill','#1a3a5c');lab.setAttribute('paint-order','stroke');lab.setAttribute('stroke','#ffffff');lab.setAttribute('font-weight','700');lab.setAttribute('style','user-select:none');lab.textContent=r.city;lab.addEventListener('click',function(){if(!dragged)chooseCity(r.city);});cityLayer.appendChild(lab);setBox([x-6,y-3.375,12,6.75]);note.textContent=r.city+' · '+r.sessions+' visits. Marker indicates the city center, not a visitor address.';}
     else {note.textContent=label(name)+' has reported visits, but no matched map coordinates are available.';}
   }
   function zoom(factor) {
