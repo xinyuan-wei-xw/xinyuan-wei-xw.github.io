@@ -236,6 +236,7 @@ function openAiTaskDialog(redraw){
   }
   function renderResults(items){
     const wrap=$("aiResults"); wrap.innerHTML="";
+    wrap.style.maxHeight="46vh"; wrap.style.overflowY="auto"; wrap.style.paddingRight="2px";
     if(!items.length){ status("没有识别出任务，换个说法试试"); return; }
     if(aiPickedFile){
       const att=document.createElement("div");
@@ -243,31 +244,44 @@ function openAiTaskDialog(redraw){
       att.textContent="📎 附件："+aiPickedFile.name+"（确认后上传并关联到所选任务）";
       wrap.appendChild(att);
     }
+    const rows=[];
     items.forEach(it=>{
-      const r=document.createElement("label");
-      r.style.cssText="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid #e3ecf5;border-radius:9px;margin-bottom:6px;cursor:pointer;font-size:13.5px";
-      const tm=it.start?(" "+it.start+(it.end?"–"+it.end:"")):"";
-      r.innerHTML='<input type="checkbox" checked style="margin-top:3px;flex:none"><span><b>'+esc(it.title)+'</b>'+
-        '<span style="color:#5a6875"> · '+esc(it.date)+esc(tm)+'</span>'+
-        aiPlaceHtml(it.place)+
-        (it.notes?'<div style="color:#8a97a3;font-size:12px;white-space:pre-wrap">'+esc(it.notes)+'</div>':"")+'</span>';
-      wrap.appendChild(r);
+      const r=document.createElement("div");
+      r.style.cssText="padding:10px 12px;border:1px solid #e3ecf5;border-radius:9px;margin-bottom:8px;font-size:13.5px;background:#fbfdfe";
+      r.innerHTML=
+        '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">'+
+          '<input type="checkbox" data-k="pick" checked style="flex:none;width:16px;height:16px">'+
+          '<input data-k="title" value="'+esc(it.title)+'" placeholder="Task title" style="'+inCss+';flex:1;font-weight:600;padding:7px 9px">'+
+        '</div>'+
+        '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:6px">'+
+          '<label style="font-size:12.5px;color:#5a6875">Date <input type="date" data-k="date" value="'+esc(it.date||"")+'" style="'+inCss+';width:auto;padding:6px 8px"></label>'+
+          '<label style="font-size:12.5px;color:#5a6875">Start <input type="time" data-k="start" value="'+esc(it.start||"")+'" style="'+inCss+';width:auto;padding:6px 8px"></label>'+
+          '<label style="font-size:12.5px;color:#5a6875">End <input type="time" data-k="end" value="'+esc(it.end||"")+'" style="'+inCss+';width:auto;padding:6px 8px"></label>'+
+        '</div>'+
+        '<div style="margin-bottom:6px"><input data-k="place" value="'+esc(it.place||"")+'" placeholder="Location" style="'+inCss+';width:100%;padding:7px 9px"></div>'+
+        '<div><textarea data-k="notes" rows="2" placeholder="Notes" style="'+inCss+';width:100%;resize:vertical;padding:7px 9px">'+esc(it.notes||"")+'</textarea></div>';
+      wrap.appendChild(r); rows.push(r);
     });
     const syncW=$("aiSyncWrap"), cf=$("aiConfirm");
     syncW.style.display=""; cf.disabled=false; cf.style.opacity="";
     const recount=()=>{
-      const n=wrap.querySelectorAll("input:checked").length;
+      const n=rows.filter(r=>r.querySelector('[data-k="pick"]').checked).length;
       cf.textContent="确认添加 ("+n+")"; cf.disabled=!n; cf.style.opacity=n?"":"0.45";
     };
     wrap.onchange=recount; recount();
     cf.onclick=()=>{
       const picked=[];
-      wrap.querySelectorAll("label").forEach((lab,i)=>{ if(lab.querySelector("input").checked) picked.push(items[i]); });
+      rows.forEach(r=>{
+        if(!r.querySelector('[data-k="pick"]').checked) return;
+        const v=k=>{ const el=r.querySelector('[data-k="'+k+'"]'); return el?el.value.trim():""; };
+        const t=v("title"); if(!t) return;
+        picked.push({title:t, date:v("date"), start:v("start"), end:v("end"), place:v("place"), notes:v("notes")});
+      });
       if(!picked.length) return;
       const tasks=aiAddTasks(picked, $("aiSync").checked);
       const f=aiPickedFile;
       closeTaskDialog(); redraw();
-      aiAttachFile(tasks, f, redraw);
+      aiAttachFile(tasks, f, redraw); /* uploads in background; 📄 chip appears when done */
     };
   }
 
