@@ -589,8 +589,8 @@ DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
    Idempotent: runs again whenever fresh data arrives. */
 function repairAiMatrix(){
   DB.seedFlags=DB.seedFlags||{};
-  if(DB.seedFlags.aiMatrixRepair1)return;
-  DB.seedFlags.aiMatrixRepair1=1;
+  if(DB.seedFlags.aiMatrixRepair2)return;
+  DB.seedFlags.aiMatrixRepair2=1;
   try{
     const inMx=new Set((DB.matrix||[]).map(x=>x&&x.id));
     const toMin=hm=>{const m=/^(\d{2}):(\d{2})$/.exec(hm||"");return m?(+m[1])*60+(+m[2]):null;};
@@ -598,7 +598,13 @@ function repairAiMatrix(){
       const day=DB.days[k];if(!day||!day.top3)return;
       day.blocks=day.blocks||{};
       day.top3.forEach(t=>{
-        if(!t||!t.id||t.d||!("due"in t)||!t.due||!(t.t&&String(t.t).trim()))return;
+        if(!t||!t.id||t.d||!(t.t&&String(t.t).trim()))return;
+        if(!t.due){/* pre-matrix-sync AI tasks have id+time/end but no due: backfill it. Manual Tasks Today rows have no id, untouched. */
+          if(t.time&&/^\d{4}-\d{2}-\d{2}$/.test(String(t.time).slice(0,10)))t.due=t.time;
+          else if(/^\d{4}-\d{2}-\d{2}$/.test(k))t.due=k;
+          else return;
+          if(t.end&&!t.dueEnd)t.dueEnd=t.end;
+        }
         if(!inMx.has(t.id)){
           if(t.quad==null)t.quad=3;
           if(!t.added)t.added=Date.now();
