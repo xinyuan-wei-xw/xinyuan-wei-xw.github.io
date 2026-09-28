@@ -2,19 +2,31 @@
    Paste text or upload a document (.txt/.md/.pdf/.docx) → a free Gemini API key
    extracts tasks → you confirm → they are added to the right days' Tasks Today,
    and timed tasks are also written into empty Time-blocks slots.
-   The API key lives ONLY in the user's own planner data (DB.aiKey → localStorage
-   + their private Firestore doc). It is never in the repo. Loaded with defer after
-   the main planner script, so all planner globals (DB, esc, pad, dayKey, getDay,
-   save, render, openTaskDialog helpers) are available. */
+   If a document was uploaded, it is also uploaded to the user's own Firebase
+   Storage and attached to the created tasks (downloadable via the 📄 chip).
+   The API key lives ONLY in the user's own data: a dedicated device-local
+   slot (primary) plus DB.aiKey (so it can roam via cloud sync). It is never
+   in the repo. Loaded with defer after the main planner script, so all planner
+   globals (DB, esc, pad, dayKey, getDay, save, render, fbUser, fstore, newMid,
+   openTaskDialog helpers) are available. */
 
-const AI_DEFAULT_MODEL = "gemini-3.5-flash-lite";
-const AI_FALLBACK_MODELS = ["gemini-3.8-flash", "gemini-2.5-flash"];
+const AI_DEFAULT_MODEL = "gemini-2.5-flash";
+const AI_KEY_LS = "xplanner.geminiKey";
+const AI_MAX_FILE_MB = 15;
+const AI_FALLBACK_MODELS = ["gemini-3.5-flash-lite", "gemini-3.8-flash"];
 const AI_MAX_CHARS = 30000;
 const PDFJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
 const PDFJS_WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 const MAMMOTH_URL = "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js";
 
-function aiKey(){ return (DB.aiKey || "").trim(); }
+function aiKey(){
+  try{ const l=localStorage.getItem(AI_KEY_LS); if(l&&l.trim()) return l.trim(); }catch(e){}
+  return (DB.aiKey || "").trim();
+}
+function aiSaveKey(k){
+  try{ localStorage.setItem(AI_KEY_LS, k); }catch(e){}
+  DB.aiKey = k;
+}
 function aiModel(){ return (DB.aiModel || "").trim() || AI_DEFAULT_MODEL; }
 
 /* ---------- document text extraction (all client-side) ---------- */
@@ -58,12 +70,12 @@ function aiPrompt(text){
   const dw="日一二三四五六"[now.getDay()];
   return "今天是"+ds+"（星期"+dw+"）。请从以下文本中提取待办事项。只输出一个 JSON 数组，不要输出其他任何文字（不要 markdown 代码块标记）。\n"+
     "数组每个元素是一个对象，字段如下：\n"+
-    "- title：任务标题（必填，简洁）\n"+
+    "- title：任务标题（必填，简洁；会议/答辩/讲座类请写清事件类型和人物或主题，例如“Caroline Gavin 学位论文开题答辩”）\n"+
     "- date：YYYY-MM-DD。文本中的相对日期按今天换算（今天/明天/后天/大后天/本周X/下周X/X号/X月X日）；没有明确日期的任务用今天的日期。\n"+
     "- start：开始时间 HH:MM（24小时制）。只有文本明确提到开始时间才填，否则填 null。\n"+
     "- end：结束时间 HH:MM。只有文本明确提到结束时间才填，否则填 null。\n"+
-    "- place：地点，没有则填 null。\n"+
-    "- notes：备注，没有则填 null。\n文本：\n"+text;
+    "- place：地点；线上会议则填会议链接（如 Teams/Zoom 入会链接），没有则填 null。\n"+
+    "- notes：备注。会议/答辩类请包含参会信息（会议号、密码等）；如果文本附带了摘要或正文，把摘要/要点也写入 notes。没有则填 null。\n文本：\n"+text;
 }
 function aiParseJson(t){
   t=String(t||"").trim().replace(/^```(json)?\s*/,"").replace(/\s*```$/,"");
@@ -75,8 +87,8 @@ function aiParseJson(t){
     date: /^\d{4}-\d{2}-\d{2}$/.test(x.date||"") ? x.date : today,
     start: /^\d{2}:\d{2}$/.test(x.start||"") ? x.start : null,
     end: /^\d{2}:\d{2}$/.test(x.end||"") ? x.end : null,
-    place: x.place ? String(x.place).slice(0,120) : "",
-    notes: x.notes ? String(x.notes).slice(0,500) : ""
+    place: x.place ? String(x.place).slice(0,300) : "",
+    notes: x.notes ? String(x.notes).slice(0,2500) : ""
   }));
 }
 function aiCall(model, text, key){
@@ -85,9 +97,10 @@ function aiCall(model, text, key){
     body: JSON.stringify({ contents:[{parts:[{text: aiPrompt(text)}]}],
       generationConfig:{ responseMimeType:"application/json", temperature:0.2 } })
   }).then(res=>{
-    if(res.status===404){ const e=new Error("model not found"); e.notFound=true; throw e; }
+    if(res.status===404){ const e=new Error("model not found"); e.retryable=true; throw e; }
     if(res.status===400) throw new Error("key 无效或请求有误（400）");
     if(res.status===429) throw new Error("免费额度用完，请稍后再试（429）");
+    if(res.status===500||res.status===503||res.status===529){ const e=new Error("AI 请求失败（"+res.status+"）"); e.retryable=true; throw e; }
     if(!res.ok) throw new Error("AI 请求失败（"+res.status+"）");
     return res.json();
   }).then(j=>{
@@ -100,8 +113,8 @@ function aiExtract(text){
   if(!key) return Promise.reject(new Error("请先设置 API key"));
   const models=[aiModel()].concat(AI_FALLBACK_MODELS.filter(m=>m!==aiModel()));
   const attempt=i=>{
-    if(i>=models.length) return Promise.reject(new Error("模型不可用，请检查 AI 设置中的模型名称"));
-    return aiCall(models[i], text, key).catch(e=>e&&e.notFound?attempt(i+1):Promise.reject(e));
+    if(i>=models.length) return Promise.reject(new Error("AI 模型暂时不可用，请稍后再试"));
+    return aiCall(models[i], text, key).catch(e=>e&&e.retryable?attempt(i+1):Promise.reject(e));
   };
   return attempt(0);
 }
@@ -114,20 +127,40 @@ function aiBlockKey(hm){
   mins=Math.floor(mins/30)*30; if(mins>22*60) mins=22*60;
   return pad(Math.floor(mins/60))+":"+pad(mins%60);
 }
+function aiNewId(){
+  try{ if(typeof newMid==="function") return newMid(); }catch(e){}
+  return "m"+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);
+}
 function aiAddTasks(items, syncBlocks){
+  const created=[];
   items.forEach(it=>{
     const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(it.date||"");
     const dt=m?new Date(+m[1],+m[2]-1,+m[3]):new Date();
     const day=getDay(dt);
-    day.top3.push({ t:it.title, d:false, place:it.place||"",
+    const task={ id:aiNewId(), t:it.title, d:false, place:it.place||"",
       time: it.start?it.date+"T"+it.start:"", end: it.end?it.date+"T"+it.end:"",
-      notes: it.notes||"" });
+      notes: it.notes||"", files:[] };
+    day.top3.push(task);
+    created.push(task);
     if(syncBlocks && it.start){
       const bk=aiBlockKey(it.start);
       if(bk && !day.blocks[bk]) day.blocks[bk]=it.title;
     }
   });
   save();
+  return created;
+}
+function aiAttachFile(tasks, file, redraw){
+  if(!file||!tasks.length) return;
+  const fbU=(typeof fbUser!=="undefined")?fbUser:null;
+  const fs=(typeof fstore!=="undefined")?fstore:null;
+  if(!fbU||!fs) return;
+  if(file.size>AI_MAX_FILE_MB*1024*1024){ alert("附件超过 "+AI_MAX_FILE_MB+" MB，未关联到任务。"); return; }
+  const path="users/"+fbU.uid+"/task-files/"+aiNewId()+"/"+file.name;
+  fs.ref(path).put(file).then(snap=>snap.ref.getDownloadURL()).then(url=>{
+    tasks.forEach(t=>{ t.files=t.files||[]; t.files.push({name:file.name,url:url,path:path}); });
+    save(); redraw();
+  }).catch(err=>{ alert("附件上传失败："+((err&&err.message)||err)); });
 }
 
 /* ---------- dialog ---------- */
@@ -144,7 +177,7 @@ function openAiTaskDialog(redraw){
   const hasKey=!!aiKey();
   box.innerHTML=
     '<b style="font-size:16px;color:#2b5488">✨ Create tasks with AI</b>'+
-    '<div style="font-size:12.5px;color:#5a6875;margin-top:3px">粘贴文本或上传文档，AI 提取任务，你确认后写入对应日期；有时间的任务可同步到 Time blocks 的空格子。</div>'+
+    '<div style="font-size:12.5px;color:#5a6875;margin-top:3px">粘贴文本或上传文档，AI 提取任务，你确认后写入对应日期；有时间的任务可同步到 Time blocks 的空格子。上传的文档会作为附件关联到生成的任务。</div>'+
     '<div id="aiKeySec" style="'+(hasKey?"display:none":"")+'">'+
       '<label style="'+labCss+'">Gemini API key（免费）</label>'+
       '<input id="aiKeyIn" type="password" autocomplete="off" style="'+inCss+'" placeholder="粘贴你的 key，只保存在你的私人数据中">'+
@@ -185,23 +218,39 @@ function openAiTaskDialog(redraw){
   $("aiKeySave").onclick=()=>{
     const k=$("aiKeyIn").value.trim();
     if(!k){ $("aiKeyIn").focus(); return; }
-    DB.aiKey=k; DB.aiModel=$("aiModelIn").value.trim()||AI_DEFAULT_MODEL;
+    aiSaveKey(k); DB.aiModel=$("aiModelIn").value.trim()||AI_DEFAULT_MODEL;
     save(); keySec.style.display="none"; main.style.display="";
     const ok=$("aiKeyOk"); if(ok) ok.style.display=""; else status("key 已保存");
   };
-  $("aiFile").addEventListener("change",e=>{ const f=e.target.files[0]; $("aiFileName").textContent=f?f.name:""; });
+    let aiPickedFile=null;
+  $("aiFile").addEventListener("change",e=>{
+    const f=e.target.files[0]||null; aiPickedFile=f;
+    $("aiFileName").textContent=f?(f.name+"（确认后将作为附件关联到任务）"):"";
+  });
 
+  function aiPlaceHtml(place){
+    if(!place) return "";
+    if(/^https?:\/\//i.test(place))
+      return ' · 📍<a href="'+esc(place)+'" target="_blank" rel="noopener">会议链接</a>';
+    return ' · 📍'+esc(place);
+  }
   function renderResults(items){
     const wrap=$("aiResults"); wrap.innerHTML="";
     if(!items.length){ status("没有识别出任务，换个说法试试"); return; }
+    if(aiPickedFile){
+      const att=document.createElement("div");
+      att.style.cssText="font-size:12.5px;color:#2b5488;margin-bottom:8px";
+      att.textContent="📎 附件："+aiPickedFile.name+"（确认后上传并关联到所选任务）";
+      wrap.appendChild(att);
+    }
     items.forEach(it=>{
       const r=document.createElement("label");
       r.style.cssText="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid #e3ecf5;border-radius:9px;margin-bottom:6px;cursor:pointer;font-size:13.5px";
       const tm=it.start?(" "+it.start+(it.end?"–"+it.end:"")):"";
       r.innerHTML='<input type="checkbox" checked style="margin-top:3px;flex:none"><span><b>'+esc(it.title)+'</b>'+
         '<span style="color:#5a6875"> · '+esc(it.date)+esc(tm)+'</span>'+
-        (it.place?'<span style="color:#5a6875"> · 📍'+esc(it.place)+'</span>':"")+
-        (it.notes?'<div style="color:#8a97a3;font-size:12px">'+esc(it.notes)+'</div>':"")+'</span>';
+        aiPlaceHtml(it.place)+
+        (it.notes?'<div style="color:#8a97a3;font-size:12px;white-space:pre-wrap">'+esc(it.notes)+'</div>':"")+'</span>';
       wrap.appendChild(r);
     });
     const syncW=$("aiSyncWrap"), cf=$("aiConfirm");
@@ -215,8 +264,10 @@ function openAiTaskDialog(redraw){
       const picked=[];
       wrap.querySelectorAll("label").forEach((lab,i)=>{ if(lab.querySelector("input").checked) picked.push(items[i]); });
       if(!picked.length) return;
-      aiAddTasks(picked, $("aiSync").checked);
+      const tasks=aiAddTasks(picked, $("aiSync").checked);
+      const f=aiPickedFile;
       closeTaskDialog(); redraw();
+      aiAttachFile(tasks, f, redraw);
     };
   }
 
