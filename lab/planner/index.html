@@ -45,6 +45,8 @@
     color:var(--blue-bright);font-weight:700}
   .brand h1{font-size:27px;line-height:1.05;letter-spacing:-.4px;font-weight:700;
     margin-top:3px;color:var(--blue-deep)}
+.brandrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brandrow h1{margin-top:0}
   .zoomctl{display:flex;background:var(--paper-2);border:1px solid var(--line);
     border-radius:12px;padding:4px;gap:2px}
   .zoomctl button{border:none;background:transparent;color:var(--ink-soft);font-size:12.5px;
@@ -204,6 +206,14 @@
   .cd.ok{background:var(--blue-soft);color:var(--blue-deep)}
   .qtask{border:1px solid var(--line-soft);border-radius:9px;background:#fff;padding:7px 8px;margin-bottom:6px}
 .quad.q-drop{outline:2px dashed #4183c4;outline-offset:-3px}
+.qtask .qblock{width:12px;height:12px;border-radius:4px;flex:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.qtask .qblock.q0{background:#c0503f}
+.qtask .qblock.q1{background:#4a8a5f}
+.qtask .qblock.q2{background:#c99022}
+.qtask .qblock.q3{background:var(--slate)}
+.qt-grip{cursor:grab;color:#9fb0c2;font-size:12px;letter-spacing:1px;flex:none;touch-action:none;user-select:none;-webkit-user-select:none;padding:2px 1px}
+.qt-ghost{position:fixed;z-index:999;pointer-events:none;background:#fff;border:1px solid #4183c4;border-radius:9px;padding:8px 10px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:.95;max-width:70vw}
+.qt-drag-src{opacity:.35}
   .qtask.done{opacity:.6}
   .qtask .qt-top{display:flex;align-items:center;gap:7px}
   .qtask .qt-top input[type=checkbox]{accent-color:var(--blue-bright);width:14px;height:14px;flex-shrink:0;cursor:pointer}
@@ -501,7 +511,11 @@
   <div class="topbar">
     <div class="brand">
       <div class="eyebrow" id="brandDate"></div>
-      <h1>X Planner</h1>
+      <div class="brandrow">
+        <h1>X Planner</h1>
+        <button class="pill" id="todayBtn">Today</button>
+        <button class="pill" id="aiTasksBtn">✨ AI tasks</button>
+      </div>
     </div>
     <div class="rightnav">
       <div class="modetoggle" id="modetoggle">
@@ -523,7 +537,6 @@
   <div class="navrow">
     <div class="crumbs" id="crumbs"></div>
     <div class="stepnav">
-      <button class="pill" id="todayBtn">Today</button>
       <button class="navbtn" id="prev">‹</button>
       <span class="title-lg" id="mainTitle"></span>
       <button class="navbtn" id="next">›</button>
@@ -574,6 +587,38 @@ DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
    Same shared objects as the matrix, so edits stay in sync; skips finished and
    untitled tasks. Also moves rows with text above blank rows.
    Idempotent: runs again whenever fresh data arrives. */
+function repairAiMatrix(){
+  DB.seedFlags=DB.seedFlags||{};
+  if(DB.seedFlags.aiMatrixRepair1)return;
+  DB.seedFlags.aiMatrixRepair1=1;
+  try{
+    const inMx=new Set((DB.matrix||[]).map(x=>x&&x.id));
+    const toMin=hm=>{const m=/^(\d{2}):(\d{2})$/.exec(hm||"");return m?(+m[1])*60+(+m[2]):null;};
+    Object.keys(DB.days||{}).forEach(k=>{
+      const day=DB.days[k];if(!day||!day.top3)return;
+      day.blocks=day.blocks||{};
+      day.top3.forEach(t=>{
+        if(!t||!t.id||t.d||!("due"in t)||!t.due||!(t.t&&String(t.t).trim()))return;
+        if(!inMx.has(t.id)){
+          if(t.quad==null)t.quad=3;
+          if(!t.added)t.added=Date.now();
+          DB.matrix.push(t);inMx.add(t.id);
+        }
+        const s=toMin(String(t.time||"").slice(11,16));
+        if(s==null)return;
+        const e0=toMin(String(t.end||"").slice(11,16));
+        const e=(e0!=null&&e0>s)?e0:s+30;
+        for(let m=Math.floor(s/30)*30;m<e&&m<=22*60;m+=30){
+          if(m<7*60)continue;
+          const bk=pad(Math.floor(m/60))+":"+pad(m%60);
+          if(!day.blocks[bk])day.blocks[bk]=t.t;
+        }
+      });
+    });
+    save();
+  }catch(e){}
+}
+
 function backfillToday(){
   const day=getDay(new Date());
   const have=new Set((day.top3||[]).map(r=>r&&r.id).filter(Boolean));
@@ -839,7 +884,7 @@ function renderDay(){
     <div class="maxis v">Not important</div><div class="qslot" data-q="2"></div><div class="qslot" data-q="3"></div>`;
   QDEF.forEach(def=>{
     const slot=mx.querySelector(`.qslot[data-q="${def.q}"]`);
-    const quad=document.createElement("div");quad.className="quad "+def.cls;
+    const quad=document.createElement("div");quad.className="quad "+def.cls;quad.dataset.q=def.q;
     quad.innerHTML=`<h4>${def.h}</h4><div class="qsub">${def.s}</div>`;
     const ul=document.createElement("ul");ul.className="qtasks";
     quad.addEventListener("dragover",e=>{e.preventDefault();e.dataTransfer.dropEffect="move";quad.classList.add("q-drop");});
@@ -862,6 +907,41 @@ function renderDay(){
           e.dataTransfer.setData("text/plain",li.dataset.mid);e.dataTransfer.effectAllowed="move";
         });
         const top=document.createElement("div");top.className="qt-top";
+        const qb=document.createElement("span");qb.className="qblock q"+(t.quad||0);qb.title="Quadrant";top.appendChild(qb);
+        const grip=document.createElement("span");grip.className="qt-grip";grip.textContent="⋮⋮";grip.title="Drag to move to another quadrant";top.appendChild(grip);
+        let tdrag=null;
+        grip.addEventListener("touchstart",e=>{const tc=e.touches[0];tdrag={id:t.id,x:tc.clientX,y:tc.clientY,on:false,g:null,q:null};},{passive:true});
+        grip.addEventListener("touchmove",e=>{
+          if(!tdrag)return;const tc=e.touches[0];
+          if(!tdrag.on){
+            if(Math.hypot(tc.clientX-tdrag.x,tc.clientY-tdrag.y)<12)return;
+            tdrag.on=true;
+            const g=document.createElement("div");g.className="qt-ghost";g.textContent=t.t||"Untitled";
+            g.style.left=(tdrag.x-40)+"px";g.style.top=(tc.clientY-24)+"px";
+            document.body.appendChild(g);tdrag.g=g;li.classList.add("qt-drag-src");
+          }
+          e.preventDefault();
+          tdrag.g.style.left=(tc.clientX-40)+"px";tdrag.g.style.top=(tc.clientY-24)+"px";
+          const el=document.elementFromPoint(tc.clientX,tc.clientY);
+          const qd=el&&el.closest?el.closest(".quad"):null;
+          document.querySelectorAll(".quad.q-drop").forEach(x=>x.classList.remove("q-drop"));
+          tdrag.q=qd&&qd.dataset.q!=null?+qd.dataset.q:null;
+          if(qd)qd.classList.add("q-drop");
+        },{passive:false});
+        const tdEnd=()=>{
+          if(!tdrag)return;
+          if(tdrag.on){
+            document.querySelectorAll(".quad.q-drop").forEach(x=>x.classList.remove("q-drop"));
+            if(tdrag.g)tdrag.g.remove();li.classList.remove("qt-drag-src");
+            if(tdrag.q!=null){
+              const mt=(DB.matrix||[]).find(x=>x.id===tdrag.id);
+              if(mt&&(mt.quad||0)!==tdrag.q){mt.quad=tdrag.q;save();quadDraws.forEach(f=>f());if(tt&&tt.redraw)tt.redraw();}
+            }
+          }
+          tdrag=null;
+        };
+        grip.addEventListener("touchend",tdEnd);
+        grip.addEventListener("touchcancel",tdEnd);
         const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!t.d;
         cb.addEventListener("change",()=>{t.d=cb.checked;save();drawTasks();tt.redraw();});
         const ti=document.createElement("input");ti.className="qt-title";ti.placeholder="Task title…";ti.value=t.t||"";
@@ -1741,6 +1821,7 @@ const README=[
 })();
 
 backfillToday(); /* refresh: pull any unsynced matrix tasks into today's list */
+repairAiMatrix(); /* one-time: AI tasks created before the matrix sync join the matrix (q3) and fill spanned blocks */
 seedWorkshop(); /* ensure the CEAR workshop events exist even without sign-in */
 seedAnqiSeminar(); /* one-time: Anqi's Sep 30 2026 CIS research seminar */
 initFirebase();

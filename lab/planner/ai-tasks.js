@@ -120,12 +120,20 @@ function aiExtract(text){
 }
 
 /* ---------- add confirmed tasks ---------- */
-function aiBlockKey(hm){
-  const m=/^(\d{2}):(\d{2})$/.exec(hm||""); if(!m) return null;
-  let mins=(+m[1])*60+(+m[2]);
-  if(mins<7*60||mins>22*60) return null;
-  mins=Math.floor(mins/30)*30; if(mins>22*60) mins=22*60;
-  return pad(Math.floor(mins/60))+":"+pad(mins%60);
+function aiBlockKeys(start,end){
+  const keys=[];
+  const p=/^(\d{2}):(\d{2})$/;
+  const ms=p.exec(start||""), me=p.exec(end||"");
+  if(!ms) return keys;
+  let s=(+ms[1])*60+(+ms[2]);
+  let e=me?(+me[1])*60+(+me[2]):s+30;
+  if(!(e>s)) e=s+30;
+  s=Math.floor(s/30)*30;
+  for(let m=s;m<e&&m<=22*60;m+=30){
+    if(m<7*60) continue;
+    keys.push(pad(Math.floor(m/60))+":"+pad(m%60));
+  }
+  return keys;
 }
 function aiNewId(){
   try{ if(typeof newMid==="function") return newMid(); }catch(e){}
@@ -145,8 +153,7 @@ function aiAddTasks(items, syncBlocks){
     try{ DB.matrix=DB.matrix||[]; DB.matrix.push(task); }catch(e){}
     created.push(task);
     if(syncBlocks && it.start){
-      const bk=aiBlockKey(it.start);
-      if(bk && !day.blocks[bk]) day.blocks[bk]=it.title;
+      aiBlockKeys(it.start,it.end).forEach(bk=>{ if(!day.blocks[bk]) day.blocks[bk]=it.title; });
     }
   });
   save();
@@ -203,7 +210,7 @@ function openAiTaskDialog(redraw){
       '<div id="aiResults" style="margin-top:10px"></div>'+
     '</div>'+
     '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;align-items:center">'+
-      '<label id="aiSyncWrap" style="font-size:12.5px;color:#5a6875;display:none;margin-right:auto"><input type="checkbox" id="aiSync" checked> Sync timed tasks to Time blocks</label>'+
+      '<label id="aiSyncWrap" style="font-size:12.5px;color:#5a6875;display:none;margin-right:auto"><input type="checkbox" id="aiSync" checked> Sync timed tasks into every Time block they span</label>'+
       '<button id="aiCancel" style="'+btnSec+'">Cancel</button>'+
       '<button id="aiConfirm" style="'+btnPri+';opacity:.45" disabled>Add</button>'+
     '</div>';
