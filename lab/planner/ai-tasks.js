@@ -34,7 +34,7 @@ function aiLoadScript(src){
   return new Promise((res, rej)=>{
     if(document.querySelector('script[src="'+src+'"]')) return res();
     const s=document.createElement("script"); s.src=src;
-    s.onload=()=>res(); s.onerror=()=>rej(new Error("解析库加载失败"));
+    s.onload=()=>res(); s.onerror=()=>rej(new Error("Parser library failed to load"));
     document.head.appendChild(s);
   });
 }
@@ -56,11 +56,11 @@ function aiReadFile(f){
   const name=(f.name||"").toLowerCase();
   if(/\.(txt|md|markdown|text)$/.test(name))
     return new Promise((res,rej)=>{ const r=new FileReader();
-      r.onload=()=>res(String(r.result||"")); r.onerror=()=>rej(new Error("读取失败"));
+      r.onload=()=>res(String(r.result||"")); r.onerror=()=>rej(new Error("Read failed"));
       r.readAsText(f); });
   if(name.endsWith(".pdf")) return f.arrayBuffer().then(aiPdfText);
   if(name.endsWith(".docx")) return f.arrayBuffer().then(aiDocxText);
-  return Promise.reject(new Error("暂不支持该文件类型，请用 .txt / .md / .pdf / .docx"));
+  return Promise.reject(new Error("File type not supported — please use .txt / .md / .pdf / .docx"));
 }
 
 /* ---------- Gemini API (free tier) ---------- */
@@ -80,7 +80,7 @@ function aiPrompt(text){
 function aiParseJson(t){
   t=String(t||"").trim().replace(/^```(json)?\s*/,"").replace(/\s*```$/,"");
   const a=JSON.parse(t);
-  if(!Array.isArray(a)) throw new Error("AI 返回格式不对");
+  if(!Array.isArray(a)) throw new Error("AI returned an unexpected format");
   const today=dayKey(new Date());
   return a.filter(x=>x&&x.title).map(x=>({
     title: String(x.title).slice(0,200),
@@ -98,10 +98,10 @@ function aiCall(model, text, key){
       generationConfig:{ responseMimeType:"application/json", temperature:0.2 } })
   }).then(res=>{
     if(res.status===404){ const e=new Error("model not found"); e.retryable=true; throw e; }
-    if(res.status===400) throw new Error("key 无效或请求有误（400）");
-    if(res.status===429) throw new Error("免费额度用完，请稍后再试（429）");
-    if(res.status===500||res.status===503||res.status===529){ const e=new Error("AI 请求失败（"+res.status+"）"); e.retryable=true; throw e; }
-    if(!res.ok) throw new Error("AI 请求失败（"+res.status+"）");
+    if(res.status===400) throw new Error("Invalid key or bad request (400)");
+    if(res.status===429) throw new Error("Free quota exhausted — please try again later (429)");
+    if(res.status===500||res.status===503||res.status===529){ const e=new Error("AI request failed ("+res.status+")"); e.retryable=true; throw e; }
+    if(!res.ok) throw new Error("AI request failed ("+res.status+")");
     return res.json();
   }).then(j=>{
     const parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
@@ -110,10 +110,10 @@ function aiCall(model, text, key){
 }
 function aiExtract(text){
   const key=aiKey();
-  if(!key) return Promise.reject(new Error("请先设置 API key"));
+  if(!key) return Promise.reject(new Error("Please set your API key first"));
   const models=[aiModel()].concat(AI_FALLBACK_MODELS.filter(m=>m!==aiModel()));
   const attempt=i=>{
-    if(i>=models.length) return Promise.reject(new Error("AI 模型暂时不可用，请稍后再试"));
+    if(i>=models.length) return Promise.reject(new Error("AI models are temporarily unavailable — please try again later"));
     return aiCall(models[i], text, key).catch(e=>e&&e.retryable?attempt(i+1):Promise.reject(e));
   };
   return attempt(0);
@@ -139,8 +139,10 @@ function aiAddTasks(items, syncBlocks){
     const day=getDay(dt);
     const task={ id:aiNewId(), t:it.title, d:false, place:it.place||"",
       time: it.start?it.date+"T"+it.start:"", end: it.end?it.date+"T"+it.end:"",
-      notes: it.notes||"", files:[] };
+      due: it.start?it.date+"T"+it.start:it.date, dueEnd: it.end?it.date+"T"+it.end:"",
+      quad:3, added:Date.now(), notes: it.notes||"", files:[] };
     day.top3.push(task);
+    try{ DB.matrix=DB.matrix||[]; DB.matrix.push(task); }catch(e){}
     created.push(task);
     if(syncBlocks && it.start){
       const bk=aiBlockKey(it.start);
@@ -155,12 +157,12 @@ function aiAttachFile(tasks, file, redraw){
   const fbU=(typeof fbUser!=="undefined")?fbUser:null;
   const fs=(typeof fstore!=="undefined")?fstore:null;
   if(!fbU||!fs) return;
-  if(file.size>AI_MAX_FILE_MB*1024*1024){ alert("附件超过 "+AI_MAX_FILE_MB+" MB，未关联到任务。"); return; }
+  if(file.size>AI_MAX_FILE_MB*1024*1024){ alert("Attachment exceeds "+AI_MAX_FILE_MB+" MB — not attached to the tasks."); return; }
   const path="users/"+fbU.uid+"/task-files/"+aiNewId()+"/"+file.name;
   fs.ref(path).put(file).then(snap=>snap.ref.getDownloadURL()).then(url=>{
     tasks.forEach(t=>{ t.files=t.files||[]; t.files.push({name:file.name,url:url,path:path}); });
     save(); redraw();
-  }).catch(err=>{ alert("附件上传失败："+((err&&err.message)||err)); });
+  }).catch(err=>{ alert("Attachment upload failed: "+((err&&err.message)||err)); });
 }
 
 /* ---------- dialog ---------- */
@@ -177,33 +179,33 @@ function openAiTaskDialog(redraw){
   const hasKey=!!aiKey();
   box.innerHTML=
     '<b style="font-size:16px;color:#2b5488">✨ Create tasks with AI</b>'+
-    '<div style="font-size:12.5px;color:#5a6875;margin-top:3px">粘贴文本或上传文档，AI 提取任务，你确认后写入对应日期；有时间的任务可同步到 Time blocks 的空格子。上传的文档会作为附件关联到生成的任务。</div>'+
+    '<div style="font-size:12.5px;color:#5a6875;margin-top:3px">Paste text or upload a document — AI extracts the tasks. On confirm they go to each date\u2019s Tasks Today and the Eisenhower matrix (default: Not important \u00b7 Not urgent). Timed tasks can also sync into empty Time-blocks slots. An uploaded document is attached to the created tasks.</div>'+
     '<div id="aiKeySec" style="'+(hasKey?"display:none":"")+'">'+
-      '<label style="'+labCss+'">Gemini API key（免费）</label>'+
-      '<input id="aiKeyIn" type="password" autocomplete="off" style="'+inCss+'" placeholder="粘贴你的 key，只保存在你的私人数据中">'+
+      '<label style="'+labCss+'">Gemini API key (free)</label>'+
+      '<input id="aiKeyIn" type="password" autocomplete="off" style="'+inCss+'" placeholder="Paste your key — it lives only in your private data">'+
       '<div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">'+
-        '<button id="aiKeySave" style="'+btnSec+'">保存 key</button>'+
-        '<a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="font-size:12.5px">去 aistudio.google.com 免费获取 →</a>'+
+        '<button id="aiKeySave" style="'+btnSec+'">Save key</button>'+
+        '<a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="font-size:12.5px">Get one free at aistudio.google.com →</a>'+
       '</div>'+
-      '<label style="'+labCss+'">模型（默认即可）</label>'+
+      '<label style="'+labCss+'">Model (the default is fine)</label>'+
       '<input id="aiModelIn" autocomplete="off" style="'+inCss+'" value="'+esc(aiModel())+'">'+
-      '<div style="font-size:11.5px;color:#8a97a3;margin-top:6px">免费版的内容 Google 可能用于改进产品；key 不在代码里，只在你的 planner 数据中。</div>'+
+      '<div style="font-size:11.5px;color:#8a97a3;margin-top:6px">Free-tier content may be used by Google to improve its products. The key is not in the code — only in your planner data.</div>'+
     '</div>'+
-    (hasKey?'<div id="aiKeyOk" style="margin-top:8px;font-size:12.5px;color:#2b5488">✓ API key 已设置 <a href="#" id="aiKeyChange" style="font-size:12px">更换</a></div>':"")+
+    (hasKey?'<div id="aiKeyOk" style="margin-top:8px;font-size:12.5px;color:#2b5488">✓ API key is set <a href="#" id="aiKeyChange" style="font-size:12px">Change</a></div>':"")+
     '<div id="aiMain" style="'+(hasKey?"":"display:none")+'">'+
-      '<label style="'+labCss+'">粘贴文本</label>'+
-      '<textarea id="aiText" rows="6" style="'+inCss+';resize:vertical" placeholder="例如：明天上午9点开组会，讨论Q3计划；周五前交论文初稿；记得买牛奶和鸡蛋"></textarea>'+
+      '<label style="'+labCss+'">Paste text</label>'+
+      '<textarea id="aiText" rows="6" style="'+inCss+';resize:vertical" placeholder="e.g.: Team meeting tomorrow at 9am to discuss the Q3 plan; paper draft due Friday; buy milk and eggs"></textarea>'+
       '<div style="display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap">'+
-        '<label style="font-size:13px;color:#2b5488">或上传文档 <input id="aiFile" type="file" accept=".txt,.md,.markdown,.pdf,.docx" style="font-size:12.5px"></label>'+
+        '<label style="font-size:13px;color:#2b5488">Or upload a document <input id="aiFile" type="file" accept=".txt,.md,.markdown,.pdf,.docx" style="font-size:12.5px"></label>'+
         '<span id="aiFileName" style="font-size:12px;color:#8a97a3"></span>'+
       '</div>'+
-      '<div style="margin-top:12px"><button id="aiGo" style="'+btnPri+'">生成任务</button><span id="aiStatus" style="font-size:12.5px;color:#8a97a3;margin-left:8px"></span></div>'+
+      '<div style="margin-top:12px"><button id="aiGo" style="'+btnPri+'">Generate tasks</button><span id="aiStatus" style="font-size:12.5px;color:#8a97a3;margin-left:8px"></span></div>'+
       '<div id="aiResults" style="margin-top:10px"></div>'+
     '</div>'+
     '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;align-items:center">'+
-      '<label id="aiSyncWrap" style="font-size:12.5px;color:#5a6875;display:none;margin-right:auto"><input type="checkbox" id="aiSync" checked> 同步有时间的任务到 Time blocks</label>'+
-      '<button id="aiCancel" style="'+btnSec+'">取消</button>'+
-      '<button id="aiConfirm" style="'+btnPri+';opacity:.45" disabled>确认添加</button>'+
+      '<label id="aiSyncWrap" style="font-size:12.5px;color:#5a6875;display:none;margin-right:auto"><input type="checkbox" id="aiSync" checked> Sync timed tasks to Time blocks</label>'+
+      '<button id="aiCancel" style="'+btnSec+'">Cancel</button>'+
+      '<button id="aiConfirm" style="'+btnPri+';opacity:.45" disabled>Add</button>'+
     '</div>';
   ov.appendChild(box); document.body.appendChild(ov);
 
@@ -220,28 +222,28 @@ function openAiTaskDialog(redraw){
     if(!k){ $("aiKeyIn").focus(); return; }
     aiSaveKey(k); DB.aiModel=$("aiModelIn").value.trim()||AI_DEFAULT_MODEL;
     save(); keySec.style.display="none"; main.style.display="";
-    const ok=$("aiKeyOk"); if(ok) ok.style.display=""; else status("key 已保存");
+    const ok=$("aiKeyOk"); if(ok) ok.style.display=""; else status("key saved");
   };
     let aiPickedFile=null;
   $("aiFile").addEventListener("change",e=>{
     const f=e.target.files[0]||null; aiPickedFile=f;
-    $("aiFileName").textContent=f?(f.name+"（确认后将作为附件关联到任务）"):"";
+    $("aiFileName").textContent=f?(f.name+" (attached to the tasks on confirm)"):"";
   });
 
   function aiPlaceHtml(place){
     if(!place) return "";
     if(/^https?:\/\//i.test(place))
-      return ' · 📍<a href="'+esc(place)+'" target="_blank" rel="noopener">会议链接</a>';
+      return ' · 📍<a href="'+esc(place)+'" target="_blank" rel="noopener">Meeting link</a>';
     return ' · 📍'+esc(place);
   }
   function renderResults(items){
     const wrap=$("aiResults"); wrap.innerHTML="";
     wrap.style.maxHeight="46vh"; wrap.style.overflowY="auto"; wrap.style.paddingRight="2px";
-    if(!items.length){ status("没有识别出任务，换个说法试试"); return; }
+    if(!items.length){ status("No tasks recognized — try rephrasing"); return; }
     if(aiPickedFile){
       const att=document.createElement("div");
       att.style.cssText="font-size:12.5px;color:#2b5488;margin-bottom:8px";
-      att.textContent="📎 附件："+aiPickedFile.name+"（确认后上传并关联到所选任务）";
+      att.textContent="📎 Attachment: "+aiPickedFile.name+" (uploaded and attached to the selected tasks on confirm)";
       wrap.appendChild(att);
     }
     const rows=[];
@@ -266,7 +268,7 @@ function openAiTaskDialog(redraw){
     syncW.style.display=""; cf.disabled=false; cf.style.opacity="";
     const recount=()=>{
       const n=rows.filter(r=>r.querySelector('[data-k="pick"]').checked).length;
-      cf.textContent="确认添加 ("+n+")"; cf.disabled=!n; cf.style.opacity=n?"":"0.45";
+      cf.textContent="Add ("+n+")"; cf.disabled=!n; cf.style.opacity=n?"":"0.45";
     };
     wrap.onchange=recount; recount();
     cf.onclick=()=>{
@@ -288,20 +290,20 @@ function openAiTaskDialog(redraw){
   $("aiGo").onclick=()=>{
     const f=$("aiFile").files[0];
     const txt=$("aiText").value.trim();
-    if(!f&&!txt){ status("请粘贴文本或选择文档"); return; }
+    if(!f&&!txt){ status("Please paste text or choose a document"); return; }
     const go=$("aiGo"); go.disabled=true; go.style.opacity=".5";
     $("aiResults").innerHTML=""; $("aiConfirm").disabled=true; $("aiConfirm").style.opacity=".45";
-    status("AI 识别中…");
+    status("Reading with AI…");
     const done=ok=>{ go.disabled=false; go.style.opacity=""; if(!ok) $("aiSyncWrap").style.display="none"; };
     const got=text=>{
       text=String(text||"").trim();
-      if(!text){ status("文档里没有读到文字"); done(false); return; }
+      if(!text){ status("No text found in the document"); done(false); return; }
       let cut="";
-      if(text.length>AI_MAX_CHARS){ text=text.slice(0,AI_MAX_CHARS); cut="（文档较长，已取前 "+AI_MAX_CHARS+" 字）"; }
-      aiExtract(text).then(items=>{ renderResults(items); status("识别出 "+items.length+" 个任务"+cut); done(true); })
-        .catch(err=>{ status("出错："+err.message+cut); done(false); });
+      if(text.length>AI_MAX_CHARS){ text=text.slice(0,AI_MAX_CHARS); cut=" (document is long — using the first "+AI_MAX_CHARS+" characters)"; }
+      aiExtract(text).then(items=>{ renderResults(items); status("Found "+items.length+" task(s)"+cut); done(true); })
+        .catch(err=>{ status("Error: "+err.message+cut); done(false); });
     };
-    if(f) aiReadFile(f).then(got).catch(err=>{ status("文档读取失败："+err.message); done(false); });
+    if(f) aiReadFile(f).then(got).catch(err=>{ status("Document read failed: "+err.message); done(false); });
     else got(txt);
   };
 }
