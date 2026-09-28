@@ -44,4 +44,4 @@ Source: https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_1
 State/province boundaries and city-center coordinates use Natural Earth 1:10m.
 City matching requires both country and region, with a unique name match;
 unmatched cities stay in the table without a guessed marker. Coordinates are
-public gazetteer city centers, not visitor coordinates.
+public gazetteer city centers, not visitor coordinates. The gazetteer is curated: when GA4 reports a visitor city the gazetteer lacks, its verified city-center coordinates are appended (country + region must still match exactly).
