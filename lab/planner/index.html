@@ -1595,7 +1595,9 @@ function applyRemote(d){
   DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
   ensureIds();
   backfillToday();
-  localStorage.setItem(LS,JSON.stringify(DB));render();applyingRemote=false;
+  localStorage.setItem(LS,JSON.stringify(DB));applyingRemote=false;
+  repairAiMatrix();
+  render();
 }
 function pushRemote(now){
   if(!userDoc||applyingRemote)return;
