@@ -135,6 +135,19 @@
   .block-row .bi{border:none;background:transparent;padding:6px 10px;font-size:13.5px;color:var(--ink);width:100%}
   .block-row .bi:focus{outline:none;background:var(--blue-soft)} .block-row.block-sel{background:var(--blue-soft)} .sched .block-row .bt{cursor:crosshair} .drag-hint{font-weight:400;opacity:.65;font-size:11px}
   .block-row.hour{background:var(--paper-2)}
+  .sched{position:relative}
+  .task-blocks{position:absolute;inset:0;pointer-events:none;z-index:2}
+  .task-block{position:absolute;pointer-events:auto;touch-action:none;cursor:grab;background:var(--blue-soft);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;padding:3px 8px;font-size:12.5px;line-height:1.3;color:var(--ink);overflow:hidden;box-shadow:0 1px 4px rgba(28,52,84,.18)}
+  .task-block .tb-t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .task-block .tb-h{font-size:11px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .task-block.q0{border-left-color:#c0503f;background:#fbeeea}
+  .task-block.q1{border-left-color:#4a8a5f;background:#e9f3eb}
+  .task-block.q2{border-left-color:#c99022;background:#faf0da}
+  .task-block.q3{border-left-color:var(--slate);background:var(--slate-soft)}
+  .task-block.done{opacity:.55}
+  .task-block.done .tb-t{text-decoration:line-through}
+  .task-block.dragging{cursor:grabbing;opacity:.93;box-shadow:0 8px 22px rgba(28,52,84,.28);z-index:6}
+  .block-row.covered .bi{visibility:hidden}
 
   .stack>*+*{margin-top:16px}
   .ev{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line-soft)}
@@ -465,6 +478,8 @@
     body[data-level="0"] .sched .block-row{height:7mm;min-height:0}
     body[data-level="0"] .sched .block-row .bt{padding:2px 8px 2px 0;font-size:10px}
     body[data-level="0"] .sched .block-row .bi{padding:2px 10px;font-size:12px}
+    body[data-level="0"] .task-blocks{display:none}
+    body[data-level="0"] .block-row.covered .bi{visibility:visible}
     /* month print: calendar only, fits on one page */
     body[data-level="2"] .split{display:block}
     body[data-level="2"] .split .side{display:none!important}
@@ -627,10 +642,29 @@ function repairAiMatrix(){
 
 function backfillToday(){
   const day=getDay(new Date());
-  const have=new Set((day.top3||[]).map(r=>r&&r.id).filter(Boolean));
+  const todayD=dayKey(new Date());
   let added=false;
+  /* timed tasks stay on their own day: drop any that an earlier version pulled into today */
+  for(let i=(day.top3||[]).length-1;i>=0;i--){
+    const t=day.top3[i];
+    if(t&&t.id&&/T\d{2}:\d{2}/.test(String(t.time||""))){
+      const tD=String(t.due||"").slice(0,10)||String(t.time).slice(0,10);
+      if(tD&&tD!==todayD){day.top3.splice(i,1);added=true;}
+    }
+  }
+  const have=new Set((day.top3||[]).map(r=>r&&r.id).filter(Boolean));
   (DB.matrix||[]).forEach(t=>{
     if(!t||!t.id||have.has(t.id)||t.d||!(t.t&&t.t.trim()))return;
+    const dueD=String(t.due||"").slice(0,10);
+    if(/T\d{2}:\d{2}/.test(String(t.time||""))){
+      /* task with start+end: stays on its own day */
+      const tD=dueD||String(t.time).slice(0,10);
+      if(tD&&tD!==todayD)return;
+    }else{
+      /* deadline-only (or dateless): visible from the added date; if overdue it follows the current date, never future dates */
+      const addedD=t.added?dayKey(new Date(t.added)):"";
+      if(!((addedD&&addedD<=todayD)||(dueD&&dueD<=todayD)||(!addedD&&!dueD)))return;
+    }
     day.top3.push(t);have.add(t.id);added=true;
   });
   /* refresh tidy: rows with text float to the top, blank rows sink to the bottom */
@@ -864,7 +898,7 @@ function renderDay(){
   // right stack: tasks today, events, notes
   const right=document.createElement("div");right.className="stack";
   const quadDraws=[];
-  const tt=tasksTodayPanel(d,()=>quadDraws.forEach(f=>f())); /* Apple-Calendar-style drag on time blocks to create a task (mouse only; touch keeps native scroll) */ let dragMin=null,dragMoved=false,dragStartY=0,dragOnInput=false; const rowAtY=y=>{for(const r of brows){const b=r.getBoundingClientRect();if(y>=b.top&&y<b.bottom)return r;} return y<brows[0].getBoundingClientRect().top?brows[0]:brows[brows.length-1];}; const paintSel=(a,b)=>{const lo=Math.min(a,b),hi=Math.max(a,b); brows.forEach(r=>r.classList.toggle("block-sel",+r.dataset.min>=lo&&+r.dataset.min<=hi));}; const endDrag=()=>{dragMin=null;brows.forEach(r=>r.classList.remove("block-sel"));}; sched.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse")return; const r=e.target.closest(".block-row");if(!r)return; dragMin=+r.dataset.min;dragMoved=false;dragStartY=e.clientY;dragOnInput=!!e.target.closest(".bi"); try{sched.setPointerCapture(e.pointerId);}catch(_){} if(!dragOnInput)e.preventDefault(); }); sched.addEventListener("pointermove",e=>{if(dragMin===null)return; if(!dragMoved){if(Math.abs(e.clientY-dragStartY)<=6)return; dragMoved=true; if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();} paintSel(dragMin,+rowAtY(e.clientY).dataset.min);}); sched.addEventListener("pointercancel",endDrag); sched.addEventListener("pointerup",e=>{ if(dragMin===null)return; const wasDrag=dragMoved,wasInput=dragOnInput; const cur=+rowAtY(e.clientY).dataset.min; const lo=Math.min(dragMin,cur),hi=Math.max(dragMin,cur);endDrag(); if(!wasDrag&&wasInput)return; const dk=dayKey(d),f2=m=>pad(Math.floor(m/60))+":"+pad(m%60); openTaskDialog({heading:"Add a task",start:dk+"T"+f2(lo),end:dk+"T"+f2(hi+30), context:"Time blocks · "+DOW[(d.getDay()+6)%7]+" "+(d.getMonth()+1)+"/"+d.getDate(),submitLabel:"Add task", onSubmit:v=>{day.top3.push({t:v.title,d:false,place:v.place,time:v.start,end:v.end,notes:v.notes});save();tt.redraw();}}); });
+  const tt=tasksTodayPanel(d,()=>quadDraws.forEach(f=>f())); /* Apple-Calendar-style drag on time blocks to create a task (mouse only; touch keeps native scroll) */ let dragMin=null,dragMoved=false,dragStartY=0,dragOnInput=false; const rowAtY=y=>{for(const r of brows){const b=r.getBoundingClientRect();if(y>=b.top&&y<b.bottom)return r;} return y<brows[0].getBoundingClientRect().top?brows[0]:brows[brows.length-1];}; const paintSel=(a,b)=>{const lo=Math.min(a,b),hi=Math.max(a,b); brows.forEach(r=>r.classList.toggle("block-sel",+r.dataset.min>=lo&&+r.dataset.min<=hi));}; const endDrag=()=>{dragMin=null;brows.forEach(r=>r.classList.remove("block-sel"));}; sched.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse")return; if(e.target.closest(".task-block"))return; const r=e.target.closest(".block-row");if(!r)return; dragMin=+r.dataset.min;dragMoved=false;dragStartY=e.clientY;dragOnInput=!!e.target.closest(".bi"); try{sched.setPointerCapture(e.pointerId);}catch(_){} if(!dragOnInput)e.preventDefault(); }); sched.addEventListener("pointermove",e=>{if(dragMin===null)return; if(!dragMoved){if(Math.abs(e.clientY-dragStartY)<=6)return; dragMoved=true; if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();} paintSel(dragMin,+rowAtY(e.clientY).dataset.min);}); sched.addEventListener("pointercancel",endDrag); sched.addEventListener("pointerup",e=>{ if(dragMin===null)return; const wasDrag=dragMoved,wasInput=dragOnInput; const cur=+rowAtY(e.clientY).dataset.min; const lo=Math.min(dragMin,cur),hi=Math.max(dragMin,cur);endDrag(); if(!wasDrag&&wasInput)return; const dk=dayKey(d),f2=m=>pad(Math.floor(m/60))+":"+pad(m%60); openTaskDialog({heading:"Add a task",start:dk+"T"+f2(lo),end:dk+"T"+f2(hi+30), context:"Time blocks · "+DOW[(d.getDay()+6)%7]+" "+(d.getMonth()+1)+"/"+d.getDate(),submitLabel:"Add task", onSubmit:v=>{day.top3.push({t:v.title,d:false,place:v.place,time:v.start,end:v.end,notes:v.notes});save();tt.redraw();}}); });
   right.appendChild(tt.el);
   right.appendChild(eventsPanel(d));
   const pn=document.createElement("div");pn.className="panel notes-panel";
@@ -989,7 +1023,114 @@ function renderDay(){
   });
   mp.appendChild(mx);
 
+  /* Calendar-style blocks: one block per timed task (title shown once across its span).
+     Drag a block to reschedule within the day; click a block to edit the task. */
+  function drawTaskBlocks(){
+    const dk=dayKey(d);
+    const toMin=v=>{const m=/^(\d{2}):(\d{2})$/.exec(String(v||"").slice(11,16));return m?(+m[1])*60+(+m[2]):null;};
+    const f2=m=>pad(Math.floor(m/60))+":"+pad(m%60);
+    const items=[];
+    (day.top3||[]).forEach(t=>{
+      if(!t||!t.time||String(t.time).slice(0,10)!==dk)return;
+      const s=toMin(t.time);if(s==null)return;
+      let e=toMin(t.end);if(e==null||e<=s)e=s+30;
+      const cs=Math.max(7*60,s),ce=Math.min(22*60+30,e);
+      if(ce<=cs)return;
+      items.push({t,s:cs,e:ce});
+    });
+    brows.forEach(r=>{
+      const m=+r.dataset.min;
+      r.classList.toggle("covered",items.some(it=>m>=Math.floor(it.s/30)*30&&m<it.e));
+    });
+    if(!items.length)return;
+    items.sort((a,b)=>a.s-b.s||a.e-b.e);
+    const laneEnd=[];
+    items.forEach(it=>{
+      let li=laneEnd.findIndex(x=>x<=it.s);
+      if(li<0){li=laneEnd.length;laneEnd.push(0);}
+      laneEnd[li]=it.e;it.lane=li;
+    });
+    items.forEach(a=>{a.cols=a.lane+1;items.forEach(b=>{if(b!==a&&a.s<b.e&&b.s<a.e)a.cols=Math.max(a.cols,b.lane+1);});});
+    const yFor=min=>{
+      min=Math.max(7*60,Math.min(22*60+30,min));
+      const last=brows[brows.length-1];
+      if(min>=22*60+30)return last.offsetTop+last.offsetHeight;
+      const rm=Math.floor(min/30)*30;
+      const r=brows.find(x=>+x.dataset.min===rm)||last;
+      return r.offsetTop+((min-rm)/30)*r.offsetHeight;
+    };
+    const ov=document.createElement("div");ov.className="task-blocks";
+    const bt0=brows[0].querySelector(".bt");
+    const labW=bt0?bt0.offsetWidth+2:60;
+    const avail=Math.max(80,sched.clientWidth-labW-8);
+    items.forEach(it=>{
+      const el=document.createElement("div");
+      const qq=(it.t.quad===0||it.t.quad===1||it.t.quad===2||it.t.quad===3)?it.t.quad:"x";
+      el.className="task-block q"+qq+(it.t.d?" done":"");
+      const w=avail/it.cols;
+      el.style.left=(labW+it.lane*w)+"px";
+      el.style.width=Math.max(36,w-3)+"px";
+      el.style.top=yFor(it.s)+"px";
+      el.style.height=Math.max(20,yFor(it.e)-yFor(it.s)-3)+"px";
+      el.innerHTML='<div class="tb-t">'+esc(it.t.t||"Untitled")+'</div><div class="tb-h">'+f2(Math.round(it.s))+"–"+f2(Math.round(it.e))+"</div>";
+      el.title=(it.t.t||"Untitled")+" · drag to reschedule · click to edit";
+      el.addEventListener("pointerdown",e=>{
+        if(e.button!=null&&e.button!==0)return;
+        e.stopPropagation();e.preventDefault();
+        const startY=e.clientY,dur=it.e-it.s,origSlot=Math.round(it.s/30)*30,rowH=brows[0].offsetHeight||28;
+        let moved=false,dy=0;
+        try{el.setPointerCapture(e.pointerId);}catch(_){}
+        el.classList.add("dragging");
+        const curSlot=()=>{
+          let ns=origSlot+Math.round(dy/rowH)*30;
+          return Math.max(7*60,Math.min(22*60+30-dur,ns));
+        };
+        const onMove=ev=>{
+          dy=ev.clientY-startY;
+          if(!moved&&Math.abs(dy)<=6)return;
+          moved=true;
+          const ns=curSlot();
+          el.style.transform="translateY("+(yFor(ns)-yFor(it.s))+"px";
+          brows.forEach(r=>{const m=+r.dataset.min;r.classList.toggle("block-sel",m>=Math.floor(ns/30)*30&&m<ns+dur);});
+        };
+        const onUp=()=>{
+          el.removeEventListener("pointermove",onMove);
+          el.removeEventListener("pointerup",onUp);
+          el.removeEventListener("pointercancel",onUp);
+          el.classList.remove("dragging");
+          el.style.transform="";
+          brows.forEach(r=>r.classList.remove("block-sel"));
+          if(!moved){openDayTask(d,it.t);return;}
+          const ns=curSlot();
+          if(ns!==origSlot){
+            const ne=ns+dur,t=it.t;
+            const oldTitle=t.t,oldS=it.s;
+            t.time=dk+"T"+f2(ns);t.end=dk+"T"+f2(ne);
+            if(t.due&&String(t.due).length>10)t.due=dk+"T"+f2(ns);
+            if(t.dueEnd&&String(t.dueEnd).length>10)t.dueEnd=dk+"T"+f2(ne);
+            for(let m=Math.floor(oldS/30)*30;m<oldS+dur&&m<=22*60;m+=30){
+              if(m<7*60)continue;
+              const bk=f2(m);
+              if(day.blocks[bk]===oldTitle)delete day.blocks[bk];
+            }
+            for(let m=Math.floor(ns/30)*30;m<ne&&m<=22*60;m+=30){
+              if(m<7*60)continue;
+              const bk=f2(m);
+              if(!day.blocks[bk])day.blocks[bk]=t.t;
+            }
+            save();render();
+          }
+        };
+        el.addEventListener("pointermove",onMove);
+        el.addEventListener("pointerup",onUp);
+        el.addEventListener("pointercancel",onUp);
+      });
+      ov.appendChild(el);
+    });
+    sched.appendChild(ov);
+  }
   stage.innerHTML="";stage.appendChild(mp);stage.appendChild(grid);
+  drawTaskBlocks();
 }
 
 /* =============== WEEK =============== */
