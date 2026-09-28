@@ -131,7 +131,7 @@
     border-right:1px solid var(--line);font-variant-numeric:tabular-nums}
   .block-row.hour .bt{font-weight:700;color:var(--blue-deep)}
   .block-row .bi{border:none;background:transparent;padding:6px 10px;font-size:13.5px;color:var(--ink);width:100%}
-  .block-row .bi:focus{outline:none;background:var(--blue-soft)}
+  .block-row .bi:focus{outline:none;background:var(--blue-soft)} .block-row.block-sel{background:var(--blue-soft)} .sched .block-row .bt{cursor:crosshair} .drag-hint{font-weight:400;opacity:.65;font-size:11px}
   .block-row.hour{background:var(--paper-2)}
 
   .stack>*+*{margin-top:16px}
@@ -799,10 +799,10 @@ function renderDay(){
 
   // schedule (30-min blocks 7:00–22:00)
   const sched=document.createElement("div");sched.className="panel sched";
-  sched.innerHTML=`<div class="sec-lbl">Time blocks · 30 min<span class="dash"></span></div>`;
+  sched.innerHTML=`<div class="sec-lbl">Time blocks · 30 min · <span class="drag-hint">drag to add a task</span><span class="dash"></span></div>`; const brows=[];
   for(let m=7*60;m<=22*60;m+=30){
     const hh=Math.floor(m/60),mm=m%60;const key=pad(hh)+":"+pad(mm);const onHour=mm===0;
-    const row=document.createElement("div");row.className="block-row"+(onHour?" hour":"");
+    const row=document.createElement("div");row.className="block-row"+(onHour?" hour":""); row.dataset.min=m; brows.push(row);
     row.innerHTML=`<div class="bt">${key}</div><input class="bi" value="${esc(day.blocks[key])}">`;
     const bi=row.querySelector(".bi");
     bi.addEventListener("input",()=>{if(bi.value)day.blocks[key]=bi.value;else delete day.blocks[key];save();});
@@ -812,7 +812,7 @@ function renderDay(){
   // right stack: tasks today, events, notes
   const right=document.createElement("div");right.className="stack";
   const quadDraws=[];
-  const tt=tasksTodayPanel(d,()=>quadDraws.forEach(f=>f()));
+  const tt=tasksTodayPanel(d,()=>quadDraws.forEach(f=>f())); /* Apple-Calendar-style drag on time blocks to create a task (mouse only; touch keeps native scroll) */ let dragMin=null; const rowAtY=y=>{for(const r of brows){const b=r.getBoundingClientRect();if(y>=b.top&&y<b.bottom)return r;} return y<brows[0].getBoundingClientRect().top?brows[0]:brows[brows.length-1];}; const paintSel=(a,b)=>{const lo=Math.min(a,b),hi=Math.max(a,b); brows.forEach(r=>r.classList.toggle("block-sel",+r.dataset.min>=lo&&+r.dataset.min<=hi));}; const endDrag=()=>{dragMin=null;brows.forEach(r=>r.classList.remove("block-sel"));}; sched.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.target.closest(".bi"))return; const r=e.target.closest(".block-row");if(!r)return; dragMin=+r.dataset.min;paintSel(dragMin,dragMin); try{sched.setPointerCapture(e.pointerId);}catch(_){}e.preventDefault(); }); sched.addEventListener("pointermove",e=>{if(dragMin===null)return;paintSel(dragMin,+rowAtY(e.clientY).dataset.min);}); sched.addEventListener("pointercancel",endDrag); sched.addEventListener("pointerup",e=>{ if(dragMin===null)return; const cur=+rowAtY(e.clientY).dataset.min; const lo=Math.min(dragMin,cur),hi=Math.max(dragMin,cur);endDrag(); const dk=dayKey(d),f2=m=>pad(Math.floor(m/60))+":"+pad(m%60); openTaskDialog({heading:"Add a task",start:dk+"T"+f2(lo),end:dk+"T"+f2(hi+30), context:"Time blocks · "+DOW[(d.getDay()+6)%7]+" "+(d.getMonth()+1)+"/"+d.getDate(),submitLabel:"Add task", onSubmit:v=>{day.top3.push({t:v.title,d:false,place:v.place,time:v.start,end:v.end,notes:v.notes});save();tt.redraw();}}); });
   right.appendChild(tt.el);
   right.appendChild(eventsPanel(d));
   const pn=document.createElement("div");pn.className="panel notes-panel";
