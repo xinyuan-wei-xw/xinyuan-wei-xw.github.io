@@ -893,7 +893,7 @@ function renderDay(){
 }
 
 /* =============== WEEK =============== */
-function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();const box=document.createElement("div");box.className="minical";let h='<div class="mc-mon">'+MON3[m]+" "+y+'</div><table><tr>'+["Su","Mo","Tu","We","Th","Fr","Sa"].map(w=>`<th>${w}</th>`).join("")+"</tr>";const dim=new Date(y,m+1,0).getDate();let dd=1-new Date(y,m,1).getDay();for(let r=0;r<6;r++){h+="<tr>";for(let c=0;c<7;c++){const d=new Date(y,m,dd);if(dd>=1&&dd<=dim){let cls="";if(d>=wkStart&&d<=wkEnd)cls+=" inwk";if(sameDay(d,NOW))cls+=" today";h+=`<td class="${cls.trim()}">${dd}</td>`;}else h+="<td></td>";dd++;}h+="</tr>";if(dd>dim)break;}box.innerHTML=h+"</table>";return box;} function renderWeek(){
+function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();const box=document.createElement("div");box.className="minical";let h='<div class="mc-mon">'+MON3[m]+" "+y+'</div><table><tr>'+["Su","Mo","Tu","We","Th","Fr","Sa"].map(w=>`<th>${w}</th>`).join("")+"</tr>";const dim=new Date(y,m+1,0).getDate();let dd=1-new Date(y,m,1).getDay();for(let r=0;r<6;r++){h+="<tr>";for(let c=0;c<7;c++){const d=new Date(y,m,dd);if(dd>=1&&dd<=dim){let cls="";if(d>=wkStart&&d<=wkEnd)cls+=" inwk";if(sameDay(d,NOW))cls+=" today";h+=`<td class="${cls.trim()}">${dd}</td>`;}else h+="<td></td>";dd++;}h+="</tr>";if(dd>dim)break;}box.innerHTML=h+"</table>";return box;} function openDayTask(d,t){focus=new Date(d);setLevel(0);openTaskDialog({heading:"Task details",title:t.t,place:t.place,start:t.due||t.time,end:t.dueEnd||t.end,notes:t.notes,submitLabel:"Save",onSubmit:v=>{t.t=v.title;t.place=v.place;if("due" in t){t.due=v.start;t.dueEnd=v.end;}else{t.time=v.start;t.end=v.end;}t.notes=v.notes;save();render();}});} function renderWeek(){
   const mon=mondayOf(focus);const wk=getWeek(focus);
   const end=new Date(mon);end.setDate(end.getDate()+6);
   const mid=new Date(mon);mid.setDate(mid.getDate()+3);
@@ -917,7 +917,7 @@ function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();c
     (day.top3||[]).forEach(t=>{if(!t.t||dueIds.has(t.id))return; /* due-dated ones render as full rows below */
       const p=document.createElement("div");
       p.style.cssText="font-size:12px;display:flex;gap:5px;margin-bottom:3px;line-height:1.25;"+(t.d?"opacity:.5;text-decoration:line-through;":"");
-      p.innerHTML='<span style="color:var(--gold)">★</span><span style="color:var(--ink);flex:1">'+esc(t.t)+'</span>';
+      p.innerHTML='<span style="color:var(--gold)">★</span><span style="color:var(--ink);flex:1">'+esc(t.t)+'</span>';p.style.cursor="pointer";p.title="Double-click to open in day view";p.addEventListener("dblclick",()=>openDayTask(d,t));
       col.appendChild(p);});
     const ul=document.createElement("ul");ul.className="mini-tasks";
     DB.matrix.filter(t=>t.due&&t.due.slice(0,10)===dk).forEach(t=>{
@@ -929,7 +929,7 @@ function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();c
         setTimeout(()=>{msv.textContent="Save";msv.disabled=false;},1200);});
       const tt=li.querySelector(".tt");tt.addEventListener("input",()=>{t.t=tt.textContent;save();});
       tt.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();tt.blur();}});
-      li.querySelector(".del").addEventListener("click",()=>{DB.matrix.splice(DB.matrix.indexOf(t),1);purgeFromDayLists(t.id);save();renderWeek();});
+      li.querySelector(".del").addEventListener("click",()=>{DB.matrix.splice(DB.matrix.indexOf(t),1);purgeFromDayLists(t.id);save();renderWeek();});li.addEventListener("dblclick",()=>openDayTask(d,t));
       ul.appendChild(li);
     });
     col.appendChild(ul);
