@@ -642,29 +642,10 @@ function repairAiMatrix(){
 
 function backfillToday(){
   const day=getDay(new Date());
-  const todayD=dayKey(new Date());
-  let added=false;
-  /* timed tasks stay on their own day: drop any that an earlier version pulled into today */
-  for(let i=(day.top3||[]).length-1;i>=0;i--){
-    const t=day.top3[i];
-    if(t&&t.id&&/T\d{2}:\d{2}/.test(String(t.time||""))){
-      const tD=String(t.due||"").slice(0,10)||String(t.time).slice(0,10);
-      if(tD&&tD!==todayD){day.top3.splice(i,1);added=true;}
-    }
-  }
   const have=new Set((day.top3||[]).map(r=>r&&r.id).filter(Boolean));
+  let added=false;
   (DB.matrix||[]).forEach(t=>{
     if(!t||!t.id||have.has(t.id)||t.d||!(t.t&&t.t.trim()))return;
-    const dueD=String(t.due||"").slice(0,10);
-    if(/T\d{2}:\d{2}/.test(String(t.time||""))){
-      /* task with start+end: stays on its own day */
-      const tD=dueD||String(t.time).slice(0,10);
-      if(tD&&tD!==todayD)return;
-    }else{
-      /* deadline-only (or dateless): visible from the added date; if overdue it follows the current date, never future dates */
-      const addedD=t.added?dayKey(new Date(t.added)):"";
-      if(!((addedD&&addedD<=todayD)||(dueD&&dueD<=todayD)||(!addedD&&!dueD)))return;
-    }
     day.top3.push(t);have.add(t.id);added=true;
   });
   /* refresh tidy: rows with text float to the top, blank rows sink to the bottom */
