@@ -35,6 +35,7 @@ projects:
     description: "Convert LaTeX projects and PDFs into clean Word documents"
     figure: "/images/lab/tex-pdf-to-word.svg"
     figure_alt: "A LaTeX document and a scanned page converting into a Word document"
+    url: "https://tex2word.onrender.com"
   - title: "Visitor Map"
     description: "Website visit records by country, state/province, and city"
     figure: "/images/lab/visitor-map.svg"
