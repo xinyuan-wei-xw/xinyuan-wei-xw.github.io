@@ -32,7 +32,7 @@ projects:
     figure_alt: "A manuscript approaching a journal gate in UNDER REVIEW"
     url: "/lab/under-review/"
   - title: "[Productivity] Tex/PDF to Word"
-    description: "Convert LaTeX projects and scanned PDFs into clean, editable Word documents"
+    description: "Convert LaTeX projects and PDFs into clean Word documents"
     figure: "/images/lab/tex-pdf-to-word.svg"
     figure_alt: "A LaTeX document and a scanned page converting into a Word document"
   - title: "Visitor Map"
