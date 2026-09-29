@@ -148,7 +148,7 @@ function aiAddTasks(items, syncBlocks){
     const task={ id:aiNewId(), t:it.title, d:false, place:it.place||"",
       time: it.start?it.date+"T"+it.start:"", end: it.end?it.date+"T"+it.end:"",
       due: it.start?it.date+"T"+it.start:it.date, dueEnd: it.end?it.date+"T"+it.end:"",
-      quad:3, added:Date.now(), notes: it.notes||"", files:[] };
+      quad:1, added:Date.now(), notes: it.notes||"", files:[] };
     day.top3.push(task);
     try{ DB.matrix=DB.matrix||[]; DB.matrix.push(task); }catch(e){}
     created.push(task);

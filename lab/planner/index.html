@@ -422,6 +422,8 @@
     font-weight:600;border-radius:9px;padding:7px 12px;cursor:pointer;white-space:nowrap}
   .cell .cdl{font-size:10px;color:#fff;background:#c0503f;border-radius:4px;padding:1px 5px;margin-top:3px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cell .ctask{font-size:10px;color:var(--ink);background:var(--paper-2);border:1px solid var(--line-soft);
+    border-radius:4px;padding:1px 5px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   /* ---------- toolbar ---------- */
   .toolbar{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;align-items:center;
@@ -621,7 +623,7 @@ function repairAiMatrix(){
           if(t.end&&!t.dueEnd)t.dueEnd=t.end;
         }
         if(!inMx.has(t.id)){
-          if(t.quad==null)t.quad=3;
+          if(t.quad==null)t.quad=1;
           if(!t.added)t.added=Date.now();
           DB.matrix.push(t);inMx.add(t.id);
         }
@@ -1044,13 +1046,22 @@ function renderDay(){
     });
     if(!items.length)return;
     items.sort((a,b)=>a.s-b.s||a.e-b.e);
-    const laneEnd=[];
+    /* Cluster overlapping blocks; lane-split within each cluster so blocks never visually overlap. */
+    const clusters=[];
     items.forEach(it=>{
-      let li=laneEnd.findIndex(x=>x<=it.s);
-      if(li<0){li=laneEnd.length;laneEnd.push(0);}
-      laneEnd[li]=it.e;it.lane=li;
+      let c=clusters.find(c=>c.some(o=>it.s<o.e&&o.s<it.e));
+      if(!c){c=[];clusters.push(c);}
+      c.push(it);
     });
-    items.forEach(a=>{a.cols=a.lane+1;items.forEach(b=>{if(b!==a&&a.s<b.e&&b.s<a.e)a.cols=Math.max(a.cols,b.lane+1);});});
+    clusters.forEach(c=>{
+      const ends=[];
+      c.forEach(it=>{
+        let li=ends.findIndex(x=>x<=it.s);
+        if(li<0){li=ends.length;ends.push(0);}
+        ends[li]=it.e;it.lane=li;
+      });
+      c.forEach(it=>{it.cols=ends.length;});
+    });
     const yFor=min=>{
       min=Math.max(7*60,Math.min(22*60+30,min));
       const last=brows[brows.length-1];
@@ -1225,15 +1236,19 @@ function renderMonth(){
   for(let i=0;i<42;i++){
     const cd=new Date(gridStart);cd.setDate(gridStart.getDate()+i);
     const inMonth=cd.getMonth()===d.getMonth();
-    const evs=(DB.events[dayKey(cd)]||[]).filter(e=>e.title);
-    const st=statsFor(k=>k===dayKey(cd));
-    const dls=(DB.deadlines||[]).filter(x=>x.title&&x.due===dayKey(cd));
+    const dk=dayKey(cd);
+    const evs=(DB.events[dk]||[]).filter(e=>e.title);
+    const st=statsFor(k=>k===dk);
+    const dls=(DB.deadlines||[]).filter(x=>x.title&&x.due===dk);
+    const tks=(DB.matrix||[]).filter(t=>t&&t.t&&String(t.t).trim()&&taskVisibleOn(t,dk));
     let evHtml="";
     dls.forEach(x=>{evHtml+=`<div class="cdl">⏰ ${esc(x.title)}</div>`;});
     evs.slice(0,2).forEach(e=>{evHtml+=`<div class="cev">${esc(e.title)}</div>`;});
     if(evs.length>2)evHtml+=`<div class="cmore">+${evs.length-2} more</div>`;
+    tks.slice(0,3).forEach(t=>{evHtml+=`<div class="ctask">${esc(String(t.t).trim())}</div>`;});
+    if(tks.length>3)evHtml+=`<div class="cmore">+${tks.length-3} more</div>`;
     const cnt=st.total?`<div class="ccount">${st.done}/${st.total}</div>`:"";
-    html+=`<div class="cell ${inMonth?'':'out'} ${sameDay(cd,NOW)?'today':''}" data-k="${dayKey(cd)}">
+    html+=`<div class="cell ${inMonth?'':'out'} ${sameDay(cd,NOW)?'today':''}" data-k="${dk}">
       <span class="cn">${cd.getDate()}</span>${evHtml}${cnt}</div>`;
     if((i+1)%7===0&&i>=27&&cd>=new Date(d.getFullYear(),d.getMonth()+1,0))break;
   }
