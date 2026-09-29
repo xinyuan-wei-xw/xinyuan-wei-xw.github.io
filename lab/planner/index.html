@@ -604,8 +604,8 @@ DB.vision=DB.vision||{goals:[{t:"",p:0},{t:"",p:0},{t:"",p:0}],note:""};
    Idempotent: runs again whenever fresh data arrives. */
 function repairAiMatrix(){
   DB.seedFlags=DB.seedFlags||{};
-  if(DB.seedFlags.aiMatrixRepair2)return;
-  DB.seedFlags.aiMatrixRepair2=1;
+  if(DB.seedFlags.aiMatrixRepair1)return;
+  DB.seedFlags.aiMatrixRepair1=1;
   try{
     const inMx=new Set((DB.matrix||[]).map(x=>x&&x.id));
     const toMin=hm=>{const m=/^(\d{2}):(\d{2})$/.exec(hm||"");return m?(+m[1])*60+(+m[2]):null;};
@@ -640,20 +640,39 @@ function repairAiMatrix(){
   }catch(e){}
 }
 
-function backfillToday(){
-  const day=getDay(new Date());
+function taskVisibleOn(t,dk){
+  if(!t||!t.id)return true;
+  if(/T\d{2}:\d{2}/.test(String(t.time||""))){
+    const hD=String(t.due||"").slice(0,10)||String(t.time).slice(0,10);
+    return !!hD&&hD===dk;
+  }
+  const aD=t.added?dayKey(new Date(t.added)):"";
+  if(!t.d)return (!aD||aD<=dk)&&dk<=dayKey(new Date());
+  const hD=String(t.due||"").slice(0,10)||aD;
+  return !!hD&&hD===dk;
+}
+function syncDayList(dk){
+  const day=getDay(new Date(dk+"T12:00:00"));
+  let changed=false;
+  for(let i=(day.top3||[]).length-1;i>=0;i--){
+    const r=day.top3[i];
+    if(r&&r.id&&!taskVisibleOn(r,dk)){day.top3.splice(i,1);changed=true;}
+  }
   const have=new Set((day.top3||[]).map(r=>r&&r.id).filter(Boolean));
-  let added=false;
   (DB.matrix||[]).forEach(t=>{
-    if(!t||!t.id||have.has(t.id)||t.d||!(t.t&&t.t.trim()))return;
-    day.top3.push(t);have.add(t.id);added=true;
+    if(!t||!t.id||have.has(t.id)||!(t.t&&t.t.trim()))return;
+    if(taskVisibleOn(t,dk)){day.top3.push(t);have.add(t.id);changed=true;}
   });
+  if(changed)save();
+}
+function backfillToday(){
+  syncDayList(dayKey(new Date()));
   /* refresh tidy: rows with text float to the top, blank rows sink to the bottom */
+  const day=getDay(new Date());
   const rows=day.top3||[];
   const withText=rows.filter(r=>r&&r.t&&r.t.trim());
   const blanks=rows.filter(r=>!(r&&r.t&&r.t.trim()));
-  if(withText.length&&blanks.length){day.top3=withText.concat(blanks);added=true;}
-  if(added)save();
+  if(withText.length&&blanks.length){day.top3=withText.concat(blanks);save();}
 }
 
 let saveTimer=null;
@@ -860,7 +879,7 @@ function removeEventFile(e,f,redraw){
 
 /* =============== DAY =============== */
 function renderDay(){
-  const d=new Date(focus);const day=getDay(d);
+  const d=new Date(focus);const day=getDay(d);syncDayList(dayKey(d));
   document.getElementById("mainTitle").textContent=DOW[(d.getDay()+6)%7]+" "+d.getDate();
   const grid=document.createElement("div");grid.className="day-grid";
 
@@ -917,7 +936,7 @@ function renderDay(){
       mt.quad=def.q;save();quadDraws.forEach(f=>f());if(tt&&tt.redraw)tt.redraw();
     });
     function drawTasks(){ul.innerHTML="";
-      const dk=dayKey(d);const items=DB.matrix.filter(t=>(t.quad||0)===def.q&&(!t.due||t.due.slice(0,10)<=dk)&&(!t.d||(t.due&&t.due.slice(0,10)===dk)));
+      const dk=dayKey(d);const items=DB.matrix.filter(t=>(t.quad||0)===def.q&&taskVisibleOn(t,dk));
       items.sort((a,b)=>{if(!!a.d!==!!b.d)return a.d?1:-1;
         return (a.due||"9999").localeCompare(b.due||"9999");});
       items.forEach(t=>{
@@ -1127,7 +1146,7 @@ function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();c
 
   const grid=document.createElement("div");grid.className="weekgrid";
   const mkCell=i=>{
-    const d=new Date(mon);d.setDate(d.getDate()+i);const day=getDay(d);const evs=getEvents(d);
+    const d=new Date(mon);d.setDate(d.getDate()+i);const day=getDay(d);syncDayList(dayKey(d));const evs=getEvents(d);
     const col=document.createElement("div");col.className="daycol"+(sameDay(d,NOW)?" today":"");
     col.innerHTML=`<div class="dh"><span class="dd">${d.getDate()}</span><span class="dn">${DOW[i]}</span></div>`;
     col.querySelector(".dh").addEventListener("click",()=>{focus=new Date(d);setLevel(0);});
