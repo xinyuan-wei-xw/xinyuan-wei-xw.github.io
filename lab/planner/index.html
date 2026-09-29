@@ -644,7 +644,7 @@ function repairAiMatrix(){
 
 function taskVisibleOn(t,dk){
   if(!t||!t.id)return true;
-  if(/T\d{2}:\d{2}/.test(String(t.time||""))){
+  if(/T\d{2}:\d{2}/.test(String(t.time||"")+" "+String(t.due||""))){
     const hD=String(t.due||"").slice(0,10)||String(t.time).slice(0,10);
     return !!hD&&hD===dk;
   }
@@ -1195,8 +1195,13 @@ function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();c
       f.textContent="🕒 "+nb+" scheduled";f.addEventListener("click",()=>{focus=new Date(d);setLevel(0);});col.appendChild(f);}
     return col;
   }
-  const order=[0,4,1,5,2,6];order.forEach(i=>grid.appendChild(mkCell(i)));const midc=mkCell(3);midc.classList.add("span2");grid.appendChild(midc);
-  /* template grid: 3 pair-rows + Thu full-width; blank cell retired */
+  for(let i=0;i<6;i++)grid.appendChild(mkCell(i));
+  grid.appendChild(mkCell(6));
+  const big=document.createElement("div");big.className="daycol";
+  big.innerHTML=`<div class="dh"><span class="dn">Big 3 this week</span></div>`;
+  checkRows(big,wk.big3,"Key deliverable…");
+  grid.appendChild(big);
+  /* 2-col pairs Mon/Tue, Wed/Thu, Fri/Sat; Sun + Big 3 share the last row */
   stage.appendChild(grid);
 
   stage.appendChild(divider("Weekly plan"));
@@ -1205,11 +1210,6 @@ function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();c
   outP.innerHTML=`<div class="sec-lbl">This week's outcomes<span class="dash"></span></div>`;
   goalsPanel(outP,{goals:wk.outcomes},"var(--blue)");
   stage.appendChild(outP);
-
-  const big=document.createElement("div");big.className="panel";big.style.marginTop="18px";
-  big.innerHTML=`<div class="sec-lbl">Big 3 this week<span class="dash"></span></div>`;
-  checkRows(big,wk.big3,"Key deliverable…");
-  stage.appendChild(big);
 
   const row3=document.createElement("div");row3.className="twocol";row3.style.marginTop="18px";
   const w1=document.createElement("div");w1.className="panel";
