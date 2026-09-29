@@ -2,6 +2,7 @@
 <title id="tw-title">Tex/PDF to Word</title>
 <desc id="tw-desc">A LaTeX source document and a scanned page converting into a clean Word document.</desc>
 <rect width="900" height="506.25" fill="#eef4f7"/>
+<g transform="translate(450 253.125) scale(0.72) translate(-450 -253.125)">
 <g>
 <rect x="95" y="110" width="210" height="290" rx="10" fill="#ffffff" stroke="#d7e0e5" stroke-width="3"/>
 <rect x="125" y="140" width="90" height="26" rx="6" fill="#3451b2"/>
@@ -40,5 +41,6 @@
 <rect x="625" y="300" width="105" height="10" rx="4" fill="#3451b2"/>
 <rect x="625" y="325" width="150" height="10" rx="4" fill="#c3ccd1"/>
 <rect x="625" y="345" width="130" height="10" rx="4" fill="#c3ccd1"/>
+</g>
 </g>
 </svg>
