@@ -1,0 +1,28 @@
+name: Nightly X Planner digest
+
+# Every night, read tomorrow's X Planner data from Firestore, summarize it
+# with Gemini, and email a Chinese "明日日程" digest.
+# Cron is UTC: 01:00 UTC = 9pm EDT (summer) / 8pm EST (winter).
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install firebase-admin google-genai
+      - name: Build and send digest
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DIGEST_SMTP_USER: ${{ secrets.DIGEST_SMTP_USER }}
+          DIGEST_SMTP_APP_PASSWORD: ${{ secrets.DIGEST_SMTP_APP_PASSWORD }}
+          DIGEST_TO: xwei6@student.gsu.edu, xinyuan.wei.xw@gmail.com
+        run: python tools/xplanner/nightly_digest.py
