@@ -644,7 +644,7 @@ function repairAiMatrix(){
 
 function taskVisibleOn(t,dk){
   if(!t||!t.id)return true;
-  if(/T\d{2}:\d{2}/.test(String(t.time||"")+" "+String(t.due||""))){
+  if(/T\d{2}:\d{2}/.test(String(t.time||""))){
     const hD=String(t.due||"").slice(0,10)||String(t.time).slice(0,10);
     return !!hD&&hD===dk;
   }
@@ -1165,17 +1165,17 @@ function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();c
       chip.textContent=e.title;col.appendChild(chip);});
     const dk=dayKey(d);
     const top3Ids=new Set((day.top3||[]).filter(t=>t&&t.id).map(t=>t.id));
-    const dueIds=new Set(DB.matrix.filter(t=>t.due&&t.due.slice(0,10)===dk&&t.id).map(t=>t.id));
+    const dueIds=new Set(DB.matrix.filter(t=>t.id&&((t.due&&t.due.slice(0,10)===dk)||(t.time&&/T\d{2}:\d{2}/.test(String(t.time))&&String(t.time).slice(0,10)===dk))).map(t=>t.id));
     (day.top3||[]).forEach(t=>{if(!t.t||dueIds.has(t.id))return; /* due-dated ones render as full rows below */
       const p=document.createElement("div");
       p.style.cssText="font-size:12px;display:flex;gap:5px;margin-bottom:3px;line-height:1.25;"+(t.d?"opacity:.5;text-decoration:line-through;":"");
       p.innerHTML='<span style="color:var(--gold)">★</span><span style="color:var(--ink);flex:1">'+esc(t.t)+'</span>';p.style.cursor="pointer";p.title="Double-click to open in day view";p.addEventListener("dblclick",()=>openDayTask(d,t));
       col.appendChild(p);});
     const ul=document.createElement("ul");ul.className="mini-tasks";
-    DB.matrix.filter(t=>t.due&&t.due.slice(0,10)===dk).forEach(t=>{
+    DB.matrix.filter(t=>(t.due&&t.due.slice(0,10)===dk)||(t.time&&/T\d{2}:\d{2}/.test(String(t.time))&&String(t.time).slice(0,10)===dk)).forEach(t=>{
       const li=document.createElement("li");li.className="mini-task"+(t.d?" done":"");
       const badge=top3Ids.has(t.id)?'<span style="color:var(--gold)" title="In Tasks Today">★</span>':"";
-      li.innerHTML=`${badge}<input type="checkbox" ${t.d?"checked":""}><span class="tt" contenteditable="true">${esc(t.t)}</span><button class="msv">Save</button><button class="tdedit" title="Edit task details">✎</button><button class="del">×</button>`;li.querySelector(".tdedit").addEventListener("click",()=>{openTaskDialog({heading:"Edit task",context:"Week view",title:t.t,place:t.place,start:t.due,end:t.dueEnd,notes:t.notes,submitLabel:"Save",onSubmit:v=>{t.t=v.title;t.place=v.place;t.due=v.start;t.dueEnd=v.end;t.notes=v.notes;save();renderWeek();}});});
+      li.innerHTML=`${badge}<input type="checkbox" ${t.d?"checked":""}><span class="tt" contenteditable="true">${esc(t.t)}</span><button class="msv">Save</button><button class="tdedit" title="Edit task details">✎</button><button class="del">×</button>`;li.querySelector(".tdedit").addEventListener("click",()=>{openTaskDialog({heading:"Edit task",context:"Week view",title:t.t,place:t.place,start:t.due||t.time,end:t.dueEnd||t.end,notes:t.notes,submitLabel:"Save",onSubmit:v=>{t.t=v.title;t.place=v.place;t.due=v.start;t.dueEnd=v.end;t.notes=v.notes;save();renderWeek();}});});
       li.querySelector("input").addEventListener("change",e=>{t.d=e.target.checked;li.classList.toggle("done",t.d);save();});
       const msv=li.querySelector(".msv");msv.addEventListener("click",()=>{save();msv.textContent="Saved ✓";msv.disabled=true;
         setTimeout(()=>{msv.textContent="Save";msv.disabled=false;},1200);});
