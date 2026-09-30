@@ -8,6 +8,8 @@
   var status = document.getElementById('visitor-status');
   var note = document.getElementById('visitor-location-note');
   var data = {countries: [], regions: [], cities: []}, regions = [], svg, stateLayer, cityLayer;
+  var HIDDEN_MAP_CITIES = ['Roswell'];
+  function mapHidden(name){return HIDDEN_MAP_CITIES.indexOf(name)>=0;}
   var box = [0, 0, 900, 506.25], country = '', region = '', city = '';
   var ns = 'http://www.w3.org/2000/svg', dragged = false;
   function norm(s) { return (s || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
@@ -91,7 +93,7 @@
     records.forEach(function(r){option(citySelect,r.city,label(r.city));});citySelect.disabled=!records.length;
     cityLayer.replaceChildren();
     records.forEach(function(r){
-      if(!r.location)return;
+      if(!r.location||mapHidden(r.city))return;
       var dot=document.createElementNS(ns,'circle');dot.setAttribute('cx',(r.location.longitude+180)*2.5);dot.setAttribute('cy',(85-r.location.latitude)*2.5+25);dot.setAttribute('r','0.2');dot.setAttribute('fill','#0039a6');dot.setAttribute('stroke','#fff');dot.setAttribute('stroke-width','1');dot.setAttribute('vector-effect','non-scaling-stroke');dot.dataset.city=r.city;
       var title=document.createElementNS(ns,'title');title.textContent=r.city+': '+r.sessions+' sessions';dot.appendChild(title);dot.addEventListener('click',function(){if(!dragged)chooseCity(r.city);});cityLayer.appendChild(dot)
     });
@@ -105,7 +107,7 @@
     if(!name){chooseRegion(region);return;}
     city=name;citySelect.value=name;
     var r=data.cities.find(function(r){return r.country===country&&r.region===region&&r.city===city;});
-    if(r&&r.location){var x=(r.location.longitude+180)*2.5,y=(85-r.location.latitude)*2.5+25;cityLayer.querySelectorAll('text').forEach(function(t){t.remove();});cityLayer.querySelectorAll('circle').forEach(function(p){p.setAttribute('fill',p.dataset.city===name?'#d43d2a':'#0039a6');});var lab=document.createElementNS(ns,'text');lab.dataset.x=x;lab.dataset.y=y;lab.dataset.city=r.city;lab.setAttribute('fill','#1a3a5c');lab.setAttribute('paint-order','stroke');lab.setAttribute('stroke','#ffffff');lab.setAttribute('font-weight','700');lab.setAttribute('style','user-select:none');lab.textContent=r.city;lab.addEventListener('click',function(){if(!dragged)chooseCity(r.city);});cityLayer.appendChild(lab);setBox([x-6,y-3.375,12,6.75]);note.textContent=r.city+' · '+r.sessions+' visits. Marker indicates the city center, not a visitor address.';}
+    if(r&&r.location){var x=(r.location.longitude+180)*2.5,y=(85-r.location.latitude)*2.5+25;cityLayer.querySelectorAll('text').forEach(function(t){t.remove();});cityLayer.querySelectorAll('circle').forEach(function(p){p.setAttribute('fill',p.dataset.city===name?'#d43d2a':'#0039a6');});if(!mapHidden(r.city)){var lab=document.createElementNS(ns,'text');lab.dataset.x=x;lab.dataset.y=y;lab.dataset.city=r.city;lab.setAttribute('fill','#1a3a5c');lab.setAttribute('paint-order','stroke');lab.setAttribute('stroke','#ffffff');lab.setAttribute('font-weight','700');lab.setAttribute('style','user-select:none');lab.textContent=r.city;lab.addEventListener('click',function(){if(!dragged)chooseCity(r.city);});cityLayer.appendChild(lab);}setBox([x-6,y-3.375,12,6.75]);note.textContent=r.city+' · '+r.sessions+' visits. Marker indicates the city center, not a visitor address.';}
     else {note.textContent=label(name)+' has reported visits, but no matched map coordinates are available.';}
   }
   function zoom(factor) {
