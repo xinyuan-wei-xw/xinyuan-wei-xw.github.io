@@ -1,3 +1,4 @@
+---
 # Replace placeholders with real projects. URL makes the entire card clickable.
 # figure: use an image path such as /images/lab/example.png
 projects:
@@ -11,10 +12,10 @@ projects:
     figure: "/lab/planner/thumbnail.png"
     figure_alt: "X Planner daily planner interface"
     url: "/lab/planner/"
-  - title: "[Reading] News Watcher"
-    description: "A daily digest of the WSJ and The Economist with plain-English summaries — skim the day, then click through to read the originals"
+  - title: "[Reading] Signal"
+    description: "Daily shortcut to some news"
     figure: "/images/lab/news-watcher.svg"
-    figure_alt: "News Watcher daily digest illustration"
+    figure_alt: "Signal daily digest illustration"
     url: "/lab/news-watcher/"
   - title: "[Learning] IS Research Craft"
     description: "Learning notes to think and work as an IS researcher"
@@ -31,13 +32,15 @@ projects:
     figure: "/images/lab/under-review.svg"
     figure_alt: "A manuscript approaching a journal gate in UNDER REVIEW"
     url: "/lab/under-review/"
-  - title: "[Productivity] Tex/PDF to Word"
-    description: "Convert LaTeX projects and PDFs into clean Word documents"
-    figure: "/images/lab/tex-pdf-to-word.svg"
-    figure_alt: "A LaTeX document and a scanned page converting into a Word document"
-    url: "https://tex2word.onrender.com"
+  # Temporarily hidden 2026-09-29 (tex2word not working well yet) — uncomment to restore.
+#   - title: "[Productivity] Tex/PDF to Word"
+#     description: "Convert LaTeX projects and PDFs into clean Word documents"
+#     figure: "/images/lab/tex-pdf-to-word.svg"
+#     figure_alt: "A LaTeX document and a scanned page converting into a Word document"
+#     url: "https://tex2word.onrender.com"
   - title: "Visitor Map"
     description: "Website visit records by country, state/province, and city"
     figure: "/images/lab/visitor-map.svg"
     figure_alt: "World map of website visits by country"
     url: "/visitor-map/"
+---
