@@ -9,6 +9,7 @@
 .visitor-map-viewport { overflow: auto; max-height: 650px; border: 1px solid #cbdced; border-radius: 6px; }
 #visitor-map-image { display: block; width: 100%; max-width: none; aspect-ratio: 900 / 506.25; }
 .visitor-table { width: 100%; }
+.visitor-table th:first-child, .visitor-table td:first-child { width: 2ch; white-space: nowrap; }
 .visitor-table th { text-align: left; }
 .visitor-table td, .visitor-table thead th:last-child { text-align: right; }
 .visitor-table tbody th { font-weight: normal; }
