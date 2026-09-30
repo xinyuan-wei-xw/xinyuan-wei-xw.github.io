@@ -46,7 +46,7 @@
     } else if (!region) {
       heading = 'State / province'; rows = data.regions.filter(function (r) { return r.country === country; }).map(function (r) { return {name:r.region,n:r.sessions,choose:function(){chooseRegion(r.region);}}; });
     } else {
-      heading = 'City'; rows = data.cities.filter(function (r) { return r.country === country && r.region === region; }).map(function (r) { return {name:r.city,n:r.sessions,choose:function(){chooseCity(r.city);}}; });
+      heading = 'City'; rows = data.cities.filter(function (r) { return r.country === country && r.region === region && !mapHidden(r.city); }).map(function (r) { return {name:r.city,n:r.sessions,choose:function(){chooseCity(r.city);}}; });
     }
     rows.sort(function(a,b){return (b.n-a.n) || a.name.localeCompare(b.name);});
     document.getElementById('visitor-table-title').textContent = 'Visits by ' + heading.toLowerCase();
@@ -90,7 +90,7 @@
     if(!name){chooseCountry(country);return;}
     region=name;city='';regionSelect.value=name;note.textContent='';clear(citySelect,'All cities');
     var records=data.cities.filter(function(r){return r.country===country&&r.region===region;});
-    records.forEach(function(r){option(citySelect,r.city,label(r.city));});citySelect.disabled=!records.length;
+    records.forEach(function(r){if(!mapHidden(r.city))option(citySelect,r.city,label(r.city));});citySelect.disabled=!records.length;
     cityLayer.replaceChildren();
     records.forEach(function(r){
       if(!r.location||mapHidden(r.city))return;
