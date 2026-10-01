@@ -6,14 +6,21 @@ records. The GA property is 554846099. Its service account is a GA Viewer.
 ## Scope
 
 - Metric: sessions (visits, not distinct people or page views).
-- Range: last 30 calendar days including today, in the property's time zone.
+- Range: all visits on record. Each run adds only complete days not yet recorded
+  (through yesterday, in the property's time zone), so a calendar day is counted
+  exactly once and nothing is ever dropped as time passes. The cumulative store
+  is assets/data/visitor-map-history.json, committed back to master by the
+  workflow ([skip ci]); the first run seeds as far back as GA4 retention allows
+  (tries 365/180/90/29 days, longest first) and records the achieved
+  seed_range_days. If a daily run fails, the next run's watermark covers the gap.
 - Filter: hostName xinyuan-wei-xw.github.io, eventName page_view, pagePath not
   starting with /visitor-map. A session visiting other pages and the map still
   counts. A map-only visit does not. The map page also disables GA tagging.
 - Dimensions: countryId, country, region, and city. All positive aggregate counts are included; no five-visit threshold. No institution inference or IP lookup.
 - Total comes from a separate report without a country dimension, rather than
   assuming country rows sum to a unique global session count.
-- Today is provisional. Google thresholds and unknown locations can affect totals.
+- Only complete days are counted (through yesterday), so today's partial data never
+  appears. Google thresholds and unknown locations can affect totals.
 
 ## Authentication and deployment
 
@@ -23,8 +30,10 @@ are not written to disk. The analytics.readonly OAuth scope is used.
 
 On manual dispatch, pushes to master, and daily at 11:23 UTC, the workflow exports
 assets/data/visitor-map.json and images/lab/visitor-map.svg, builds Jekyll, and
-deploys via GitHub Pages Actions. Generated data is included in the deployment
-artifact, not committed to git history. If authentication or export fails, the
+deploys via GitHub Pages Actions. The rendered visitor-map.json and SVG stay in
+the deployment artifact, but the cumulative assets/data/visitor-map-history.json
+IS committed to git history ([skip ci], so the push does not re-trigger the
+workflow) — it is the map's memory across runs. If authentication or export fails, the
 workflow fails before deployment, preserving the existing website.
 
 GitHub Settings > Pages > Source must be GitHub Actions before activation.
