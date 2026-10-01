@@ -1,0 +1,643 @@
+{
+  "cities": {
+    "(not set)|(not set)|(not set)": {
+      "city": "(not set)",
+      "country": "(not set)",
+      "country_name": "(not set)",
+      "region": "(not set)",
+      "sessions": 1
+    },
+    "CN|(not set)|(not set)": {
+      "city": "(not set)",
+      "country": "CN",
+      "country_name": "China",
+      "region": "(not set)",
+      "sessions": 1
+    },
+    "CN|Heilongjiang|Harbin": {
+      "city": "Harbin",
+      "country": "CN",
+      "country_name": "China",
+      "location": {
+        "latitude": 45.75193,
+        "longitude": 126.648039
+      },
+      "region": "Heilongjiang",
+      "sessions": 1
+    },
+    "CN|Hunan|Zhangjiajie": {
+      "city": "Zhangjiajie",
+      "country": "CN",
+      "country_name": "China",
+      "location": {
+        "latitude": 29.117,
+        "longitude": 110.479
+      },
+      "region": "Hunan",
+      "sessions": 1
+    },
+    "CN|Shaanxi|Xi'An": {
+      "city": "Xi'An",
+      "country": "CN",
+      "country_name": "China",
+      "location": {
+        "latitude": 34.276971,
+        "longitude": 108.89305
+      },
+      "region": "Shaanxi",
+      "sessions": 1
+    },
+    "DE|(not set)|(not set)": {
+      "city": "(not set)",
+      "country": "DE",
+      "country_name": "Germany",
+      "region": "(not set)",
+      "sessions": 2
+    },
+    "SG|(not set)|(not set)": {
+      "city": "(not set)",
+      "country": "SG",
+      "country_name": "Singapore",
+      "region": "(not set)",
+      "sessions": 1
+    },
+    "SG|(not set)|Singapore": {
+      "city": "Singapore",
+      "country": "SG",
+      "country_name": "Singapore",
+      "location": {
+        "latitude": 1.294979,
+        "longitude": 103.853875
+      },
+      "region": "(not set)",
+      "sessions": 61
+    },
+    "SG||Singapore": {
+      "city": "Singapore",
+      "country": "SG",
+      "country_name": "Singapore",
+      "location": {
+        "latitude": 1.294979,
+        "longitude": 103.853875
+      },
+      "region": "",
+      "sessions": 4
+    },
+    "US|(not set)|(not set)": {
+      "city": "(not set)",
+      "country": "US",
+      "country_name": "United States",
+      "region": "(not set)",
+      "sessions": 5
+    },
+    "US|California|Daly City": {
+      "city": "Daly City",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 37.69109,
+        "longitude": -122.47241
+      },
+      "region": "California",
+      "sessions": 1
+    },
+    "US|California|Hercules": {
+      "city": "Hercules",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 38.0104,
+        "longitude": -122.26538
+      },
+      "region": "California",
+      "sessions": 1
+    },
+    "US|California|Los Angeles": {
+      "city": "Los Angeles",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 33.991924,
+        "longitude": -118.181926
+      },
+      "region": "California",
+      "sessions": 3
+    },
+    "US|California|San Jose": {
+      "city": "San Jose",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 37.301929,
+        "longitude": -121.851935
+      },
+      "region": "California",
+      "sessions": 1
+    },
+    "US|California|South San Francisco": {
+      "city": "South San Francisco",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 37.65607,
+        "longitude": -122.4142
+      },
+      "region": "California",
+      "sessions": 1
+    },
+    "US|Florida|Daytona Beach": {
+      "city": "Daytona Beach",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 29.210554,
+        "longitude": -81.023075
+      },
+      "region": "Florida",
+      "sessions": 1
+    },
+    "US|Florida|Hialeah": {
+      "city": "Hialeah",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 25.82699,
+        "longitude": -80.2815
+      },
+      "region": "Florida",
+      "sessions": 1
+    },
+    "US|Florida|Sarasota": {
+      "city": "Sarasota",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 27.336121,
+        "longitude": -82.530787
+      },
+      "region": "Florida",
+      "sessions": 1
+    },
+    "US|Florida|Spring Hill": {
+      "city": "Spring Hill",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 28.478945,
+        "longitude": -82.547711
+      },
+      "region": "Florida",
+      "sessions": 1
+    },
+    "US|Georgia|Atlanta": {
+      "city": "Atlanta",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 33.83196,
+        "longitude": -84.401895
+      },
+      "region": "Georgia",
+      "sessions": 28
+    },
+    "US|Georgia|Dallas": {
+      "city": "Dallas",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 33.92523,
+        "longitude": -84.84155
+      },
+      "region": "Georgia",
+      "sessions": 6
+    },
+    "US|Georgia|Dunwoody": {
+      "city": "Dunwoody",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 33.92621,
+        "longitude": -84.33625
+      },
+      "region": "Georgia",
+      "sessions": 21
+    },
+    "US|Georgia|East Cobb": {
+      "city": "East Cobb",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 33.98293,
+        "longitude": -84.42498
+      },
+      "region": "Georgia",
+      "sessions": 1
+    },
+    "US|Georgia|Marietta": {
+      "city": "Marietta",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 33.955613,
+        "longitude": -84.543248
+      },
+      "region": "Georgia",
+      "sessions": 2
+    },
+    "US|Georgia|Rome": {
+      "city": "Rome",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 34.24489,
+        "longitude": -85.16679
+      },
+      "region": "Georgia",
+      "sessions": 2
+    },
+    "US|Georgia|Roswell": {
+      "city": "Roswell",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 34.02167,
+        "longitude": -84.359
+      },
+      "region": "Georgia",
+      "sessions": 32
+    },
+    "US|Illinois|Chicago": {
+      "city": "Chicago",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 41.831937,
+        "longitude": -87.752001
+      },
+      "region": "Illinois",
+      "sessions": 1
+    },
+    "US|Louisiana|Mandeville": {
+      "city": "Mandeville",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Louisiana",
+      "sessions": 1
+    },
+    "US|New York|(not set)": {
+      "city": "(not set)",
+      "country": "US",
+      "country_name": "United States",
+      "region": "New York",
+      "sessions": 2
+    },
+    "US|North Carolina|Wilmington": {
+      "city": "Wilmington",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 34.225519,
+        "longitude": -77.94502
+      },
+      "region": "North Carolina",
+      "sessions": 1
+    },
+    "US|Ohio|Columbus": {
+      "city": "Columbus",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 39.98192,
+        "longitude": -82.991956
+      },
+      "region": "Ohio",
+      "sessions": 1
+    },
+    "US|Oklahoma|Tulsa": {
+      "city": "Tulsa",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 36.120003,
+        "longitude": -95.930021
+      },
+      "region": "Oklahoma",
+      "sessions": 1
+    },
+    "US|Pennsylvania|Pittsburgh": {
+      "city": "Pittsburgh",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 40.431945,
+        "longitude": -80.001931
+      },
+      "region": "Pennsylvania",
+      "sessions": 1
+    },
+    "US|Texas|Arlington": {
+      "city": "Arlington",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 32.684761,
+        "longitude": -97.020239
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
+    "US|Texas|Fort Worth": {
+      "city": "Fort Worth",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 32.739977,
+        "longitude": -97.340038
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
+    "US|Texas|Houston": {
+      "city": "Houston",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 29.82192,
+        "longitude": -95.341925
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
+    "US|Texas|Sugar Land": {
+      "city": "Sugar Land",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 29.63297,
+        "longitude": -95.60067
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
+    "US|Utah|Salt Lake City": {
+      "city": "Salt Lake City",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 40.776962,
+        "longitude": -111.931998
+      },
+      "region": "Utah",
+      "sessions": 1
+    },
+    "US|Vermont|Burlington": {
+      "city": "Burlington",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 44.475798,
+        "longitude": -73.212467
+      },
+      "region": "Vermont",
+      "sessions": 2
+    },
+    "US|Virginia|Arlington": {
+      "city": "Arlington",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 38.8905,
+        "longitude": -77.08629
+      },
+      "region": "Virginia",
+      "sessions": 1
+    },
+    "US|Virginia|Ashburn": {
+      "city": "Ashburn",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 39.05232,
+        "longitude": -77.4827
+      },
+      "region": "Virginia",
+      "sessions": 1
+    },
+    "US|Virginia|Reston": {
+      "city": "Reston",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 38.95979,
+        "longitude": -77.35453
+      },
+      "region": "Virginia",
+      "sessions": 1
+    },
+    "US|Virginia|Suffolk": {
+      "city": "Suffolk",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 36.73114,
+        "longitude": -76.58837
+      },
+      "region": "Virginia",
+      "sessions": 1
+    },
+    "US|Washington|Moses Lake": {
+      "city": "Moses Lake",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Washington",
+      "sessions": 2
+    },
+    "US|Washington|Seattle": {
+      "city": "Seattle",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 47.571948,
+        "longitude": -122.341931
+      },
+      "region": "Washington",
+      "sessions": 3
+    }
+  },
+  "countries": {
+    "(not set)": {
+      "name": "(not set)",
+      "sessions": 1
+    },
+    "CN": {
+      "name": "China",
+      "sessions": 4
+    },
+    "DE": {
+      "name": "Germany",
+      "sessions": 2
+    },
+    "SG": {
+      "name": "Singapore",
+      "sessions": 66
+    },
+    "US": {
+      "name": "United States",
+      "sessions": 122
+    }
+  },
+  "first_start": "2025-10-01",
+  "last_end": "2026-09-30",
+  "metric": "sessions",
+  "regions": {
+    "(not set)|(not set)": {
+      "country": "(not set)",
+      "country_name": "(not set)",
+      "region": "(not set)",
+      "sessions": 1
+    },
+    "CN|(not set)": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "(not set)",
+      "sessions": 1
+    },
+    "CN|Heilongjiang": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "Heilongjiang",
+      "sessions": 1
+    },
+    "CN|Hunan": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "Hunan",
+      "sessions": 1
+    },
+    "CN|Shaanxi": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "Shaanxi",
+      "sessions": 1
+    },
+    "DE|(not set)": {
+      "country": "DE",
+      "country_name": "Germany",
+      "region": "(not set)",
+      "sessions": 2
+    },
+    "SG|": {
+      "country": "SG",
+      "country_name": "Singapore",
+      "region": "",
+      "sessions": 4
+    },
+    "SG|(not set)": {
+      "country": "SG",
+      "country_name": "Singapore",
+      "region": "(not set)",
+      "sessions": 62
+    },
+    "US|(not set)": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "(not set)",
+      "sessions": 5
+    },
+    "US|California": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "California",
+      "sessions": 7
+    },
+    "US|Florida": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Florida",
+      "sessions": 3
+    },
+    "US|Georgia": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Georgia",
+      "sessions": 90
+    },
+    "US|Illinois": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Illinois",
+      "sessions": 1
+    },
+    "US|Louisiana": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Louisiana",
+      "sessions": 1
+    },
+    "US|New York": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "New York",
+      "sessions": 2
+    },
+    "US|North Carolina": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "North Carolina",
+      "sessions": 1
+    },
+    "US|Ohio": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Ohio",
+      "sessions": 1
+    },
+    "US|Oklahoma": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Oklahoma",
+      "sessions": 1
+    },
+    "US|Pennsylvania": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Pennsylvania",
+      "sessions": 1
+    },
+    "US|Texas": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Texas",
+      "sessions": 4
+    },
+    "US|Utah": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Utah",
+      "sessions": 1
+    },
+    "US|Vermont": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Vermont",
+      "sessions": 2
+    },
+    "US|Virginia": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Virginia",
+      "sessions": 4
+    },
+    "US|Washington": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Washington",
+      "sessions": 5
+    }
+  },
+  "seed_range_days": 365,
+  "thresholded": false,
+  "timezone": "America/Los_Angeles",
+  "total_sessions": 194,
+  "version": 1
+}
