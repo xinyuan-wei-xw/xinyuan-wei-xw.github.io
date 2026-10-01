@@ -6,7 +6,7 @@ on:
   schedule:
     - cron: '23 11 * * *'
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -14,11 +14,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
       pages: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Authenticate for read-only Analytics access
         id: google
         uses: google-github-actions/auth@v3
@@ -33,6 +35,23 @@ jobs:
         env:
           GA_ACCESS_TOKEN: ${{ steps.google.outputs.access_token }}
         run: python3 _tools/visitor_map/export.py
+      - name: Save cumulative visit history
+        # The history file is the map's memory: without committing it, each run
+        # would start over. [skip ci] keeps this push from re-triggering the
+        # workflow. If another run already merged newer days, keep theirs.
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin master
+          OURS=$(python3 -c "import json; print(json.load(open('assets/data/visitor-map-history.json'))['last_end'])")
+          THEIRS=$(git show HEAD:assets/data/visitor-map-history.json 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin)['last_end'])") || THEIRS=""
+          if [ -n "$THEIRS" ] && [ "$THEIRS" \> "$OURS" ]; then
+            git checkout -- assets/data/visitor-map-history.json
+          else
+            git add assets/data/visitor-map-history.json
+            git diff --cached --quiet || git commit -m "Visitor map: accumulate visit history [skip ci]"
+          fi
+          git push origin master
       - uses: actions/configure-pages@v5
       - uses: actions/jekyll-build-pages@v1
         with:
