@@ -653,6 +653,14 @@ function taskVisibleOn(t,dk){
   const hD=String(t.due||"").slice(0,10)||aD;
   return !!hD&&hD===dk;
 }
+/* When a task is added to Tasks Today, Important & Urgent (Do now, quad 0)
+   tasks go straight to the TOP of the list; everything else appends at the
+   bottom. Used on every add path (matrix "+ task", week "+ task", sync). */
+function addToToday(day,t){
+  day.top3=day.top3||[];
+  if(t&&t.quad===0){day.top3.unshift(t);}
+  else{day.top3.push(t);}
+}
 function syncDayList(dk){
   const day=getDay(new Date(dk+"T12:00:00"));
   let changed=false;
@@ -661,10 +669,12 @@ function syncDayList(dk){
     if(r&&r.id&&!taskVisibleOn(r,dk)){day.top3.splice(i,1);changed=true;}
   }
   const have=new Set((day.top3||[]).map(r=>r&&r.id).filter(Boolean));
+  const urgent=[],rest=[];
   (DB.matrix||[]).forEach(t=>{
     if(!t||!t.id||have.has(t.id)||!(t.t&&t.t.trim()))return;
-    if(taskVisibleOn(t,dk)){day.top3.push(t);have.add(t.id);changed=true;}
+    if(taskVisibleOn(t,dk)){have.add(t.id);(t.quad===0?urgent:rest).push(t);changed=true;}
   });
+  if(urgent.length||rest.length){day.top3=urgent.concat(day.top3||[],rest);}
   if(changed)save();
 }
 function backfillToday(){
@@ -1017,7 +1027,7 @@ function renderDay(){
     quad.appendChild(ul);
     const add=document.createElement("button");add.className="qadd";add.textContent="+ task";
     add.addEventListener("click",()=>{
-      openTaskDialog({heading:"Add a task",context:"Quadrant: "+def.h,start:"",end:"",submitLabel:"Add task",onSubmit:v=>{const nt={id:newMid(),t:v.title,d:false,quad:def.q,added:Date.now(),due:v.start,dueEnd:v.end,notes:v.notes,place:v.place};DB.matrix.push(nt);day.top3.push(nt);save();drawTasks();tt.redraw();}});
+      openTaskDialog({heading:"Add a task",context:"Quadrant: "+def.h,start:"",end:"",submitLabel:"Add task",onSubmit:v=>{const nt={id:newMid(),t:v.title,d:false,quad:def.q,added:Date.now(),due:v.start,dueEnd:v.end,notes:v.notes,place:v.place};DB.matrix.push(nt);addToToday(day,nt);save();drawTasks();tt.redraw();}});
 
 
     });
@@ -1186,7 +1196,7 @@ function miniCal(ref,wkStart,wkEnd){const y=ref.getFullYear(),m=ref.getMonth();c
     });
     col.appendChild(ul);
     const add=document.createElement("button");add.className="mini-add";add.textContent="+ task";
-    add.addEventListener("click",()=>{openTaskDialog({heading:"Add a task",start:dk+"T09:00",end:dk+"T10:00",context:DOW[i]+" "+MON3[d.getMonth()]+" "+d.getDate(),submitLabel:"Add task",onSubmit:v=>{const nt={id:newMid(),t:v.title,d:false,quad:0,added:Date.now(),due:v.start,dueEnd:v.end,notes:v.notes,place:v.place};DB.matrix.push(nt);day.top3.push(nt);save();renderWeek();}});
+    add.addEventListener("click",()=>{openTaskDialog({heading:"Add a task",start:dk+"T09:00",end:dk+"T10:00",context:DOW[i]+" "+MON3[d.getMonth()]+" "+d.getDate(),submitLabel:"Add task",onSubmit:v=>{const nt={id:newMid(),t:v.title,d:false,quad:0,added:Date.now(),due:v.start,dueEnd:v.end,notes:v.notes,place:v.place};DB.matrix.push(nt);addToToday(day,nt);save();renderWeek();}});
 
     });
     col.appendChild(add);
