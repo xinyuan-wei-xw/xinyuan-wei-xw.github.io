@@ -19,7 +19,7 @@ projects:
     url: "/lab/news-watcher/"
   - title: "[Learning] IS Research Craft"
     description: "Learning notes to think and work as an IS researcher"
-    figure: "/lab/is-research-craft/cover.jpg"
+    figure: "/lab/is-research-craft/cover.jpg?v=20261002"
     figure_alt: "IS Research Craft study notes illustration"
     url: "/lab/is-research-craft/"
   - title: "[Life] Eat Well"
