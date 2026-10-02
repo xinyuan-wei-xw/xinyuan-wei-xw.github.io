@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>News Watcher</title>
+<title>Signal</title>
 <style>
 :root{--blue:#52adc8;--ink:#2b2f33;--soft:#5b636b;--line:#e3e6e8;--bg:#f7f8f8;}
 *{box-sizing:border-box}
@@ -25,6 +25,10 @@ h2.sec{font-size:1.3em;margin:1.6em 0 .8em}
 .srccard .links a:hover{text-decoration:underline}
 .srccard .links .ext{font-weight:400;color:var(--soft)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.colh{font-size:1.05em;margin:0 0 12px;color:var(--ink)}
+.colcards{display:grid;grid-template-columns:1fr;gap:18px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
 .card{display:block;border:1px solid var(--line);border-radius:12px;overflow:hidden;text-decoration:none;color:var(--ink);background:#fff;transition:transform .15s,box-shadow .15s,border-color .15s}
 .card:hover{border-color:var(--blue);box-shadow:0 4px 18px rgba(82,173,200,.18);transform:translateY(-3px)}
 .card .body{padding:16px 18px 18px}
@@ -40,7 +44,7 @@ footer .wrap{padding:22px;font-size:13px;color:var(--soft)}
 <div class="topbar"><div class="wrap"><a href="/toolbox/">&larr; Back to Toolbox</a></div></div>
 <div class="wrap">
 <main>
-<div class="hero"><h1>News Watcher</h1>
+<div class="hero"><h1>Signal</h1>
 <p class="sub">A daily digest of the outlets I subscribe to &mdash; skim the day in plain English, then click through to read the originals.</p>
 <p class="byline">Every morning I pull the latest from <strong>The Wall Street Journal</strong> and <strong>The Economist</strong>, pick the stories that matter across AI &amp; tech, business &amp; markets, and economics &amp; policy, and write a short summary of each &mdash; what happened and why it matters. Each summary links to the original article, which you can read in full with your own subscription.</p></div>
 
@@ -48,10 +52,13 @@ footer .wrap{padding:22px;font-size:13px;color:var(--soft)}
 <div class="srcgrid" id="srcgrid"><p class="loading">Loading sources&hellip;</p></div>
 
 <h2 class="sec">Past digests</h2>
-<div class="grid" id="grid"><p class="loading">Loading digests&hellip;</p></div>
+<div class="cols">
+  <div class="col"><h3 class="colh">The Wall Street Journal</h3><div class="colcards" id="col-wsj"><p class="loading">Loading digests&hellip;</p></div></div>
+  <div class="col"><h3 class="colh">The Economist</h3><div class="colcards" id="col-econ"><p class="loading">Loading digests&hellip;</p></div></div>
+</div>
 </main>
 </div>
-<footer><div class="wrap">News Watcher &middot; daily digest &middot; summaries generated from public feed data; full articles live on the publisher's site.</div></footer>
+<footer><div class="wrap">Signal &middot; daily digest &middot; summaries generated from public feed data; full articles live on the publisher's site.</div></footer>
 <script>
 var REPO = "xinyuan-wei-xw/xinyuan-wei-xw.github.io";
 var DIR = "lab/news-watcher";
@@ -88,20 +95,39 @@ function renderSources(latest){
   });
 }
 
+function digestCard(it){
+  var label = it.source === "wsj" ? "WSJ" : "Economist";
+  var a = document.createElement("a");
+  a.className = "card"; a.href = it.file;
+  var body = document.createElement("div"); body.className = "body";
+  var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = label;
+  var h = document.createElement("p"); h.className = "date"; h.textContent = fmt(it.date);
+  var d = document.createElement("p"); d.className = "desc"; d.textContent = "The day's essential stories, distilled.";
+  body.appendChild(tag); body.appendChild(h); body.appendChild(d);
+  a.appendChild(body);
+  return a;
+}
+
 function renderArchive(items){
-  var grid = document.getElementById("grid");
-  grid.innerHTML = "";
-  items.forEach(function(it){
-    var label = it.source === "wsj" ? "WSJ" : "Economist";
-    var a = document.createElement("a");
-    a.className = "card"; a.href = it.file;
-    var body = document.createElement("div"); body.className = "body";
-    var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = label;
-    var h = document.createElement("p"); h.className = "date"; h.textContent = fmt(it.date);
-    var d = document.createElement("p"); d.className = "desc"; d.textContent = "The day's essential stories, distilled.";
-    body.appendChild(tag); body.appendChild(h); body.appendChild(d);
-    a.appendChild(body);
-    grid.appendChild(a);
+  // Two columns — one per source — each ranked by date, most recent first.
+  var cols = {
+    wsj: document.getElementById("col-wsj"),
+    economist: document.getElementById("col-econ")
+  };
+  Object.keys(cols).forEach(function(src){
+    var box = cols[src];
+    if(!box) return;
+    box.innerHTML = "";
+    var mine = items
+      .filter(function(it){ return it.source === src; })
+      .sort(function(a,b){ return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
+    if(!mine.length){
+      var p = document.createElement("p");
+      p.className = "loading"; p.textContent = "No digests yet.";
+      box.appendChild(p);
+      return;
+    }
+    mine.forEach(function(it){ box.appendChild(digestCard(it)); });
   });
 }
 
