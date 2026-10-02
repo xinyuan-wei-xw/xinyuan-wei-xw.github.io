@@ -7,6 +7,17 @@
       "region": "(not set)",
       "sessions": 1
     },
+    "CA|Ontario|Toronto": {
+      "city": "Toronto",
+      "country": "CA",
+      "country_name": "Canada",
+      "location": {
+        "latitude": 43.701926,
+        "longitude": -79.421967
+      },
+      "region": "Ontario",
+      "sessions": 1
+    },
     "CN|(not set)|(not set)": {
       "city": "(not set)",
       "country": "CN",
@@ -81,7 +92,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 4
+      "sessions": 7
     },
     "US|(not set)|(not set)": {
       "city": "(not set)",
@@ -198,7 +209,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 28
+      "sessions": 31
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -277,6 +288,24 @@
       "region": "Illinois",
       "sessions": 1
     },
+    "US|Illinois|Glenview": {
+      "city": "Glenview",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Illinois",
+      "sessions": 1
+    },
+    "US|Iowa|Council Bluffs": {
+      "city": "Council Bluffs",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 41.262273,
+        "longitude": -95.8608
+      },
+      "region": "Iowa",
+      "sessions": 1
+    },
     "US|Louisiana|Mandeville": {
       "city": "Mandeville",
       "country": "US",
@@ -302,6 +331,13 @@
       "region": "North Carolina",
       "sessions": 1
     },
+    "US|Ohio|Cleveland Heights": {
+      "city": "Cleveland Heights",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Ohio",
+      "sessions": 1
+    },
     "US|Ohio|Columbus": {
       "city": "Columbus",
       "country": "US",
@@ -310,6 +346,13 @@
         "latitude": 39.98192,
         "longitude": -82.991956
       },
+      "region": "Ohio",
+      "sessions": 1
+    },
+    "US|Ohio|McConnelsville": {
+      "city": "McConnelsville",
+      "country": "US",
+      "country_name": "United States",
       "region": "Ohio",
       "sessions": 1
     },
@@ -322,6 +365,13 @@
         "longitude": -95.930021
       },
       "region": "Oklahoma",
+      "sessions": 1
+    },
+    "US|Pennsylvania|": {
+      "city": "",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Pennsylvania",
       "sessions": 1
     },
     "US|Pennsylvania|Pittsburgh": {
@@ -469,6 +519,10 @@
       "name": "(not set)",
       "sessions": 1
     },
+    "CA": {
+      "name": "Canada",
+      "sessions": 1
+    },
     "CN": {
       "name": "China",
       "sessions": 4
@@ -479,21 +533,27 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 66
+      "sessions": 69
     },
     "US": {
       "name": "United States",
-      "sessions": 122
+      "sessions": 130
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-09-30",
+  "last_end": "2026-10-01",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
       "country": "(not set)",
       "country_name": "(not set)",
       "region": "(not set)",
+      "sessions": 1
+    },
+    "CA|Ontario": {
+      "country": "CA",
+      "country_name": "Canada",
+      "region": "Ontario",
       "sessions": 1
     },
     "CN|(not set)": {
@@ -530,7 +590,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 4
+      "sessions": 7
     },
     "SG|(not set)": {
       "country": "SG",
@@ -560,12 +620,18 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 90
+      "sessions": 93
     },
     "US|Illinois": {
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
+      "sessions": 2
+    },
+    "US|Iowa": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Iowa",
       "sessions": 1
     },
     "US|Louisiana": {
@@ -590,7 +656,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Ohio",
-      "sessions": 1
+      "sessions": 3
     },
     "US|Oklahoma": {
       "country": "US",
@@ -602,7 +668,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Texas": {
       "country": "US",
@@ -638,6 +704,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 194,
+  "total_sessions": 206,
   "version": 1
 }
