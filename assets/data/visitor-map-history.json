@@ -92,7 +92,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 7
+      "sessions": 11
     },
     "US|(not set)|(not set)": {
       "city": "(not set)",
@@ -133,6 +133,17 @@
       },
       "region": "California",
       "sessions": 3
+    },
+    "US|California|San Francisco": {
+      "city": "San Francisco",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 37.769196,
+        "longitude": -122.417169
+      },
+      "region": "California",
+      "sessions": 1
     },
     "US|California|San Jose": {
       "city": "San Jose",
@@ -209,7 +220,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 31
+      "sessions": 35
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -231,7 +242,7 @@
         "longitude": -84.33625
       },
       "region": "Georgia",
-      "sessions": 21
+      "sessions": 22
     },
     "US|Georgia|East Cobb": {
       "city": "East Cobb",
@@ -276,6 +287,13 @@
       },
       "region": "Georgia",
       "sessions": 32
+    },
+    "US|Georgia|Sandy Springs": {
+      "city": "Sandy Springs",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Georgia",
+      "sessions": 1
     },
     "US|Illinois|Chicago": {
       "city": "Chicago",
@@ -351,6 +369,13 @@
     },
     "US|Ohio|McConnelsville": {
       "city": "McConnelsville",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Ohio",
+      "sessions": 1
+    },
+    "US|Ohio|Tiffin": {
+      "city": "Tiffin",
       "country": "US",
       "country_name": "United States",
       "region": "Ohio",
@@ -533,15 +558,15 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 69
+      "sessions": 73
     },
     "US": {
       "name": "United States",
-      "sessions": 130
+      "sessions": 138
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-01",
+  "last_end": "2026-10-02",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -590,7 +615,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 7
+      "sessions": 11
     },
     "SG|(not set)": {
       "country": "SG",
@@ -608,7 +633,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 7
+      "sessions": 8
     },
     "US|Florida": {
       "country": "US",
@@ -620,7 +645,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 93
+      "sessions": 99
     },
     "US|Illinois": {
       "country": "US",
@@ -656,7 +681,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Ohio",
-      "sessions": 3
+      "sessions": 4
     },
     "US|Oklahoma": {
       "country": "US",
@@ -704,6 +729,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 206,
+  "total_sessions": 218,
   "version": 1
 }
