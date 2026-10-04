@@ -36,50 +36,50 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script src="/xwei/xwei.js"></script>
 <script>
-/* 每日经文（和合本）。按日期取一节：同一天打开都是同一节，第二天换新的一节。 */
+/* 每日经文（NIV 英文）。按日期取一节：同一天打开都是同一节，第二天换新的一节。 */
 var VERSES = [
-  {t:"这是耶和华所定的日子，我们在其中要高兴欢喜！", r:"诗篇 118:24"},
-  {t:"我要时时称颂耶和华；赞美他的话必常在我口中。", r:"诗篇 34:1"},
-  {t:"当称谢进入他的门；当赞美进入他的院。当感谢他，称颂他的名！", r:"诗篇 100:4"},
-  {t:"耶和华是我的牧者，我必不致缺乏。", r:"诗篇 23:1"},
-  {t:"神是我们的避难所，是我们的力量，是我们在患难中随时的帮助。", r:"诗篇 46:1"},
-  {t:"求你使我清晨得听你慈爱之言，因为我倚靠你；求你使我知道当行的路，因我的心仰望你。", r:"诗篇 143:8"},
-  {t:"我要向山举目；我的帮助从何而来？我的帮助从造天地的耶和华而来。", r:"诗篇 121:1-2"},
-  {t:"你必将生命的道路指示我。在你面前有满足的喜乐；在你右手中有永远的福乐。", r:"诗篇 16:11"},
-  {t:"又要以耶和华为乐，他就将你心里所求的赐给你。", r:"诗篇 37:4"},
-  {t:"我要称谢你，因我受造，奇妙可畏；你的作为奇妙，这是我心深知道的。", r:"诗篇 139:14"},
-  {t:"要像一棵树栽在溪水旁，按时候结果子，叶子也不枯干。凡他所做的尽都顺利。", r:"诗篇 1:3"},
-  {t:"耶和华是我的亮光，是我的拯救，我还怕谁呢？耶和华是我性命的保障，我还惧谁呢？", r:"诗篇 27:1"},
-  {t:"你以恩典为年岁的冠冕；你的路径都滴下脂油。", r:"诗篇 65:11"},
-  {t:"求你指教我们怎样数算自己的日子，好叫我们得着智慧的心。", r:"诗篇 90:12"},
-  {t:"耶和华我的磐石，我的救赎主啊，愿我口中的言语、心里的意念在你面前蒙悦纳。", r:"诗篇 19:14"},
-  {t:"你不要害怕，因为我与你同在；不要惊惶，因为我是你的神。我必坚固你，我必帮助你，我必用我公义的右手扶持你。", r:"以赛亚书 41:10"},
-  {t:"但那等候耶和华的必重新得力。他们必如鹰展翅上腾；他们奔跑却不困倦，行走却不疲乏。", r:"以赛亚书 40:31"},
-  {t:"耶和华说：我知道我向你们所怀的意念，是赐平安的意念，不是降灾祸的意念，要叫你们末后有指望。", r:"耶利米书 29:11"},
-  {t:"你要专心仰赖耶和华，不可倚靠自己的聪明。", r:"箴言 3:5"},
-  {t:"你所做的，要交托耶和华，你所谋的，就必成立。", r:"箴言 16:3"},
-  {t:"我岂没有吩咐你吗？你当刚强壮胆！不要惧怕，也不要惊惶，因为你无论往哪里去，耶和华你的神必与你同在。", r:"约书亚记 1:9"},
-  {t:"耶和华必在你前面行；他必与你同在，必不撇下你，也不丢弃你。不要惧怕，也不要惊惶。", r:"申命记 31:8"},
-  {t:"凡劳苦担重担的人可以到我这里来，我就使你们得安息。", r:"马太福音 11:28"},
-  {t:"你们要先求他的国和他的义，这些东西都要加给你们了。", r:"马太福音 6:33"},
-  {t:"我们晓得万事都互相效力，叫爱神的人得益处，就是按他旨意被召的人。", r:"罗马书 8:28"},
-  {t:"在指望中要喜乐，在患难中要忍耐，祷告要恒切。", r:"罗马书 12:12"},
-  {t:"我靠着那加给我力量的，凡事都能做。", r:"腓立比书 4:13"},
-  {t:"应当一无挂虑，只要凡事藉着祷告、祈求，和感谢，将你们所要的告诉神。神所赐、出人意外的平安必在基督耶稣里保守你们的心怀意念。", r:"腓立比书 4:6-7"},
-  {t:"我深信那在你们心里动了善工的，必成全这工，直到耶稣基督的日子。", r:"腓立比书 1:6"},
-  {t:"要常常喜乐，不住地祷告，凡事谢恩；因为这是神在基督耶稣里向你们所定的旨意。", r:"帖撒罗尼迦前书 5:16-18"},
-  {t:"他对我说：我的恩典够你用的，因为我的能力是在人的软弱上显得完全。", r:"哥林多后书 12:9"},
-  {t:"所以，你们或吃或喝，无论做什么，都要为荣耀神而行。", r:"哥林多前书 10:31"},
-  {t:"信就是所望之事的实底，是未见之事的确据。", r:"希伯来书 11:1"},
-  {t:"我们爱，因为神先爱我们。", r:"约翰一书 4:19"},
-  {t:"神爱世人，甚至将他的独生子赐给他们，叫一切信他的，不至灭亡，反得永生。", r:"约翰福音 3:16"},
-  {t:"我是葡萄树，你们是枝子。常在我里面的，我也常在他里面，这人就多结果子；因为离了我，你们就不能做什么。", r:"约翰福音 15:5"},
-  {t:"各样美善的恩赐和各样全备的赏赐都是从上头来的，从众光之父那里降下来的。", r:"雅各书 1:17"},
-  {t:"世人哪，耶和华已指示你何为善。他向你所要的是什么呢？只要你行公义，好怜悯，存谦卑的心，与你的神同行。", r:"米迦书 6:8"},
-  {t:"神啊，求你为我造清洁的心，使我里面重新有正直的灵。", r:"诗篇 51:10"},
-  {t:"然而，我要因耶和华欢欣，因救我的神喜乐。", r:"哈巴谷书 3:18"},
-  {t:"神造万物，各按其时成为美好，又将永生安置在世人心里。", r:"传道书 3:11"},
-  {t:"圣灵所结的果子，就是仁爱、喜乐、和平、忍耐、恩慈、良善、信实、温柔、节制。", r:"加拉太书 5:22-23"}
+  {t:"The Lord has done it this very day; let us rejoice today and be glad.", r:"Psalm 118:24"},
+  {t:"I will extol the Lord at all times; his praise will always be on my lips.", r:"Psalm 34:1"},
+  {t:"Enter his gates with thanksgiving and his courts with praise; give thanks to him and praise his name.", r:"Psalm 100:4"},
+  {t:"The Lord is my shepherd, I lack nothing.", r:"Psalm 23:1"},
+  {t:"God is our refuge and strength, an ever-present help in trouble.", r:"Psalm 46:1"},
+  {t:"Let the morning bring me word of your unfailing love, for I have put my trust in you. Show me the way I should go, for to you I entrust my life.", r:"Psalm 143:8"},
+  {t:"I lift up my eyes to the mountains— where does my help come from? My help comes from the Lord, the Maker of heaven and earth.", r:"Psalm 121:1-2"},
+  {t:"You make known to me the path of life; you will fill me with joy in your presence, with eternal pleasures at your right hand.", r:"Psalm 16:11"},
+  {t:"Take delight in the Lord, and he will give you the desires of your heart.", r:"Psalm 37:4"},
+  {t:"I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well.", r:"Psalm 139:14"},
+  {t:"That person is like a tree planted by streams of water, which yields its fruit in season and whose leaf does not wither— whatever they do prospers.", r:"Psalm 1:3"},
+  {t:"The Lord is my light and my salvation— whom shall I fear? The Lord is the stronghold of my life— of whom shall I be afraid?", r:"Psalm 27:1"},
+  {t:"You crown the year with your bounty, and your carts overflow with abundance.", r:"Psalm 65:11"},
+  {t:"Teach us to number our days, that we may gain a heart of wisdom.", r:"Psalm 90:12"},
+  {t:"May these words of my mouth and this meditation of my heart be pleasing in your sight, Lord, my Rock and my Redeemer.", r:"Psalm 19:14"},
+  {t:"So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.", r:"Isaiah 41:10"},
+  {t:"But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.", r:"Isaiah 40:31"},
+  {t:"For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.", r:"Jeremiah 29:11"},
+  {t:"Trust in the Lord with all your heart and lean not on your own understanding.", r:"Proverbs 3:5"},
+  {t:"Commit to the Lord whatever you do, and he will establish your plans.", r:"Proverbs 16:3"},
+  {t:"Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.", r:"Joshua 1:9"},
+  {t:"The Lord himself goes before you and will be with you; he will never leave you nor forsake you. Do not be afraid; do not be discouraged.", r:"Deuteronomy 31:8"},
+  {t:"Come to me, all you who are weary and burdened, and I will give you rest.", r:"Matthew 11:28"},
+  {t:"But seek first his kingdom and his righteousness, and all these things will be given to you as well.", r:"Matthew 6:33"},
+  {t:"And we know that in all things God works for the good of those who love him, who have been called according to his purpose.", r:"Romans 8:28"},
+  {t:"Be joyful in hope, patient in affliction, faithful in prayer.", r:"Romans 12:12"},
+  {t:"I can do all this through him who gives me strength.", r:"Philippians 4:13"},
+  {t:"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.", r:"Philippians 4:6-7"},
+  {t:"Being confident of this, that he who began a good work in you will carry it on to completion until the day of Christ Jesus.", r:"Philippians 1:6"},
+  {t:"Rejoice always, pray continually, give thanks in all circumstances; for this is God's will for you in Christ Jesus.", r:"1 Thessalonians 5:16-18"},
+  {t:"But he said to me, My grace is sufficient for you, for my power is made perfect in weakness.", r:"2 Corinthians 12:9"},
+  {t:"So whether you eat or drink or whatever you do, do it all for the glory of God.", r:"1 Corinthians 10:31"},
+  {t:"Now faith is confidence in what we hope for and assurance about what we do not see.", r:"Hebrews 11:1"},
+  {t:"We love because he first loved us.", r:"1 John 4:19"},
+  {t:"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", r:"John 3:16"},
+  {t:"I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing.", r:"John 15:5"},
+  {t:"Every good and perfect gift is from above, coming down from the Father of the heavenly lights, who does not change like shifting shadows.", r:"James 1:17"},
+  {t:"He has shown you, O mortal, what is good. And what does the Lord require of you? To act justly and to love mercy and to walk humbly with your God.", r:"Micah 6:8"},
+  {t:"Create in me a pure heart, O God, and renew a steadfast spirit within me.", r:"Psalm 51:10"},
+  {t:"Yet I will rejoice in the Lord, I will be joyful in God my Savior.", r:"Habakkuk 3:18"},
+  {t:"He has made everything beautiful in its time. He has also set eternity in the human heart.", r:"Ecclesiastes 3:11"},
+  {t:"But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.", r:"Galatians 5:22-23"}
 ];
 
 var praise = {}, curKey = "", saveT = null;
@@ -187,7 +187,7 @@ function render(){
   $("#verseBox").innerHTML =
     '<div class="vlab">今日经文</div>' +
     '<div class="vtext">' + XW.esc(v.t) + '</div>' +
-    '<div class="vref">—— ' + XW.esc(v.r) + '（和合本）</div>';
+    '<div class="vref">—— ' + XW.esc(v.r) + ' (NIV)</div>';
   var e = praise[curKey];
   $("#diaryText").value = e ? (e.text || "") : "";
   $("#datePick").value = curKey;
