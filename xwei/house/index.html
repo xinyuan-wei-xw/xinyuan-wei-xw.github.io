@@ -21,6 +21,13 @@
 .wantadd{display:flex;gap:8px;margin-top:10px}
 .wantadd input{flex:1}
 .roomdel{margin-top:12px}
+.panel3d{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:0 0 22px}
+.panel3d h2{margin:0 0 6px;font-size:1.15em}
+.panel3d .steps{margin:8px 0 12px;padding-left:20px}
+.panel3d .steps li{margin:4px 0}
+.linkrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.linkrow input{flex:1;min-width:220px}
+.viewframe{width:100%;aspect-ratio:16/10;border:1px solid var(--line);border-radius:12px;background:#f7f5f0}
 </style>
 </head>
 <body>
@@ -71,6 +78,7 @@ function buildUI(){
         '  }\n' +
         '}</pre>' +
       '</div>' +
+      '<div id="house3d"></div>' +
       '<div class="rooms" id="rooms"></div>' +
       '<div style="margin-top:18px">' +
         '<button class="btn primary small" id="addRoom" style="width:auto">+  Add room</button>' +
@@ -91,6 +99,106 @@ function persist(){
       $("#saved").textContent = "Couldn’t save (see the note above)";
     });
   }, 700);
+}
+
+function extractUrl(raw){
+  if(!raw) return "";
+  var m = String(raw).match(/src\s*=\s*"([^"]+)"/i) || String(raw).match(/src\s*=\s*'([^']+)'/i);
+  var u = (m ? m[1] : String(raw)).trim();
+  return /^https?:\/\//i.test(u) ? u : "";
+}
+
+/* Floorplanner: the viewable embed lives at <project-url>/embed.
+   Given either form, derive both the viewer URL and the designer URL. */
+function deriveModel(u){
+  var view = u, edit = u;
+  try{
+    var a = new URL(u);
+    if(/(^|\.)floorplanner\.com$/i.test(a.hostname)){
+      if(/\/embed\/?$/.test(a.pathname)){
+        edit = a.origin + a.pathname.replace(/\/embed\/?$/, "") + a.search;
+      }else{
+        view = a.origin + a.pathname.replace(/\/?$/, "") + "/embed" + a.search;
+      }
+    }
+  }catch(e){}
+  return {view: view, edit: edit};
+}
+
+function renderModel(editing){
+  var box = $("#house3d"); if(!box) return;
+  box.innerHTML = "";
+  var panel = document.createElement("div"); panel.className = "panel3d";
+  var h = document.createElement("h2"); h.textContent = "🏠 My 3D House";
+  panel.appendChild(h);
+
+  if(house.modelUrl && !editing){
+    var f = document.createElement("iframe");
+    f.className = "viewframe"; f.src = house.modelUrl;
+    f.setAttribute("allowfullscreen", ""); f.setAttribute("loading", "lazy");
+    f.title = "My 3D house (Floorplanner)";
+    panel.appendChild(f);
+    var row = document.createElement("div"); row.className = "linkrow";
+    var open = document.createElement("a");
+    open.className = "btn primary small"; open.style.width = "auto";
+    open.style.textDecoration = "none"; open.target = "_blank"; open.rel = "noopener";
+    open.href = house.modelEdit || house.modelUrl;
+    open.textContent = "Open designer ↗";
+    var change = document.createElement("button");
+    change.className = "btn ghost small"; change.style.width = "auto";
+    change.textContent = "Change link";
+    change.addEventListener("click", function(){ renderModel(true); });
+    var remove = document.createElement("button");
+    remove.className = "linkbtn"; remove.textContent = "Remove";
+    remove.style.color = "#b3402e";
+    remove.addEventListener("click", function(){
+      if(!confirm("Remove the 3D house from this page? Your design itself stays untouched on Floorplanner.")) return;
+      house.modelUrl = ""; house.modelEdit = "";
+      renderModel(false); persist();
+    });
+    row.appendChild(open); row.appendChild(change); row.appendChild(remove);
+    panel.appendChild(row);
+    var live = document.createElement("p"); live.className = "sub";
+    live.style.marginBottom = "0";
+    live.textContent = "Live from Floorplanner — save a change there and it shows up here. If the frame stays blank, the project may need to be shared/published first; the Open designer button always works.";
+    panel.appendChild(live);
+  }else{
+    var intro = document.createElement("p"); intro.className = "sub";
+    intro.textContent = "Design your future home in 3D, step by step, and keep it right here on this page.";
+    panel.appendChild(intro);
+    var ol = document.createElement("ol"); ol.className = "steps";
+    [
+      "Create a free account at floorplanner.com (the free Basic plan is plenty: full editor, up to 5 projects).",
+      "Design your house there — walls, rooms, furniture — a little at a time, whenever you feel like it.",
+      "In Floorplanner, open the project’s Share menu and choose “Embed project”. Copy the embed code (or simply the project link) and paste it below."
+    ].forEach(function(t){
+      var li = document.createElement("li"); li.textContent = t; ol.appendChild(li);
+    });
+    panel.appendChild(ol);
+    var row2 = document.createElement("div"); row2.className = "linkrow";
+    var inp = document.createElement("input");
+    inp.type = "text";
+    inp.placeholder = "Paste the Floorplanner embed code or project link here";
+    inp.value = house.modelEdit || house.modelUrl || "";
+    var btn = document.createElement("button");
+    btn.className = "btn primary small"; btn.style.width = "auto";
+    btn.textContent = house.modelUrl ? "Update link" : "Show my house";
+    var msg = document.createElement("span"); msg.className = "saved";
+    btn.addEventListener("click", function(){
+      var u = extractUrl(inp.value);
+      if(!u){ msg.textContent = "That doesn’t look like a link — paste the embed code or the project URL."; return; }
+      var d = deriveModel(u);
+      house.modelUrl = d.view; house.modelEdit = d.edit;
+      persist(); renderModel(false);
+    });
+    row2.appendChild(inp); row2.appendChild(btn); row2.appendChild(msg);
+    panel.appendChild(row2);
+    var note = document.createElement("p"); note.className = "sub";
+    note.style.marginBottom = "0";
+    note.textContent = "Free to design and to view. The design link works like an unlisted link — anyone who has it can open it — and on this page it sits behind your login.";
+    panel.appendChild(note);
+  }
+  box.appendChild(panel);
 }
 
 function render(){
@@ -162,9 +270,11 @@ XW.boot(function(){
       })};
     }
     render();
+    renderModel(false);
   }).catch(function(){
     $("#saved").textContent = "Couldn’t load (see the note above)";
     render();
+    renderModel(false);
   });
   $("#addRoom").addEventListener("click", function(){
     house.rooms.push({id: XW.uid(), name: "New Room", desc: "", wants: []});
