@@ -25,6 +25,13 @@
       "region": "(not set)",
       "sessions": 1
     },
+    "CN|Guangdong Province|Guangzhou": {
+      "city": "Guangzhou",
+      "country": "CN",
+      "country_name": "China",
+      "region": "Guangdong Province",
+      "sessions": 1
+    },
     "CN|Heilongjiang|Harbin": {
       "city": "Harbin",
       "country": "CN",
@@ -92,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 11
+      "sessions": 15
     },
     "US|(not set)|(not set)": {
       "city": "(not set)",
@@ -100,6 +107,13 @@
       "country_name": "United States",
       "region": "(not set)",
       "sessions": 5
+    },
+    "US|California|Copperopolis": {
+      "city": "Copperopolis",
+      "country": "US",
+      "country_name": "United States",
+      "region": "California",
+      "sessions": 1
     },
     "US|California|Daly City": {
       "city": "Daly City",
@@ -211,6 +225,17 @@
       "region": "Florida",
       "sessions": 1
     },
+    "US|Georgia|Athens": {
+      "city": "Athens",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 33.961298,
+        "longitude": -83.378022
+      },
+      "region": "Georgia",
+      "sessions": 1
+    },
     "US|Georgia|Atlanta": {
       "city": "Atlanta",
       "country": "US",
@@ -220,7 +245,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 35
+      "sessions": 36
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -550,7 +575,7 @@
     },
     "CN": {
       "name": "China",
-      "sessions": 4
+      "sessions": 5
     },
     "DE": {
       "name": "Germany",
@@ -558,15 +583,15 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 73
+      "sessions": 77
     },
     "US": {
       "name": "United States",
-      "sessions": 138
+      "sessions": 141
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-02",
+  "last_end": "2026-10-03",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -585,6 +610,12 @@
       "country": "CN",
       "country_name": "China",
       "region": "(not set)",
+      "sessions": 1
+    },
+    "CN|Guangdong Province": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "Guangdong Province",
       "sessions": 1
     },
     "CN|Heilongjiang": {
@@ -615,7 +646,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 11
+      "sessions": 15
     },
     "SG|(not set)": {
       "country": "SG",
@@ -633,7 +664,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 8
+      "sessions": 9
     },
     "US|Florida": {
       "country": "US",
@@ -645,7 +676,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 99
+      "sessions": 101
     },
     "US|Illinois": {
       "country": "US",
@@ -729,6 +760,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 218,
+  "total_sessions": 226,
   "version": 1
 }
