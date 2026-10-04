@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>我的表情包 · 我的小角落</title>
+<title>Digital Twins · Xinyuan’s Secret Garden</title>
 <link rel="stylesheet" href="/xwei/xwei.css">
 <style>
 .swrap{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
@@ -20,74 +20,7 @@
 </head>
 <body>
 <div id="gate"></div>
-
-<div id="app" style="display:none">
-  <div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">
-    <a href="/xwei/" style="text-decoration:none">← 小角落</a>
-    <span class="brand">😂 我的表情包</span><span class="sp"></span>
-    <span class="saved" id="saved"></span>
-    <button class="linkbtn" id="signOut">退出登录</button>
-  </div></div>
-  <div class="wrap">
-    <h1 class="page">做自己的动态表情包</h1>
-    <p class="sub">选一张照片，加句话，挑个动作，生成 GIF。照片只在你这台设备上处理；不点“保存”，就不会上传到任何地方。</p>
-
-    <div id="rulesHint" class="rules-hint" style="display:none">
-      <b>还差最后一步：</b>数据库规则还没包含这个小角落，内容暂时存不进去。
-      打开 Firebase console → 项目 x-planner-99dd3 → Firestore Database → Rules，把规则换成下面这版再点 Publish，回来刷新就好了：
-      <pre>rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /planners/{uid} {
-      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
-    }
-    match /xwei/{uid} {
-      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
-    }
-  }
-}</pre>
-    </div>
-
-    <div class="swrap">
-      <div class="panel" style="margin-top:0">
-        <div class="srow">
-          <label for="file">照片</label>
-          <input type="file" id="file" accept="image/*" style="flex:1">
-        </div>
-        <canvas id="cv" class="sticker" width="320" height="320"></canvas>
-        <div class="srow">
-          <label for="cap">文字</label>
-          <input type="text" id="cap" placeholder="比如：收到！">
-        </div>
-        <div class="srow">
-          <label for="anim">动作</label>
-          <select id="anim" style="width:auto;flex:1">
-            <option value="bounce">跳动</option>
-            <option value="wiggle">摇摆</option>
-            <option value="breathe">呼吸（缩放）</option>
-            <option value="spin">旋转</option>
-          </select>
-        </div>
-        <div class="srow">
-          <button class="btn primary small" id="gen" style="width:auto">生成 GIF</button>
-          <span class="saved" id="genMsg"></span>
-        </div>
-        <div id="result" style="display:none">
-          <img id="gifImg" class="gifimg" alt="生成的表情包">
-          <div class="srow">
-            <a class="btn primary small" id="dl" download="my-sticker.gif" style="text-decoration:none;width:auto">下载 GIF</a>
-            <button class="btn ghost small" id="saveGif" style="width:auto">保存到我的表情包</button>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3 style="margin-top:0">我存下的表情包</h3>
-        <p class="sub" id="noneSaved">还没有存下的。做好一个，点“保存到我的表情包”，它就会出现在这里，哪个设备登录都能看到。</p>
-        <div class="savedgrid" id="savedGrid"></div>
-      </div>
-    </div>
-  </div>
-</div>
+<div id="app" style="display:none"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -98,6 +31,82 @@ service cloud.firestore {
 <script>
 var $ = function(s){ return document.querySelector(s); };
 var SIZE = 320, srcCanvas = null, gifBlob = null, myStickers = [];
+
+function buildUI(){
+  $("#app").innerHTML =
+    '<div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">' +
+      '<a href="/xwei/" style="text-decoration:none">← Secret Garden</a>' +
+      '<span class="brand">👯 Digital Twins</span><span class="sp"></span>' +
+      '<span class="saved" id="saved"></span>' +
+      '<button class="linkbtn" id="signOut">Sign out</button>' +
+    '</div></div>' +
+    '<div class="wrap">' +
+      '<h1 class="page">My Digital Twins</h1>' +
+      '<p class="sub">Pick a photo, add a caption, choose a motion — out comes an animated GIF twin. Your photo is processed right here on your device; nothing is uploaded unless you tap Save.</p>' +
+      '<div id="rulesHint" class="rules-hint" style="display:none">' +
+        '<b>One last step:</b> the database rules don’t include this garden yet, so nothing can be saved. ' +
+        'Open the Firebase console → project x-planner-99dd3 → Firestore Database → Rules, replace the rules with the version below, click Publish, then come back and refresh:' +
+        '<pre>rules_version = \'2\';\n' +
+        'service cloud.firestore {\n' +
+        '  match /databases/{database}/documents {\n' +
+        '    match /planners/{uid} {\n' +
+        '      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;\n' +
+        '    }\n' +
+        '    match /eatwell/{uid} {\n' +
+        '      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;\n' +
+        '    }\n' +
+        '    // Public per-university visit counters. Docs may ONLY contain {visits}.\n' +
+        '    match /uni_visits/{slug} {\n' +
+        '      allow read: if true;\n' +
+        '      allow create: if request.resource.data.keys().hasOnly([\'visits\']) &amp;&amp; (request.resource.data.visits == 0 || request.resource.data.visits == 1);\n' +
+        '      allow update: if request.resource.data.keys().hasOnly([\'visits\']) &amp;&amp; request.resource.data.visits == resource.data.visits + 1;\n' +
+        '    }\n' +
+        '    match /xwei/{uid} {\n' +
+        '      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;\n' +
+        '    }\n' +
+        '  }\n' +
+        '}</pre>' +
+      '</div>' +
+      '<div class="swrap">' +
+        '<div class="panel" style="margin-top:0">' +
+          '<div class="srow">' +
+            '<label for="file">Photo</label>' +
+            '<input type="file" id="file" accept="image/*" style="flex:1">' +
+          '</div>' +
+          '<canvas id="cv" class="sticker" width="320" height="320"></canvas>' +
+          '<div class="srow">' +
+            '<label for="cap">Caption</label>' +
+            '<input type="text" id="cap" placeholder="e.g. Got it!">' +
+          '</div>' +
+          '<div class="srow">' +
+            '<label for="anim">Motion</label>' +
+            '<select id="anim" style="width:auto;flex:1">' +
+              '<option value="bounce">Bounce</option>' +
+              '<option value="wiggle">Wiggle</option>' +
+              '<option value="breathe">Breathe (scale)</option>' +
+              '<option value="spin">Spin</option>' +
+            '</select>' +
+          '</div>' +
+          '<div class="srow">' +
+            '<button class="btn primary small" id="gen" style="width:auto">Generate GIF</button>' +
+            '<span class="saved" id="genMsg"></span>' +
+          '</div>' +
+          '<div id="result" style="display:none">' +
+            '<img id="gifImg" class="gifimg" alt="Your digital twin">' +
+            '<div class="srow">' +
+              '<a class="btn primary small" id="dl" download="my-twin.gif" style="text-decoration:none;width:auto">Download GIF</a>' +
+              '<button class="btn ghost small" id="saveGif" style="width:auto">Save to My Twins</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div>' +
+          '<h3 style="margin-top:0">My Saved Twins</h3>' +
+          '<p class="sub" id="noneSaved">None saved yet. Make one and tap “Save to My Twins” — it will be here on any device you sign in with.</p>' +
+          '<div class="savedgrid" id="savedGrid"></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
 
 function fitSource(img){
   var c = document.createElement("canvas");
@@ -113,9 +122,9 @@ function drawFrame(ctx, phase){
   ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, SIZE, SIZE);
   if(!srcCanvas){
     ctx.fillStyle = "#93a3b8"; ctx.font = "600 17px sans-serif"; ctx.textAlign = "center";
-    ctx.fillText("先选一张照片", SIZE/2, SIZE/2 - 6);
+    ctx.fillText("Pick a photo first", SIZE/2, SIZE/2 - 6);
     ctx.font = "13px sans-serif";
-    ctx.fillText("它会出现在这里，动起来", SIZE/2, SIZE/2 + 20);
+    ctx.fillText("It will appear here — moving", SIZE/2, SIZE/2 + 20);
     return;
   }
   var anim = $("#anim").value;
@@ -140,30 +149,14 @@ function drawFrame(ctx, phase){
   }
 }
 
-var cv = $("#cv"), ctx = cv.getContext("2d");
-(function loop(ts){
-  drawFrame(ctx, ((ts || 0) % 1400) / 1400);
-  requestAnimationFrame(loop);
-})(0);
-
-$("#file").addEventListener("change", function(){
-  var f = $("#file").files[0]; if(!f) return;
-  var img = new Image();
-  img.onload = function(){
-    srcCanvas = fitSource(img);
-    URL.revokeObjectURL(img.src);
-  };
-  img.src = URL.createObjectURL(f);
-});
-
 function makeGif(){
   var msg = $("#genMsg");
-  if(!srcCanvas){ msg.textContent = "先选一张照片再生成。"; return; }
+  if(!srcCanvas){ msg.textContent = "Pick a photo before generating."; return; }
   if(typeof GIF === "undefined"){
-    msg.textContent = "GIF 组件没加载成功，检查网络后刷新再试。";
+    msg.textContent = "The GIF maker didn’t load — check your connection and refresh.";
     return;
   }
-  msg.textContent = "正在生成…";
+  msg.textContent = "Generating…";
   $("#gen").disabled = true;
   fetch("https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js")
     .then(function(r){ return r.text(); })
@@ -184,39 +177,16 @@ function makeGif(){
         $("#dl").href = $("#gifImg").src;
         $("#result").style.display = "";
         $("#gen").disabled = false;
-        msg.textContent = "生成好啦，可以下载，也可以存起来。";
+        msg.textContent = "Done! Download it, or save it to your twins.";
         URL.revokeObjectURL(wurl);
       });
       gif.render();
     })
     .catch(function(){
       $("#gen").disabled = false;
-      msg.textContent = "GIF 组件加载失败，检查网络后重试。";
+      msg.textContent = "The GIF maker couldn’t load — check your connection and try again.";
     });
 }
-$("#gen").addEventListener("click", makeGif);
-
-$("#saveGif").addEventListener("click", function(){
-  if(!gifBlob) return;
-  var btn = $("#saveGif"); btn.disabled = true;
-  var id = XW.uid();
-  var path = "users/" + XW.user().uid + "/stickers/" + id + ".gif";
-  XW.storage().ref(path).put(gifBlob)
-    .then(function(snap){ return snap.ref.getDownloadURL(); })
-    .then(function(url){
-      myStickers.push({id: id, url: url, path: path, created: Date.now()});
-      return XW.save("stickers", myStickers);
-    })
-    .then(function(){
-      btn.disabled = false;
-      renderSaved();
-      $("#saved").textContent = "已存下 ✓ 在哪个设备登录都能看到";
-    })
-    .catch(function(){
-      btn.disabled = false;
-      $("#saved").textContent = "保存失败（看上方提示或检查网络）";
-    });
-});
 
 function renderSaved(){
   var grid = $("#savedGrid"); grid.innerHTML = "";
@@ -224,14 +194,14 @@ function renderSaved(){
   myStickers.slice().reverse().forEach(function(s){
     var d = document.createElement("div"); d.className = "saveditem";
     var im = document.createElement("img");
-    im.className = "thumb"; im.src = s.url; im.alt = "我的表情包";
+    im.className = "thumb"; im.src = s.url; im.alt = "My digital twin";
     var ops = document.createElement("div"); ops.className = "ops";
     var a = document.createElement("a");
-    a.href = s.url; a.download = "sticker.gif"; a.textContent = "下载";
+    a.href = s.url; a.download = "twin.gif"; a.textContent = "Download";
     var del = document.createElement("button");
-    del.className = "linkbtn"; del.textContent = "删除"; del.style.color = "#b3402e";
+    del.className = "linkbtn"; del.textContent = "Delete"; del.style.color = "#b3402e";
     del.addEventListener("click", function(){
-      if(!confirm("删掉这个表情包？")) return;
+      if(!confirm("Delete this twin?")) return;
       myStickers = myStickers.filter(function(x){ return x.id !== s.id; });
       XW.save("stickers", myStickers).then(renderSaved);
       try{ XW.storage().ref(s.path).delete(); }catch(e){}
@@ -243,11 +213,52 @@ function renderSaved(){
 }
 
 XW.boot(function(){
+  buildUI();
+
+  var cv = $("#cv"), ctx = cv.getContext("2d");
+  (function loop(ts){
+    drawFrame(ctx, ((ts || 0) % 1400) / 1400);
+    requestAnimationFrame(loop);
+  })(0);
+
+  $("#file").addEventListener("change", function(){
+    var f = $("#file").files[0]; if(!f) return;
+    var img = new Image();
+    img.onload = function(){
+      srcCanvas = fitSource(img);
+      URL.revokeObjectURL(img.src);
+    };
+    img.src = URL.createObjectURL(f);
+  });
+  $("#gen").addEventListener("click", makeGif);
+
+  $("#saveGif").addEventListener("click", function(){
+    if(!gifBlob) return;
+    var btn = $("#saveGif"); btn.disabled = true;
+    var id = XW.uid();
+    var path = "users/" + XW.user().uid + "/stickers/" + id + ".gif";
+    XW.storage().ref(path).put(gifBlob)
+      .then(function(snap){ return snap.ref.getDownloadURL(); })
+      .then(function(url){
+        myStickers.push({id: id, url: url, path: path, created: Date.now()});
+        return XW.save("stickers", myStickers);
+      })
+      .then(function(){
+        btn.disabled = false;
+        renderSaved();
+        $("#saved").textContent = "Saved ✓ — here on any device you sign in with";
+      })
+      .catch(function(){
+        btn.disabled = false;
+        $("#saved").textContent = "Couldn’t save (see the note above, or check your connection)";
+      });
+  });
+
   XW.load().then(function(data){
     myStickers = Array.isArray(data.stickers) ? data.stickers : [];
     renderSaved();
   }).catch(function(){
-    $("#saved").textContent = "读取失败（看上方提示）";
+    $("#saved").textContent = "Couldn’t load (see the note above)";
   });
 });
 </script>
