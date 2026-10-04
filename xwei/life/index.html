@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>想要的人生 · 我的小角落</title>
+<title>My Life in a Few Years? · Xinyuan’s Secret Garden</title>
 <link rel="stylesheet" href="/xwei/xwei.css">
 <style>
 .sec{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0}
@@ -17,45 +17,7 @@
 </head>
 <body>
 <div id="gate"></div>
-
-<div id="app" style="display:none">
-  <div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">
-    <a href="/xwei/" style="text-decoration:none">← 小角落</a>
-    <span class="brand">🌿 想要的人生</span><span class="sp"></span>
-    <span class="saved" id="saved"></span>
-    <button class="linkbtn" id="signOut">退出登录</button>
-  </div></div>
-  <div class="wrap">
-    <h1 class="page">侧写：我想要的人生</h1>
-    <p class="sub">不用写得完整，也不用想得清楚。想到哪儿补到哪儿 — 这是慢慢长出来的一幅画像。</p>
-
-    <div id="rulesHint" class="rules-hint" style="display:none">
-      <b>还差最后一步：</b>数据库规则还没包含这个小角落，内容暂时存不进去。
-      打开 Firebase console → 项目 x-planner-99dd3 → Firestore Database → Rules，把规则换成下面这版再点 Publish，回来刷新就好了：
-      <pre>rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /planners/{uid} {
-      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
-    }
-    match /xwei/{uid} {
-      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
-    }
-  }
-}</pre>
-    </div>
-
-    <div class="sec">
-      <h3>一句话版本</h3>
-      <p class="hint">如果只能用一句话：我想要的人生是…</p>
-      <input type="text" class="oneliner" id="oneLiner" placeholder="写在这里">
-    </div>
-
-    <div id="sections"></div>
-
-    <footer>慢慢来，这幅画像没有截止日期。</footer>
-  </div>
-</div>
+<div id="app" style="display:none"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -64,25 +26,70 @@ service cloud.firestore {
 <script src="/xwei/xwei.js"></script>
 <script>
 var SECTIONS = [
-  {k: "work",    t: "工作",     h: "想做什么样的事，和什么样的人共事，过怎样的职业生活"},
-  {k: "rhythm",  t: "生活节奏", h: "一天、一周想怎么过 — 什么时候忙，什么时候闲下来"},
-  {k: "home",    t: "家",       h: "想住在哪座城市、什么样的家里（可以和小房子那页互相照应）"},
-  {k: "health",  t: "身体",     h: "想保持怎样的体力和状态，怎样照顾自己"},
-  {k: "people",  t: "身边的人", h: "想和谁一起生活、怎么相处，朋友和家人是什么位置"},
-  {k: "places",  t: "远方",     h: "想去看看的地方，想体验的生活"},
-  {k: "become",  t: "想成为的人", h: "抛开头衔和成就，想成为一个怎样的人"},
-  {k: "tenYears", t: "十年后",  h: "想象十年后的一个普通早晨：你在哪儿，醒来先做什么"}
+  {k: "work",     t: "Work",              h: "The kind of work I want to do, the people I want to work with, the career I want to live"},
+  {k: "rhythm",   t: "Daily Rhythm",      h: "How a day, and a week, should go — when to be busy, when to slow down"},
+  {k: "home",     t: "Home",              h: "Which city, what kind of home (this pairs with the Digital Home page)"},
+  {k: "health",   t: "Body",              h: "The energy and health I want to keep, and how I take care of myself"},
+  {k: "people",   t: "People Around Me",  h: "Who I share my life with, and how we treat each other — friends and family included"},
+  {k: "places",   t: "Places to See",     h: "Places I want to go, lives I want to glimpse"},
+  {k: "become",   t: "Who I Want to Become", h: "Beyond titles and achievements — the person I want to be"},
+  {k: "tenYears", t: "In Ten Years",      h: "An ordinary morning, ten years from now: where am I, and what do I do first?"}
 ];
 var life = {oneLiner: "", sections: {}}, saveT = null;
 var $ = function(s){ return document.querySelector(s); };
+
+function buildUI(){
+  $("#app").innerHTML =
+    '<div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">' +
+      '<a href="/xwei/" style="text-decoration:none">← Secret Garden</a>' +
+      '<span class="brand">🌿 My Life in a Few Years?</span><span class="sp"></span>' +
+      '<span class="saved" id="saved"></span>' +
+      '<button class="linkbtn" id="signOut">Sign out</button>' +
+    '</div></div>' +
+    '<div class="wrap">' +
+      '<h1 class="page">A Sketch of the Life I Want</h1>' +
+      '<p class="sub">It doesn’t have to be complete, or even clear. Add to it whenever a piece comes into focus — this portrait grows slowly, in its own time.</p>' +
+      '<div id="rulesHint" class="rules-hint" style="display:none">' +
+        '<b>One last step:</b> the database rules don’t include this garden yet, so nothing can be saved. ' +
+        'Open the Firebase console → project x-planner-99dd3 → Firestore Database → Rules, replace the rules with the version below, click Publish, then come back and refresh:' +
+        '<pre>rules_version = \'2\';\n' +
+        'service cloud.firestore {\n' +
+        '  match /databases/{database}/documents {\n' +
+        '    match /planners/{uid} {\n' +
+        '      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;\n' +
+        '    }\n' +
+        '    match /eatwell/{uid} {\n' +
+        '      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;\n' +
+        '    }\n' +
+        '    // Public per-university visit counters. Docs may ONLY contain {visits}.\n' +
+        '    match /uni_visits/{slug} {\n' +
+        '      allow read: if true;\n' +
+        '      allow create: if request.resource.data.keys().hasOnly([\'visits\']) &amp;&amp; (request.resource.data.visits == 0 || request.resource.data.visits == 1);\n' +
+        '      allow update: if request.resource.data.keys().hasOnly([\'visits\']) &amp;&amp; request.resource.data.visits == resource.data.visits + 1;\n' +
+        '    }\n' +
+        '    match /xwei/{uid} {\n' +
+        '      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;\n' +
+        '    }\n' +
+        '  }\n' +
+        '}</pre>' +
+      '</div>' +
+      '<div class="sec">' +
+        '<h3>The One-Sentence Version</h3>' +
+        '<p class="hint">If it had to be one sentence: the life I want is…</p>' +
+        '<input type="text" class="oneliner" id="oneLiner" placeholder="Write it here">' +
+      '</div>' +
+      '<div id="sections"></div>' +
+      '<footer>No deadline. This portrait takes as long as it takes.</footer>' +
+    '</div>';
+}
 
 function persist(){
   clearTimeout(saveT);
   saveT = setTimeout(function(){
     XW.save("life", life).then(function(){
-      $("#saved").textContent = "已保存 ✓";
+      $("#saved").textContent = "Saved ✓";
     }).catch(function(){
-      $("#saved").textContent = "保存失败（看上方提示）";
+      $("#saved").textContent = "Couldn’t save (see the note above)";
     });
   }, 700);
 }
@@ -96,7 +103,7 @@ function render(){
     var p = document.createElement("p"); p.className = "hint"; p.textContent = s.h;
     var ta = document.createElement("textarea");
     ta.value = (life.sections && life.sections[s.k]) || "";
-    ta.placeholder = "想到就写，不用完整…";
+    ta.placeholder = "Write whatever comes — it doesn’t have to be complete…";
     ta.addEventListener("input", function(){
       life.sections = life.sections || {};
       life.sections[s.k] = ta.value; persist();
@@ -107,12 +114,13 @@ function render(){
 }
 
 XW.boot(function(){
+  buildUI();
   XW.load().then(function(data){
     if(data.life) life = data.life;
     life.sections = life.sections || {};
     render();
   }).catch(function(){
-    $("#saved").textContent = "读取失败（看上方提示）";
+    $("#saved").textContent = "Couldn’t load (see the note above)";
     render();
   });
   $("#oneLiner").addEventListener("input", function(){
