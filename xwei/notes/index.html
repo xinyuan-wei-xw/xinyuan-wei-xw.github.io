@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>笔记 · 我的小角落</title>
+<link rel="stylesheet" href="/xwei/xwei.css">
+<style>
+.nwrap{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
+@media (max-width:760px){.nwrap{grid-template-columns:1fr}}
+.nlist{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.nitem{display:block;width:100%;text-align:left;background:#fff;border:none;border-bottom:1px solid var(--line);padding:12px 14px;cursor:pointer;font-family:inherit}
+.nitem:last-child{border-bottom:none}
+.nitem:hover{background:#f4f8ff}
+.nitem.on{background:#eef3ff}
+.nitem b{display:block;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nitem span{display:block;font-size:12px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.neditor{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+.neditor textarea{min-height:300px;border:none;padding:6px 2px;font-size:15.5px}
+.neditor textarea:focus{outline:none}
+.ntitle{border:none!important;font-size:19px;font-weight:700;padding:6px 2px!important}
+.ntitle:focus{outline:none}
+.nrow{display:flex;gap:10px;align-items:center;margin:12px 0}
+</style>
+</head>
+<body>
+<div id="gate"></div>
+
+<div id="app" style="display:none">
+  <div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">
+    <a href="/xwei/" style="text-decoration:none">← 小角落</a>
+    <span class="brand">📝 笔记</span><span class="sp"></span>
+    <span class="saved" id="saved"></span>
+    <button class="linkbtn" id="signOut">退出登录</button>
+  </div></div>
+  <div class="wrap">
+    <div id="rulesHint" class="rules-hint" style="display:none">
+      <b>还差最后一步：</b>数据库规则还没包含这个小角落，内容暂时存不进去。
+      打开 Firebase console → 项目 x-planner-99dd3 → Firestore Database → Rules，把规则换成下面这版再点 Publish，回来刷新就好了：
+      <pre>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /planners/{uid} {
+      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
+    }
+    match /xwei/{uid} {
+      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
+    }
+  }
+}</pre>
+    </div>
+
+    <div class="nrow">
+      <button class="btn primary small" id="newBtn" style="width:auto">＋ 新建笔记</button>
+      <input type="text" id="q" placeholder="搜索笔记…" style="max-width:280px">
+    </div>
+    <div class="nwrap">
+      <div class="nlist" id="list"></div>
+      <div class="neditor" id="editor">
+        <input type="text" class="ntitle" id="etitle" placeholder="标题">
+        <textarea id="ebody" placeholder="从这里开始写…"></textarea>
+        <div class="nrow" style="justify-content:flex-end">
+          <button class="btn danger small" id="delBtn">删除这篇</button>
+        </div>
+      </div>
+    </div>
+    <p class="sub" id="empty" style="display:none">还没有笔记。点上面的“＋ 新建笔记”写第一篇吧。</p>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script src="/xwei/xwei.js"></script>
+<script>
+var notes = [], curId = null, saveT = null;
+var $ = function(s){ return document.querySelector(s); };
+
+function stamp(ts){
+  var d = new Date(ts);
+  return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate() + " " +
+    String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
+}
+function cur(){ return notes.find(function(n){ return n.id === curId; }) || null; }
+
+function renderList(){
+  var q = ($("#q").value || "").toLowerCase();
+  var sorted = notes.slice().sort(function(a,b){ return (b.updated||0) - (a.updated||0); });
+  var box = $("#list"); box.innerHTML = "";
+  $("#empty").style.display = notes.length ? "none" : "";
+  sorted.filter(function(n){
+    return !q || (n.title||"").toLowerCase().indexOf(q) >= 0 || (n.body||"").toLowerCase().indexOf(q) >= 0;
+  }).forEach(function(n){
+    var b = document.createElement("button");
+    b.className = "nitem" + (n.id === curId ? " on" : "");
+    b.innerHTML = "<b>" + XW.esc(n.title || "无标题") + "</b><span>" +
+      stamp(n.updated||Date.now()) + " · " + XW.esc((n.body||"").split("\n")[0].slice(0,40)) + "</span>";
+    b.addEventListener("click", function(){ curId = n.id; renderAll(); });
+    box.appendChild(b);
+  });
+}
+function renderEditor(){
+  var n = cur();
+  $("#etitle").value = n ? (n.title||"") : "";
+  $("#ebody").value = n ? (n.body||"") : "";
+  $("#editor").style.opacity = n ? "" : ".45";
+  $("#etitle").disabled = $("#ebody").disabled = !n;
+}
+function renderAll(){ renderList(); renderEditor(); }
+
+function persist(){
+  clearTimeout(saveT);
+  saveT = setTimeout(function(){
+    XW.save("notes", notes).then(function(){
+      $("#saved").textContent = "已保存 ✓ " + stamp(Date.now());
+    }).catch(function(){
+      $("#saved").textContent = "保存失败，检查网络（或看上方提示）";
+    });
+  }, 700);
+}
+function touch(){
+  var n = cur(); if(!n) return;
+  n.title = $("#etitle").value; n.body = $("#ebody").value; n.updated = Date.now();
+  renderList(); persist();
+}
+
+XW.boot(function(){
+  XW.load().then(function(data){
+    notes = Array.isArray(data.notes) ? data.notes : [];
+    if(notes.length) curId = notes.slice().sort(function(a,b){ return (b.updated||0)-(a.updated||0); })[0].id;
+    renderAll();
+  }).catch(function(){
+    $("#saved").textContent = "读取失败，检查网络（或看上方提示）";
+    renderAll();
+  });
+  $("#newBtn").addEventListener("click", function(){
+    var n = {id: XW.uid(), title: "", body: "", updated: Date.now()};
+    notes.push(n); curId = n.id; renderAll(); persist();
+    $("#etitle").focus();
+  });
+  $("#q").addEventListener("input", renderList);
+  $("#etitle").addEventListener("input", touch);
+  $("#ebody").addEventListener("input", touch);
+  $("#delBtn").addEventListener("click", function(){
+    var n = cur(); if(!n) return;
+    if(!confirm("删除这篇笔记？删了就找不回来了。")) return;
+    notes = notes.filter(function(x){ return x.id !== n.id; });
+    curId = notes.length ? notes[0].id : null;
+    renderAll(); persist();
+  });
+});
+</script>
+</body>
+</html>
