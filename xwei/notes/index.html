@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>笔记 · 我的小角落</title>
+<title>Notes · Xinyuan’s Secret Garden</title>
 <link rel="stylesheet" href="/xwei/xwei.css">
 <style>
 .nwrap{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
@@ -26,48 +26,7 @@
 </head>
 <body>
 <div id="gate"></div>
-
-<div id="app" style="display:none">
-  <div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">
-    <a href="/xwei/" style="text-decoration:none">← 小角落</a>
-    <span class="brand">📝 笔记</span><span class="sp"></span>
-    <span class="saved" id="saved"></span>
-    <button class="linkbtn" id="signOut">退出登录</button>
-  </div></div>
-  <div class="wrap">
-    <div id="rulesHint" class="rules-hint" style="display:none">
-      <b>还差最后一步：</b>数据库规则还没包含这个小角落，内容暂时存不进去。
-      打开 Firebase console → 项目 x-planner-99dd3 → Firestore Database → Rules，把规则换成下面这版再点 Publish，回来刷新就好了：
-      <pre>rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /planners/{uid} {
-      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
-    }
-    match /xwei/{uid} {
-      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
-    }
-  }
-}</pre>
-    </div>
-
-    <div class="nrow">
-      <button class="btn primary small" id="newBtn" style="width:auto">＋ 新建笔记</button>
-      <input type="text" id="q" placeholder="搜索笔记…" style="max-width:280px">
-    </div>
-    <div class="nwrap">
-      <div class="nlist" id="list"></div>
-      <div class="neditor" id="editor">
-        <input type="text" class="ntitle" id="etitle" placeholder="标题">
-        <textarea id="ebody" placeholder="从这里开始写…"></textarea>
-        <div class="nrow" style="justify-content:flex-end">
-          <button class="btn danger small" id="delBtn">删除这篇</button>
-        </div>
-      </div>
-    </div>
-    <p class="sub" id="empty" style="display:none">还没有笔记。点上面的“＋ 新建笔记”写第一篇吧。</p>
-  </div>
-</div>
+<div id="app" style="display:none"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -77,6 +36,48 @@ service cloud.firestore {
 <script>
 var notes = [], curId = null, saveT = null;
 var $ = function(s){ return document.querySelector(s); };
+
+function buildUI(){
+  $("#app").innerHTML =
+    '<div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">' +
+      '<a href="/xwei/" style="text-decoration:none">← Secret Garden</a>' +
+      '<span class="brand">📝 Notes</span><span class="sp"></span>' +
+      '<span class="saved" id="saved"></span>' +
+      '<button class="linkbtn" id="signOut">Sign out</button>' +
+    '</div></div>' +
+    '<div class="wrap">' +
+      '<div id="rulesHint" class="rules-hint" style="display:none">' +
+        '<b>One last step:</b> the database rules don’t include this garden yet, so nothing can be saved. ' +
+        'Open the Firebase console → project x-planner-99dd3 → Firestore Database → Rules, replace the rules with the version below, click Publish, then come back and refresh:' +
+        '<pre>rules_version = \'2\';\n' +
+        'service cloud.firestore {\n' +
+        '  match /databases/{database}/documents {\n' +
+        '    match /planners/{uid} {\n' +
+        '      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;\n' +
+        '    }\n' +
+        '    match /xwei/{uid} {\n' +
+        '      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;\n' +
+        '    }\n' +
+        '  }\n' +
+        '}</pre>' +
+      '</div>' +
+      '<div class="nrow">' +
+        '<button class="btn primary small" id="newBtn" style="width:auto">+  New note</button>' +
+        '<input type="text" id="q" placeholder="Search notes…" style="max-width:280px">' +
+      '</div>' +
+      '<div class="nwrap">' +
+        '<div class="nlist" id="list"></div>' +
+        '<div class="neditor" id="editor">' +
+          '<input type="text" class="ntitle" id="etitle" placeholder="Title">' +
+          '<textarea id="ebody" placeholder="Start writing…"></textarea>' +
+          '<div class="nrow" style="justify-content:flex-end">' +
+            '<button class="btn danger small" id="delBtn">Delete this note</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<p class="sub" id="empty" style="display:none">No notes yet. Click “+  New note” above to write your first one.</p>' +
+    '</div>';
+}
 
 function stamp(ts){
   var d = new Date(ts);
@@ -95,7 +96,7 @@ function renderList(){
   }).forEach(function(n){
     var b = document.createElement("button");
     b.className = "nitem" + (n.id === curId ? " on" : "");
-    b.innerHTML = "<b>" + XW.esc(n.title || "无标题") + "</b><span>" +
+    b.innerHTML = "<b>" + XW.esc(n.title || "Untitled") + "</b><span>" +
       stamp(n.updated||Date.now()) + " · " + XW.esc((n.body||"").split("\n")[0].slice(0,40)) + "</span>";
     b.addEventListener("click", function(){ curId = n.id; renderAll(); });
     box.appendChild(b);
@@ -114,9 +115,9 @@ function persist(){
   clearTimeout(saveT);
   saveT = setTimeout(function(){
     XW.save("notes", notes).then(function(){
-      $("#saved").textContent = "已保存 ✓ " + stamp(Date.now());
+      $("#saved").textContent = "Saved ✓ " + stamp(Date.now());
     }).catch(function(){
-      $("#saved").textContent = "保存失败，检查网络（或看上方提示）";
+      $("#saved").textContent = "Couldn’t save — check your connection (or see the note above)";
     });
   }, 700);
 }
@@ -127,12 +128,13 @@ function touch(){
 }
 
 XW.boot(function(){
+  buildUI();
   XW.load().then(function(data){
     notes = Array.isArray(data.notes) ? data.notes : [];
     if(notes.length) curId = notes.slice().sort(function(a,b){ return (b.updated||0)-(a.updated||0); })[0].id;
     renderAll();
   }).catch(function(){
-    $("#saved").textContent = "读取失败，检查网络（或看上方提示）";
+    $("#saved").textContent = "Couldn’t load — check your connection (or see the note above)";
     renderAll();
   });
   $("#newBtn").addEventListener("click", function(){
@@ -145,7 +147,7 @@ XW.boot(function(){
   $("#ebody").addEventListener("input", touch);
   $("#delBtn").addEventListener("click", function(){
     var n = cur(); if(!n) return;
-    if(!confirm("删除这篇笔记？删了就找不回来了。")) return;
+    if(!confirm("Delete this note? This can’t be undone.")) return;
     notes = notes.filter(function(x){ return x.id !== n.id; });
     curId = notes.length ? notes[0].id : null;
     renderAll(); persist();
