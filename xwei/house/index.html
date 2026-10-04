@@ -109,16 +109,22 @@ function extractUrl(raw){
 }
 
 /* Floorplanner: the viewable embed lives at <project-url>/embed.
-   Given either form, derive both the viewer URL and the designer URL. */
+   Given any project/editor/embed link, derive clean viewer + editor
+   URLs. Any token query (a manage-capable credential) is stripped and
+   never stored — the page keeps only the plain project address. */
 function deriveModel(u){
   var view = u, edit = u;
   try{
     var a = new URL(u);
     if(/(^|\.)floorplanner\.com$/i.test(a.hostname)){
-      if(/\/embed\/?$/.test(a.pathname)){
-        edit = a.origin + a.pathname.replace(/\/embed\/?$/, "") + a.search;
+      var m = a.pathname.match(/^\/projects\/(\d+)(?:-[^\/]*)?(?:\/(editor|embed))?\/?$/);
+      if(m){
+        view = a.origin + "/projects/" + m[1] + "/embed";
+        edit = a.origin + "/projects/" + m[1] + "/editor";
       }else{
-        view = a.origin + a.pathname.replace(/\/?$/, "") + "/embed" + a.search;
+        a.search = "";
+        view = a.origin + a.pathname;
+        edit = view;
       }
     }
   }catch(e){}
@@ -265,9 +271,20 @@ XW.boot(function(){
     if(data.house && Array.isArray(data.house.rooms) && data.house.rooms.length){
       house = data.house;
     }else{
-      house = {rooms: ["Living Room","Bedroom","Kitchen","Study","Balcony"].map(function(n){
-        return {id: XW.uid(), name: n, desc: "", wants: []};
-      })};
+      house = {rooms: [
+        {name: "Living Room", desc: "Light colors, clean, spacious, full of sunlight.", wants: []},
+        {name: "Master Bedroom 1", desc: "Walk-in closet. Light and sun-filled.", wants: []},
+        {name: "Master Bedroom 2", desc: "Walk-in closet. Light and sun-filled.", wants: []},
+        {name: "Guest Bedroom", desc: "", wants: []},
+        {name: "Study 1", desc: "Spacious and bright.", wants: []},
+        {name: "Study 2", desc: "Spacious and bright.", wants: []},
+        {name: "Kitchen", desc: "Spacious and bright.", wants: []},
+        {name: "Tea Room", desc: "", wants: []},
+        {name: "Gym", desc: "", wants: []},
+        {name: "Storage Room", desc: "", wants: []},
+        {name: "Garage", desc: "Room for two cars. Connected to the house by a covered corridor, but separate from the main building.", wants: []},
+        {name: "Elevator", desc: "Internal elevator for all three floors.", wants: []}
+      ].map(function(r){ return {id: XW.uid(), name: r.name, desc: r.desc, wants: r.wants}; })};
     }
     render();
     renderModel(false);
