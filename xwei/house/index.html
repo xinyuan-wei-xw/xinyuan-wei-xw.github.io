@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>电子小房子 · 我的小角落</title>
+<link rel="stylesheet" href="/xwei/xwei.css">
+<style>
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;align-items:start}
+.room{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.room h3{margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.room h3 input{border:none;font-size:17px;font-weight:700;padding:2px;width:auto;flex:1}
+.room h3 input:focus{outline:none;border-bottom:1px dashed var(--sky)}
+.room textarea{min-height:74px;border:none;background:var(--warm);border-radius:10px}
+.room textarea:focus{outline:1px solid var(--sky)}
+.room .lbl{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--soft);margin:12px 0 4px}
+.want{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.want span{flex:1}
+.want button{background:none;border:none;color:#b3402e;cursor:pointer;font-size:15px}
+.wantadd{display:flex;gap:8px;margin-top:10px}
+.wantadd input{flex:1}
+.roomdel{margin-top:12px}
+</style>
+</head>
+<body>
+<div id="gate"></div>
+
+<div id="app" style="display:none">
+  <div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">
+    <a href="/xwei/" style="text-decoration:none">← 小角落</a>
+    <span class="brand">🏠 电子小房子</span><span class="sp"></span>
+    <span class="saved" id="saved"></span>
+    <button class="linkbtn" id="signOut">退出登录</button>
+  </div></div>
+  <div class="wrap">
+    <h1 class="page">以后家的样子</h1>
+    <p class="sub">不用一次想完。每个房间写一点想要的样子，心愿清单想到什么加什么 — 这是给未来的自己的小蓝图。</p>
+
+    <div id="rulesHint" class="rules-hint" style="display:none">
+      <b>还差最后一步：</b>数据库规则还没包含这个小角落，内容暂时存不进去。
+      打开 Firebase console → 项目 x-planner-99dd3 → Firestore Database → Rules，把规则换成下面这版再点 Publish，回来刷新就好了：
+      <pre>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /planners/{uid} {
+      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
+    }
+    match /xwei/{uid} {
+      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
+    }
+  }
+}</pre>
+    </div>
+
+    <div class="rooms" id="rooms"></div>
+    <div style="margin-top:18px">
+      <button class="btn primary small" id="addRoom" style="width:auto">＋ 添加房间</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script src="/xwei/xwei.js"></script>
+<script>
+var house = {rooms: []}, saveT = null;
+var $ = function(s){ return document.querySelector(s); };
+
+function stamp(ts){
+  var d = new Date(ts);
+  return d.getHours() + ":" + String(d.getMinutes()).padStart(2,"0");
+}
+function persist(){
+  clearTimeout(saveT);
+  saveT = setTimeout(function(){
+    XW.save("house", house).then(function(){
+      $("#saved").textContent = "已保存 ✓ " + stamp(Date.now());
+    }).catch(function(){
+      $("#saved").textContent = "保存失败（看上方提示）";
+    });
+  }, 700);
+}
+
+function render(){
+  var box = $("#rooms"); box.innerHTML = "";
+  house.rooms.forEach(function(room){
+    var card = document.createElement("div"); card.className = "room";
+    var h = document.createElement("h3");
+    var nameIn = document.createElement("input");
+    nameIn.type = "text"; nameIn.value = room.name || "";
+    nameIn.placeholder = "房间名";
+    nameIn.addEventListener("input", function(){ room.name = nameIn.value; persist(); });
+    h.appendChild(nameIn);
+    card.appendChild(h);
+
+    var l1 = document.createElement("div"); l1.className = "lbl"; l1.textContent = "想要的样子";
+    card.appendChild(l1);
+    var desc = document.createElement("textarea");
+    desc.value = room.desc || "";
+    desc.placeholder = "比如：阳光要好，有个能窝着看书的角落…";
+    desc.addEventListener("input", function(){ room.desc = desc.value; persist(); });
+    card.appendChild(desc);
+
+    var l2 = document.createElement("div"); l2.className = "lbl"; l2.textContent = "心愿清单";
+    card.appendChild(l2);
+    var wl = document.createElement("div");
+    (room.wants || []).forEach(function(w, wi){
+      var row = document.createElement("div"); row.className = "want";
+      var s = document.createElement("span"); s.textContent = "· " + w;
+      var x = document.createElement("button"); x.textContent = "×"; x.title = "删掉";
+      x.addEventListener("click", function(){ room.wants.splice(wi, 1); render(); persist(); });
+      row.appendChild(s); row.appendChild(x);
+      wl.appendChild(row);
+    });
+    card.appendChild(wl);
+    var wa = document.createElement("div"); wa.className = "wantadd";
+    var win = document.createElement("input"); win.type = "text"; win.placeholder = "想要的东西，回车添加";
+    var wbtn = document.createElement("button"); wbtn.className = "btn primary small"; wbtn.textContent = "添加";
+    function addWant(){
+      var v = win.value.trim(); if(!v) return;
+      room.wants = room.wants || []; room.wants.push(v);
+      render(); persist();
+    }
+    wbtn.addEventListener("click", addWant);
+    win.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); addWant(); } });
+    wa.appendChild(win); wa.appendChild(wbtn);
+    card.appendChild(wa);
+
+    var del = document.createElement("button");
+    del.className = "linkbtn roomdel"; del.textContent = "删除这个房间";
+    del.style.color = "#b3402e";
+    del.addEventListener("click", function(){
+      if(!confirm("删除「" + (room.name || "这个房间") + "」？里面的内容会一起删掉。")) return;
+      house.rooms = house.rooms.filter(function(r){ return r !== room; });
+      render(); persist();
+    });
+    card.appendChild(del);
+    box.appendChild(card);
+  });
+}
+
+XW.boot(function(){
+  XW.load().then(function(data){
+    if(data.house && Array.isArray(data.house.rooms) && data.house.rooms.length){
+      house = data.house;
+    }else{
+      house = {rooms: ["客厅","卧室","厨房","书房","阳台"].map(function(n){
+        return {id: XW.uid(), name: n, desc: "", wants: []};
+      })};
+    }
+    render();
+  }).catch(function(){
+    $("#saved").textContent = "读取失败（看上方提示）";
+    render();
+  });
+  $("#addRoom").addEventListener("click", function(){
+    house.rooms.push({id: XW.uid(), name: "新房间", desc: "", wants: []});
+    render(); persist();
+  });
+});
+</script>
+</body>
+</html>
