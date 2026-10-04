@@ -1,56 +1,40 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>我的小角落</title>
+<title>Xinyuan’s Secret Garden</title>
 <link rel="stylesheet" href="/xwei/xwei.css">
 </head>
 <body>
 <div id="gate"></div>
-
-<div id="app" style="display:none">
-  <div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">
-    <span class="brand">🏡 我的小角落</span><span class="sp"></span>
-    <button class="linkbtn" id="signOut">退出登录</button>
-  </div></div>
-  <div class="wrap">
-    <h1 class="page">只属于你的地方</h1>
-    <p class="sub">这个页面没有挂在网站的任何地方，知道地址、并且用你的账号登录，才能看到里面的东西。</p>
-
-    <div class="cards">
-      <a class="xcard" href="/xwei/notes/">
-        <div class="em">📝</div>
-        <h3>笔记</h3>
-        <p>随手记，慢慢攒。只有你能看的笔记本。</p>
-      </a>
-      <a class="xcard" href="/xwei/house/">
-        <div class="em">🏠</div>
-        <h3>电子小房子</h3>
-        <p>一点点想象、搭建以后家的样子。</p>
-      </a>
-      <a class="xcard" href="/xwei/stickers/">
-        <div class="em">😂</div>
-        <h3>我的表情包</h3>
-        <p>用自己的照片做动态表情包，生成 GIF。</p>
-      </a>
-      <a class="xcard" href="/xwei/life/">
-        <div class="em">🌿</div>
-        <h3>想要的人生</h3>
-        <p>侧写理想生活的样子，想到就补一句。</p>
-      </a>
-    </div>
-
-    <footer>xwei · 只有登录后可见 · 内容存在你自己的云端空间</footer>
-  </div>
-</div>
+<div id="app" style="display:none"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script src="/xwei/xwei.js"></script>
-<script>XW.boot(function(){});</script>
+<script>
+XW.boot(function(){
+  var cards = XW.hubCards().map(function(c){
+    return '<a class="xcard" href="' + c.href + '">' +
+      '<div class="em">' + c.em + '</div>' +
+      '<h3>' + XW.esc(c.name) + '</h3>' +
+      '<p>' + XW.esc(c.desc) + '</p></a>';
+  }).join("");
+  document.querySelector("#app").innerHTML =
+    '<div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">' +
+      '<span class="brand">🏡 Xinyuan’s Secret Garden</span><span class="sp"></span>' +
+      '<button class="linkbtn" id="signOut">Sign out</button>' +
+    '</div></div>' +
+    '<div class="wrap">' +
+      '<h1 class="page">Xinyuan’s Secret Garden</h1>' +
+      '<div class="cards">' + cards + '</div>' +
+      '<footer>Xinyuan’s Secret Garden · this page only exists after you sign in</footer>' +
+    '</div>';
+});
+</script>
 </body>
 </html>

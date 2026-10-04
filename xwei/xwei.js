@@ -1,7 +1,9 @@
-/* xwei — 只属于 Xinyuan 的小角落。
-   隐私模型：Firebase 没确认登录之前，页面什么内容都不渲染；
-   内容存在 Firestore 的 xwei/{uid} 文档里，靠 owner-only 规则保护。
-   与 X Planner 共用同一个 Firebase 账号。 */
+/* Xinyuan's Secret Garden (/xwei).
+   Privacy model: nothing renders until Firebase confirms sign-in;
+   all content lives in the Firestore doc xwei/{uid}, protected by
+   owner-only rules. Shares one Firebase account with X Planner.
+   Every page builds its UI from JS only after sign-in, so the
+   static HTML holds no card names and no content. */
 const firebaseConfig = {
   "apiKey": "AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw",
   "authDomain": "x-planner-99dd3.firebaseapp.com",
@@ -24,13 +26,13 @@ const XW = (() => {
   function authErrText(er){
     const c = er && er.code || "";
     if(c === "auth/invalid-credential" || c === "auth/wrong-password" || c === "auth/user-not-found")
-      return "邮箱或密码不对。密码至少 6 位；确认邮箱拼写后再试一次。";
-    if(c === "auth/invalid-email") return "邮箱格式看起来不对，检查一下再试。";
-    if(c === "auth/email-already-in-use") return "这个邮箱已经注册过了，直接点登录就好。";
-    if(c === "auth/weak-password") return "密码太短了，至少要 6 位。";
-    if(c === "auth/network-request-failed") return "网络连不上 Firebase，检查网络后刷新再试。";
-    if(c === "auth/too-many-requests") return "试太多次被暂时拦住了，过几分钟再来。";
-    return "登录没成功（" + (c || "未知错误") + "）。检查网络和邮箱密码后再试。";
+      return "That email or password doesn’t match. Passwords are at least 6 characters — check the spelling and try again.";
+    if(c === "auth/invalid-email") return "That email address doesn’t look right. Check it and try again.";
+    if(c === "auth/email-already-in-use") return "That email is already registered — just sign in instead.";
+    if(c === "auth/weak-password") return "That password is too short — it needs at least 6 characters.";
+    if(c === "auth/network-request-failed") return "Couldn’t reach Firebase. Check your connection and refresh.";
+    if(c === "auth/too-many-requests") return "Too many attempts — you’ve been paused for a bit. Try again in a few minutes.";
+    return "Sign-in didn’t work (" + (c || "unknown error") + "). Check your connection, email, and password, then try again.";
   }
 
   function injectGate(){
@@ -40,14 +42,14 @@ const XW = (() => {
     g.innerHTML =
       '<form id="gateForm" class="gate-card">' +
         '<div class="gate-emoji">🏡</div>' +
-        '<h1 class="gate-title">我的小角落</h1>' +
-        '<p class="gate-sub">这里只属于你。登录后才能看到里面的内容。</p>' +
-        '<label class="fld"><span>邮箱</span><input id="gateEmail" type="email" autocomplete="username" placeholder="you@example.com"></label>' +
-        '<label class="fld"><span>密码</span><input id="gatePw" type="password" autocomplete="current-password" placeholder="至少 6 位"></label>' +
+        '<h1 class="gate-title">Xinyuan’s Secret Garden</h1>' +
+        '<p class="gate-sub">Sign in to see what’s inside.</p>' +
+        '<label class="fld"><span>Email</span><input id="gateEmail" type="email" autocomplete="username" placeholder="you@example.com"></label>' +
+        '<label class="fld"><span>Password</span><input id="gatePw" type="password" autocomplete="current-password" placeholder="At least 6 characters"></label>' +
         '<p id="gateErr" class="gate-err"></p>' +
-        '<button class="btn primary" type="submit">登录</button>' +
-        '<button class="btn ghost" type="button" id="gateRegister">第一次来？注册账号</button>' +
-        '<p class="gate-note">和 X Planner 用同一个账号。没登录时，这里什么都不显示。</p>' +
+        '<button class="btn primary" type="submit">Sign in</button>' +
+        '<button class="btn ghost" type="button" id="gateRegister">New here? Create an account</button>' +
+        '<p class="gate-note">Same account as X Planner. Nothing here is visible until you sign in.</p>' +
       '</form>';
   }
 
@@ -56,7 +58,7 @@ const XW = (() => {
     const gate = $("#gate"), app = $("#app"), err = $("#gateErr");
     const fail = m => { if(err) err.textContent = m; };
     if(typeof firebase === "undefined"){
-      fail("登录组件没加载成功 — 检查网络后刷新。放心，未登录时你的内容不会显示。");
+      fail("The sign-in component didn’t load — check your connection and refresh. Don’t worry: nothing here shows while you’re signed out.");
       return;
     }
     try{
@@ -92,9 +94,22 @@ const XW = (() => {
         auth.createUserWithEmailAndPassword(em, pw).catch(er => fail(authErrText(er)));
       });
     }
-    const out = $("#signOut");
-    if(out) out.addEventListener("click", () => auth.signOut());
+    /* Subpages build their topbar (with #signOut) only after sign-in,
+       so sign-out is handled by delegation rather than a direct bind. */
+    document.addEventListener("click", e => {
+      if(e.target && e.target.id === "signOut") auth.signOut();
+    });
   }
+
+  /* Hub cards live here (never in the hub's static HTML) and are
+     rendered only after sign-in, so visitors see nothing but the
+     login form on /xwei. */
+  const HUB_CARDS = [
+    {em: "📝", name: "Notes", desc: "A quiet notebook. Jot things down — they add up.", href: "/xwei/notes/"},
+    {em: "🏠", name: "Digital Home", desc: "Imagining, and slowly building, my home of the future.", href: "/xwei/house/"},
+    {em: "👯", name: "Digital Twins", desc: "Animated GIF stickers made from my own photos.", href: "/xwei/stickers/"},
+    {em: "🌿", name: "My Life in a Few Years?", desc: "A sketch of the life I want. Add a line whenever it gets clearer.", href: "/xwei/life/"}
+  ];
 
   function doc(){ return db.collection("xwei").doc(user.uid); }
 
@@ -116,6 +131,7 @@ const XW = (() => {
 
   return {
     boot, load, save, esc, uid,
+    hubCards: () => HUB_CARDS,
     storage: () => storageRef,
     user: () => user
   };
