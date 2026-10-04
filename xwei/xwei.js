@@ -106,6 +106,7 @@ const XW = (() => {
      login form on /xwei. */
   const HUB_CARDS = [
     {em: "📝", name: "Notes", desc: "A quiet notebook. Jot things down — they add up.", href: "/xwei/notes/"},
+    {em: "🙏", name: "赞美日记", desc: "每天打开新的一页：一节经文，一篇赞美。", href: "/xwei/praise/"},
     {em: "🏠", name: "Digital Home", desc: "Imagining, and slowly building, my home of the future.", href: "/xwei/house/"},
     {em: "👯", name: "Digital Twins", desc: "Animated GIF stickers made from my own photos.", href: "/xwei/stickers/"},
     {em: "🌿", name: "My Life in a Few Years?", desc: "A sketch of the life I want. Add a line whenever it gets clearer.", href: "/xwei/life/"}
