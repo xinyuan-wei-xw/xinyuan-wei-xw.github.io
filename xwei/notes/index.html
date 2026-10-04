@@ -22,6 +22,10 @@
 .ntitle{border:none!important;font-size:19px;font-weight:700;padding:6px 2px!important}
 .ntitle:focus{outline:none}
 .nrow{display:flex;gap:10px;align-items:center;margin:12px 0}
+.nmodes{display:flex;gap:8px;margin:2px 0 8px}
+.nmodes .btn.on{background:#dbe7ff}
+.npreview{white-space:pre-wrap;font-size:15.5px;line-height:1.6;padding:6px 2px;min-height:300px}
+.npreview a{color:#2563eb;word-break:break-all}
 </style>
 </head>
 <body>
@@ -34,7 +38,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script src="/xwei/xwei.js"></script>
 <script>
-var notes = [], curId = null, saveT = null;
+var notes = [], curId = null, saveT = null, viewMode = "edit";
 var $ = function(s){ return document.querySelector(s); };
 
 function buildUI(){
@@ -78,7 +82,9 @@ function buildUI(){
         '<div class="nlist" id="list"></div>' +
         '<div class="neditor" id="editor">' +
           '<input type="text" class="ntitle" id="etitle" placeholder="Title">' +
+          '<div class="nmodes"><button class="btn small" id="editBtn" style="width:auto">✏️ Edit</button><button class="btn small" id="readBtn" style="width:auto">👁 Read</button></div>' +
           '<textarea id="ebody" placeholder="Start writing…"></textarea>' +
+          '<div id="eprev" class="npreview" style="display:none"></div>' +
           '<div class="nrow" style="justify-content:flex-end">' +
             '<button class="btn danger small" id="delBtn">Delete this note</button>' +
           '</div>' +
@@ -94,6 +100,16 @@ function stamp(ts){
     String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
 }
 function cur(){ return notes.find(function(n){ return n.id === curId; }) || null; }
+
+function linkify(text){
+  var e = XW.esc(text || "");
+  return e.replace(/(https?:\/\/[^\s<]+)/g, function(m){
+    var tail = "";
+    while(/[.,;:!?)\]]$/.test(m)){ tail = m.slice(-1) + tail; m = m.slice(0, -1); }
+    if(m.length <= 8) return m + tail;
+    return '<a href="' + m + '" target="_blank" rel="noopener noreferrer">' + m + '</a>' + tail;
+  });
+}
 
 function renderList(){
   var q = ($("#q").value || "").toLowerCase();
@@ -115,8 +131,14 @@ function renderEditor(){
   var n = cur();
   $("#etitle").value = n ? (n.title||"") : "";
   $("#ebody").value = n ? (n.body||"") : "";
+  $("#eprev").innerHTML = n ? linkify(n.body || "") : "";
   $("#editor").style.opacity = n ? "" : ".45";
-  $("#etitle").disabled = $("#ebody").disabled = !n;
+  $("#etitle").disabled = !n;
+  $("#ebody").disabled = !n || viewMode === "read";
+  $("#ebody").style.display = viewMode === "read" ? "none" : "";
+  $("#eprev").style.display = viewMode === "read" ? "" : "none";
+  $("#editBtn").classList.toggle("on", viewMode === "edit");
+  $("#readBtn").classList.toggle("on", viewMode === "read");
 }
 function renderAll(){ renderList(); renderEditor(); }
 
@@ -154,6 +176,8 @@ XW.boot(function(){
   $("#q").addEventListener("input", renderList);
   $("#etitle").addEventListener("input", touch);
   $("#ebody").addEventListener("input", touch);
+  $("#editBtn").addEventListener("click", function(){ viewMode = "edit"; renderEditor(); });
+  $("#readBtn").addEventListener("click", function(){ viewMode = "read"; renderEditor(); });
   $("#delBtn").addEventListener("click", function(){
     var n = cur(); if(!n) return;
     if(!confirm("Delete this note? This can’t be undone.")) return;
