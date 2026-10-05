@@ -99,7 +99,14 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 15
+      "sessions": 17
+    },
+    "TW|Changhua County|Beidou Township": {
+      "city": "Beidou Township",
+      "country": "TW",
+      "country_name": "Taiwan",
+      "region": "Changhua County",
+      "sessions": 1
     },
     "US|(not set)|(not set)": {
       "city": "(not set)",
@@ -245,7 +252,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 36
+      "sessions": 41
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -583,15 +590,19 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 77
+      "sessions": 79
+    },
+    "TW": {
+      "name": "Taiwan",
+      "sessions": 1
     },
     "US": {
       "name": "United States",
-      "sessions": 141
+      "sessions": 146
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-03",
+  "last_end": "2026-10-04",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -646,13 +657,19 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 15
+      "sessions": 17
     },
     "SG|(not set)": {
       "country": "SG",
       "country_name": "Singapore",
       "region": "(not set)",
       "sessions": 62
+    },
+    "TW|Changhua County": {
+      "country": "TW",
+      "country_name": "Taiwan",
+      "region": "Changhua County",
+      "sessions": 1
     },
     "US|(not set)": {
       "country": "US",
@@ -676,7 +693,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 101
+      "sessions": 106
     },
     "US|Illinois": {
       "country": "US",
@@ -760,6 +777,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 226,
+  "total_sessions": 234,
   "version": 1
 }
