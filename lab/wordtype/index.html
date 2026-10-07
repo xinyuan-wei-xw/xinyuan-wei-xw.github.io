@@ -3,339 +3,209 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WordType — Type your way to a new language</title>
+<title>WordType · Xinyuan's Toolbox</title>
+<meta name="description" content="A typing vocabulary trainer for Japanese, Korean, Spanish, Chinese, German and Cantonese — from alphabets to advanced exam word lists. Type each word, hear it, learn it.">
 <style>
   :root{
-    --ink:#22303c; --muted:#7a8a96; --paper:#f7f5f0; --card:#ffffff;
-    --accent:#3e7d5b; --accent-soft:#e3efe7; --bad:#c0453d; --bad-soft:#f9e9e7;
-    --line:#e4e0d6; --gold:#c9a44e;
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222c; --line:#262b36;
+    --text:#e8eaf0; --muted:#9aa3b2; --accent:#ffd166; --good:#4ade80; --bad:#f87171;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  body{font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
-    background:var(--paper); color:var(--ink); min-height:100vh;}
-  header{max-width:980px; margin:0 auto; padding:34px 20px 8px; text-align:center;}
-  header h1{font-size:32px; letter-spacing:.5px;}
-  header h1 .t{color:var(--accent);}
-  header p{color:var(--muted); margin-top:6px; font-size:15px;}
-  .tabs{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:22px auto 6px; max-width:980px; padding:0 16px;}
-  .tab{border:1px solid var(--line); background:var(--card); color:var(--ink); padding:9px 20px; border-radius:999px;
-    font-size:16px; cursor:pointer; transition:all .15s;}
-  .tab:hover{border-color:var(--accent);}
-  .tab.on{background:var(--accent); color:#fff; border-color:var(--accent);}
-  main{max-width:980px; margin:0 auto; padding:14px 20px 60px;}
-  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin-top:12px;}
-  .book{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; cursor:pointer; transition:all .15s;}
-  .book:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(34,48,60,.08); border-color:var(--accent);}
-  .book h3{font-size:18px; margin-bottom:4px;}
-  .book .d{color:var(--muted); font-size:13px; min-height:34px;}
-  .book .n{margin-top:10px; font-size:13px; color:var(--accent); font-weight:600;}
-  .book .p{margin-top:6px; font-size:12px; color:var(--gold);}
-  .hidden{display:none !important;}
-  /* practice */
-  .pbar-wrap{display:flex; align-items:center; gap:12px; margin:10px 0 18px;}
-  .pbar{flex:1; height:8px; background:var(--line); border-radius:99px; overflow:hidden;}
-  .pbar>i{display:block; height:100%; background:var(--accent); width:0%; transition:width .25s;}
-  .pcount{font-size:13px; color:var(--muted); white-space:nowrap;}
-  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:34px 26px 26px; text-align:center;
-    box-shadow:0 4px 16px rgba(34,48,60,.05);}
-  .word{font-size:52px; font-weight:700; letter-spacing:1px; line-height:1.15;}
-  .reading{font-size:22px; color:var(--accent); margin-top:6px; min-height:28px;}
-  .meaning{margin-top:10px; font-size:16px; color:var(--muted); min-height:24px;}
-  .meaning b{color:var(--ink); font-weight:600;}
-  .letters{margin:26px 0 6px; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:30px; letter-spacing:2px;}
-  .letters span{padding:2px 1px; border-bottom:3px solid var(--line); color:#b9c4cc; transition:color .08s;}
-  .letters span.ok{color:var(--accent); border-color:var(--accent);}
-  .letters span.bad{color:var(--bad); border-color:var(--bad); background:var(--bad-soft);}
-  .letters span.cur{border-color:var(--ink); color:#8fa0ad;}
-  .hint{font-size:13px; color:var(--muted); margin-top:8px; min-height:18px;}
-  #typer{position:absolute; opacity:0; pointer-events:none; height:1px; width:1px;}
-  .stats{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:18px;}
-  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:8px 16px; font-size:14px;}
-  .stat b{color:var(--accent);}
-  .controls{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:16px;}
-  .btn{border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px; padding:8px 18px;
-    font-size:14px; cursor:pointer; transition:all .15s;}
-  .btn:hover{border-color:var(--accent); color:var(--accent);}
-  .btn.primary{background:var(--accent); color:#fff; border-color:var(--accent);}
-  .btn.primary:hover{color:#fff; opacity:.92;}
-  .btn.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent);}
-  .backrow{display:flex; justify-content:space-between; align-items:center;}
-  .booktitle{font-size:20px; font-weight:700;}
-  .summary h2{font-size:24px; margin-bottom:8px;}
-  .summary .big{font-size:16px; color:var(--muted); line-height:1.7;}
-  .wronglist{margin:14px auto 4px; max-width:560px; text-align:left;}
-  .wronglist li{list-style:none; padding:8px 12px; border:1px solid var(--line); border-radius:10px; margin-bottom:6px; background:#fff; font-size:15px;}
-  .wronglist .w{color:var(--bad); font-weight:600;}
-  .kbcard{background:var(--card); border:1px solid var(--gold); border-radius:14px; padding:16px 20px 12px; margin:12px 0 4px; text-align:left;}
-  .kbcard h4{font-size:16px; margin-bottom:8px;}
-  .kbcard ol{margin:0 0 8px 20px; font-size:14px; line-height:1.65;}
-  .kbcard .knote{font-size:13px; color:var(--muted); line-height:1.6;}
-  .kbcard .kx{float:right; border:none; background:none; font-size:16px; cursor:pointer; color:var(--muted);}
-  footer{max-width:980px; margin:0 auto; padding:0 20px 34px; text-align:center; color:var(--muted); font-size:13px;}
-  @media (max-width:560px){ .word{font-size:40px;} .letters{font-size:24px;} }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif}
+  a{color:var(--accent)}
+  .wrap{max-width:960px;margin:0 auto;padding:18px 16px 64px}
+  .topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .back{font-size:13px;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  h1{font-size:26px;margin:10px 0 2px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+  .authbox{display:flex;align-items:center;gap:8px;font-size:13px}
+  .authbox .who{color:var(--muted)}
+  .btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;
+    padding:7px 12px;font-size:13px;cursor:pointer}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#141414;border-color:var(--accent);font-weight:600}
+  .btn.primary:hover{color:#141414;opacity:.9}
+  #authPanel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:0 0 16px;display:none}
+  #authPanel.open{display:block}
+  #authPanel h3{margin:0 0 6px;font-size:16px}
+  #authPanel p{color:var(--muted);font-size:13px;margin:0 0 10px;line-height:1.5}
+  #authPanel .rowin{display:flex;gap:8px;flex-wrap:wrap}
+  #authPanel input{background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--text);
+    padding:9px 11px;font-size:14px;min-width:200px;flex:1}
+  #authErr{color:var(--bad);font-size:13px;margin-top:8px;min-height:16px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 16px}
+  .tab{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:999px;
+    padding:8px 14px;font-size:14px;cursor:pointer}
+  .tab.on{background:var(--accent);color:#141414;border-color:var(--accent);font-weight:700}
+  .kbcard{position:relative;background:#14202e;border:1px solid #27435f;border-radius:12px;padding:14px 16px;margin:0 0 16px;font-size:14px;line-height:1.65}
+  .kbcard b{color:#8ecbff}
+  .kbcard h4{margin:0 0 8px;font-size:15px}
+  .kbcard ol{margin:0 0 8px;padding-left:20px}
+  .kbcard .knote{color:var(--muted);font-size:13px}
+  .kbcard .kx{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer}
+  .kbcard code{background:#0e1622;border:1px solid #27435f;border-radius:5px;padding:0 5px;font-size:13px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;text-align:left;width:100%;color:var(--text)}
+  .card:hover{border-color:var(--accent)}
+  .card h3{margin:0 0 6px;font-size:17px}
+  .card p{margin:0 0 10px;color:var(--muted);font-size:13px;line-height:1.5;min-height:38px}
+  .card .meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+  .card .best{color:var(--accent);font-weight:600}
+  .card .done{color:var(--good);font-weight:600}
+  .hidden{display:none !important}
+  #setsView h2, #practice h2{font-size:20px;margin:6px 0 4px}
+  .hintline{color:var(--muted);font-size:13px;margin:0 0 14px}
+  .setgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+  .setbtn{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px;cursor:pointer;text-align:left}
+  .setbtn:hover{border-color:var(--accent)}
+  .setbtn .sb1{font-size:14px;font-weight:600}
+  .setbtn .sb2{font-size:12px;color:var(--muted)}
+  .setbtn .sb3{font-size:12px;color:var(--accent)}
+  .stage{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px 22px;text-align:center}
+  .progressline{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+  #wordBig{font-size:56px;font-weight:800;letter-spacing:.02em;margin:12px 0 2px;line-height:1.15}
+  #reading{font-size:22px;color:var(--accent);min-height:28px}
+  #meaning{font-size:17px;color:var(--text);margin-top:6px;min-height:24px}
+  #meaning .zh{color:var(--muted)}
+  .letters{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:26px 0 8px;min-height:58px}
+  .ch{width:40px;height:52px;border-bottom:3px solid var(--line);font-size:30px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .ch.done{color:var(--good);border-color:var(--good)}
+  .ch.now{border-color:var(--accent);color:var(--text)}
+  .ch.wrong{color:var(--bad);border-color:var(--bad)}
+  #typeInput{position:absolute;opacity:0;pointer-events:none;height:1px;width:1px}
+  .tapzone{cursor:text}
+  .controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .stats{display:flex;gap:18px;justify-content:center;color:var(--muted);font-size:13px;margin-top:16px;flex-wrap:wrap}
+  .stats b{color:var(--text)}
+  #summaryScore{font-size:52px;font-weight:800;text-align:center;margin:8px 0}
+  .reviewlist{margin:16px auto 0;max-width:560px;text-align:left}
+  .reviewlist .rw{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-bottom:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+  .reviewlist .rw .w{font-weight:700}
+  .reviewlist .rw .m{color:var(--muted)}
+  .missed{color:var(--bad);font-size:12px}
+  footer{margin-top:36px;color:var(--muted);font-size:12px;line-height:1.7;text-align:center}
+  @media (max-width:560px){ #wordBig{font-size:42px} .ch{width:30px;height:44px;font-size:24px} }
 </style>
 </head>
 <body>
-<header>
-  <h1>Word<span class="t">Type</span></h1>
-  <p>Type every word. Build the muscle memory. 日本語 · 한국어 · Español · 中文 · Deutsch · 粤语</p>
-</header>
+<div class="wrap">
+  <div class="topline">
+    <a class="back" href="../">← Back to Toolbox</a>
+    <div class="authbox">
+      <span class="who" id="authWho"></span>
+      <button class="btn" id="loginBtn">Log in</button>
+      <button class="btn hidden" id="logoutBtn">Log out</button>
+    </div>
+  </div>
+  <h1>⌨️ WordType</h1>
+  <p class="sub">Type the word you see — in its reading <i>or</i> on the word's own keyboard — hear it, and learn it. From alphabets to advanced exam lists.</p>
 
-<div class="tabs" id="tabs"></div>
-<div style="text-align:center; margin-top:2px;">
-  <button class="btn hidden" id="kbBtn">⌨️ Mac keyboard setup</button>
-</div>
+  <div id="authPanel">
+    <h3>Log in to record your progress</h3>
+    <p>Use the same email and password as X Planner and the Secret Garden (one account for everything). Your best scores, finished sets and tricky words are saved to your account and follow you across devices. Without logging in, you can still practise — progress just stays on this device.</p>
+    <div class="rowin">
+      <input type="email" id="authEmail" placeholder="Email" autocomplete="email">
+      <input type="password" id="authPass" placeholder="Password (6+ characters)" autocomplete="current-password">
+      <button class="btn primary" id="signinBtn">Log in</button>
+      <button class="btn" id="signupBtn">Create account</button>
+    </div>
+    <div id="authErr"></div>
+  </div>
 
-<main>
-  <section id="gallery"><div id="kbCard"></div><div id="gridWrap"></div></section>
+  <div class="tabs" id="langTabs"></div>
+  <div id="kbCard"></div>
+
+  <section id="gallery">
+    <div class="grid" id="bookGrid"></div>
+  </section>
+
+  <section id="setsView" class="hidden">
+    <h2 id="setsTitle"></h2>
+    <p class="hintline" id="setsHint"></p>
+    <div class="setgrid" id="setGrid"></div>
+    <div class="controls" style="justify-content:flex-start">
+      <button class="btn" id="shuffleSetBtn">🔀 Shuffle 50 words</button>
+      <button class="btn" id="setsBackBtn">← All books</button>
+    </div>
+  </section>
 
   <section id="practice" class="hidden">
-    <div class="backrow">
-      <button class="btn" id="backBtn">← Gallery</button>
-      <div class="booktitle" id="bookTitle"></div>
-      <button class="btn" id="restartBtn">↻ Restart</button>
-    </div>
-    <div class="pbar-wrap">
-      <div class="pbar"><i id="pfill"></i></div>
-      <div class="pcount" id="pcount"></div>
-    </div>
-    <div class="card" id="typeCard">
-      <div class="word" id="wDisplay"></div>
-      <div class="reading" id="wReading"></div>
-      <div class="meaning" id="wMeaning"></div>
+    <div class="stage tapzone" id="stage">
+      <div class="progressline">
+        <span id="pBook"></span><span id="pSet"></span><span id="pCount"></span><span id="pTimer">0:00</span>
+      </div>
+      <div id="wordBig"></div>
+      <div id="reading"></div>
+      <div id="meaning"></div>
       <div class="letters" id="letters"></div>
-      <div class="hint" id="hint">Click here and start typing</div>
-      <input id="typer" autocomplete="off" autocapitalize="none" spellcheck="false">
-    </div>
-    <div class="controls">
-      <button class="btn" id="speakBtn">🔊 Listen</button>
-      <button class="btn on" id="soundTgl">Auto-sound: on</button>
-      <button class="btn on" id="meaningTgl">Meaning: on</button>
-      <button class="btn" id="shuffleBtn">🔀 Shuffle</button>
-      <button class="btn" id="skipBtn">Skip →</button>
-    </div>
-    <div class="stats">
-      <div class="stat">Accuracy <b id="stAcc">100%</b></div>
-      <div class="stat">Correct <b id="stOk">0</b></div>
-      <div class="stat">Mistakes <b id="stBad">0</b></div>
-      <div class="stat">Time <b id="stTime">0:00</b></div>
+      <div class="hintline" style="margin:0">Click here, then just type. <span id="typeHint"></span></div>
+      <input id="typeInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <div class="stats">
+        <span>Accuracy <b id="stAcc">100%</b></span>
+        <span>Typed <b id="stTyped">0</b></span>
+        <span>Mistakes <b id="stMiss">0</b></span>
+      </div>
+      <div class="controls">
+        <button class="btn" id="speakBtn">🔊 Listen</button>
+        <button class="btn" id="skipBtn">Skip →</button>
+        <button class="btn" id="shuffleBtn">🔀 Shuffle: off</button>
+        <button class="btn" id="kbBtn">⌨️ Mac keyboard setup</button>
+        <button class="btn" id="quitBtn">✕ Quit</button>
+      </div>
     </div>
   </section>
 
   <section id="summary" class="hidden">
-    <div class="card summary">
-      <h2 id="sumTitle">Book complete 🎉</h2>
-      <div class="big" id="sumBody"></div>
-      <ul class="wronglist" id="wrongList"></ul>
-      <div class="controls">
-        <button class="btn primary" id="againBtn">Practice again</button>
-        <button class="btn hidden" id="reviewBtn">Review mistakes only</button>
-        <button class="btn" id="sumBackBtn">← Back to gallery</button>
+    <div class="stage">
+      <div style="text-align:center;color:var(--muted);font-size:14px">Session complete</div>
+      <div id="summaryScore">0%</div>
+      <div class="stats" style="margin-top:4px">
+        <span>Words <b id="sumWords">0</b></span>
+        <span>Time <b id="sumTime">0:00</b></span>
+        <span>Best for this book <b id="sumBest">—</b></span>
       </div>
+      <div class="controls">
+        <button class="btn primary" id="nextSetBtn">Next set →</button>
+        <button class="btn" id="reviewBtn">↻ Review mistakes (<span id="reviewCount">0</span>)</button>
+        <button class="btn" id="againBtn">↻ Practise again</button>
+        <button class="btn" id="toSetsBtn">Sets</button>
+        <button class="btn" id="toGalleryBtn">← All books</button>
+      </div>
+      <div class="reviewlist" id="reviewList"></div>
     </div>
   </section>
-</main>
 
-<footer>Starter core-vocabulary sets — type the reading (romaji / romanization / pinyin / Jyutping) or the word itself for Spanish and German. Progress is saved on this device.</footer>
-
+  <footer>
+    Word lists: OpenJLPT (Japanese), complete-hsk-vocabulary (Chinese, HSK 3.0), 국립국어원 학습용 어휘 / TOPIK lists (Korean),
+    Goethe-Institut A1–B1 Wortlisten (German), OpenSubtitles frequency lists + Wiktionary glosses (Spanish), CC-Canto 粤典 (Cantonese, CC BY-SA 3.0), kaikki.org Wiktionary data (CC BY-SA).
+    Pronunciation uses your browser's built-in voices. Progress is stored on this device, and in your account when you log in.
+  </footer>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
 "use strict";
-const BOOKS = [
-/* ============ 日本語 ============ */
-{id:"ja-n5", lang:"ja", langName:"日本語", voice:"ja-JP", name:"JLPT N5 Core", desc:"Everyday basics — nature, home, school", typeHint:"Type the romaji", words:[
-["水","みず","mizu","water","水"],["山","やま","yama","mountain","山"],["川","かわ","kawa","river","河"],["雨","あめ","ame","rain","雨"],
-["電車","でんしゃ","densha","train","电车"],["先生","せんせい","sensei","teacher","老师"],["学生","がくせい","gakusei","student","学生"],
-["学校","がっこう","gakkou","school","学校"],["本","ほん","hon","book","书"],["日本語","にほんご","nihongo","Japanese (language)","日语"],
-["今日","きょう","kyou","today","今天"],["明日","あした","ashita","tomorrow","明天"],["昨日","きのう","kinou","yesterday","昨天"],
-["朝","あさ","asa","morning","早晨"],["夜","よる","yoru","night","夜晚"],["猫","ねこ","neko","cat","猫"],["犬","いぬ","inu","dog","狗"],
-["鳥","とり","tori","bird","鸟"],["魚","さかな","sakana","fish","鱼"],["馬","うま","uma","horse","马"],["車","くるま","kuruma","car","汽车"],
-["家","いえ","ie","house","家"],["店","みせ","mise","shop","商店"],["駅","えき","eki","station","车站"],["空","そら","sora","sky","天空"],
-["海","うみ","umi","sea","海"],["花","はな","hana","flower","花"],["木","き","ki","tree","树"],["月","つき","tsuki","moon","月亮"],
-["星","ほし","hoshi","star","星星"],["雪","ゆき","yuki","snow","雪"],["風","かぜ","kaze","wind","风"],["雲","くも","kumo","cloud","云"],
-["電話","でんわ","denwa","telephone","电话"],["時計","とけい","tokei","clock / watch","钟表"],["部屋","へや","heya","room","房间"],
-["窓","まど","mado","window","窗户"],["机","つくえ","tsukue","desk","桌子"],["椅子","いす","isu","chair","椅子"],["紙","かみ","kami","paper","纸"],
-["手紙","てがみ","tegami","letter","信"],["写真","しゃしん","shashin","photo","照片"],["映画","えいが","eiga","movie","电影"],
-["音楽","おんがく","ongaku","music","音乐"],["友達","ともだち","tomodachi","friend","朋友"],["家族","かぞく","kazoku","family","家人"],
-["森","もり","mori","forest","森林"],["日","ひ","hi","sun / day","太阳；日"]]},
-{id:"ja-n4", lang:"ja", langName:"日本語", voice:"ja-JP", name:"JLPT N4 Core", desc:"Work, travel, food and seasons", typeHint:"Type the romaji", words:[
-["仕事","しごと","shigoto","work / job","工作"],["会社","かいしゃ","kaisha","company","公司"],["会議","かいぎ","kaigi","meeting","会议"],
-["旅行","りょこう","ryokou","travel","旅行"],["飛行機","ひこうき","hikouki","airplane","飞机"],["新聞","しんぶん","shinbun","newspaper","报纸"],
-["病院","びょういん","byouin","hospital","医院"],["薬","くすり","kusuri","medicine","药"],["天気","てんき","tenki","weather","天气"],
-["季節","きせつ","kisetsu","season","季节"],["春","はる","haru","spring","春天"],["夏","なつ","natsu","summer","夏天"],
-["秋","あき","aki","autumn","秋天"],["冬","ふゆ","fuyu","winter","冬天"],["世界","せかい","sekai","world","世界"],
-["国","くに","kuni","country","国家"],["町","まち","machi","town","城镇"],["村","むら","mura","village","村庄"],
-["島","しま","shima","island","岛"],["湖","みずうみ","mizuumi","lake","湖"],["橋","はし","hashi","bridge","桥"],
-["道","みち","michi","road","路"],["建物","たてもの","tatemono","building","建筑物"],["教室","きょうしつ","kyoushitsu","classroom","教室"],
-["図書館","としょかん","toshokan","library","图书馆"],["公園","こうえん","kouen","park","公园"],["動物","どうぶつ","doubutsu","animal","动物"],
-["野菜","やさい","yasai","vegetable","蔬菜"],["果物","くだもの","kudamono","fruit","水果"],["牛乳","ぎゅうにゅう","gyuunyuu","milk","牛奶"],
-["卵","たまご","tamago","egg","鸡蛋"],["肉","にく","niku","meat","肉"],["塩","しお","shio","salt","盐"],
-["砂糖","さとう","satou","sugar","糖"],["醤油","しょうゆ","shouyu","soy sauce","酱油"],["料理","りょうり","ryouri","cooking / dish","菜肴"],
-["食事","しょくじ","shokuji","meal","用餐"],["朝ご飯","あさごはん","asagohan","breakfast","早餐"],["晩ご飯","ばんごはん","bangohan","dinner","晚餐"],
-["味噌","みそ","miso","miso","味噌"]]},
-/* ============ 한국어 ============ */
-{id:"ko-topik1", lang:"ko", langName:"한국어", voice:"ko-KR", name:"TOPIK I Core", desc:"Everyday basics — home, school, travel", typeHint:"Type the romanization", words:[
-["물","mul","mul","water","水"],["산","san","san","mountain","山"],["강","gang","gang","river","江"],["비","bi","bi","rain","雨"],
-["눈","nun","nun","snow / eye","雪；眼睛"],["바다","bada","bada","sea","海"],["하늘","haneul","haneul","sky","天空"],
-["구름","gureum","gureum","cloud","云"],["바람","baram","baram","wind","风"],["꽃","kkot","kkot","flower","花"],
-["나무","namu","namu","tree","树"],["학교","hakgyo","hakgyo","school","学校"],["선생님","seonsaengnim","seonsaengnim","teacher","老师"],
-["학생","haksaeng","haksaeng","student","学生"],["책","chaek","chaek","book","书"],["연필","yeonpil","yeonpil","pencil","铅笔"],
-["가방","gabang","gabang","bag","包"],["집","jip","jip","house","家"],["방","bang","bang","room","房间"],["문","mun","mun","door","门"],
-["창문","changmun","changmun","window","窗户"],["의자","uija","uija","chair","椅子"],["책상","chaeksang","chaeksang","desk","书桌"],
-["침대","chimdae","chimdae","bed","床"],["전화","jeonhwa","jeonhwa","phone","电话"],["시계","sigye","sigye","clock","钟表"],
-["차","cha","cha","car / tea","汽车；茶"],["기차","gicha","gicha","train","火车"],["비행기","bihaenggi","bihaenggi","airplane","飞机"],
-["버스","beoseu","beoseu","bus","公交车"],["병원","byeongwon","byeongwon","hospital","医院"],["약","yak","yak","medicine","药"],
-["의사","uisa","uisa","doctor","医生"],["친구","chingu","chingu","friend","朋友"],["가족","gajok","gajok","family","家人"],
-["어머니","eomeoni","eomeoni","mother","母亲"],["아버지","abeoji","abeoji","father","父亲"],["오늘","oneul","oneul","today","今天"],
-["내일","naeil","naeil","tomorrow","明天"],["어제","eoje","eoje","yesterday","昨天"],["아침","achim","achim","morning","早晨"],
-["저녁","jeonyeok","jeonyeok","evening","晚上"],["밤","bam","bam","night","夜晚"],["시간","sigan","sigan","time","时间"],
-["돈","don","don","money","钱"],["시장","sijang","sijang","market","市场"],["음식","eumsik","eumsik","food","食物"],["밥","bap","bap","rice / meal","米饭"]]},
-{id:"ko-daily", lang:"ko", langName:"한국어", voice:"ko-KR", name:"Daily Korean", desc:"Food, weather, fun and getting around", typeHint:"Type the romanization", words:[
-["사과","sagwa","sagwa","apple","苹果"],["바나나","banana","banana","banana","香蕉"],["우유","uyu","uyu","milk","牛奶"],
-["계란","gyeran","gyeran","egg","鸡蛋"],["빵","ppang","ppang","bread","面包"],["고기","gogi","gogi","meat","肉"],
-["생선","saengseon","saengseon","fish","鱼"],["야채","yachae","yachae","vegetable","蔬菜"],["과일","gwail","gwail","fruit","水果"],
-["커피","keopi","keopi","coffee","咖啡"],["맥주","maekju","maekju","beer","啤酒"],["김치","gimchi","gimchi","kimchi","泡菜"],
-["날씨","nalssi","nalssi","weather","天气"],["봄","bom","bom","spring","春天"],["여름","yeoreum","yeoreum","summer","夏天"],
-["가을","gaeul","gaeul","autumn","秋天"],["겨울","gyeoul","gyeoul","winter","冬天"],["고양이","goyangi","goyangi","cat","猫"],
-["강아지","gangaji","gangaji","puppy / dog","小狗"],["새","sae","sae","bird","鸟"],["노래","norae","norae","song","歌曲"],
-["영화","yeonghwa","yeonghwa","movie","电影"],["음악","eumak","eumak","music","音乐"],["사진","sajin","sajin","photo","照片"],
-["신문","sinmun","sinmun","newspaper","报纸"],["운동","undong","undong","exercise","运动"],["수영","suyeong","suyeong","swimming","游泳"],
-["축구","chukgu","chukgu","soccer","足球"],["농구","nonggu","nonggu","basketball","篮球"],["회사","hoesa","hoesa","company","公司"],
-["일","il","il","work","工作"],["회의","hoeui","hoeui","meeting","会议"],["여행","yeohaeng","yeohaeng","travel","旅行"],
-["호텔","hotel","hotel","hotel","酒店"],["공항","gonghang","gonghang","airport","机场"],["여권","yeogwon","yeogwon","passport","护照"],
-["지도","jido","jido","map","地图"],["동생","dongsaeng","dongsaeng","younger sibling","弟弟/妹妹"],["말","mal","mal","horse / language","马；语言"],
-["가게","gage","gage","shop","商店"]]},
-/* ============ Español ============ */
-{id:"es-a1", lang:"es", langName:"Español", voice:"es-ES", name:"Español A1", desc:"First steps — home, nature, daily life", typeHint:"Type the word (accents optional)", words:[
-["agua","","agua","water","水"],["casa","","casa","house / home","房子；家"],["perro","","perro","dog","狗"],["gato","","gato","cat","猫"],
-["libro","","libro","book","书"],["mesa","","mesa","table","桌子"],["silla","","silla","chair","椅子"],["puerta","","puerta","door","门"],
-["ventana","","ventana","window","窗户"],["coche","","coche","car","汽车"],["tren","","tren","train","火车"],["avión","","avion","airplane","飞机"],
-["ciudad","","ciudad","city","城市"],["país","","pais","country","国家"],["mar","","mar","sea","海"],["río","","rio","river","河"],
-["montaña","","montana","mountain","山"],["sol","","sol","sun","太阳"],["luna","","luna","moon","月亮"],["estrella","","estrella","star","星星"],
-["cielo","","cielo","sky","天空"],["lluvia","","lluvia","rain","雨"],["nieve","","nieve","snow","雪"],["viento","","viento","wind","风"],
-["fuego","","fuego","fire","火"],["tierra","","tierra","earth / land","土地；地球"],["árbol","","arbol","tree","树"],["flor","","flor","flower","花"],
-["fruta","","fruta","fruit","水果"],["manzana","","manzana","apple","苹果"],["pan","","pan","bread","面包"],["leche","","leche","milk","牛奶"],
-["huevo","","huevo","egg","鸡蛋"],["carne","","carne","meat","肉"],["pescado","","pescado","fish (food)","鱼（食物）"],["arroz","","arroz","rice","米饭"],
-["queso","","queso","cheese","奶酪"],["vino","","vino","wine","葡萄酒"],["café","","cafe","coffee","咖啡"],["día","","dia","day","天；日子"],
-["noche","","noche","night","夜晚"],["mañana","","manana","morning / tomorrow","早晨；明天"],["tarde","","tarde","afternoon","下午"],
-["semana","","semana","week","周"],["mes","","mes","month","月"],["año","","ano","year","年"],["tiempo","","tiempo","time / weather","时间；天气"],
-["hombre","","hombre","man","男人"],["mujer","","mujer","woman","女人"],["hoja","","hoja","leaf","叶子"]]},
-{id:"es-a2", lang:"es", langName:"Español", voice:"es-ES", name:"Español A2", desc:"People, places, seasons and travel", typeHint:"Type the word (accents optional)", words:[
-["familia","","familia","family","家人"],["amigo","","amigo","friend","朋友"],["trabajo","","trabajo","work","工作"],["dinero","","dinero","money","钱"],
-["escuela","","escuela","school","学校"],["maestro","","maestro","teacher","老师"],["estudiante","","estudiante","student","学生"],
-["hospital","","hospital","hospital","医院"],["médico","","medico","doctor","医生"],["mercado","","mercado","market","市场"],
-["tienda","","tienda","shop","商店"],["banco","","banco","bank","银行"],["calle","","calle","street","街道"],["puente","","puente","bridge","桥"],
-["parque","","parque","park","公园"],["playa","","playa","beach","海滩"],["bosque","","bosque","forest","森林"],["isla","","isla","island","岛屿"],
-["desierto","","desierto","desert","沙漠"],["lago","","lago","lake","湖"],["verano","","verano","summer","夏天"],["invierno","","invierno","winter","冬天"],
-["primavera","","primavera","spring","春天"],["otoño","","otono","autumn","秋天"],["viaje","","viaje","trip / travel","旅行"],
-["maleta","","maleta","suitcase","行李箱"],["pasaporte","","pasaporte","passport","护照"],["hotel","","hotel","hotel","酒店"],
-["llave","","llave","key","钥匙"],["carta","","carta","letter","信"],["regalo","","regalo","gift","礼物"],["fiesta","","fiesta","party / festival","派对；节日"],
-["música","","musica","music","音乐"],["película","","pelicula","movie","电影"],["canción","","cancion","song","歌曲"],["baile","","baile","dance","舞蹈"],
-["cocina","","cocina","kitchen","厨房"],["baño","","bano","bathroom","浴室"],["cama","","cama","bed","床"],["espejo","","espejo","mirror","镜子"]]},
-/* ============ 中文 ============ */
-{id:"zh-hsk1", lang:"zh", langName:"中文", voice:"zh-CN", name:"HSK 1", desc:"First steps — people, home, every day", typeHint:"Type the pinyin (no tones needed)", words:[
-["水","shuǐ","shui","water",""],["人","rén","ren","person",""],["大","dà","da","big",""],["小","xiǎo","xiao","small",""],
-["山","shān","shan","mountain",""],["天","tiān","tian","sky / day",""],["今天","jīntiān","jintian","today",""],["明天","míngtiān","mingtian","tomorrow",""],
-["昨天","zuótiān","zuotian","yesterday",""],["学校","xuéxiào","xuexiao","school",""],["老师","lǎoshī","laoshi","teacher",""],["学生","xuésheng","xuesheng","student",""],
-["朋友","péngyou","pengyou","friend",""],["家","jiā","jia","home / family",""],["猫","māo","mao","cat",""],["狗","gǒu","gou","dog",""],
-["书","shū","shu","book",""],["字","zì","zi","character",""],["汉语","hànyǔ","hanyu","Chinese (language)",""],["英语","yīngyǔ","yingyu","English (language)",""],
-["中国","zhōngguó","zhongguo","China",""],["美国","měiguó","meiguo","USA",""],["医生","yīshēng","yisheng","doctor",""],["医院","yīyuàn","yiyuan","hospital",""],
-["商店","shāngdiàn","shangdian","shop",""],["饭店","fàndiàn","fandian","restaurant",""],["茶","chá","cha","tea",""],["米饭","mǐfàn","mifan","cooked rice",""],
-["水果","shuǐguǒ","shuiguo","fruit",""],["苹果","píngguǒ","pingguo","apple",""],["电影","diànyǐng","dianying","movie",""],["电视","diànshì","dianshi","TV",""],
-["电话","diànhuà","dianhua","phone",""],["电脑","diànnǎo","diannao","computer",""],["天气","tiānqì","tianqi","weather",""],["雨","yǔ","yu","rain",""],
-["雪","xuě","xue","snow",""],["钱","qián","qian","money",""],["东西","dōngxi","dongxi","thing",""],["衣服","yīfu","yifu","clothes",""],
-["车","chē","che","car / vehicle",""],["出租车","chūzūchē","chuzuche","taxi",""],["飞机","fēijī","feiji","airplane",""],["火车","huǒchē","huoche","train",""],
-["高兴","gāoxìng","gaoxing","happy",""],["喜欢","xǐhuan","xihuan","to like",""],["看","kàn","kan","to see / watch",""],["听","tīng","ting","to listen",""],
-["说","shuō","shuo","to speak",""],["读","dú","du","to read",""]]},
-{id:"zh-hsk2", lang:"zh", langName:"中文", voice:"zh-CN", name:"HSK 2", desc:"Life, travel, health and getting around", typeHint:"Type the pinyin (no tones needed)", words:[
-["时间","shíjiān","shijian","time",""],["工作","gōngzuò","gongzuo","work / job",""],["问题","wèntí","wenti","question / problem",""],["事情","shìqing","shiqing","matter / affair",""],
-["意思","yìsi","yisi","meaning",""],["房间","fángjiān","fangjian","room",""],["门","mén","men","door",""],["路","lù","lu","road",""],
-["街道","jiēdào","jiedao","street",""],["自行车","zìxíngchē","zixingche","bicycle",""],["游泳","yóuyǒng","youyong","swimming",""],["跑步","pǎobù","paobu","running",""],
-["唱歌","chànggē","changge","to sing",""],["跳舞","tiàowǔ","tiaowu","to dance",""],["旅游","lǚyóu","luyou","to travel",""],["照片","zhàopiàn","zhaopian","photo",""],
-["眼睛","yǎnjing","yanjing","eyes",""],["身体","shēntǐ","shenti","body / health",""],["生病","shēngbìng","shengbing","to get sick",""],["药","yào","yao","medicine",""],
-["牛奶","niúnǎi","niunai","milk",""],["鸡蛋","jīdàn","jidan","egg",""],["面条","miàntiáo","miantiao","noodles",""],["咖啡","kāfēi","kafei","coffee",""],
-["啤酒","píjiǔ","pijiu","beer",""],["颜色","yánsè","yanse","color",""],["红色","hóngsè","hongse","red",""],["白色","báisè","baise","white",""],
-["黑色","hēisè","heise","black",""],["左边","zuǒbian","zuobian","left side",""],["右边","yòubian","youbian","right side",""],["旁边","pángbiān","pangbian","beside",""],
-["里边","lǐbian","libian","inside",""],["外边","wàibian","waibian","outside",""],["远","yuǎn","yuan","far",""],["近","jìn","jin","near",""],
-["长","cháng","chang","long",""],["贵","guì","gui","expensive",""],["便宜","piányi","pianyi","cheap",""],["公共汽车","gōnggòng qìchē","gonggongqiche","bus",""]]},
-/* ============ Deutsch ============ */
-{id:"de-a1", lang:"de", langName:"Deutsch", voice:"de-DE", name:"Deutsch A1", desc:"First steps — home, nature, daily life", typeHint:"Type the word (umlauts optional)", words:[
-["Wasser","","wasser","water","水"],["Haus","","haus","house","房子"],["Hund","","hund","dog","狗"],["Katze","","katze","cat","猫"],
-["Buch","","buch","book","书"],["Tisch","","tisch","table","桌子"],["Stuhl","","stuhl","chair","椅子"],["Tür","","tur","door","门"],
-["Fenster","","fenster","window","窗户"],["Auto","","auto","car","汽车"],["Zug","","zug","train","火车"],["Flugzeug","","flugzeug","airplane","飞机"],
-["Stadt","","stadt","city","城市"],["Land","","land","country","国家"],["Meer","","meer","sea","海"],["Fluss","","fluss","river","河"],
-["Berg","","berg","mountain","山"],["Sonne","","sonne","sun","太阳"],["Mond","","mond","moon","月亮"],["Stern","","stern","star","星星"],
-["Himmel","","himmel","sky","天空"],["Regen","","regen","rain","雨"],["Schnee","","schnee","snow","雪"],["Wind","","wind","wind","风"],
-["Feuer","","feuer","fire","火"],["Baum","","baum","tree","树"],["Blume","","blume","flower","花"],["Blatt","","blatt","leaf","叶子"],
-["Obst","","obst","fruit","水果"],["Apfel","","apfel","apple","苹果"],["Brot","","brot","bread","面包"],["Milch","","milch","milk","牛奶"],
-["Ei","","ei","egg","鸡蛋"],["Fleisch","","fleisch","meat","肉"],["Fisch","","fisch","fish","鱼"],["Reis","","reis","rice","米饭"],
-["Käse","","kase","cheese","奶酪"],["Wein","","wein","wine","葡萄酒"],["Kaffee","","kaffee","coffee","咖啡"],["Tag","","tag","day","天"],
-["Nacht","","nacht","night","夜晚"],["Morgen","","morgen","morning","早晨"],["Woche","","woche","week","周"],["Monat","","monat","month","月"],
-["Jahr","","jahr","year","年"],["Zeit","","zeit","time","时间"],["Mann","","mann","man","男人"],["Frau","","frau","woman","女人"],
-["Kind","","kind","child","孩子"],["Schule","","schule","school","学校"]]},
-{id:"de-a2", lang:"de", langName:"Deutsch", voice:"de-DE", name:"Deutsch A2", desc:"People, places, seasons and travel", typeHint:"Type the word (umlauts optional)", words:[
-["Familie","","familie","family","家人"],["Freund","","freund","friend","朋友"],["Arbeit","","arbeit","work","工作"],["Geld","","geld","money","钱"],
-["Lehrer","","lehrer","teacher","老师"],["Schüler","","schuler","pupil / student","学生"],["Krankenhaus","","krankenhaus","hospital","医院"],["Arzt","","arzt","doctor","医生"],
-["Markt","","markt","market","市场"],["Geschäft","","geschaft","shop","商店"],["Bank","","bank","bank","银行"],["Straße","","strasse","street","街道"],
-["Brücke","","brucke","bridge","桥"],["Park","","park","park","公园"],["Strand","","strand","beach","海滩"],["Wald","","wald","forest","森林"],
-["Insel","","insel","island","岛屿"],["See","","see","lake","湖"],["Sommer","","sommer","summer","夏天"],["Winter","","winter","winter","冬天"],
-["Frühling","","fruhling","spring","春天"],["Herbst","","herbst","autumn","秋天"],["Reise","","reise","trip / travel","旅行"],["Koffer","","koffer","suitcase","行李箱"],
-["Hotel","","hotel","hotel","酒店"],["Schlüssel","","schlussel","key","钥匙"],["Brief","","brief","letter","信"],["Geschenk","","geschenk","gift","礼物"],
-["Musik","","musik","music","音乐"],["Film","","film","movie","电影"],["Lied","","lied","song","歌曲"],["Küche","","kuche","kitchen","厨房"],
-["Bad","","bad","bathroom","浴室"],["Bett","","bett","bed","床"],["Spiegel","","spiegel","mirror","镜子"],["Urlaub","","urlaub","vacation","假期"],
-["Wetter","","wetter","weather","天气"],["Garten","","garten","garden","花园"],["Fahrrad","","fahrrad","bicycle","自行车"],["Bahnhof","","bahnhof","train station","火车站"]]},
-/* ============ 粤语 Cantonese ============ */
-{id:"yue-basic", lang:"yue", langName:"粤语", voice:"yue-Hant-HK", name:"Cantonese Basics", desc:"Core words in Jyutping — greetings and key verbs", typeHint:"Type the Jyutping (tones optional)", words:[
-["你好","nei5 hou2","neihou","hello","你好"],["係","hai6","hai","to be","是"],["唔","m4","m","not","不"],["嘅","ge3","ge","(possessive)","的"],
-["我","ngo5","ngo","I / me","我"],["你","nei5","nei","you","你"],["佢","keoi5","keoi","he / she","他；她"],["我哋","ngo5 dei6","ngodei","we / us","我们"],
-["好","hou2","hou","good","好"],["唔該","m4 goi1","mgoi","please / thanks","请；谢谢"],["多謝","do1 ze6","doze","thank you","多谢"],
-["早晨","zou2 san4","zousan","good morning","早上好"],["食","sik6","sik","to eat","吃"],["飲","jam2","jam","to drink","喝"],
-["水","seoi2","seoi","water","水"],["茶","caa4","caa","tea","茶"],["飯","faan6","faan","rice / meal","饭"],["錢","cin2","cin","money","钱"],
-["買","maai5","maai","to buy","买"],["賣","maai6","maai","to sell","卖"],["去","heoi3","heoi","to go","去"],["嚟","lei4","lei","to come","来"],
-["返","faan1","faan","to return","回"],["睇","tai2","tai","to look / watch","看"],["聽","teng1","teng","to listen","听"],
-["講","gong2","gong","to speak","说"],["識","sik1","sik","to know / recognize","认识；会"],["想","soeng2","soeng","to want / think","想"],
-["要","jiu3","jiu","to want / need","要"],["冇","mou5","mou","not have","没有"],["有","jau5","jau","to have","有"],
-["大","daai6","daai","big","大"],["細","sai3","sai","small","小"],["多","do1","do","many","多"],["少","siu2","siu","few","少"],
-["今日","gam1 jat6","gamjat","today","今天"],["聽日","ting1 jat6","tingjat","tomorrow","明天"],["琴日","kam4 jat6","kamjat","yesterday","昨天"],
-["而家","ji4 gaa1","jigaa","now","现在"],["邊度","bin1 dou6","bindou","where","哪里"],["乜嘢","mat1 je5","matje","what","什么"],
-["幾多","gei2 do1","geido","how many / much","多少"],["天氣","tin1 hei3","tinhei","weather","天气"],["落雨","lok6 jyu5","lokjyu","to rain","下雨"],
-["熱","jit6","jit","hot","热"],["凍","dung3","dung","cold","冷"],["朋友","pang4 jau5","pangjau","friend","朋友"],
-["屋企","uk1 kei2","ukkei","home","家"],["返工","faan1 gung1","faangung","go to work","上班"],["放工","fong3 gung1","fonggung","get off work","下班"]]},
-{id:"yue-daily", lang:"yue", langName:"粤语", voice:"yue-Hant-HK", name:"Cantonese Daily Life", desc:"Food, getting around, work and fun", typeHint:"Type the Jyutping (tones optional)", words:[
-["飲茶","jam2 caa4","jamcaa","yum cha / dim sum","饮茶"],["食飯","sik6 faan6","sikfaan","have a meal","吃饭"],["買餸","maai5 sung3","maaisung","buy groceries","买菜"],
-["餸","sung3","sung","dish (with rice)","配饭的菜"],["湯","tong1","tong","soup","汤"],["麵","min6","min","noodles","面条"],["包","baau1","baau","bun / bread","包子；面包"],
-["雞蛋","gaai1 daan2","gaidaan","egg","鸡蛋"],["牛奶","ngau4 naai5","ngaunaai","milk","牛奶"],["生果","saang1 gwo2","saanggwo","fruit","水果"],
-["蘋果","ping4 gwo2","pinggwo","apple","苹果"],["醫生","ji1 sang1","jisang","doctor","医生"],["醫院","ji1 jyun2","jijyun","hospital","医院"],
-["學校","hok6 haau6","hokhaau","school","学校"],["老師","lou5 si1","lousi","teacher","老师"],["學生","hok6 sang1","hoksang","student","学生"],
-["公司","gung1 si1","gungsi","company","公司"],["老闆","lou5 baan2","loubaan","boss","老板"],["車","ce1","ce","car","车"],
-["巴士","baa1 si2","baasi","bus","巴士"],["地鐵","dei6 tit3","deitit","subway / MTR","地铁"],["飛機","fei1 gei1","feigei","airplane","飞机"],
-["機場","gei1 coeng4","geicoeng","airport","机场"],["酒店","zau2 dim3","zaudim","hotel","酒店"],["市場","si5 coeng4","sicoeng","market","市场"],
-["銀行","ngan4 hong4","nganhong","bank","银行"],["路","lou6","lou","road","路"],["橋","kiu4","kiu","bridge","桥"],["海","hoi2","hoi","sea","海"],
-["山","saan1","saan","mountain","山"],["電話","din6 waa2","dinwaa","phone","电话"],["電腦","din6 nou5","dinnou","computer","电脑"],
-["電影","din6 jing2","dinjing","movie","电影"],["音樂","jam1 ngok6","jamngok","music","音乐"],["相","soeng2","soeng","photo","照片"],
-["貓","maau1","maau","cat","猫"],["狗","gau2","gau","dog","狗"],["雀","zoek3","zoek","bird","鸟"],["花","faa1","faa","flower","花"],
-["衫","saam1","saam","clothes / shirt","衣服"]]}
+const firebaseConfig = {
+  apiKey:"AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw",
+  authDomain:"x-planner-99dd3.firebaseapp.com",
+  projectId:"x-planner-99dd3",
+  appId:"1:146714833806:web:d1c4516985514f7c35eadf"
+};
+const $ = (id) => document.getElementById(id);
+
+const LANGS = [
+  { id:"ja",  label:"日本語", voice:"ja-JP", hint:"Type the romaji — or switch to a Japanese keyboard and type the kana." },
+  { id:"ko",  label:"한국어", voice:"ko-KR", hint:"Type the romanization — or switch to a Korean keyboard and type the Hangul." },
+  { id:"es",  label:"Español", voice:"es-ES", hint:"Type the word itself — accents can be left off." },
+  { id:"zh",  label:"中文", voice:"zh-CN", hint:"Type the pinyin without tones — or switch to a Chinese keyboard and type the characters." },
+  { id:"de",  label:"Deutsch", voice:"de-DE", hint:"Type the word itself — ä ö ü may be typed as a o u, ß as ss." },
+  { id:"yue", label:"粤语", voice:"yue-Hant-HK", hint:"Type the Jyutping without tone numbers — or switch to a Cantonese keyboard and type the characters." },
 ];
-
-const LANGS = [["ja","日本語"],["ko","한국어"],["es","Español"],["zh","中文"],["de","Deutsch"],["yue","粤语"]];
-const $ = id => document.getElementById(id);
-let curLang = "ja", curBook = null, queue = [], qi = 0;
-let typed = [], mistakes = 0, correctWords = 0, startTime = null, timerId = null;
-let wrongSet = [], autoSound = true, showMeaning = true, wordHadError = false;
-
-function progressKey(id){ return "wt.progress." + id; }
-function getProgress(id){ try { return JSON.parse(localStorage.getItem(progressKey(id))) || null; } catch(e){ return null; } }
-function setProgress(id, p){ try { localStorage.setItem(progressKey(id), JSON.stringify(p)); } catch(e){} }
-
-function renderTabs(){
-  $("tabs").innerHTML = "";
-  LANGS.forEach(([code,label])=>{
-    const b = document.createElement("button");
-    b.className = "tab" + (code===curLang ? " on" : "");
-    b.textContent = label;
-    b.onclick = ()=>{ curLang = code; renderTabs(); renderGallery(); };
-    $("tabs").appendChild(b);
-  });
-}
+const langOf = (id) => LANGS.find((l) => l.id === id);
 const KB = {
   ja:{pick:"「Japanese – Romaji」", keys:"Type romaji and it turns into かな as you type; press Space to convert to 漢字."},
   ko:{pick:"「Korean – 2-Set Korean (두벌식)」", keys:"Every key is a Hangul jamo (자모); the letters join into syllables automatically as you type."},
@@ -344,174 +214,439 @@ const KB = {
   de:{pick:"「German」", keys:"The German layout gives ä, ö, ü and ß their own keys on the right-hand side."},
   yue:{pick:"「Chinese, Traditional – Jyutping (粵語拼音)」", keys:"Type the Jyutping (tone numbers optional), then press Space (or a number) to choose the character. On older macOS, if Jyutping is not listed, any Cantonese input source works too."}
 };
-function renderKb(){
-  const card = $("kbCard");
-  const dismissed = (()=>{ try { return localStorage.getItem("wt.kb.hide." + curLang) === "1"; } catch(e){ return false; } })();
-  $("kbBtn").classList.toggle("hidden", !dismissed);
-  if (dismissed) { card.innerHTML = ""; return; }
-  const kb = KB[curLang];
-  card.innerHTML = "<div class='kbcard'><button class='kx' id='kbClose' title='Hide'>✕</button>" +
-    "<h4>⌨️ Type with a Mac " + esc(langLabel(curLang)) + " keyboard</h4>" +
-    "<ol><li>Open <b>System Settings → Keyboard → Text Input → Input Sources → Edit…</b> and click <b>+</b></li>" +
-    "<li>Search for and add " + kb.pick + "</li>" +
-    "<li>Switch keyboards any time with <b>Control + Space</b>, or the input icon in the menu bar</li></ol>" +
-    "<div class='knote'>" + kb.keys + " In WordType both ways work: the language keyboard, or typing the reading on an English keyboard.</div></div>";
-  $("kbClose").onclick = ()=>{ try { localStorage.setItem("wt.kb.hide." + curLang, "1"); } catch(e){} renderKb(); };
-}
-function langLabel(code){ const f = LANGS.find(l=>l[0]===code); return f ? f[1] : code; }
-function renderGallery(){
-  show("gallery");
-  renderKb();
-  const g = $("gridWrap"); g.innerHTML = "";
-  const grid = document.createElement("div"); grid.className = "grid";
-  BOOKS.filter(b=>b.lang===curLang).forEach(book=>{
-    const p = getProgress(book.id);
-    const card = document.createElement("div"); card.className = "book";
-    card.innerHTML = "<h3></h3><div class='d'></div><div class='n'></div>" + (p ? "<div class='p'></div>" : "");
-    card.querySelector("h3").textContent = book.name;
-    card.querySelector(".d").textContent = book.desc;
-    card.querySelector(".n").textContent = book.words.length + " words · " + book.typeHint;
-    if (p) card.querySelector(".p").textContent = "Best accuracy " + p.best + "% · finished " + p.runs + "×";
-    card.onclick = ()=> startBook(book, book.words.map((_,i)=>i));
-    grid.appendChild(card);
-  });
-  g.appendChild(grid);
-}
-function show(id){
-  ["gallery","practice","summary"].forEach(s=> $(s).classList.toggle("hidden", s!==id));
-}
-function shuffleArr(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-function startBook(book, indices){
-  curBook = book;
-  queue = indices.slice();
-  qi = 0; mistakes = 0; correctWords = 0; wrongSet = [];
-  startTime = Date.now();
-  clearInterval(timerId); timerId = setInterval(tick, 500); tick();
-  $("bookTitle").textContent = book.langName + " · " + book.name;
-  show("practice");
-  loadWord();
-  $("typer").focus();
+function fold(s){
+  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]/g, "");
 }
-function cur(){ return curBook.words[queue[qi]]; }
-function romanTarget(){ return cur()[2]; }
-function scriptTarget(){ const w = cur(); return curBook.lang === "ja" ? w[1] : w[0]; }
-function activeSeq(){ return mode === "script" ? scriptTarget() : romanTarget(); }
-function loadWord(){
-  const w = cur();
-  typed = []; wordHadError = false; mode = "roman";
-  $("wDisplay").textContent = w[0];
-  $("wReading").textContent = w[1] || "";
-  $("wMeaning").innerHTML = showMeaning
-    ? "<b>" + esc(w[3]) + "</b>" + (w[4] ? " · " + esc(w[4]) : "")
-    : "";
-  $("hint").textContent = curBook.typeHint + " · or type it with the " + curBook.langName + " keyboard";
-  renderLetters();
-  $("pcount").textContent = (qi+1) + " / " + queue.length;
-  $("pfill").style.width = (queue.length ? (qi/queue.length*100) : 0) + "%";
-  updateStats();
-  if (autoSound) speak();
+const SCRIPT_RANGES = [
+  [0x3040, 0x30ff], [0x4e00, 0x9fff], [0x3400, 0x4dbf],
+  [0xac00, 0xd7af], [0x1100, 0x11ff], [0x3130, 0x318f],
+];
+function hasScript(s){
+  for (const ch of s || "") {
+    const c = ch.codePointAt(0);
+    for (const [a, b] of SCRIPT_RANGES) if (c >= a && c <= b) return true;
+  }
+  return false;
 }
-function renderLetters(){
-  const t = activeSeq(), el = $("letters"); el.innerHTML = "";
-  [...t].forEach((ch,i)=>{
-    const s = document.createElement("span");
-    s.textContent = ch === " " ? "␣" : ch;
-    if (i < typed.length) s.className = typed[i] ? "ok" : "bad";
-    else if (i === typed.length) s.className = "cur";
-    el.appendChild(s);
-  });
+function scriptTarget(book, w){
+  if (book.lang === "ja") return w[1] || w[0];
+  if (book.lang === "ko" || book.lang === "zh" || book.lang === "yue" || book.lang === "es" || book.lang === "de") return w[0];
+  return w[2];
 }
-function esc(s){ const d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
-function speak(){
+function speak(text, voice){
   try {
-    const u = new SpeechSynthesisUtterance(cur()[0]);
-    u.lang = curBook.voice; u.rate = 0.85;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = voice; u.rate = 0.85;
+    const v = speechSynthesis.getVoices().find((x) => x.lang === voice) ||
+              speechSynthesis.getVoices().find((x) => x.lang && x.lang.indexOf(voice.split("-")[0]) === 0);
+    if (v) u.voice = v;
     speechSynthesis.cancel(); speechSynthesis.speak(u);
-  } catch(e){}
-}
-function updateStats(){
-  const total = queue.length ? correctWords + (qi>0?0:0) : 0;
-  const attempted = correctWords + wrongSet.length;
-  const done = qi;
-  const acc = done === 0 ? 100 : Math.round((done - wrongSet.length) / done * 100);
-  $("stAcc").textContent = (done===0 ? 100 : Math.max(0,acc)) + "%";
-  $("stOk").textContent = correctWords;
-  $("stBad").textContent = mistakes;
-}
-function tick(){
-  if (!startTime) return;
-  const s = Math.floor((Date.now()-startTime)/1000);
-  $("stTime").textContent = Math.floor(s/60) + ":" + String(s%60).padStart(2,"0");
-}
-function finishWord(hadError){
-  if (hadError) { if (!wrongSet.includes(queue[qi])) wrongSet.push(queue[qi]); }
-  else correctWords++;
-  qi++;
-  $("pfill").style.width = (qi/queue.length*100) + "%";
-  if (qi >= queue.length) return finishBook();
-  loadWord();
-}
-function finishBook(){
-  clearInterval(timerId);
-  const secs = Math.max(1, Math.round((Date.now()-startTime)/1000));
-  const acc = queue.length ? Math.round((queue.length - wrongSet.length)/queue.length*100) : 100;
-  const prev = getProgress(curBook.id) || {best:0, runs:0};
-  setProgress(curBook.id, {best: Math.max(prev.best, acc), runs: prev.runs + 1});
-  $("sumTitle").textContent = curBook.name + " complete 🎉";
-  $("sumBody").innerHTML = "Accuracy <b>" + acc + "%</b> · " + queue.length + " words · " +
-    Math.floor(secs/60) + ":" + String(secs%60).padStart(2,"0") +
-    (wrongSet.length ? " · " + wrongSet.length + " word(s) to review below" : " · flawless run!");
-  const ul = $("wrongList"); ul.innerHTML = "";
-  wrongSet.forEach(idx=>{
-    const w = curBook.words[idx];
-    const li = document.createElement("li");
-    li.innerHTML = "<span class='w'>" + esc(w[0]) + "</span> " + esc(w[1]||"") + " — " + esc(w[3]) + (w[4] ? " · " + esc(w[4]) : "");
-    ul.appendChild(li);
-  });
-  $("reviewBtn").classList.toggle("hidden", wrongSet.length===0);
-  show("summary");
+  } catch (e) {}
 }
 
-document.addEventListener("keydown", e=>{
-  if ($("practice").classList.contains("hidden")) return;
-  if (e.key === "Enter" && document.activeElement !== $("typer")) { $("typer").focus(); }
-});
-$("typeCard").addEventListener("click", ()=> $("typer").focus());
-const fold = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ß/g,"ss");
-let mode = "roman", composing = false;
-function evaluate(){
-  const raw = $("typer").value;
-  if (/[\u3040-\u30FF\u3400-\u9FFF\uAC00-\uD7AF\u3130-\u318F]/.test(raw)) mode = "script";
-  const seq = activeSeq();
-  const chars = mode === "script" ? [...raw.replace(/\s+/g,"")] : [...fold(raw).replace(/\s+/g,"")];
-  const prevLen = typed.length;
-  typed = chars.slice(0, seq.length).map((ch,i)=> ch === seq[i]);
-  for (let i = prevLen; i < typed.length; i++) if (!typed[i]) { mistakes++; wordHadError = true; }
-  $("typer").value = [...seq].slice(0, typed.length).join("");
-  renderLetters(); updateStats();
-  if (typed.length === seq.length && typed.every(Boolean)) {
-    const hadErr = wordHadError;
-    setTimeout(()=>{ $("typer").value = ""; finishWord(hadErr); }, 160);
+/* ---------------- progress ---------------- */
+const LS_V2 = "wt.progress.v2", LS_V1 = "wt.progress.v1";
+let progress = loadLocalProgress();
+function loadLocalProgress(){
+  try {
+    const p = JSON.parse(localStorage.getItem(LS_V2) || "null");
+    if (p && p.books && p.words) return p;
+  } catch (e) {}
+  const p = { books: {}, words: {} };
+  try {
+    const old = JSON.parse(localStorage.getItem(LS_V1) || "{}");
+    for (const id in old) p.books[id] = { best: old[id].best || 0, runs: old[id].runs || 0, sets: {}, last: "" };
+  } catch (e) {}
+  return p;
+}
+function saveLocalProgress(){ try { localStorage.setItem(LS_V2, JSON.stringify(progress)); } catch (e) {} }
+function bookProg(id){ return progress.books[id] || null; }
+function mergeProgress(a, b){
+  const out = { books: {}, words: {} };
+  const ids = new Set([...Object.keys(a.books || {}), ...Object.keys(b.books || {})]);
+  for (const id of ids) {
+    const x = (a.books || {})[id] || {}, y = (b.books || {})[id] || {};
+    const sets = {};
+    const sids = new Set([...Object.keys(x.sets || {}), ...Object.keys(y.sets || {})]);
+    for (const s of sids) {
+      const sx = (x.sets || {})[s] || {}, sy = (y.sets || {})[s] || {};
+      sets[s] = { best: Math.max(sx.best || 0, sy.best || 0), runs: Math.max(sx.runs || 0, sy.runs || 0) };
+    }
+    out.books[id] = { best: Math.max(x.best || 0, y.best || 0), runs: Math.max(x.runs || 0, y.runs || 0),
+                      sets, last: (x.last || "") > (y.last || "") ? x.last : (y.last || "") };
+  }
+  const wids = new Set([...Object.keys(a.words || {}), ...Object.keys(b.words || {})]);
+  for (const id of wids) {
+    const x = (a.words || {})[id] || {}, y = (b.words || {})[id] || {};
+    const w = {};
+    for (const k of new Set([...Object.keys(x), ...Object.keys(y)])) w[k] = Math.max(x[k] || 0, y[k] || 0);
+    out.words[id] = w;
+  }
+  return out;
+}
+
+/* ---------------- books & sets ---------------- */
+let BOOKS = [], wordCache = {}, curLang = "ja";
+const SET_SIZE = 50, SET_THRESHOLD = 120;
+const setCount = (book) => Math.ceil(book.count / SET_SIZE);
+const usesSets = (book) => book.count > SET_THRESHOLD;
+function setsDone(book){
+  const p = bookProg(book.id); if (!p || !p.sets) return 0;
+  return Object.keys(p.sets).filter((k) => (p.sets[k].runs || 0) > 0).length;
+}
+async function loadBookWords(id){
+  if (wordCache[id]) return wordCache[id];
+  const r = await fetch("data/" + id + ".json");
+  const rows = await r.json();
+  wordCache[id] = rows;
+  return rows;
+}
+
+/* ---------------- gallery ---------------- */
+function renderTabs(){
+  $("langTabs").innerHTML = LANGS.map((l) =>
+    `<button class="tab${l.id === curLang ? " on" : ""}" data-lang="${l.id}">${l.label}</button>`).join("");
+  document.querySelectorAll("#langTabs .tab").forEach((t) =>
+    t.addEventListener("click", () => { curLang = t.dataset.lang; renderTabs(); renderKB(); renderGallery(); }));
+}
+function renderKB(){
+  const card = $("kbCard");
+  const kb = KB[curLang];
+  let dismissed = false;
+  try { dismissed = localStorage.getItem("wt.kb.hide." + curLang) === "1"; } catch (e) {}
+  if (!kb || dismissed) { card.innerHTML = ""; return; }
+  card.innerHTML = `<div class="kbcard"><button class="kx" id="kbClose" title="Hide">✕</button>
+    <h4>⌨️ Type with a Mac ${langOf(curLang).label} keyboard</h4>
+    <ol><li>Open <b>System Settings → Keyboard → Text Input → Input Sources → Edit…</b> and click <b>+</b></li>
+    <li>Search for and add ${kb.pick}</li>
+    <li>Switch keyboards any time with <b>Control + Space</b>, or the input icon in the menu bar</li></ol>
+    <div class="knote">${kb.keys} In WordType both ways work: the language keyboard, or typing the reading on an English keyboard.</div></div>`;
+  $("kbClose").addEventListener("click", () => { try { localStorage.setItem("wt.kb.hide." + curLang, "1"); } catch (e) {} renderKB(); });
+}
+function progressText(book){
+  const p = bookProg(book.id);
+  if (usesSets(book)) {
+    const d = setsDone(book);
+    let s = `${book.count} words · ${d}/${setCount(book)} sets done`;
+    if (p && p.best) s += ` · <span class="best">best ${p.best}%</span>`;
+    return s;
+  }
+  if (p && p.runs) {
+    return `${book.count} words · <span class="best">best ${p.best}%</span>` + (p.best >= 99 ? ` · <span class="done">✓ done</span>` : "");
+  }
+  return `${book.count} words`;
+}
+function renderGallery(){
+  const grid = $("bookGrid");
+  grid.innerHTML = "";
+  for (const b of BOOKS.filter((x) => x.lang === curLang)) {
+    const card = document.createElement("button");
+    card.className = "card";
+    card.innerHTML = `<h3>${b.name}</h3><p>${b.desc}</p>
+      <div class="meta"><span>${progressText(b)}</span><span>${usesSets(b) ? "choose a set →" : "start →"}</span></div>`;
+    card.addEventListener("click", () => openBook(b));
+    grid.appendChild(card);
   }
 }
-$("typer").addEventListener("compositionstart", ()=>{ composing = true; });
-$("typer").addEventListener("compositionend", ()=>{ composing = false; evaluate(); });
-$("typer").addEventListener("input", e=>{ if (composing || e.isComposing) return; evaluate(); });
-$("speakBtn").onclick = ()=>{ speak(); $("typer").focus(); };
-$("soundTgl").onclick = e=>{ autoSound = !autoSound; e.target.textContent = "Auto-sound: " + (autoSound?"on":"off"); e.target.classList.toggle("on", autoSound); $("typer").focus(); };
-$("meaningTgl").onclick = e=>{ showMeaning = !showMeaning; e.target.textContent = "Meaning: " + (showMeaning?"on":"off"); e.target.classList.toggle("on", showMeaning); loadWord(); $("typer").focus(); };
-$("shuffleBtn").onclick = ()=>{ queue = shuffleArr(queue); qi = 0; wrongSet = []; loadWord(); $("typer").focus(); };
-$("skipBtn").onclick = ()=>{ if (!wrongSet.includes(queue[qi])) wrongSet.push(queue[qi]); qi++; if (qi>=queue.length) finishBook(); else loadWord(); $("typer").focus(); };
-$("restartBtn").onclick = ()=> startBook(curBook, curBook.words.map((_,i)=>i));
-$("backBtn").onclick = ()=>{ clearInterval(timerId); renderGallery(); };
-$("kbBtn").onclick = ()=>{ try { localStorage.removeItem("wt.kb.hide." + curLang); } catch(e){} renderKb(); window.scrollTo({top:0, behavior:"smooth"}); };
-$("againBtn").onclick = ()=> startBook(curBook, curBook.words.map((_,i)=>i));
-$("reviewBtn").onclick = ()=> startBook(curBook, wrongSet.slice());
-$("sumBackBtn").onclick = ()=> renderGallery();
+async function openBook(book){
+  if (usesSets(book)) { openSets(book); return; }
+  await loadBookWords(book.id);
+  startSession(book, wordCache[book.id].map((_, i) => i), book.name, null);
+}
+
+/* ---------------- sets view ---------------- */
+let setsBook = null;
+function openSets(book){
+  setsBook = book;
+  $("gallery").classList.add("hidden");
+  $("summary").classList.add("hidden");
+  $("practice").classList.add("hidden");
+  $("setsView").classList.remove("hidden");
+  $("setsTitle").textContent = book.name;
+  $("setsHint").textContent = `${book.count} words in sets of ${SET_SIZE}. Your finished sets are saved${fbUser ? " to your account" : " on this device"}.`;
+  const p = bookProg(book.id);
+  let html = "";
+  for (let i = 0; i < setCount(book); i++) {
+    const a = i * SET_SIZE + 1, b = Math.min(book.count, (i + 1) * SET_SIZE);
+    const sp = p && p.sets ? p.sets[i] : null;
+    html += `<button class="setbtn" data-set="${i}"><div class="sb1">Set ${i + 1}</div>
+      <div class="sb2">words ${a}–${b}</div>${sp && sp.runs ? `<div class="sb3">best ${sp.best}% ✓</div>` : ""}</button>`;
+  }
+  $("setGrid").innerHTML = html;
+  document.querySelectorAll("#setGrid .setbtn").forEach((btn) =>
+    btn.addEventListener("click", async () => {
+      const i = Number(btn.dataset.set);
+      await loadBookWords(book.id);
+      const idx = [];
+      for (let k = i * SET_SIZE; k < Math.min(book.count, (i + 1) * SET_SIZE); k++) idx.push(k);
+      startSession(book, idx, `Set ${i + 1} · words ${i * SET_SIZE + 1}–${Math.min(book.count, (i + 1) * SET_SIZE)}`, i);
+    }));
+}
+
+/* ---------------- practice ---------------- */
+let session = null, timerId = null, shuffleOn = false;
+function showOnly(id){
+  for (const s of ["gallery", "setsView", "practice", "summary"]) $(s).classList.toggle("hidden", s !== id);
+}
+function fmtTime(sec){ return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0"); }
+
+function startSession(book, indices, label, setIndex){
+  let queue = indices.slice();
+  if (shuffleOn && setIndex === null) queue.sort(() => Math.random() - 0.5);
+  session = { book, queue, label, setIndex, pos: 0, wrongIdx: [], charsOk: 0, charsAll: 0,
+              curMistake: false, typed: "", startAt: Date.now() };
+  showOnly("practice");
+  $("pBook").textContent = book.name;
+  $("pSet").textContent = label === book.name ? "" : label;
+  $("typeHint").textContent = langOf(book.lang).hint;
+  clearInterval(timerId);
+  timerId = setInterval(() => { $("pTimer").textContent = fmtTime(Math.floor((Date.now() - session.startAt) / 1000)); }, 500);
+  $("pTimer").textContent = "0:00";
+  renderWord();
+  setTimeout(() => $("typeInput").focus(), 30);
+}
+function curWord(){
+  const rows = wordCache[session.book.id];
+  return rows[session.queue[session.pos]];
+}
+function targetSeq(){
+  const w = curWord();
+  const typed = $("typeInput").value;
+  return { chars: hasScript(typed) ? null : fold(typed), scriptTyped: typed, seq: fold(w[2]) };
+}
+function renderWord(){
+  const w = curWord();
+  session.typed = ""; session.curMistake = false;
+  $("typeInput").value = "";
+  $("wordBig").textContent = w[0];
+  $("reading").textContent = w[1] && w[1] !== w[0] ? w[1] : "";
+  $("meaning").innerHTML = (w[3] || "") + (w[4] ? ` <span class="zh">· ${w[4]}</span>` : "");
+  $("pCount").textContent = (session.pos + 1) + " / " + session.queue.length;
+  renderLetters();
+  updateStats();
+  speak(w[1] || w[0], langOf(session.book.lang).voice);
+}
+function renderLetters(typedOverride){
+  const w = curWord();
+  const typed = typedOverride !== undefined ? typedOverride : $("typeInput").value;
+  const script = hasScript(typed);
+  const chars = script ? [...typed] : [...fold(typed)];
+  const seq = script ? [...scriptTarget(session.book, w)] : [...fold(w[2])];
+  const n = Math.max(seq.length, chars.length);
+  let html = "";
+  for (let i = 0; i < n; i++) {
+    const want = seq[i] || "";
+    let cls = "ch";
+    if (i < chars.length) cls += chars[i] === want ? " done" : " wrong";
+    else if (i === chars.length) cls += " now";
+    html += `<div class="${cls}">${want || "&nbsp;"}</div>`;
+  }
+  $("letters").innerHTML = html;
+}
+function updateStats(){
+  const acc = session.charsAll ? Math.round(100 * session.charsOk / session.charsAll) : 100;
+  $("stAcc").textContent = acc + "%";
+  $("stTyped").textContent = session.pos;
+  $("stMiss").textContent = session.wrongIdx.length;
+}
+function handleInput(){
+  if (!session) return;
+  const w = curWord();
+  const typed = $("typeInput").value.replace(/\s+/g, "");
+  $("typeInput").value = typed;
+  const script = hasScript(typed);
+  const chars = script ? [...typed] : [...fold(typed)];
+  const seq = script ? [...scriptTarget(session.book, w)] : [...fold(w[2])];
+  renderLetters();
+  if (!chars.length) return;
+  const i = chars.length - 1;
+  if (i < seq.length) {
+    session.charsAll++;
+    if (chars[i] === seq[i]) session.charsOk++;
+    else { session.curMistake = true; }
+  }
+  updateStats();
+  if (chars.length >= seq.length && chars.slice(0, seq.length).join("") === seq.join("")) {
+    if (session.curMistake && !session.wrongIdx.includes(session.queue[session.pos])) session.wrongIdx.push(session.queue[session.pos]);
+    session.pos++;
+    if (session.pos >= session.queue.length) finishSession();
+    else renderWord();
+  }
+}
+function finishSession(){
+  clearInterval(timerId);
+  const s = session;
+  const acc = s.charsAll ? Math.round(100 * s.charsOk / s.charsAll) : 100;
+  const id = s.book.id;
+  const p = progress.books[id] || (progress.books[id] = { best: 0, runs: 0, sets: {}, last: "" });
+  p.best = Math.max(p.best || 0, acc); p.runs = (p.runs || 0) + 1;
+  p.last = new Date().toISOString();
+  if (s.setIndex !== null && s.setIndex !== undefined) {
+    const sp = p.sets[s.setIndex] || (p.sets[s.setIndex] = { best: 0, runs: 0 });
+    sp.best = Math.max(sp.best || 0, acc); sp.runs = (sp.runs || 0) + 1;
+  }
+  if (s.wrongIdx.length) {
+    const wm = progress.words[id] || (progress.words[id] = {});
+    for (const idx of s.wrongIdx) wm[idx] = (wm[idx] || 0) + 1;
+  }
+  saveLocalProgress(); schedulePush();
+  $("summaryScore").textContent = acc + "%";
+  $("sumWords").textContent = s.queue.length;
+  $("sumTime").textContent = fmtTime(Math.floor((Date.now() - s.startAt) / 1000));
+  $("sumBest").textContent = p.best + "%";
+  $("reviewCount").textContent = s.wrongIdx.length;
+  $("nextSetBtn").style.display = (s.setIndex !== null && s.setIndex !== undefined && s.setIndex + 1 < setCount(s.book)) ? "" : "none";
+  $("toSetsBtn").style.display = usesSets(s.book) ? "" : "none";
+  const rows = wordCache[id];
+  $("reviewList").innerHTML = s.queue.map((idx) => {
+    const w = rows[idx];
+    const missed = s.wrongIdx.includes(idx);
+    return `<div class="rw"><span class="w">${w[0]}</span><span>${w[1] || ""}</span>
+      <span class="m">${w[3] || ""}${w[4] ? " · " + w[4] : ""}</span>${missed ? '<span class="missed">✗ missed</span>' : ""}</div>`;
+  }).join("");
+  showOnly("summary");
+  renderGallery();
+}
+
+/* ---------------- firebase auth + cloud progress ---------------- */
+let fbUser = null, pushTimer = null;
+function initFirebase(){
+  if (!firebaseConfig || typeof firebase === "undefined") return false;
+  try { if (!firebase.apps.length) firebase.initializeApp(firebaseConfig); return true; } catch (e) { return false; }
+}
+function schedulePush(){
+  if (!fbUser) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(pushCloud, 700);
+}
+async function pushCloud(){
+  if (!fbUser || !initFirebase()) return;
+  try {
+    await firebase.firestore().collection("wordtype").doc(fbUser.uid)
+      .set({ progress, updated: firebase.firestore.FieldValue.serverTimestamp() });
+  } catch (e) {}
+}
+async function loadCloud(){
+  if (!fbUser || !initFirebase()) return;
+  try {
+    const snap = await firebase.firestore().collection("wordtype").doc(fbUser.uid).get();
+    if (snap.exists && snap.data() && snap.data().progress) {
+      progress = mergeProgress(progress, snap.data().progress);
+      saveLocalProgress();
+      renderGallery();
+    }
+    schedulePush();
+  } catch (e) {}
+}
+function authErrorText(code){
+  switch (code) {
+    case "auth/invalid-email": return "That email address does not look valid — check it and try again.";
+    case "auth/user-not-found": return "No account with this email yet. Tap “Create account” to make one — if you already use X Planner, use the same email and password there instead.";
+    case "auth/wrong-password":
+    case "auth/invalid-credential": return "That password does not match this email. Check caps lock and try again.";
+    case "auth/email-already-in-use": return "This email already has an account — tap “Log in” instead.";
+    case "auth/weak-password": return "Password is too short — it needs at least 6 characters.";
+    case "auth/network-request-failed": return "Network problem — check your connection and try again.";
+    case "auth/operation-not-allowed": return "Email/password sign-in is not enabled for this project yet (Firebase console → Authentication → Sign-in method).";
+    default: return "Something went wrong (" + (code || "unknown") + "). Please try again.";
+  }
+}
+function setupAuth(){
+  if (!initFirebase()) { $("loginBtn").style.display = "none"; return; }
+  firebase.auth().onAuthStateChanged((user) => {
+    fbUser = user || null;
+    if (fbUser) {
+      $("authWho").textContent = "👤 " + (fbUser.email || "");
+      $("loginBtn").classList.add("hidden");
+      $("logoutBtn").classList.remove("hidden");
+      $("authPanel").classList.remove("open");
+      loadCloud();
+    } else {
+      $("authWho").textContent = "";
+      $("loginBtn").classList.remove("hidden");
+      $("logoutBtn").classList.add("hidden");
+    }
+  });
+  $("loginBtn").addEventListener("click", () => { $("authPanel").classList.toggle("open"); $("authEmail").focus(); });
+  $("logoutBtn").addEventListener("click", () => firebase.auth().signOut());
+  const creds = () => ({ email: $("authEmail").value.trim(), pass: $("authPass").value });
+  $("signinBtn").addEventListener("click", async () => {
+    const { email, pass } = creds();
+    $("authErr").textContent = "";
+    if (!email || !pass) { $("authErr").textContent = "Enter your email and password first."; return; }
+    try { await firebase.auth().signInWithEmailAndPassword(email, pass); }
+    catch (e) { $("authErr").textContent = authErrorText(e.code); }
+  });
+  $("signupBtn").addEventListener("click", async () => {
+    const { email, pass } = creds();
+    $("authErr").textContent = "";
+    if (!email || !pass) { $("authErr").textContent = "Enter an email and a password (6+ characters) first."; return; }
+    try { await firebase.auth().createUserWithEmailAndPassword(email, pass); }
+    catch (e) { $("authErr").textContent = authErrorText(e.code); }
+  });
+}
+
+/* ---------------- wiring & boot ---------------- */
+$("setsBackBtn").addEventListener("click", () => { showOnly("gallery"); renderGallery(); });
+$("shuffleSetBtn").addEventListener("click", async () => {
+  if (!setsBook) return;
+  await loadBookWords(setsBook.id);
+  const all = wordCache[setsBook.id].map((_, i) => i).sort(() => Math.random() - 0.5).slice(0, SET_SIZE);
+  startSession(setsBook, all, "🔀 Shuffled 50", null);
+});
+$("stage").addEventListener("click", (e) => { if (e.target.tagName !== "BUTTON") $("typeInput").focus(); });
+$("typeInput").addEventListener("input", handleInput);
+$("typeInput").addEventListener("compositionend", handleInput);
+$("speakBtn").addEventListener("click", () => { if (session) { const w = curWord(); speak(w[1] || w[0], langOf(session.book.lang).voice); } $("typeInput").focus(); });
+$("skipBtn").addEventListener("click", () => {
+  if (!session) return;
+  if (!session.wrongIdx.includes(session.queue[session.pos])) session.wrongIdx.push(session.queue[session.pos]);
+  session.pos++;
+  if (session.pos >= session.queue.length) finishSession(); else renderWord();
+  $("typeInput").focus();
+});
+$("shuffleBtn").addEventListener("click", () => {
+  shuffleOn = !shuffleOn;
+  $("shuffleBtn").textContent = "🔀 Shuffle: " + (shuffleOn ? "on" : "off");
+  $("typeInput").focus();
+});
+$("kbBtn").addEventListener("click", () => {
+  if (!session) return;
+  try { localStorage.removeItem("wt.kb.hide." + session.book.lang); } catch (e) {}
+  curLang = session.book.lang; renderTabs(); renderKB();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  $("typeInput").focus();
+});
+$("quitBtn").addEventListener("click", () => { clearInterval(timerId); session = null; showOnly("gallery"); renderGallery(); });
+$("reviewBtn").addEventListener("click", () => {
+  if (!session || !session.wrongIdx.length) return;
+  const book = session.book, wrong = session.wrongIdx.slice();
+  startSession(book, wrong, "↻ Mistake review", null);
+});
+$("againBtn").addEventListener("click", () => {
+  if (!session) return;
+  startSession(session.book, session.queue.slice(), session.label, session.setIndex);
+});
+$("nextSetBtn").addEventListener("click", async () => {
+  if (!session || session.setIndex === null || session.setIndex === undefined) return;
+  const book = session.book, i = session.setIndex + 1;
+  await loadBookWords(book.id);
+  const idx = [];
+  for (let k = i * SET_SIZE; k < Math.min(book.count, (i + 1) * SET_SIZE); k++) idx.push(k);
+  startSession(book, idx, `Set ${i + 1} · words ${i * SET_SIZE + 1}–${Math.min(book.count, (i + 1) * SET_SIZE)}`, i);
+});
+$("toSetsBtn").addEventListener("click", () => { if (session) openSets(session.book); });
+$("toGalleryBtn").addEventListener("click", () => { showOnly("gallery"); renderGallery(); });
 
 renderTabs();
-renderGallery();
+fetch("data/manifest.json").then((r) => r.json()).then((m) => {
+  BOOKS = m.books || [];
+  renderKB();
+  renderGallery();
+}).catch(() => { $("bookGrid").innerHTML = '<p style="color:var(--muted)">Could not load the word lists. Check your connection and refresh.</p>'; });
+try { if ("speechSynthesis" in window) speechSynthesis.getVoices(); } catch (e) {}
+setupAuth();
 </script>
 </body>
 </html>
