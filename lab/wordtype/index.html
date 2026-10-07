@@ -66,6 +66,11 @@
   .wronglist{margin:14px auto 4px; max-width:560px; text-align:left;}
   .wronglist li{list-style:none; padding:8px 12px; border:1px solid var(--line); border-radius:10px; margin-bottom:6px; background:#fff; font-size:15px;}
   .wronglist .w{color:var(--bad); font-weight:600;}
+  .kbcard{background:var(--card); border:1px solid var(--gold); border-radius:14px; padding:16px 20px 12px; margin:12px 0 4px; text-align:left;}
+  .kbcard h4{font-size:16px; margin-bottom:8px;}
+  .kbcard ol{margin:0 0 8px 20px; font-size:14px; line-height:1.65;}
+  .kbcard .knote{font-size:13px; color:var(--muted); line-height:1.6;}
+  .kbcard .kx{float:right; border:none; background:none; font-size:16px; cursor:pointer; color:var(--muted);}
   footer{max-width:980px; margin:0 auto; padding:0 20px 34px; text-align:center; color:var(--muted); font-size:13px;}
   @media (max-width:560px){ .word{font-size:40px;} .letters{font-size:24px;} }
 </style>
@@ -77,9 +82,12 @@
 </header>
 
 <div class="tabs" id="tabs"></div>
+<div style="text-align:center; margin-top:2px;">
+  <button class="btn hidden" id="kbBtn">⌨️ Mac keyboard setup</button>
+</div>
 
 <main>
-  <section id="gallery"></section>
+  <section id="gallery"><div id="kbCard"></div><div id="gridWrap"></div></section>
 
   <section id="practice" class="hidden">
     <div class="backrow">
@@ -328,9 +336,33 @@ function renderTabs(){
     $("tabs").appendChild(b);
   });
 }
+const KB = {
+  ja:{pick:"「Japanese – Romaji」", keys:"Type romaji and it turns into かな as you type; press Space to convert to 漢字."},
+  ko:{pick:"「Korean – 2-Set Korean (두벌식)」", keys:"Every key is a Hangul jamo (자모); the letters join into syllables automatically as you type."},
+  es:{pick:"「Spanish – ISO」", keys:"Accents use dead keys: tap ´ then a vowel for á, and ñ has its own key."},
+  zh:{pick:"「Chinese, Simplified – Pinyin (简体拼音)」", keys:"Type the pinyin, then press Space (or a number) to choose the character."},
+  de:{pick:"「German」", keys:"The German layout gives ä, ö, ü and ß their own keys on the right-hand side."},
+  yue:{pick:"「Chinese, Traditional – Jyutping (粵語拼音)」", keys:"Type the Jyutping (tone numbers optional), then press Space (or a number) to choose the character. On older macOS, if Jyutping is not listed, any Cantonese input source works too."}
+};
+function renderKb(){
+  const card = $("kbCard");
+  const dismissed = (()=>{ try { return localStorage.getItem("wt.kb.hide." + curLang) === "1"; } catch(e){ return false; } })();
+  $("kbBtn").classList.toggle("hidden", !dismissed);
+  if (dismissed) { card.innerHTML = ""; return; }
+  const kb = KB[curLang];
+  card.innerHTML = "<div class='kbcard'><button class='kx' id='kbClose' title='Hide'>✕</button>" +
+    "<h4>⌨️ Type with a Mac " + esc(langLabel(curLang)) + " keyboard</h4>" +
+    "<ol><li>Open <b>System Settings → Keyboard → Text Input → Input Sources → Edit…</b> and click <b>+</b></li>" +
+    "<li>Search for and add " + kb.pick + "</li>" +
+    "<li>Switch keyboards any time with <b>Control + Space</b>, or the input icon in the menu bar</li></ol>" +
+    "<div class='knote'>" + kb.keys + " In WordType both ways work: the language keyboard, or typing the reading on an English keyboard.</div></div>";
+  $("kbClose").onclick = ()=>{ try { localStorage.setItem("wt.kb.hide." + curLang, "1"); } catch(e){} renderKb(); };
+}
+function langLabel(code){ const f = LANGS.find(l=>l[0]===code); return f ? f[1] : code; }
 function renderGallery(){
   show("gallery");
-  const g = $("gallery"); g.innerHTML = "";
+  renderKb();
+  const g = $("gridWrap"); g.innerHTML = "";
   const grid = document.createElement("div"); grid.className = "grid";
   BOOKS.filter(b=>b.lang===curLang).forEach(book=>{
     const p = getProgress(book.id);
@@ -362,16 +394,18 @@ function startBook(book, indices){
   $("typer").focus();
 }
 function cur(){ return curBook.words[queue[qi]]; }
-function target(){ return cur()[2]; }
+function romanTarget(){ return cur()[2]; }
+function scriptTarget(){ const w = cur(); return curBook.lang === "ja" ? w[1] : w[0]; }
+function activeSeq(){ return mode === "script" ? scriptTarget() : romanTarget(); }
 function loadWord(){
   const w = cur();
-  typed = []; wordHadError = false;
+  typed = []; wordHadError = false; mode = "roman";
   $("wDisplay").textContent = w[0];
   $("wReading").textContent = w[1] || "";
   $("wMeaning").innerHTML = showMeaning
     ? "<b>" + esc(w[3]) + "</b>" + (w[4] ? " · " + esc(w[4]) : "")
     : "";
-  $("hint").textContent = curBook.typeHint + " — click the card and type";
+  $("hint").textContent = curBook.typeHint + " · or type it with the " + curBook.langName + " keyboard";
   renderLetters();
   $("pcount").textContent = (qi+1) + " / " + queue.length;
   $("pfill").style.width = (queue.length ? (qi/queue.length*100) : 0) + "%";
@@ -379,7 +413,7 @@ function loadWord(){
   if (autoSound) speak();
 }
 function renderLetters(){
-  const t = target(), el = $("letters"); el.innerHTML = "";
+  const t = activeSeq(), el = $("letters"); el.innerHTML = "";
   [...t].forEach((ch,i)=>{
     const s = document.createElement("span");
     s.textContent = ch === " " ? "␣" : ch;
@@ -445,22 +479,25 @@ document.addEventListener("keydown", e=>{
 });
 $("typeCard").addEventListener("click", ()=> $("typer").focus());
 const fold = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ß/g,"ss");
-$("typer").addEventListener("input", e=>{
-  const v = fold(e.target.value).replace(/\s+/g,"");
-  const t = target();
+let mode = "roman", composing = false;
+function evaluate(){
+  const raw = $("typer").value;
+  if (/[\u3040-\u30FF\u3400-\u9FFF\uAC00-\uD7AF\u3130-\u318F]/.test(raw)) mode = "script";
+  const seq = activeSeq();
+  const chars = mode === "script" ? [...raw.replace(/\s+/g,"")] : [...fold(raw).replace(/\s+/g,"")];
   const prevLen = typed.length;
-  typed = [...v].slice(0, t.length).map((ch,i)=> ch === t[i]);
+  typed = chars.slice(0, seq.length).map((ch,i)=> ch === seq[i]);
   for (let i = prevLen; i < typed.length; i++) if (!typed[i]) { mistakes++; wordHadError = true; }
-  e.target.value = [...t].slice(0, typed.length).join("");
+  $("typer").value = [...seq].slice(0, typed.length).join("");
   renderLetters(); updateStats();
-  if (typed.length === t.length && typed.every(Boolean)) {
+  if (typed.length === seq.length && typed.every(Boolean)) {
     const hadErr = wordHadError;
-    setTimeout(()=>{ e.target.value=""; finishWord(hadErr); }, 160);
+    setTimeout(()=>{ $("typer").value = ""; finishWord(hadErr); }, 160);
   }
-});
-$("typer").addEventListener("keydown", e=>{
-  if (e.key === "Backspace") { /* input event handles it */ }
-});
+}
+$("typer").addEventListener("compositionstart", ()=>{ composing = true; });
+$("typer").addEventListener("compositionend", ()=>{ composing = false; evaluate(); });
+$("typer").addEventListener("input", e=>{ if (composing || e.isComposing) return; evaluate(); });
 $("speakBtn").onclick = ()=>{ speak(); $("typer").focus(); };
 $("soundTgl").onclick = e=>{ autoSound = !autoSound; e.target.textContent = "Auto-sound: " + (autoSound?"on":"off"); e.target.classList.toggle("on", autoSound); $("typer").focus(); };
 $("meaningTgl").onclick = e=>{ showMeaning = !showMeaning; e.target.textContent = "Meaning: " + (showMeaning?"on":"off"); e.target.classList.toggle("on", showMeaning); loadWord(); $("typer").focus(); };
@@ -468,6 +505,7 @@ $("shuffleBtn").onclick = ()=>{ queue = shuffleArr(queue); qi = 0; wrongSet = []
 $("skipBtn").onclick = ()=>{ if (!wrongSet.includes(queue[qi])) wrongSet.push(queue[qi]); qi++; if (qi>=queue.length) finishBook(); else loadWord(); $("typer").focus(); };
 $("restartBtn").onclick = ()=> startBook(curBook, curBook.words.map((_,i)=>i));
 $("backBtn").onclick = ()=>{ clearInterval(timerId); renderGallery(); };
+$("kbBtn").onclick = ()=>{ try { localStorage.removeItem("wt.kb.hide." + curLang); } catch(e){} renderKb(); window.scrollTo({top:0, behavior:"smooth"}); };
 $("againBtn").onclick = ()=> startBook(curBook, curBook.words.map((_,i)=>i));
 $("reviewBtn").onclick = ()=> startBook(curBook, wrongSet.slice());
 $("sumBackBtn").onclick = ()=> renderGallery();
