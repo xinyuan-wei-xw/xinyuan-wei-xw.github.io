@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 506.25" role="img" aria-labelledby="wt-title wt-desc">
+<title id="wt-title">WordType vocabulary typing trainer</title>
+<desc id="wt-desc">A row of keyboard keys showing characters from Japanese, Korean, Spanish, Chinese, German and Cantonese wordbooks.</desc>
+<rect width="900" height="506.25" fill="#f2f6f1"/>
+<g font-family="'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif" text-anchor="middle">
+  <g>
+    <rect x="90" y="150" width="104" height="104" rx="16" fill="#ffffff" stroke="#cfd8ce" stroke-width="3"/>
+    <text x="142" y="222" font-size="52" fill="#3e7d5b">あ</text>
+    <rect x="218" y="150" width="104" height="104" rx="16" fill="#ffffff" stroke="#cfd8ce" stroke-width="3"/>
+    <text x="270" y="222" font-size="48" fill="#3e7d5b">한</text>
+    <rect x="346" y="150" width="104" height="104" rx="16" fill="#ffffff" stroke="#cfd8ce" stroke-width="3"/>
+    <text x="398" y="222" font-size="52" fill="#3e7d5b">ñ</text>
+    <rect x="474" y="150" width="104" height="104" rx="16" fill="#ffffff" stroke="#cfd8ce" stroke-width="3"/>
+    <text x="526" y="222" font-size="48" fill="#3e7d5b">汉</text>
+    <rect x="602" y="150" width="104" height="104" rx="16" fill="#ffffff" stroke="#cfd8ce" stroke-width="3"/>
+    <text x="654" y="222" font-size="52" fill="#3e7d5b">ä</text>
+    <rect x="730" y="150" width="104" height="104" rx="16" fill="#ffffff" stroke="#cfd8ce" stroke-width="3"/>
+    <text x="782" y="222" font-size="48" fill="#3e7d5b">粤</text>
+  </g>
+  <rect x="218" y="286" width="464" height="52" rx="14" fill="#ffffff" stroke="#cfd8ce" stroke-width="3"/>
+  <text x="450" y="322" font-size="26" fill="#7a8a96" letter-spacing="4">type · learn · remember</text>
+  <text x="450" y="106" font-size="40" font-weight="700" fill="#22303c">WordType</text>
+  <text x="450" y="402" font-size="22" fill="#7a8a96">日本語 · 한국어 · Español · 中文 · Deutsch · 粤语</text>
+</g>
+</svg>
