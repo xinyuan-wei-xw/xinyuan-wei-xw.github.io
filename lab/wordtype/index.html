@@ -1,1 +1,479 @@
-placeholder
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WordType — Type your way to a new language</title>
+<style>
+  :root{
+    --ink:#22303c; --muted:#7a8a96; --paper:#f7f5f0; --card:#ffffff;
+    --accent:#3e7d5b; --accent-soft:#e3efe7; --bad:#c0453d; --bad-soft:#f9e9e7;
+    --line:#e4e0d6; --gold:#c9a44e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+    background:var(--paper); color:var(--ink); min-height:100vh;}
+  header{max-width:980px; margin:0 auto; padding:34px 20px 8px; text-align:center;}
+  header h1{font-size:32px; letter-spacing:.5px;}
+  header h1 .t{color:var(--accent);}
+  header p{color:var(--muted); margin-top:6px; font-size:15px;}
+  .tabs{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:22px auto 6px; max-width:980px; padding:0 16px;}
+  .tab{border:1px solid var(--line); background:var(--card); color:var(--ink); padding:9px 20px; border-radius:999px;
+    font-size:16px; cursor:pointer; transition:all .15s;}
+  .tab:hover{border-color:var(--accent);}
+  .tab.on{background:var(--accent); color:#fff; border-color:var(--accent);}
+  main{max-width:980px; margin:0 auto; padding:14px 20px 60px;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin-top:12px;}
+  .book{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; cursor:pointer; transition:all .15s;}
+  .book:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(34,48,60,.08); border-color:var(--accent);}
+  .book h3{font-size:18px; margin-bottom:4px;}
+  .book .d{color:var(--muted); font-size:13px; min-height:34px;}
+  .book .n{margin-top:10px; font-size:13px; color:var(--accent); font-weight:600;}
+  .book .p{margin-top:6px; font-size:12px; color:var(--gold);}
+  .hidden{display:none !important;}
+  /* practice */
+  .pbar-wrap{display:flex; align-items:center; gap:12px; margin:10px 0 18px;}
+  .pbar{flex:1; height:8px; background:var(--line); border-radius:99px; overflow:hidden;}
+  .pbar>i{display:block; height:100%; background:var(--accent); width:0%; transition:width .25s;}
+  .pcount{font-size:13px; color:var(--muted); white-space:nowrap;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:34px 26px 26px; text-align:center;
+    box-shadow:0 4px 16px rgba(34,48,60,.05);}
+  .word{font-size:52px; font-weight:700; letter-spacing:1px; line-height:1.15;}
+  .reading{font-size:22px; color:var(--accent); margin-top:6px; min-height:28px;}
+  .meaning{margin-top:10px; font-size:16px; color:var(--muted); min-height:24px;}
+  .meaning b{color:var(--ink); font-weight:600;}
+  .letters{margin:26px 0 6px; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:30px; letter-spacing:2px;}
+  .letters span{padding:2px 1px; border-bottom:3px solid var(--line); color:#b9c4cc; transition:color .08s;}
+  .letters span.ok{color:var(--accent); border-color:var(--accent);}
+  .letters span.bad{color:var(--bad); border-color:var(--bad); background:var(--bad-soft);}
+  .letters span.cur{border-color:var(--ink); color:#8fa0ad;}
+  .hint{font-size:13px; color:var(--muted); margin-top:8px; min-height:18px;}
+  #typer{position:absolute; opacity:0; pointer-events:none; height:1px; width:1px;}
+  .stats{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:18px;}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:8px 16px; font-size:14px;}
+  .stat b{color:var(--accent);}
+  .controls{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:16px;}
+  .btn{border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px; padding:8px 18px;
+    font-size:14px; cursor:pointer; transition:all .15s;}
+  .btn:hover{border-color:var(--accent); color:var(--accent);}
+  .btn.primary{background:var(--accent); color:#fff; border-color:var(--accent);}
+  .btn.primary:hover{color:#fff; opacity:.92;}
+  .btn.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent);}
+  .backrow{display:flex; justify-content:space-between; align-items:center;}
+  .booktitle{font-size:20px; font-weight:700;}
+  .summary h2{font-size:24px; margin-bottom:8px;}
+  .summary .big{font-size:16px; color:var(--muted); line-height:1.7;}
+  .wronglist{margin:14px auto 4px; max-width:560px; text-align:left;}
+  .wronglist li{list-style:none; padding:8px 12px; border:1px solid var(--line); border-radius:10px; margin-bottom:6px; background:#fff; font-size:15px;}
+  .wronglist .w{color:var(--bad); font-weight:600;}
+  footer{max-width:980px; margin:0 auto; padding:0 20px 34px; text-align:center; color:var(--muted); font-size:13px;}
+  @media (max-width:560px){ .word{font-size:40px;} .letters{font-size:24px;} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Word<span class="t">Type</span></h1>
+  <p>Type every word. Build the muscle memory. 日本語 · 한국어 · Español · 中文 · Deutsch · 粤语</p>
+</header>
+
+<div class="tabs" id="tabs"></div>
+
+<main>
+  <section id="gallery"></section>
+
+  <section id="practice" class="hidden">
+    <div class="backrow">
+      <button class="btn" id="backBtn">← Gallery</button>
+      <div class="booktitle" id="bookTitle"></div>
+      <button class="btn" id="restartBtn">↻ Restart</button>
+    </div>
+    <div class="pbar-wrap">
+      <div class="pbar"><i id="pfill"></i></div>
+      <div class="pcount" id="pcount"></div>
+    </div>
+    <div class="card" id="typeCard">
+      <div class="word" id="wDisplay"></div>
+      <div class="reading" id="wReading"></div>
+      <div class="meaning" id="wMeaning"></div>
+      <div class="letters" id="letters"></div>
+      <div class="hint" id="hint">Click here and start typing</div>
+      <input id="typer" autocomplete="off" autocapitalize="none" spellcheck="false">
+    </div>
+    <div class="controls">
+      <button class="btn" id="speakBtn">🔊 Listen</button>
+      <button class="btn on" id="soundTgl">Auto-sound: on</button>
+      <button class="btn on" id="meaningTgl">Meaning: on</button>
+      <button class="btn" id="shuffleBtn">🔀 Shuffle</button>
+      <button class="btn" id="skipBtn">Skip →</button>
+    </div>
+    <div class="stats">
+      <div class="stat">Accuracy <b id="stAcc">100%</b></div>
+      <div class="stat">Correct <b id="stOk">0</b></div>
+      <div class="stat">Mistakes <b id="stBad">0</b></div>
+      <div class="stat">Time <b id="stTime">0:00</b></div>
+    </div>
+  </section>
+
+  <section id="summary" class="hidden">
+    <div class="card summary">
+      <h2 id="sumTitle">Book complete 🎉</h2>
+      <div class="big" id="sumBody"></div>
+      <ul class="wronglist" id="wrongList"></ul>
+      <div class="controls">
+        <button class="btn primary" id="againBtn">Practice again</button>
+        <button class="btn hidden" id="reviewBtn">Review mistakes only</button>
+        <button class="btn" id="sumBackBtn">← Back to gallery</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Starter core-vocabulary sets — type the reading (romaji / romanization / pinyin / Jyutping) or the word itself for Spanish and German. Progress is saved on this device.</footer>
+
+<script>
+"use strict";
+const BOOKS = [
+/* ============ 日本語 ============ */
+{id:"ja-n5", lang:"ja", langName:"日本語", voice:"ja-JP", name:"JLPT N5 Core", desc:"Everyday basics — nature, home, school", typeHint:"Type the romaji", words:[
+["水","みず","mizu","water","水"],["山","やま","yama","mountain","山"],["川","かわ","kawa","river","河"],["雨","あめ","ame","rain","雨"],
+["電車","でんしゃ","densha","train","电车"],["先生","せんせい","sensei","teacher","老师"],["学生","がくせい","gakusei","student","学生"],
+["学校","がっこう","gakkou","school","学校"],["本","ほん","hon","book","书"],["日本語","にほんご","nihongo","Japanese (language)","日语"],
+["今日","きょう","kyou","today","今天"],["明日","あした","ashita","tomorrow","明天"],["昨日","きのう","kinou","yesterday","昨天"],
+["朝","あさ","asa","morning","早晨"],["夜","よる","yoru","night","夜晚"],["猫","ねこ","neko","cat","猫"],["犬","いぬ","inu","dog","狗"],
+["鳥","とり","tori","bird","鸟"],["魚","さかな","sakana","fish","鱼"],["馬","うま","uma","horse","马"],["車","くるま","kuruma","car","汽车"],
+["家","いえ","ie","house","家"],["店","みせ","mise","shop","商店"],["駅","えき","eki","station","车站"],["空","そら","sora","sky","天空"],
+["海","うみ","umi","sea","海"],["花","はな","hana","flower","花"],["木","き","ki","tree","树"],["月","つき","tsuki","moon","月亮"],
+["星","ほし","hoshi","star","星星"],["雪","ゆき","yuki","snow","雪"],["風","かぜ","kaze","wind","风"],["雲","くも","kumo","cloud","云"],
+["電話","でんわ","denwa","telephone","电话"],["時計","とけい","tokei","clock / watch","钟表"],["部屋","へや","heya","room","房间"],
+["窓","まど","mado","window","窗户"],["机","つくえ","tsukue","desk","桌子"],["椅子","いす","isu","chair","椅子"],["紙","かみ","kami","paper","纸"],
+["手紙","てがみ","tegami","letter","信"],["写真","しゃしん","shashin","photo","照片"],["映画","えいが","eiga","movie","电影"],
+["音楽","おんがく","ongaku","music","音乐"],["友達","ともだち","tomodachi","friend","朋友"],["家族","かぞく","kazoku","family","家人"],
+["森","もり","mori","forest","森林"],["日","ひ","hi","sun / day","太阳；日"]]},
+{id:"ja-n4", lang:"ja", langName:"日本語", voice:"ja-JP", name:"JLPT N4 Core", desc:"Work, travel, food and seasons", typeHint:"Type the romaji", words:[
+["仕事","しごと","shigoto","work / job","工作"],["会社","かいしゃ","kaisha","company","公司"],["会議","かいぎ","kaigi","meeting","会议"],
+["旅行","りょこう","ryokou","travel","旅行"],["飛行機","ひこうき","hikouki","airplane","飞机"],["新聞","しんぶん","shinbun","newspaper","报纸"],
+["病院","びょういん","byouin","hospital","医院"],["薬","くすり","kusuri","medicine","药"],["天気","てんき","tenki","weather","天气"],
+["季節","きせつ","kisetsu","season","季节"],["春","はる","haru","spring","春天"],["夏","なつ","natsu","summer","夏天"],
+["秋","あき","aki","autumn","秋天"],["冬","ふゆ","fuyu","winter","冬天"],["世界","せかい","sekai","world","世界"],
+["国","くに","kuni","country","国家"],["町","まち","machi","town","城镇"],["村","むら","mura","village","村庄"],
+["島","しま","shima","island","岛"],["湖","みずうみ","mizuumi","lake","湖"],["橋","はし","hashi","bridge","桥"],
+["道","みち","michi","road","路"],["建物","たてもの","tatemono","building","建筑物"],["教室","きょうしつ","kyoushitsu","classroom","教室"],
+["図書館","としょかん","toshokan","library","图书馆"],["公園","こうえん","kouen","park","公园"],["動物","どうぶつ","doubutsu","animal","动物"],
+["野菜","やさい","yasai","vegetable","蔬菜"],["果物","くだもの","kudamono","fruit","水果"],["牛乳","ぎゅうにゅう","gyuunyuu","milk","牛奶"],
+["卵","たまご","tamago","egg","鸡蛋"],["肉","にく","niku","meat","肉"],["塩","しお","shio","salt","盐"],
+["砂糖","さとう","satou","sugar","糖"],["醤油","しょうゆ","shouyu","soy sauce","酱油"],["料理","りょうり","ryouri","cooking / dish","菜肴"],
+["食事","しょくじ","shokuji","meal","用餐"],["朝ご飯","あさごはん","asagohan","breakfast","早餐"],["晩ご飯","ばんごはん","bangohan","dinner","晚餐"],
+["味噌","みそ","miso","miso","味噌"]]},
+/* ============ 한국어 ============ */
+{id:"ko-topik1", lang:"ko", langName:"한국어", voice:"ko-KR", name:"TOPIK I Core", desc:"Everyday basics — home, school, travel", typeHint:"Type the romanization", words:[
+["물","mul","mul","water","水"],["산","san","san","mountain","山"],["강","gang","gang","river","江"],["비","bi","bi","rain","雨"],
+["눈","nun","nun","snow / eye","雪；眼睛"],["바다","bada","bada","sea","海"],["하늘","haneul","haneul","sky","天空"],
+["구름","gureum","gureum","cloud","云"],["바람","baram","baram","wind","风"],["꽃","kkot","kkot","flower","花"],
+["나무","namu","namu","tree","树"],["학교","hakgyo","hakgyo","school","学校"],["선생님","seonsaengnim","seonsaengnim","teacher","老师"],
+["학생","haksaeng","haksaeng","student","学生"],["책","chaek","chaek","book","书"],["연필","yeonpil","yeonpil","pencil","铅笔"],
+["가방","gabang","gabang","bag","包"],["집","jip","jip","house","家"],["방","bang","bang","room","房间"],["문","mun","mun","door","门"],
+["창문","changmun","changmun","window","窗户"],["의자","uija","uija","chair","椅子"],["책상","chaeksang","chaeksang","desk","书桌"],
+["침대","chimdae","chimdae","bed","床"],["전화","jeonhwa","jeonhwa","phone","电话"],["시계","sigye","sigye","clock","钟表"],
+["차","cha","cha","car / tea","汽车；茶"],["기차","gicha","gicha","train","火车"],["비행기","bihaenggi","bihaenggi","airplane","飞机"],
+["버스","beoseu","beoseu","bus","公交车"],["병원","byeongwon","byeongwon","hospital","医院"],["약","yak","yak","medicine","药"],
+["의사","uisa","uisa","doctor","医生"],["친구","chingu","chingu","friend","朋友"],["가족","gajok","gajok","family","家人"],
+["어머니","eomeoni","eomeoni","mother","母亲"],["아버지","abeoji","abeoji","father","父亲"],["오늘","oneul","oneul","today","今天"],
+["내일","naeil","naeil","tomorrow","明天"],["어제","eoje","eoje","yesterday","昨天"],["아침","achim","achim","morning","早晨"],
+["저녁","jeonyeok","jeonyeok","evening","晚上"],["밤","bam","bam","night","夜晚"],["시간","sigan","sigan","time","时间"],
+["돈","don","don","money","钱"],["시장","sijang","sijang","market","市场"],["음식","eumsik","eumsik","food","食物"],["밥","bap","bap","rice / meal","米饭"]]},
+{id:"ko-daily", lang:"ko", langName:"한국어", voice:"ko-KR", name:"Daily Korean", desc:"Food, weather, fun and getting around", typeHint:"Type the romanization", words:[
+["사과","sagwa","sagwa","apple","苹果"],["바나나","banana","banana","banana","香蕉"],["우유","uyu","uyu","milk","牛奶"],
+["계란","gyeran","gyeran","egg","鸡蛋"],["빵","ppang","ppang","bread","面包"],["고기","gogi","gogi","meat","肉"],
+["생선","saengseon","saengseon","fish","鱼"],["야채","yachae","yachae","vegetable","蔬菜"],["과일","gwail","gwail","fruit","水果"],
+["커피","keopi","keopi","coffee","咖啡"],["맥주","maekju","maekju","beer","啤酒"],["김치","gimchi","gimchi","kimchi","泡菜"],
+["날씨","nalssi","nalssi","weather","天气"],["봄","bom","bom","spring","春天"],["여름","yeoreum","yeoreum","summer","夏天"],
+["가을","gaeul","gaeul","autumn","秋天"],["겨울","gyeoul","gyeoul","winter","冬天"],["고양이","goyangi","goyangi","cat","猫"],
+["강아지","gangaji","gangaji","puppy / dog","小狗"],["새","sae","sae","bird","鸟"],["노래","norae","norae","song","歌曲"],
+["영화","yeonghwa","yeonghwa","movie","电影"],["음악","eumak","eumak","music","音乐"],["사진","sajin","sajin","photo","照片"],
+["신문","sinmun","sinmun","newspaper","报纸"],["운동","undong","undong","exercise","运动"],["수영","suyeong","suyeong","swimming","游泳"],
+["축구","chukgu","chukgu","soccer","足球"],["농구","nonggu","nonggu","basketball","篮球"],["회사","hoesa","hoesa","company","公司"],
+["일","il","il","work","工作"],["회의","hoeui","hoeui","meeting","会议"],["여행","yeohaeng","yeohaeng","travel","旅行"],
+["호텔","hotel","hotel","hotel","酒店"],["공항","gonghang","gonghang","airport","机场"],["여권","yeogwon","yeogwon","passport","护照"],
+["지도","jido","jido","map","地图"],["동생","dongsaeng","dongsaeng","younger sibling","弟弟/妹妹"],["말","mal","mal","horse / language","马；语言"],
+["가게","gage","gage","shop","商店"]]},
+/* ============ Español ============ */
+{id:"es-a1", lang:"es", langName:"Español", voice:"es-ES", name:"Español A1", desc:"First steps — home, nature, daily life", typeHint:"Type the word (accents optional)", words:[
+["agua","","agua","water","水"],["casa","","casa","house / home","房子；家"],["perro","","perro","dog","狗"],["gato","","gato","cat","猫"],
+["libro","","libro","book","书"],["mesa","","mesa","table","桌子"],["silla","","silla","chair","椅子"],["puerta","","puerta","door","门"],
+["ventana","","ventana","window","窗户"],["coche","","coche","car","汽车"],["tren","","tren","train","火车"],["avión","","avion","airplane","飞机"],
+["ciudad","","ciudad","city","城市"],["país","","pais","country","国家"],["mar","","mar","sea","海"],["río","","rio","river","河"],
+["montaña","","montana","mountain","山"],["sol","","sol","sun","太阳"],["luna","","luna","moon","月亮"],["estrella","","estrella","star","星星"],
+["cielo","","cielo","sky","天空"],["lluvia","","lluvia","rain","雨"],["nieve","","nieve","snow","雪"],["viento","","viento","wind","风"],
+["fuego","","fuego","fire","火"],["tierra","","tierra","earth / land","土地；地球"],["árbol","","arbol","tree","树"],["flor","","flor","flower","花"],
+["fruta","","fruta","fruit","水果"],["manzana","","manzana","apple","苹果"],["pan","","pan","bread","面包"],["leche","","leche","milk","牛奶"],
+["huevo","","huevo","egg","鸡蛋"],["carne","","carne","meat","肉"],["pescado","","pescado","fish (food)","鱼（食物）"],["arroz","","arroz","rice","米饭"],
+["queso","","queso","cheese","奶酪"],["vino","","vino","wine","葡萄酒"],["café","","cafe","coffee","咖啡"],["día","","dia","day","天；日子"],
+["noche","","noche","night","夜晚"],["mañana","","manana","morning / tomorrow","早晨；明天"],["tarde","","tarde","afternoon","下午"],
+["semana","","semana","week","周"],["mes","","mes","month","月"],["año","","ano","year","年"],["tiempo","","tiempo","time / weather","时间；天气"],
+["hombre","","hombre","man","男人"],["mujer","","mujer","woman","女人"],["hoja","","hoja","leaf","叶子"]]},
+{id:"es-a2", lang:"es", langName:"Español", voice:"es-ES", name:"Español A2", desc:"People, places, seasons and travel", typeHint:"Type the word (accents optional)", words:[
+["familia","","familia","family","家人"],["amigo","","amigo","friend","朋友"],["trabajo","","trabajo","work","工作"],["dinero","","dinero","money","钱"],
+["escuela","","escuela","school","学校"],["maestro","","maestro","teacher","老师"],["estudiante","","estudiante","student","学生"],
+["hospital","","hospital","hospital","医院"],["médico","","medico","doctor","医生"],["mercado","","mercado","market","市场"],
+["tienda","","tienda","shop","商店"],["banco","","banco","bank","银行"],["calle","","calle","street","街道"],["puente","","puente","bridge","桥"],
+["parque","","parque","park","公园"],["playa","","playa","beach","海滩"],["bosque","","bosque","forest","森林"],["isla","","isla","island","岛屿"],
+["desierto","","desierto","desert","沙漠"],["lago","","lago","lake","湖"],["verano","","verano","summer","夏天"],["invierno","","invierno","winter","冬天"],
+["primavera","","primavera","spring","春天"],["otoño","","otono","autumn","秋天"],["viaje","","viaje","trip / travel","旅行"],
+["maleta","","maleta","suitcase","行李箱"],["pasaporte","","pasaporte","passport","护照"],["hotel","","hotel","hotel","酒店"],
+["llave","","llave","key","钥匙"],["carta","","carta","letter","信"],["regalo","","regalo","gift","礼物"],["fiesta","","fiesta","party / festival","派对；节日"],
+["música","","musica","music","音乐"],["película","","pelicula","movie","电影"],["canción","","cancion","song","歌曲"],["baile","","baile","dance","舞蹈"],
+["cocina","","cocina","kitchen","厨房"],["baño","","bano","bathroom","浴室"],["cama","","cama","bed","床"],["espejo","","espejo","mirror","镜子"]]},
+/* ============ 中文 ============ */
+{id:"zh-hsk1", lang:"zh", langName:"中文", voice:"zh-CN", name:"HSK 1", desc:"First steps — people, home, every day", typeHint:"Type the pinyin (no tones needed)", words:[
+["水","shuǐ","shui","water",""],["人","rén","ren","person",""],["大","dà","da","big",""],["小","xiǎo","xiao","small",""],
+["山","shān","shan","mountain",""],["天","tiān","tian","sky / day",""],["今天","jīntiān","jintian","today",""],["明天","míngtiān","mingtian","tomorrow",""],
+["昨天","zuótiān","zuotian","yesterday",""],["学校","xuéxiào","xuexiao","school",""],["老师","lǎoshī","laoshi","teacher",""],["学生","xuésheng","xuesheng","student",""],
+["朋友","péngyou","pengyou","friend",""],["家","jiā","jia","home / family",""],["猫","māo","mao","cat",""],["狗","gǒu","gou","dog",""],
+["书","shū","shu","book",""],["字","zì","zi","character",""],["汉语","hànyǔ","hanyu","Chinese (language)",""],["英语","yīngyǔ","yingyu","English (language)",""],
+["中国","zhōngguó","zhongguo","China",""],["美国","měiguó","meiguo","USA",""],["医生","yīshēng","yisheng","doctor",""],["医院","yīyuàn","yiyuan","hospital",""],
+["商店","shāngdiàn","shangdian","shop",""],["饭店","fàndiàn","fandian","restaurant",""],["茶","chá","cha","tea",""],["米饭","mǐfàn","mifan","cooked rice",""],
+["水果","shuǐguǒ","shuiguo","fruit",""],["苹果","píngguǒ","pingguo","apple",""],["电影","diànyǐng","dianying","movie",""],["电视","diànshì","dianshi","TV",""],
+["电话","diànhuà","dianhua","phone",""],["电脑","diànnǎo","diannao","computer",""],["天气","tiānqì","tianqi","weather",""],["雨","yǔ","yu","rain",""],
+["雪","xuě","xue","snow",""],["钱","qián","qian","money",""],["东西","dōngxi","dongxi","thing",""],["衣服","yīfu","yifu","clothes",""],
+["车","chē","che","car / vehicle",""],["出租车","chūzūchē","chuzuche","taxi",""],["飞机","fēijī","feiji","airplane",""],["火车","huǒchē","huoche","train",""],
+["高兴","gāoxìng","gaoxing","happy",""],["喜欢","xǐhuan","xihuan","to like",""],["看","kàn","kan","to see / watch",""],["听","tīng","ting","to listen",""],
+["说","shuō","shuo","to speak",""],["读","dú","du","to read",""]]},
+{id:"zh-hsk2", lang:"zh", langName:"中文", voice:"zh-CN", name:"HSK 2", desc:"Life, travel, health and getting around", typeHint:"Type the pinyin (no tones needed)", words:[
+["时间","shíjiān","shijian","time",""],["工作","gōngzuò","gongzuo","work / job",""],["问题","wèntí","wenti","question / problem",""],["事情","shìqing","shiqing","matter / affair",""],
+["意思","yìsi","yisi","meaning",""],["房间","fángjiān","fangjian","room",""],["门","mén","men","door",""],["路","lù","lu","road",""],
+["街道","jiēdào","jiedao","street",""],["自行车","zìxíngchē","zixingche","bicycle",""],["游泳","yóuyǒng","youyong","swimming",""],["跑步","pǎobù","paobu","running",""],
+["唱歌","chànggē","changge","to sing",""],["跳舞","tiàowǔ","tiaowu","to dance",""],["旅游","lǚyóu","luyou","to travel",""],["照片","zhàopiàn","zhaopian","photo",""],
+["眼睛","yǎnjing","yanjing","eyes",""],["身体","shēntǐ","shenti","body / health",""],["生病","shēngbìng","shengbing","to get sick",""],["药","yào","yao","medicine",""],
+["牛奶","niúnǎi","niunai","milk",""],["鸡蛋","jīdàn","jidan","egg",""],["面条","miàntiáo","miantiao","noodles",""],["咖啡","kāfēi","kafei","coffee",""],
+["啤酒","píjiǔ","pijiu","beer",""],["颜色","yánsè","yanse","color",""],["红色","hóngsè","hongse","red",""],["白色","báisè","baise","white",""],
+["黑色","hēisè","heise","black",""],["左边","zuǒbian","zuobian","left side",""],["右边","yòubian","youbian","right side",""],["旁边","pángbiān","pangbian","beside",""],
+["里边","lǐbian","libian","inside",""],["外边","wàibian","waibian","outside",""],["远","yuǎn","yuan","far",""],["近","jìn","jin","near",""],
+["长","cháng","chang","long",""],["贵","guì","gui","expensive",""],["便宜","piányi","pianyi","cheap",""],["公共汽车","gōnggòng qìchē","gonggongqiche","bus",""]]},
+/* ============ Deutsch ============ */
+{id:"de-a1", lang:"de", langName:"Deutsch", voice:"de-DE", name:"Deutsch A1", desc:"First steps — home, nature, daily life", typeHint:"Type the word (umlauts optional)", words:[
+["Wasser","","wasser","water","水"],["Haus","","haus","house","房子"],["Hund","","hund","dog","狗"],["Katze","","katze","cat","猫"],
+["Buch","","buch","book","书"],["Tisch","","tisch","table","桌子"],["Stuhl","","stuhl","chair","椅子"],["Tür","","tur","door","门"],
+["Fenster","","fenster","window","窗户"],["Auto","","auto","car","汽车"],["Zug","","zug","train","火车"],["Flugzeug","","flugzeug","airplane","飞机"],
+["Stadt","","stadt","city","城市"],["Land","","land","country","国家"],["Meer","","meer","sea","海"],["Fluss","","fluss","river","河"],
+["Berg","","berg","mountain","山"],["Sonne","","sonne","sun","太阳"],["Mond","","mond","moon","月亮"],["Stern","","stern","star","星星"],
+["Himmel","","himmel","sky","天空"],["Regen","","regen","rain","雨"],["Schnee","","schnee","snow","雪"],["Wind","","wind","wind","风"],
+["Feuer","","feuer","fire","火"],["Baum","","baum","tree","树"],["Blume","","blume","flower","花"],["Blatt","","blatt","leaf","叶子"],
+["Obst","","obst","fruit","水果"],["Apfel","","apfel","apple","苹果"],["Brot","","brot","bread","面包"],["Milch","","milch","milk","牛奶"],
+["Ei","","ei","egg","鸡蛋"],["Fleisch","","fleisch","meat","肉"],["Fisch","","fisch","fish","鱼"],["Reis","","reis","rice","米饭"],
+["Käse","","kase","cheese","奶酪"],["Wein","","wein","wine","葡萄酒"],["Kaffee","","kaffee","coffee","咖啡"],["Tag","","tag","day","天"],
+["Nacht","","nacht","night","夜晚"],["Morgen","","morgen","morning","早晨"],["Woche","","woche","week","周"],["Monat","","monat","month","月"],
+["Jahr","","jahr","year","年"],["Zeit","","zeit","time","时间"],["Mann","","mann","man","男人"],["Frau","","frau","woman","女人"],
+["Kind","","kind","child","孩子"],["Schule","","schule","school","学校"]]},
+{id:"de-a2", lang:"de", langName:"Deutsch", voice:"de-DE", name:"Deutsch A2", desc:"People, places, seasons and travel", typeHint:"Type the word (umlauts optional)", words:[
+["Familie","","familie","family","家人"],["Freund","","freund","friend","朋友"],["Arbeit","","arbeit","work","工作"],["Geld","","geld","money","钱"],
+["Lehrer","","lehrer","teacher","老师"],["Schüler","","schuler","pupil / student","学生"],["Krankenhaus","","krankenhaus","hospital","医院"],["Arzt","","arzt","doctor","医生"],
+["Markt","","markt","market","市场"],["Geschäft","","geschaft","shop","商店"],["Bank","","bank","bank","银行"],["Straße","","strasse","street","街道"],
+["Brücke","","brucke","bridge","桥"],["Park","","park","park","公园"],["Strand","","strand","beach","海滩"],["Wald","","wald","forest","森林"],
+["Insel","","insel","island","岛屿"],["See","","see","lake","湖"],["Sommer","","sommer","summer","夏天"],["Winter","","winter","winter","冬天"],
+["Frühling","","fruhling","spring","春天"],["Herbst","","herbst","autumn","秋天"],["Reise","","reise","trip / travel","旅行"],["Koffer","","koffer","suitcase","行李箱"],
+["Hotel","","hotel","hotel","酒店"],["Schlüssel","","schlussel","key","钥匙"],["Brief","","brief","letter","信"],["Geschenk","","geschenk","gift","礼物"],
+["Musik","","musik","music","音乐"],["Film","","film","movie","电影"],["Lied","","lied","song","歌曲"],["Küche","","kuche","kitchen","厨房"],
+["Bad","","bad","bathroom","浴室"],["Bett","","bett","bed","床"],["Spiegel","","spiegel","mirror","镜子"],["Urlaub","","urlaub","vacation","假期"],
+["Wetter","","wetter","weather","天气"],["Garten","","garten","garden","花园"],["Fahrrad","","fahrrad","bicycle","自行车"],["Bahnhof","","bahnhof","train station","火车站"]]},
+/* ============ 粤语 Cantonese ============ */
+{id:"yue-basic", lang:"yue", langName:"粤语", voice:"yue-Hant-HK", name:"Cantonese Basics", desc:"Core words in Jyutping — greetings and key verbs", typeHint:"Type the Jyutping (tones optional)", words:[
+["你好","nei5 hou2","neihou","hello","你好"],["係","hai6","hai","to be","是"],["唔","m4","m","not","不"],["嘅","ge3","ge","(possessive)","的"],
+["我","ngo5","ngo","I / me","我"],["你","nei5","nei","you","你"],["佢","keoi5","keoi","he / she","他；她"],["我哋","ngo5 dei6","ngodei","we / us","我们"],
+["好","hou2","hou","good","好"],["唔該","m4 goi1","mgoi","please / thanks","请；谢谢"],["多謝","do1 ze6","doze","thank you","多谢"],
+["早晨","zou2 san4","zousan","good morning","早上好"],["食","sik6","sik","to eat","吃"],["飲","jam2","jam","to drink","喝"],
+["水","seoi2","seoi","water","水"],["茶","caa4","caa","tea","茶"],["飯","faan6","faan","rice / meal","饭"],["錢","cin2","cin","money","钱"],
+["買","maai5","maai","to buy","买"],["賣","maai6","maai","to sell","卖"],["去","heoi3","heoi","to go","去"],["嚟","lei4","lei","to come","来"],
+["返","faan1","faan","to return","回"],["睇","tai2","tai","to look / watch","看"],["聽","teng1","teng","to listen","听"],
+["講","gong2","gong","to speak","说"],["識","sik1","sik","to know / recognize","认识；会"],["想","soeng2","soeng","to want / think","想"],
+["要","jiu3","jiu","to want / need","要"],["冇","mou5","mou","not have","没有"],["有","jau5","jau","to have","有"],
+["大","daai6","daai","big","大"],["細","sai3","sai","small","小"],["多","do1","do","many","多"],["少","siu2","siu","few","少"],
+["今日","gam1 jat6","gamjat","today","今天"],["聽日","ting1 jat6","tingjat","tomorrow","明天"],["琴日","kam4 jat6","kamjat","yesterday","昨天"],
+["而家","ji4 gaa1","jigaa","now","现在"],["邊度","bin1 dou6","bindou","where","哪里"],["乜嘢","mat1 je5","matje","what","什么"],
+["幾多","gei2 do1","geido","how many / much","多少"],["天氣","tin1 hei3","tinhei","weather","天气"],["落雨","lok6 jyu5","lokjyu","to rain","下雨"],
+["熱","jit6","jit","hot","热"],["凍","dung3","dung","cold","冷"],["朋友","pang4 jau5","pangjau","friend","朋友"],
+["屋企","uk1 kei2","ukkei","home","家"],["返工","faan1 gung1","faangung","go to work","上班"],["放工","fong3 gung1","fonggung","get off work","下班"]]},
+{id:"yue-daily", lang:"yue", langName:"粤语", voice:"yue-Hant-HK", name:"Cantonese Daily Life", desc:"Food, getting around, work and fun", typeHint:"Type the Jyutping (tones optional)", words:[
+["飲茶","jam2 caa4","jamcaa","yum cha / dim sum","饮茶"],["食飯","sik6 faan6","sikfaan","have a meal","吃饭"],["買餸","maai5 sung3","maaisung","buy groceries","买菜"],
+["餸","sung3","sung","dish (with rice)","配饭的菜"],["湯","tong1","tong","soup","汤"],["麵","min6","min","noodles","面条"],["包","baau1","baau","bun / bread","包子；面包"],
+["雞蛋","gaai1 daan2","gaidaan","egg","鸡蛋"],["牛奶","ngau4 naai5","ngaunaai","milk","牛奶"],["生果","saang1 gwo2","saanggwo","fruit","水果"],
+["蘋果","ping4 gwo2","pinggwo","apple","苹果"],["醫生","ji1 sang1","jisang","doctor","医生"],["醫院","ji1 jyun2","jijyun","hospital","医院"],
+["學校","hok6 haau6","hokhaau","school","学校"],["老師","lou5 si1","lousi","teacher","老师"],["學生","hok6 sang1","hoksang","student","学生"],
+["公司","gung1 si1","gungsi","company","公司"],["老闆","lou5 baan2","loubaan","boss","老板"],["車","ce1","ce","car","车"],
+["巴士","baa1 si2","baasi","bus","巴士"],["地鐵","dei6 tit3","deitit","subway / MTR","地铁"],["飛機","fei1 gei1","feigei","airplane","飞机"],
+["機場","gei1 coeng4","geicoeng","airport","机场"],["酒店","zau2 dim3","zaudim","hotel","酒店"],["市場","si5 coeng4","sicoeng","market","市场"],
+["銀行","ngan4 hong4","nganhong","bank","银行"],["路","lou6","lou","road","路"],["橋","kiu4","kiu","bridge","桥"],["海","hoi2","hoi","sea","海"],
+["山","saan1","saan","mountain","山"],["電話","din6 waa2","dinwaa","phone","电话"],["電腦","din6 nou5","dinnou","computer","电脑"],
+["電影","din6 jing2","dinjing","movie","电影"],["音樂","jam1 ngok6","jamngok","music","音乐"],["相","soeng2","soeng","photo","照片"],
+["貓","maau1","maau","cat","猫"],["狗","gau2","gau","dog","狗"],["雀","zoek3","zoek","bird","鸟"],["花","faa1","faa","flower","花"],
+["衫","saam1","saam","clothes / shirt","衣服"]]}
+];
+
+const LANGS = [["ja","日本語"],["ko","한국어"],["es","Español"],["zh","中文"],["de","Deutsch"],["yue","粤语"]];
+const $ = id => document.getElementById(id);
+let curLang = "ja", curBook = null, queue = [], qi = 0;
+let typed = [], mistakes = 0, correctWords = 0, startTime = null, timerId = null;
+let wrongSet = [], autoSound = true, showMeaning = true, wordHadError = false;
+
+function progressKey(id){ return "wt.progress." + id; }
+function getProgress(id){ try { return JSON.parse(localStorage.getItem(progressKey(id))) || null; } catch(e){ return null; } }
+function setProgress(id, p){ try { localStorage.setItem(progressKey(id), JSON.stringify(p)); } catch(e){} }
+
+function renderTabs(){
+  $("tabs").innerHTML = "";
+  LANGS.forEach(([code,label])=>{
+    const b = document.createElement("button");
+    b.className = "tab" + (code===curLang ? " on" : "");
+    b.textContent = label;
+    b.onclick = ()=>{ curLang = code; renderTabs(); renderGallery(); };
+    $("tabs").appendChild(b);
+  });
+}
+function renderGallery(){
+  show("gallery");
+  const g = $("gallery"); g.innerHTML = "";
+  const grid = document.createElement("div"); grid.className = "grid";
+  BOOKS.filter(b=>b.lang===curLang).forEach(book=>{
+    const p = getProgress(book.id);
+    const card = document.createElement("div"); card.className = "book";
+    card.innerHTML = "<h3></h3><div class='d'></div><div class='n'></div>" + (p ? "<div class='p'></div>" : "");
+    card.querySelector("h3").textContent = book.name;
+    card.querySelector(".d").textContent = book.desc;
+    card.querySelector(".n").textContent = book.words.length + " words · " + book.typeHint;
+    if (p) card.querySelector(".p").textContent = "Best accuracy " + p.best + "% · finished " + p.runs + "×";
+    card.onclick = ()=> startBook(book, book.words.map((_,i)=>i));
+    grid.appendChild(card);
+  });
+  g.appendChild(grid);
+}
+function show(id){
+  ["gallery","practice","summary"].forEach(s=> $(s).classList.toggle("hidden", s!==id));
+}
+function shuffleArr(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function startBook(book, indices){
+  curBook = book;
+  queue = indices.slice();
+  qi = 0; mistakes = 0; correctWords = 0; wrongSet = [];
+  startTime = Date.now();
+  clearInterval(timerId); timerId = setInterval(tick, 500); tick();
+  $("bookTitle").textContent = book.langName + " · " + book.name;
+  show("practice");
+  loadWord();
+  $("typer").focus();
+}
+function cur(){ return curBook.words[queue[qi]]; }
+function target(){ return cur()[2]; }
+function loadWord(){
+  const w = cur();
+  typed = []; wordHadError = false;
+  $("wDisplay").textContent = w[0];
+  $("wReading").textContent = w[1] || "";
+  $("wMeaning").innerHTML = showMeaning
+    ? "<b>" + esc(w[3]) + "</b>" + (w[4] ? " · " + esc(w[4]) : "")
+    : "";
+  $("hint").textContent = curBook.typeHint + " — click the card and type";
+  renderLetters();
+  $("pcount").textContent = (qi+1) + " / " + queue.length;
+  $("pfill").style.width = (queue.length ? (qi/queue.length*100) : 0) + "%";
+  updateStats();
+  if (autoSound) speak();
+}
+function renderLetters(){
+  const t = target(), el = $("letters"); el.innerHTML = "";
+  [...t].forEach((ch,i)=>{
+    const s = document.createElement("span");
+    s.textContent = ch === " " ? "␣" : ch;
+    if (i < typed.length) s.className = typed[i] ? "ok" : "bad";
+    else if (i === typed.length) s.className = "cur";
+    el.appendChild(s);
+  });
+}
+function esc(s){ const d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
+function speak(){
+  try {
+    const u = new SpeechSynthesisUtterance(cur()[0]);
+    u.lang = curBook.voice; u.rate = 0.85;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch(e){}
+}
+function updateStats(){
+  const total = queue.length ? correctWords + (qi>0?0:0) : 0;
+  const attempted = correctWords + wrongSet.length;
+  const done = qi;
+  const acc = done === 0 ? 100 : Math.round((done - wrongSet.length) / done * 100);
+  $("stAcc").textContent = (done===0 ? 100 : Math.max(0,acc)) + "%";
+  $("stOk").textContent = correctWords;
+  $("stBad").textContent = mistakes;
+}
+function tick(){
+  if (!startTime) return;
+  const s = Math.floor((Date.now()-startTime)/1000);
+  $("stTime").textContent = Math.floor(s/60) + ":" + String(s%60).padStart(2,"0");
+}
+function finishWord(hadError){
+  if (hadError) { if (!wrongSet.includes(queue[qi])) wrongSet.push(queue[qi]); }
+  else correctWords++;
+  qi++;
+  $("pfill").style.width = (qi/queue.length*100) + "%";
+  if (qi >= queue.length) return finishBook();
+  loadWord();
+}
+function finishBook(){
+  clearInterval(timerId);
+  const secs = Math.max(1, Math.round((Date.now()-startTime)/1000));
+  const acc = queue.length ? Math.round((queue.length - wrongSet.length)/queue.length*100) : 100;
+  const prev = getProgress(curBook.id) || {best:0, runs:0};
+  setProgress(curBook.id, {best: Math.max(prev.best, acc), runs: prev.runs + 1});
+  $("sumTitle").textContent = curBook.name + " complete 🎉";
+  $("sumBody").innerHTML = "Accuracy <b>" + acc + "%</b> · " + queue.length + " words · " +
+    Math.floor(secs/60) + ":" + String(secs%60).padStart(2,"0") +
+    (wrongSet.length ? " · " + wrongSet.length + " word(s) to review below" : " · flawless run!");
+  const ul = $("wrongList"); ul.innerHTML = "";
+  wrongSet.forEach(idx=>{
+    const w = curBook.words[idx];
+    const li = document.createElement("li");
+    li.innerHTML = "<span class='w'>" + esc(w[0]) + "</span> " + esc(w[1]||"") + " — " + esc(w[3]) + (w[4] ? " · " + esc(w[4]) : "");
+    ul.appendChild(li);
+  });
+  $("reviewBtn").classList.toggle("hidden", wrongSet.length===0);
+  show("summary");
+}
+
+document.addEventListener("keydown", e=>{
+  if ($("practice").classList.contains("hidden")) return;
+  if (e.key === "Enter" && document.activeElement !== $("typer")) { $("typer").focus(); }
+});
+$("typeCard").addEventListener("click", ()=> $("typer").focus());
+const fold = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ß/g,"ss");
+$("typer").addEventListener("input", e=>{
+  const v = fold(e.target.value).replace(/\s+/g,"");
+  const t = target();
+  const prevLen = typed.length;
+  typed = [...v].slice(0, t.length).map((ch,i)=> ch === t[i]);
+  for (let i = prevLen; i < typed.length; i++) if (!typed[i]) { mistakes++; wordHadError = true; }
+  e.target.value = [...t].slice(0, typed.length).join("");
+  renderLetters(); updateStats();
+  if (typed.length === t.length && typed.every(Boolean)) {
+    const hadErr = wordHadError;
+    setTimeout(()=>{ e.target.value=""; finishWord(hadErr); }, 160);
+  }
+});
+$("typer").addEventListener("keydown", e=>{
+  if (e.key === "Backspace") { /* input event handles it */ }
+});
+$("speakBtn").onclick = ()=>{ speak(); $("typer").focus(); };
+$("soundTgl").onclick = e=>{ autoSound = !autoSound; e.target.textContent = "Auto-sound: " + (autoSound?"on":"off"); e.target.classList.toggle("on", autoSound); $("typer").focus(); };
+$("meaningTgl").onclick = e=>{ showMeaning = !showMeaning; e.target.textContent = "Meaning: " + (showMeaning?"on":"off"); e.target.classList.toggle("on", showMeaning); loadWord(); $("typer").focus(); };
+$("shuffleBtn").onclick = ()=>{ queue = shuffleArr(queue); qi = 0; wrongSet = []; loadWord(); $("typer").focus(); };
+$("skipBtn").onclick = ()=>{ if (!wrongSet.includes(queue[qi])) wrongSet.push(queue[qi]); qi++; if (qi>=queue.length) finishBook(); else loadWord(); $("typer").focus(); };
+$("restartBtn").onclick = ()=> startBook(curBook, curBook.words.map((_,i)=>i));
+$("backBtn").onclick = ()=>{ clearInterval(timerId); renderGallery(); };
+$("againBtn").onclick = ()=> startBook(curBook, curBook.words.map((_,i)=>i));
+$("reviewBtn").onclick = ()=> startBook(curBook, wrongSet.slice());
+$("sumBackBtn").onclick = ()=> renderGallery();
+
+renderTabs();
+renderGallery();
+</script>
+</body>
+</html>
