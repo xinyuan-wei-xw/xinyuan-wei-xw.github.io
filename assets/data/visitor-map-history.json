@@ -99,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 26
+      "sessions": 32
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -259,7 +259,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 49
+      "sessions": 54
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -460,6 +460,17 @@
       "region": "Texas",
       "sessions": 1
     },
+    "US|Texas|Dallas": {
+      "city": "Dallas",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 32.82197,
+        "longitude": -96.841963
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
     "US|Texas|Fort Worth": {
       "city": "Fort Worth",
       "country": "US",
@@ -467,6 +478,17 @@
       "location": {
         "latitude": 32.739977,
         "longitude": -97.340038
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
+    "US|Texas|Galveston": {
+      "city": "Galveston",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 29.301143,
+        "longitude": -94.79748
       },
       "region": "Texas",
       "sessions": 1
@@ -502,7 +524,7 @@
         "longitude": -111.931998
       },
       "region": "Utah",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Vermont|Burlington": {
       "city": "Burlington",
@@ -597,7 +619,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 88
+      "sessions": 94
     },
     "TW": {
       "name": "Taiwan",
@@ -605,11 +627,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 156
+      "sessions": 164
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-06",
+  "last_end": "2026-10-07",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -664,7 +686,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 26
+      "sessions": 32
     },
     "SG|(not set)": {
       "country": "SG",
@@ -700,7 +722,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 114
+      "sessions": 119
     },
     "US|Illinois": {
       "country": "US",
@@ -754,13 +776,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Texas",
-      "sessions": 4
+      "sessions": 6
     },
     "US|Utah": {
       "country": "US",
       "country_name": "United States",
       "region": "Utah",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Vermont": {
       "country": "US",
@@ -784,6 +806,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 253,
+  "total_sessions": 267,
   "version": 1
 }
