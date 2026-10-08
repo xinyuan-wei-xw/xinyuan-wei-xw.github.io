@@ -156,7 +156,7 @@ function render(){
       {selector:'edge.dim',style:{'opacity':.03}},
       {selector:'edge.hie',style:{'opacity':.95,'width':2.6}}
     ],
-    layout: HAS_FCOSE ? {name:'fcose',animate:false,randomize:true,quality:'proof',nodeRepulsion:16000,idealEdgeLength:110,edgeElasticity:0.35,gravity:0.25,gravityRange:3.5,numIter:2500,tilingPaddingVertical:20,tilingPaddingHorizontal:20,padding:30}
+    layout: HAS_FCOSE ? {name:'fcose',animate:false,randomize:true,quality:'default',nodeRepulsion:14000,idealEdgeLength:105,edgeElasticity:0.35,gravity:0.3,gravityRange:3.5,numIter:1200,tilingPaddingVertical:20,tilingPaddingHorizontal:20,padding:30}
                      : {name:'cose',animate:false,nodeRepulsion:16000,idealEdgeLength:110,padding:30}});
   cy.on('mouseover','node',ev=>{const n=ev.target;const nb=n.neighborhood().add(n);cy.elements().not(nb).addClass('dim');n.connectedEdges().addClass('hie')});
   cy.on('mouseout','node',()=>{cy.elements().removeClass('dim');cy.edges().removeClass('hie')});
