@@ -107,7 +107,8 @@ function init(){
   [...ss].sort().forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;$('f-stream').appendChild(o)});
   ['f-co','f-colcur','f-colpast','f-cls','f-stream','f-topn','f-labels'].forEach(id=>$(id).addEventListener('change',render));
   $('f-weight').addEventListener('input',()=>{$('wval').textContent=$('f-weight').value;render()});
-  $('f-search').addEventListener('change',()=>{const q=$('f-search').value.trim().toLowerCase();if(!q)return;const n=DATA.nodes.find(x=>x.name.toLowerCase()===q)||DATA.nodes.find(x=>x.name.toLowerCase().includes(q));if(n)focusNode(n.id)});
+  const sq=s=>(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ');
+  $('f-search').addEventListener('change',()=>{const raw=$('f-search').value,q=sq(raw).trim();if(!q)return;const solid=v=>v.replace(/ /g,'');const n=DATA.nodes.find(x=>{const nm=sq(x.name);return nm.includes(q)||solid(nm).includes(solid(q))});if(n)focusNode(n.id);else alert('No researcher matches "'+raw+'"')});
   $('btn-reset').addEventListener('click',()=>{cy&&cy.fit(null,40)});
   render();
 }
