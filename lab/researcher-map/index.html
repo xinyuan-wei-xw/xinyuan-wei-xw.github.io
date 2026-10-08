@@ -6,9 +6,6 @@
 <title>Researcher Connection Map — IS &amp; Management Scholars</title>
 <meta name="description" content="Interactive map of co-authorship, colleague and classmate connections among researchers publishing in MIS Quarterly, Information Systems Research and Management Science (2000–2026). Data: OpenAlex.">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
-<script src="https://unpkg.com/layout-base@2.0.1/layout-base.js"></script>
-<script src="https://unpkg.com/cose-base@2.2.0/cose-base.js"></script>
-<script src="https://unpkg.com/cytoscape-fcose@2.2.0/cytoscape-fcose.js"></script>
 <style>
 :root{--ink:#1c2430;--mut:#5b6572;--line:#e3e7ee;--bg:#f7f8fa;--card:#fff;--accent:#2f6fed;--seed:#e8590c}
 *{box-sizing:border-box}
@@ -79,8 +76,8 @@ button.act{background:var(--accent);color:#fff;border:0;border-radius:8px;paddin
       <option value="off">No labels</option>
     </select>
     <h3>Find a researcher</h3>
-    <input type="text" id="f-search" placeholder="Type a name…" list="names">
-    <datalist id="names"></datalist>
+    <input type="text" id="f-search" placeholder="Type a name…">
+    <div id="f-matches" style="margin-top:4px"></div>
     <button class="act" id="btn-reset">Reset view</button>
     <div class="stats" id="stats"></div>
     <div class="legend">
@@ -94,21 +91,26 @@ button.act{background:var(--accent);color:#fff;border:0;border-radius:8px;paddin
   </div>
 </div>
 <script>
-let DATA=null, cy=null, HAS_FCOSE=false;
-try{ if(window.cytoscapeFcose){ cytoscape.use(window.cytoscapeFcose); HAS_FCOSE=true; } }catch(e){}
+let DATA=null, cy=null;
 const $=id=>document.getElementById(id);
 fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;init();});
 function nodeById(id){return DATA._byId[id]}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function init(){
   DATA._byId={}; DATA.nodes.forEach(n=>DATA._byId[n.id]=n);
-  const dl=$('names'); DATA.nodes.slice().sort((a,b)=>(b.cites3||0)-(a.cites3||0)).slice(0,1500).forEach(n=>{const o=document.createElement('option');o.value=n.name;dl.appendChild(o)});
   const ss=new Set(); DATA.nodes.forEach(n=>(n.streams||[]).forEach(x=>ss.add(x)));
   [...ss].sort().forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;$('f-stream').appendChild(o)});
   ['f-co','f-colcur','f-colpast','f-cls','f-stream','f-topn','f-labels'].forEach(id=>$(id).addEventListener('change',render));
   $('f-weight').addEventListener('input',()=>{$('wval').textContent=$('f-weight').value;render()});
   const sq=s=>(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ');
-  $('f-search').addEventListener('change',()=>{const raw=$('f-search').value,q=sq(raw).trim();if(!q)return;const solid=v=>v.replace(/ /g,'');const n=DATA.nodes.find(x=>{const nm=sq(x.name);return nm.includes(q)||solid(nm).includes(solid(q))});if(n)focusNode(n.id);else alert('No researcher matches "'+raw+'"')});
+  $('f-search').addEventListener('change',()=>{const raw=$('f-search').value,q=sq(raw).trim(),box=$('f-matches');box.innerHTML='';if(!q)return;const solid=v=>v.replace(/ /g,'');
+    let hits=DATA.nodes.filter(x=>{const nm=sq(x.name);return nm.includes(q)||solid(nm).includes(solid(q))});
+    const firstKey=n=>{const p=sq(n.name).split(' ');return (p[0]||'')+'|'+sq(n.name)};
+    hits.sort((a,b)=>firstKey(a)<firstKey(b)?-1:1);
+    if(!hits.length){alert('No researcher matches "'+raw+'"');return}
+    focusNode(hits[0].id);
+    if(hits.length>1){box.innerHTML='<div class="hint">'+hits.length+' matches, ranked by first name — click to jump:</div>'+hits.slice(0,12).map(n=>'<a href="#" data-id="'+n.id+'" style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:#2f6fed;text-decoration:none;background:#fff">'+esc(n.name)+'</a>').join('')+(hits.length>12?'<div class="hint">…and '+(hits.length-12)+' more — type more of the name to narrow it down.</div>':'');
+      box.querySelectorAll('a[data-id]').forEach(a=>a.addEventListener('click',ev=>{ev.preventDefault();focusNode(a.getAttribute('data-id'))}))}});
   $('btn-reset').addEventListener('click',()=>{cy&&cy.fit(null,40)});
   render();
 }
@@ -126,7 +128,7 @@ function visible(){
   if(stream)nodes=nodes.filter(n=>(n.streams||[]).includes(stream));
   nodes.sort((a,b)=>((deg[b.id]||0)-(deg[a.id]||0))||((b.cites3||0)-(a.cites3||0)));
   const keep=new Set(nodes.slice(0,topn).map(n=>n.id));
-  DATA.nodes.forEach(n=>{if((n.seed||n.course_seed)&&(!stream||!n.streams||(n.streams||[]).includes(stream)))keep.add(n.id)});
+  DATA.nodes.forEach(n=>{if(n.seed&&(!stream||!n.streams||(n.streams||[]).includes(stream)))keep.add(n.id)});
   edges=edges.filter(e=>keep.has(e.a)&&keep.has(e.b));
   return {nodes:DATA.nodes.filter(n=>keep.has(n.id)),edges};
 }
@@ -138,15 +140,15 @@ function render(){
   const ranked=nodes.slice().sort((a,b)=>(b.cites3||0)-(a.cites3||0));
   const keySet=new Set(ranked.slice(0,45).map(n=>n.id));
   nodes.forEach(n=>{const showLab = labMode==='all' || (labMode==='key' && (n.seed || n.course_seed || keySet.has(n.id)));
-    els.push({data:{id:n.id,label:showLab?n.name:'',size:Math.max(14,Math.min(48,10+9*Math.log10(1+(n.cites3||0)))),seed:n.seed?1:0,cseed:n.course_seed?1:0}})});
+    els.push({data:{id:n.id,label:showLab?n.name:'',size:Math.max(14,Math.min(48,10+9*Math.log10(1+(n.cites3||0)))),seed:n.seed?1:0,cseed:n.course_seed?1:0},position:n.pos?{x:n.pos[0],y:n.pos[1]}:{x:2000,y:2000}})});
   edges.forEach((e,i)=>els.push({data:{id:'e'+i,source:e.a,target:e.b,ty:e.type,cur:e.current?1:0}}));
   if(cy)cy.destroy();
-  cy=cytoscape({container:$('cy'),elements:els,
+  cy=cytoscape({container:$('cy'),elements:els,hideEdgesOnViewport:true,textureOnViewport:true,
     style:[
       {selector:'node',style:{'background-color':'#7aa5f5','label':'data(label)','font-size':7.5,'color':'#33404f','text-valign':'bottom','text-margin-y':2,'min-zoomed-font-size':9,'width':'data(size)','height':'data(size)','border-width':0}},
       {selector:'node[cseed=1]',style:{'border-width':3,'border-color':'#2f9e44'}},
       {selector:'node[seed=1]',style:{'border-width':3,'border-color':'#e8590c','background-color':'#4a86f7'}},
-      {selector:'edge',style:{'width':1.2,'line-color':'#b9c8e8','opacity':.5,'curve-style':'bezier'}},
+      {selector:'edge',style:{'width':1.2,'line-color':'#b9c8e8','opacity':.5,'curve-style':'haystack','haystack-radius':0}},
       {selector:'edge[ty="coauthor"]',style:{'line-color':'#2f6fed','width':1.4,'opacity':.5}},
       {selector:'edge[ty="colleague"][cur=1]',style:{'line-color':'#2f9e44','opacity':.38}},
       {selector:'edge[ty="colleague"][cur=0]',style:{'line-color':'#a9c6ae','opacity':.4}},
@@ -156,8 +158,7 @@ function render(){
       {selector:'edge.dim',style:{'opacity':.03}},
       {selector:'edge.hie',style:{'opacity':.95,'width':2.6}}
     ],
-    layout: HAS_FCOSE ? {name:'fcose',animate:false,randomize:true,quality:'default',nodeRepulsion:14000,idealEdgeLength:105,edgeElasticity:0.35,gravity:0.3,gravityRange:3.5,numIter:1200,tilingPaddingVertical:20,tilingPaddingHorizontal:20,padding:30}
-                     : {name:'cose',animate:false,nodeRepulsion:16000,idealEdgeLength:110,padding:30}});
+    layout:{name:'preset',padding:30}});
   cy.on('mouseover','node',ev=>{const n=ev.target;const nb=n.neighborhood().add(n);cy.elements().not(nb).addClass('dim');n.connectedEdges().addClass('hie')});
   cy.on('mouseout','node',()=>{cy.elements().removeClass('dim');cy.edges().removeClass('hie')});
   cy.on('tap','node',ev=>showDetail(ev.target.id()));
