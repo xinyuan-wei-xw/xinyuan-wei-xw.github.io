@@ -9,59 +9,45 @@ _Study Notes_
 _Reader edition 3_
 
 
-# Preface: How this book develops a researcher
+# Preface: How these study notes develop a researcher
 
-This book begins with a simple difficulty: a technology can work as designed while the activity around it fails. A record is saved, but nobody acts on it. A recommendation is accurate, but a worker has reasons to disregard it. Information Systems (IS) research investigates such relationships among information, digital technologies, people, and organized activity. The field contains several intellectual traditions; the working explanations in this book introduce their questions without treating one approach as the definition of the entire discipline.
+Digital technology can function as designed while the activity it supports breaks down. An application saves a record, but no one acts on it. A recommendation is accurate, but a worker has reasons to set it aside. Information Systems (IS) research examines relationships among information, digital technologies, people, and organized activity. These notes introduce several ways of studying those relationships across the field's intellectual traditions.
 
-IS
+The six volumes follow the decisions involved in a research project. Define the object of study, identify a question, and locate the relevant literature. Then choose a design, gather and analyze evidence, and develop an argument that its readers can assess. Finally, learn to manage this work as an independent researcher. The process is iterative: a measurement problem can change the question, and writing can expose a missing explanation.
 
-The six volumes follow a chain of reasoning. First define what is being studied. Then identify something worth learning, locate the relevant conversation, and formulate a question. Next decide what evidence could answer it and how to obtain that evidence. Examine what the evidence actually supports, communicate the resulting argument, and learn to manage this process independently. These stages interact: a measurement problem can force a new question, and writing can reveal a missing explanation. The sequence is a learning path, not a requirement to complete research in a single pass.
+Each chapter explains why a concept matters, applies it to an example, and ends with a reviewer question and practice. Read the concept, work through the example, and then test whether the principle transfers to another setting. Stable chapter numbers let later discussions of research design and writing refer back to the same foundation.
 
-Each chapter starts with a reason for reading it, develops concepts, and ends with an application, a reviewer question, and practice. Read the concept before the application; then return from the particular example to the general principle. English and Chinese paragraphs are paired throughout. The chapter numbers remain stable so that the research-design and writing discussions can refer back to the same conceptual foundation.
-
-This is a revised book manuscript, not a completed reference textbook. The conceptual explanations and fictional cases are instructional synthesis. The reading section identifies source-linked publications, but does not claim that every article has received a full methodological dissection. Reading, practice, feedback, and research experience must work together; completing the book alone cannot guarantee publication or independent expertise.
+The conceptual explanations and fictional cases are instructional syntheses. The reading sections link to published work for further study. Use the notes alongside the original research, practice, feedback, and experience with your own projects.
 
 
 ## The purpose and status of examples
 
-All unreferenced scenarios, organizations, conversations, numerical illustrations, and student situations in the teaching text are hypothetical unless explicitly identified as a published study or a sourced factual account. They help isolate a reasoning problem; they do not establish how common a phenomenon is or what effects a technology has in the real world. A statement about an imagined clinic is therefore an example to reason about, not evidence about healthcare. Published papers are introduced separately in the reading section.
+Unless identified as a published study or sourced account, the scenarios, organizations, conversations, numerical illustrations, and student situations in these notes are hypothetical. They isolate a reasoning problem; they are not evidence about how often an event occurs or what effect a technology has. The reading sections identify published papers separately.
 
-A useful example has four parts: a situation, a question, an analysis, and a lesson that can transfer to another setting. Actors appear because their actions or responsibilities matter to that question. When the text introduces a patient, a vendor, or a family caregiver, it should first tell you what system they belong to and why their inclusion changes the analysis. If removing an actor leaves the explanation unchanged, the actor probably does not need to be in that example.
+A useful example moves from a situation to a question, an analysis, and a transferable lesson. Each actor has a role in that reasoning. In the clinic case below, the patient, caregiver, staff, and vendor reveal different boundaries, responsibilities, or sources of information.
 
 
 ## Case H: A clinic coordination system
 
-Our opening case is an invented outpatient clinic, used only to teach systems thinking. Patients submit home measurements through an application. Nurses review incoming records, clinicians decide what action is appropriate, and a software vendor maintains the application and its interfaces. A family caregiver helps some patients submit readings or respond to messages. The application records submissions; the clinic has separate arrangements for assigning work and acknowledging that somebody has handled a message. No clinical recommendation or real performance finding is implied.
+Consider a hypothetical outpatient clinic. Patients submit home measurements through an application. Nurses review incoming records, clinicians decide on follow-up, and a software vendor maintains the application and its interfaces. A family caregiver helps some patients submit readings or respond to messages. The application records submissions; the clinic's work arrangements determine who receives a message and who acknowledges responsibility for it.
 
-Each actor has a specific teaching function. The patient connects a recorded value to the person and occasion it describes. The nurse and clinician reveal the difference between receiving information and taking responsibility for action. The vendor makes an external technical dependency visible. The caregiver reveals that the person entering data may differ from the person represented by the data. Chapter 1 uses these distinctions to explain information, system boundaries, tasks, and consequences. None of these roles is required in every IS study.
-
-1IS
+Each actor helps define the system being studied. The patient connects a recorded value to a person and occasion. The nurse and clinician distinguish receiving information from taking responsibility for action. The vendor makes an external technical dependency visible. The caregiver shows that the person entering data may differ from the person represented by the data. Chapter 1 uses these distinctions to examine information, boundaries, tasks, and outcomes.
 
 
 ## Four recurring cases for later volumes
 
-**Case A — Online community governance.** Imagine a question-and-answer platform that changes how contributions are displayed. Members ask, answer, moderate, and leave. We use this setting to examine participation, historical data, comparison groups, unequal exposure, and the difference between platform records and the behavior those records represent. Any counts or effects supplied in exercises are teaching quantities, not findings from a live platform.
+**Case A: Online community governance.** A question-and-answer platform changes how contributions are displayed. Members ask, answer, moderate, and leave. The case supports questions about participation, historical data, comparison groups, unequal exposure, and the relationship between platform records and behavior. Counts and effects in exercises are hypothetical teaching quantities.
 
-**A**
+**Case B: Human–AI decisions.** Employees receive AI-generated advice while retaining responsibility for decisions. The employee, task, advice quality, interface, and ability to override the advice are distinct elements. The case separates trust from reliance, labels from performance, and an experimental manipulation from the mechanism under study.
 
-**Case B — Human–AI decisions.** Imagine employees receiving AI-generated advice while retaining responsibility for decisions. The employee, task, advice quality, interface, and ability to override the advice are distinct elements. We use this case to separate trust from reliance, labels from performance, and experimental manipulation from the mechanism a researcher hopes to establish.
+**Case C: Organizational monitoring.** A company introduces a dashboard that makes work visible to managers. Employees and managers may interpret it differently, and those interpretations may change. The case supports analysis of routines, authority, interviews, observation, conflicting accounts, and processes over time.
 
-**B**AI
-
-**Case C — Organizational monitoring.** Imagine a company introducing a dashboard that makes work visible to managers. Employees and managers may interpret it differently, and those interpretations may change. This case supports learning about routines, authority, interviews, observation, conflicting accounts, and processes over time. The story does not assume that monitoring necessarily helps or harms workers.
-
-**C**
-
-**Case D — Designing a decision aid.** Imagine a research team building a tool that presents recommendations together with explanations and uncertainty. The case follows needs, requirements, design alternatives, evaluation, and revision. It asks what knowledge can extend beyond a single working prototype. It is related to Case B, but its primary question concerns how to design and evaluate an artifact rather than only how people react to an existing one.
-
-**D**B
+**Case D: Designing a decision aid.** A research team builds a tool that presents recommendations with explanations and uncertainty. The case follows needs, requirements, design alternatives, evaluation, and revision. It asks what design knowledge can extend beyond a single working prototype. Case B studies decisions made with AI advice; Case D studies how the decision aid is designed and evaluated.
 
 
 ## Reading route
 
-Read Volume 1 to acquire the vocabulary and distinctions used throughout the book. Volume 2 turns a phenomenon into a defensible question and proposal. Volume 3 explains design choices; its different methodological routes should be selected by the question rather than treated as a competition. Volume 4 examines data and evidence. Volume 5 builds an argument for readers and reviewers. Volume 6 develops the habits and decisions needed to sustain an independent research agenda. The workshops and reading atlas after the six volumes are companions to this sequence.
-
-123456
+Begin with Volume 1 for the field's vocabulary and core distinctions. Volume 2 develops a question, literature review, and proposal. Volume 3 links the question to a research design. Volume 4 examines data and evidence; Volume 5 turns the analysis into an argument for readers and reviewers. Volume 6 addresses the habits and decisions involved in an independent research agenda. The workshops and reading atlas offer practice and sources alongside the six-volume sequence.
 
 
 # Volume 1: Entering the discipline
