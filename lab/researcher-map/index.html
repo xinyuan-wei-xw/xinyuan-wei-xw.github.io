@@ -65,7 +65,7 @@ button.act{background:var(--accent);color:#fff;border:0;border-radius:8px;paddin
       <option value="160">Most connected core (~160)</option>
       <option value="400" selected>Core + active (~400)</option>
       <option value="900">Extended (~900)</option>
-      <option value="100000">Everyone in the data</option>
+      <option value="1200">Wide view (~1,200)</option>
     </select>
     <h3>Find a researcher</h3>
     <input type="text" id="f-search" placeholder="Type a name…" list="names">
@@ -75,7 +75,7 @@ button.act{background:var(--accent);color:#fff;border:0;border-radius:8px;paddin
     <div class="legend">
       <span class="lg-co">Co-author</span><span class="lg-col">Colleague now</span><span class="lg-colp">Colleague past</span><span class="lg-cls">Classmates</span>
     </div>
-    <p class="hint" style="margin-top:12px">Colleague links come from OpenAlex affiliation histories — same institution with overlapping years. They map who was where together; they do not prove two people overlapped in the same department day to day. Classmate links (same PhD school, overlapping years) are curated by hand for the core set and marked verified or inferred. Expansion to the full UTD24 and FT50 journal lists is planned.</p>
+    <p class="hint" style="margin-top:12px">Colleague links come from OpenAlex affiliation histories — same institution with overlapping years. They map who was where together; they do not prove two people overlapped in the same department day to day. Classmate links (same PhD school, overlapping years) are curated by hand for the core set and marked verified or inferred. Expansion to the full UTD24 and FT50 journal lists is planned. The wide view is capped for browser performance; the complete dataset (2,846 researchers, 40,000+ connections) is in the page data file.</p>
   </div>
   <div id="main">
     <div id="cy"></div>
@@ -140,7 +140,7 @@ function render(){
   cy.on('tap','node',ev=>showDetail(ev.target.id()));
 }
 function focusNode(id){
-  if(!cy.getElementById(id).length){$('f-topn').value='100000';render()}
+  if(!cy.getElementById(id).length){$('f-topn').value='1200';render()}
   const el=cy.getElementById(id); if(!el.length)return;
   cy.animate({center:{eles:el},zoom:1.15},{duration:450});
   cy.nodes().removeClass('hl'); el.addClass('hl'); showDetail(id);
