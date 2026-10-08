@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Researcher Connection Map — IS &amp; Management Scholars</title>
+<meta name="description" content="Interactive map of co-authorship, colleague and classmate connections among researchers publishing in MIS Quarterly, Information Systems Research and Management Science (2000–2026). Data: OpenAlex.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+<style>
+:root{--ink:#1c2430;--mut:#5b6572;--line:#e3e7ee;--bg:#f7f8fa;--card:#fff;--accent:#2f6fed;--seed:#e8590c}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{padding:20px 22px 10px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--mut);font-size:13.5px;max-width:900px;line-height:1.55}
+.wrap{display:flex;gap:14px;padding:10px 16px 20px;align-items:flex-start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+#controls{width:290px;flex:0 0 290px;position:sticky;top:12px}
+#controls h3{margin:10px 0 6px;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+#controls h3:first-child{margin-top:2px}
+#controls label{display:block;font-size:13.5px;margin:7px 0;cursor:pointer}
+#controls input[type=checkbox]{margin-right:7px;accent-color:var(--accent)}
+#controls select,#controls input[type=text]{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;margin:4px 0 4px}
+#controls input[type=range]{width:100%}
+.hint{font-size:12px;color:var(--mut);line-height:1.55}
+#main{flex:1;min-width:0}
+#cy{width:100%;height:72vh;border:1px solid var(--line);border-radius:12px;background:#fff}
+#detail{margin-top:12px;display:none}
+#detail h2{margin:0 0 2px;font-size:19px}
+#detail .inst{color:var(--mut);font-size:13.5px;margin-bottom:8px}
+#detail h4{margin:14px 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+#detail ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.65}
+#detail .tag{display:inline-block;background:#eef3fe;color:var(--accent);border-radius:20px;padding:1px 9px;font-size:11.5px;margin:2px 3px 2px 0}
+#detail .seedbadge{display:inline-block;background:#fff1e8;color:var(--seed);border:1px solid #ffd8bd;border-radius:20px;padding:1px 9px;font-size:11.5px;margin-left:6px;vertical-align:2px}
+#detail .vchip{display:inline-block;background:#f1f4f9;border:1px solid var(--line);border-radius:8px;padding:2px 9px;font-size:12px;margin:2px 4px 2px 0}
+.conn{font-size:13.5px;line-height:1.75}
+.conn a{color:var(--accent);text-decoration:none}.conn a:hover{text-decoration:underline}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--mut);margin-top:12px}
+.legend span::before{content:"";display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px;border-radius:2px}
+.lg-co::before{border-color:#2f6fed}.lg-col::before{border-color:#2f9e44}.lg-colp::before{border-color:#a9c6ae}.lg-cls::before{border-color:#e8590c}
+.stats{font-size:12.5px;color:var(--mut);margin-top:10px}
+button.act{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer;margin-top:8px}
+@media (max-width:900px){.wrap{flex-direction:column}#controls{width:100%;flex:none;position:static}#cy{height:60vh}}
+</style>
+</head>
+<body>
+<header>
+<h1>Researcher Connection Map</h1>
+<div class="sub">Who has written with whom, worked alongside whom, and studied together — for researchers publishing in <b>MIS Quarterly</b>, <b>Information Systems Research</b> and <b>Management Science</b>, 2000–2026. Click any researcher for their institutions, landmark papers and connections. Sources: OpenAlex (October 2026 snapshot) and the landmark papers of the IS Research Craft atlas; classmate links are a hand-checked core set and are labelled as such.</div>
+</header>
+<div class="wrap">
+  <div class="panel" id="controls">
+    <h3>Connections</h3>
+    <label><input type="checkbox" id="f-co" checked> Co-authors (joint papers in these journals)</label>
+    <label><input type="checkbox" id="f-colcur" checked> Current colleagues (same institution, overlapping into 2024+)</label>
+    <label><input type="checkbox" id="f-colpast"> Past colleagues (shared an institution earlier)</label>
+    <label><input type="checkbox" id="f-cls" checked> PhD classmates (core set, labelled)</label>
+    <h3>Co-authorship strength</h3>
+    <label class="hint">At least <span id="wval">1</span> joint paper(s)</label>
+    <input type="range" id="f-weight" min="1" max="6" step="1" value="1">
+    <h3>Research stream (atlas)</h3>
+    <select id="f-stream"><option value="">All streams</option></select>
+    <h3>How many researchers</h3>
+    <select id="f-topn">
+      <option value="160">Most connected core (~160)</option>
+      <option value="400" selected>Core + active (~400)</option>
+      <option value="900">Extended (~900)</option>
+      <option value="100000">Everyone in the data</option>
+    </select>
+    <h3>Find a researcher</h3>
+    <input type="text" id="f-search" placeholder="Type a name…" list="names">
+    <datalist id="names"></datalist>
+    <button class="act" id="btn-reset">Reset view</button>
+    <div class="stats" id="stats"></div>
+    <div class="legend">
+      <span class="lg-co">Co-author</span><span class="lg-col">Colleague now</span><span class="lg-colp">Colleague past</span><span class="lg-cls">Classmates</span>
+    </div>
+    <p class="hint" style="margin-top:12px">Colleague links come from OpenAlex affiliation histories — same institution with overlapping years. They map who was where together; they do not prove two people overlapped in the same department day to day. Classmate links (same PhD school, overlapping years) are curated by hand for the core set and marked verified or inferred. Expansion to the full UTD24 and FT50 journal lists is planned.</p>
+  </div>
+  <div id="main">
+    <div id="cy"></div>
+    <div class="panel" id="detail"></div>
+  </div>
+</div>
+<script>
+let DATA=null, cy=null;
+const $=id=>document.getElementById(id);
+fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;init();});
+function nodeById(id){return DATA._byId[id]}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function init(){
+  DATA._byId={}; DATA.nodes.forEach(n=>DATA._byId[n.id]=n);
+  const dl=$('names'); DATA.nodes.slice().sort((a,b)=>(b.cites3||0)-(a.cites3||0)).slice(0,1500).forEach(n=>{const o=document.createElement('option');o.value=n.name;dl.appendChild(o)});
+  const ss=new Set(); DATA.nodes.forEach(n=>(n.streams||[]).forEach(x=>ss.add(x)));
+  [...ss].sort().forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;$('f-stream').appendChild(o)});
+  ['f-co','f-colcur','f-colpast','f-cls','f-stream','f-topn'].forEach(id=>$(id).addEventListener('change',render));
+  $('f-weight').addEventListener('input',()=>{$('wval').textContent=$('f-weight').value;render()});
+  $('f-search').addEventListener('change',()=>{const q=$('f-search').value.trim().toLowerCase();if(!q)return;const n=DATA.nodes.find(x=>x.name.toLowerCase()===q)||DATA.nodes.find(x=>x.name.toLowerCase().includes(q));if(n)focusNode(n.id)});
+  $('btn-reset').addEventListener('click',()=>{cy&&cy.fit(null,40)});
+  render();
+}
+function visible(){
+  const topn=+$('f-topn').value, w=+$('f-weight').value, stream=$('f-stream').value;
+  const show={co:$('f-co').checked, cur:$('f-colcur').checked, past:$('f-colpast').checked, cls:$('f-cls').checked};
+  let edges=DATA.edges.filter(e=>{
+    if(e.type==='coauthor')return show.co&&(e.weight||1)>=w;
+    if(e.type==='colleague')return e.current?show.cur:show.past;
+    if(e.type==='classmate')return show.cls;
+    return true});
+  if(w>1){ /* colleague/classmate edges stay regardless; only coauthor filtered above */ }
+  const deg={}; edges.forEach(e=>{deg[e.a]=(deg[e.a]||0)+1;deg[e.b]=(deg[e.b]||0)+1});
+  let nodes=DATA.nodes.filter(n=>(deg[n.id]||0)>0||n.seed);
+  if(stream)nodes=nodes.filter(n=>(n.streams||[]).includes(stream));
+  nodes.sort((a,b)=>((deg[b.id]||0)-(deg[a.id]||0))||((b.cites3||0)-(a.cites3||0)));
+  const keep=new Set(nodes.slice(0,topn).map(n=>n.id));
+  DATA.nodes.forEach(n=>{if(n.seed&&(!stream||(n.streams||[]).includes(stream)))keep.add(n.id)});
+  edges=edges.filter(e=>keep.has(e.a)&&keep.has(e.b));
+  return {nodes:DATA.nodes.filter(n=>keep.has(n.id)),edges};
+}
+function render(){
+  const {nodes,edges}=visible();
+  $('stats').textContent=`Showing ${nodes.length} researchers · ${edges.length} connections`;
+  const els=[];
+  nodes.forEach(n=>els.push({data:{id:n.id,label:n.name,size:Math.max(14,Math.min(48,10+9*Math.log10(1+(n.cites3||0)))),seed:n.seed?1:0}}));
+  edges.forEach((e,i)=>els.push({data:{id:'e'+i,source:e.a,target:e.b,ty:e.type,cur:e.current?1:0}}));
+  if(cy)cy.destroy();
+  cy=cytoscape({container:$('cy'),elements:els,
+    style:[
+      {selector:'node',style:{'background-color':'#7aa5f5','label':'data(label)','font-size':9,'color':'#33404f','text-valign':'bottom','text-margin-y':2,'width':'data(size)','height':'data(size)','border-width':0}},
+      {selector:'node[seed=1]',style:{'border-width':3,'border-color':'#e8590c','background-color':'#4a86f7'}},
+      {selector:'edge',style:{'width':1.2,'line-color':'#b9c8e8','opacity':.5,'curve-style':'bezier'}},
+      {selector:'edge[ty="coauthor"]',style:{'line-color':'#2f6fed','width':1.6,'opacity':.65}},
+      {selector:'edge[ty="colleague"][cur=1]',style:{'line-color':'#2f9e44','opacity':.55}},
+      {selector:'edge[ty="colleague"][cur=0]',style:{'line-color':'#a9c6ae','opacity':.4}},
+      {selector:'edge[ty="classmate"]',style:{'line-color':'#e8590c','width':2.2,'opacity':.85,'line-style':'dashed'}},
+      {selector:'node.hl',style:{'border-width':4,'border-color':'#111'}}
+    ],
+    layout:{name:'cose',animate:false,nodeRepulsion:9000,idealEdgeLength:90,padding:30}});
+  cy.on('tap','node',ev=>showDetail(ev.target.id()));
+}
+function focusNode(id){
+  if(!cy.getElementById(id).length){$('f-topn').value='100000';render()}
+  const el=cy.getElementById(id); if(!el.length)return;
+  cy.animate({center:{eles:el},zoom:1.15},{duration:450});
+  cy.nodes().removeClass('hl'); el.addClass('hl'); showDetail(id);
+}
+function yrSpan(years){if(!years||!years.length)return'';const ys=years.slice().sort((a,b)=>a-b);return ys[0]===ys[ys.length-1]?`${ys[0]}`:`${ys[0]}–${ys[ys.length-1]}`}
+function showDetail(id){
+  const n=nodeById(id); if(!n)return;
+  const box=$('detail'); box.style.display='block';
+  const groups={coauthor:[],colleague:[],classmate:[]};
+  DATA.edges.forEach(e=>{let o=null;if(e.a===id)o=e.b;else if(e.b===id)o=e.a;if(o&&groups[e.type])groups[e.type].push({e,o})});
+  const nm=oid=>{const x=nodeById(oid);return x?x.name:oid};
+  let h=`<h2>${esc(n.name)}${n.seed?'<span class="seedbadge">landmark-paper author</span>':''}</h2>`;
+  h+=`<div class="inst">${esc(n.institution_now||'')}${n.phd?` · PhD: ${esc(n.phd.school)}${n.phd.year?' ('+n.phd.year+')':''}${n.phd.conf?' · '+esc(n.phd.conf):''}`:''}</div>`;
+  h+=`<div>${(n.streams||[]).map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`;
+  const vc=n.venue_counts||{}; const vtot=Object.values(vc).reduce((x,y)=>x+y,0);
+  h+=`<div style="margin-top:8px">${Object.entries(vc).map(([k,v])=>`<span class="vchip">${esc(k)} × ${v}</span>`).join('')}</div>`;
+  h+=`<div class="conn"><b>${vtot}</b> papers in these three journals · <b>${(n.cites_all||0).toLocaleString()}</b> career citations (OpenAlex)</div>`;
+  if(n.affiliations&&n.affiliations.length){
+    const aff=n.affiliations.slice().sort((a,b)=>(Math.min(...(b.years||[0])))-(Math.min(...(a.years||[0]))));
+    h+=`<h4>Institutions (OpenAlex affiliation history)</h4><ul>`+aff.map(a=>`<li>${esc(a.institution)} <span style="color:#5b6572">${esc(yrSpan(a.years))}</span></li>`).join('')+`</ul>`}
+  if(n.papers&&n.papers.length){
+    h+=`<h4>Landmark papers in the atlas</h4><ul>`+n.papers.map(p=>`<li><a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.cite)}</a> <span class="tag">${esc(p.stream)}</span></li>`).join('')+`</ul>`}
+  const grp=(t,arr,fmt)=>{if(!arr.length)return'';arr.sort((x,y)=>((y.e.weight||1)-(x.e.weight||1)));return `<h4>${t} (${arr.length})</h4><div class="conn">`+arr.slice(0,50).map(({e,o})=>`<a href="#" onclick="focusNode('${o}');return false">${esc(nm(o))}</a> <span style="color:#5b6572">${fmt(e)}</span>`).join('<br>')+`</div>`};
+  h+=grp('Co-authors',groups.coauthor,e=>`${(e.weight||1)>1?'· '+e.weight+' joint papers':''}${e.also_colleague?' · also colleagues at '+esc(e.also_colleague.institution)+' ('+e.also_colleague.years[0]+'–'+e.also_colleague.years[1]+')':''}`);
+  h+=grp('Colleagues',groups.colleague,e=>`· ${esc(e.institution||'')} ${e.years?e.years[0]+'–'+e.years[1]:''}${e.current?' · current':''}`);
+  h+=grp('PhD classmates',groups.classmate,e=>`· ${esc(e.school||'')}${(e.y0&&e.y1)?' · PhD '+e.y0+' &amp; '+e.y1+' ('+esc(e.conf||'verified')+')':' · same PhD school, one graduation year on record (inferred)'}`);
+  box.innerHTML=h;
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+</script>
+</body>
+</html>
