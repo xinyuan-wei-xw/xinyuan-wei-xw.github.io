@@ -113,7 +113,7 @@ function visible(){
   if(stream)nodes=nodes.filter(n=>(n.streams||[]).includes(stream));
   nodes.sort((a,b)=>((deg[b.id]||0)-(deg[a.id]||0))||((b.cites3||0)-(a.cites3||0)));
   const keep=new Set(nodes.slice(0,topn).map(n=>n.id));
-  DATA.nodes.forEach(n=>{if(n.seed&&(!stream||(n.streams||[]).includes(stream)))keep.add(n.id)});
+  DATA.nodes.forEach(n=>{if((n.seed||n.course_seed)&&(!stream||!n.streams||(n.streams||[]).includes(stream)))keep.add(n.id)});
   edges=edges.filter(e=>keep.has(e.a)&&keep.has(e.b));
   return {nodes:DATA.nodes.filter(n=>keep.has(n.id)),edges};
 }
@@ -121,12 +121,13 @@ function render(){
   const {nodes,edges}=visible();
   $('stats').textContent=`Showing ${nodes.length} researchers · ${edges.length} connections`;
   const els=[];
-  nodes.forEach(n=>els.push({data:{id:n.id,label:n.name,size:Math.max(14,Math.min(48,10+9*Math.log10(1+(n.cites3||0)))),seed:n.seed?1:0}}));
+  nodes.forEach(n=>els.push({data:{id:n.id,label:n.name,size:Math.max(14,Math.min(48,10+9*Math.log10(1+(n.cites3||0)))),seed:n.seed?1:0,cseed:n.course_seed?1:0}}));
   edges.forEach((e,i)=>els.push({data:{id:'e'+i,source:e.a,target:e.b,ty:e.type,cur:e.current?1:0}}));
   if(cy)cy.destroy();
   cy=cytoscape({container:$('cy'),elements:els,
     style:[
       {selector:'node',style:{'background-color':'#7aa5f5','label':'data(label)','font-size':9,'color':'#33404f','text-valign':'bottom','text-margin-y':2,'width':'data(size)','height':'data(size)','border-width':0}},
+      {selector:'node[cseed=1]',style:{'border-width':3,'border-color':'#2f9e44'}},
       {selector:'node[seed=1]',style:{'border-width':3,'border-color':'#e8590c','background-color':'#4a86f7'}},
       {selector:'edge',style:{'width':1.2,'line-color':'#b9c8e8','opacity':.5,'curve-style':'bezier'}},
       {selector:'edge[ty="coauthor"]',style:{'line-color':'#2f6fed','width':1.6,'opacity':.65}},
@@ -151,7 +152,7 @@ function showDetail(id){
   const groups={coauthor:[],colleague:[],classmate:[]};
   DATA.edges.forEach(e=>{let o=null;if(e.a===id)o=e.b;else if(e.b===id)o=e.a;if(o&&groups[e.type])groups[e.type].push({e,o})});
   const nm=oid=>{const x=nodeById(oid);return x?x.name:oid};
-  let h=`<h2>${esc(n.name)}${n.seed?'<span class="seedbadge">landmark-paper author</span>':''}</h2>`;
+  let h=`<h2>${esc(n.name)}${n.seed?'<span class="seedbadge">landmark-paper author</span>':''}${n.course_seed?'<span class="seedbadge" style="background:#e9f7ee;color:#1e7a34;border-color:#bfe6cb">course-reading author</span>':''}</h2>`;
   h+=`<div class="inst">${esc(n.institution_now||'')}${n.phd?` · PhD: ${esc(n.phd.school)}${n.phd.year?' ('+n.phd.year+')':''}${n.phd.conf?' · '+esc(n.phd.conf):''}`:''}</div>`;
   h+=`<div>${(n.streams||[]).map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`;
   const vc=n.venue_counts||{}; const vtot=Object.values(vc).reduce((x,y)=>x+y,0);
@@ -162,6 +163,8 @@ function showDetail(id){
     h+=`<h4>Institutions (OpenAlex affiliation history)</h4><ul>`+aff.map(a=>`<li>${esc(a.institution)} <span style="color:#5b6572">${esc(yrSpan(a.years))}</span></li>`).join('')+`</ul>`}
   if(n.papers&&n.papers.length){
     h+=`<h4>Landmark papers in the atlas</h4><ul>`+n.papers.map(p=>`<li><a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.cite)}</a> <span class="tag">${esc(p.stream)}</span></li>`).join('')+`</ul>`}
+  if(n.course_papers&&n.course_papers.length){
+    h+=`<h4>Assigned in doctoral seminars</h4><ul>`+n.course_papers.map(p=>`<li>${p.link?`<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.cite)}</a>`:esc(p.cite)} <span class="tag" style="background:#e9f7ee;color:#1e7a34">${esc(p.course)}</span></li>`).join('')+`</ul>`}
   const grp=(t,arr,fmt)=>{if(!arr.length)return'';arr.sort((x,y)=>((y.e.weight||1)-(x.e.weight||1)));return `<h4>${t} (${arr.length})</h4><div class="conn">`+arr.slice(0,50).map(({e,o})=>`<a href="#" onclick="focusNode('${o}');return false">${esc(nm(o))}</a> <span style="color:#5b6572">${fmt(e)}</span>`).join('<br>')+`</div>`};
   h+=grp('Co-authors',groups.coauthor,e=>`${(e.weight||1)>1?'· '+e.weight+' joint papers':''}${e.also_colleague?' · also colleagues at '+esc(e.also_colleague.institution)+' ('+e.also_colleague.years[0]+'–'+e.also_colleague.years[1]+')':''}`);
   h+=grp('Colleagues',groups.colleague,e=>`· ${esc(e.institution||'')} ${e.years?e.years[0]+'–'+e.years[1]:''}${e.current?' · current':''}`);
