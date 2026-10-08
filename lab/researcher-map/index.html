@@ -6,6 +6,9 @@
 <title>Researcher Connection Map — IS &amp; Management Scholars</title>
 <meta name="description" content="Interactive map of co-authorship, colleague and classmate connections among researchers publishing in MIS Quarterly, Information Systems Research and Management Science (2000–2026). Data: OpenAlex.">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+<script src="https://unpkg.com/layout-base@2.0.1/layout-base.js"></script>
+<script src="https://unpkg.com/cose-base@2.2.0/cose-base.js"></script>
+<script src="https://unpkg.com/cytoscape-fcose@2.2.0/cytoscape-fcose.js"></script>
 <style>
 :root{--ink:#1c2430;--mut:#5b6572;--line:#e3e7ee;--bg:#f7f8fa;--card:#fff;--accent:#2f6fed;--seed:#e8590c}
 *{box-sizing:border-box}
@@ -63,9 +66,16 @@ button.act{background:var(--accent);color:#fff;border:0;border-radius:8px;paddin
     <h3>How many researchers</h3>
     <select id="f-topn">
       <option value="160">Most connected core (~160)</option>
-      <option value="400" selected>Core + active (~400)</option>
-      <option value="900">Extended (~900)</option>
-      <option value="1200">Wide view (~1,200)</option>
+      <option value="250" selected>Core + active (~250)</option>
+      <option value="400">Extended (~400)</option>
+      <option value="900">Wide (~900)</option>
+      <option value="1200">Widest (~1,200)</option>
+    </select>
+    <h3>Name labels</h3>
+    <select id="f-labels">
+      <option value="key" selected>Key people only</option>
+      <option value="all">Everyone (zoom in to read)</option>
+      <option value="off">No labels</option>
     </select>
     <h3>Find a researcher</h3>
     <input type="text" id="f-search" placeholder="Type a name…" list="names">
@@ -83,7 +93,8 @@ button.act{background:var(--accent);color:#fff;border:0;border-radius:8px;paddin
   </div>
 </div>
 <script>
-let DATA=null, cy=null;
+let DATA=null, cy=null, HAS_FCOSE=false;
+try{ if(window.cytoscapeFcose){ cytoscape.use(window.cytoscapeFcose); HAS_FCOSE=true; } }catch(e){}
 const $=id=>document.getElementById(id);
 fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;init();});
 function nodeById(id){return DATA._byId[id]}
@@ -93,7 +104,7 @@ function init(){
   const dl=$('names'); DATA.nodes.slice().sort((a,b)=>(b.cites3||0)-(a.cites3||0)).slice(0,1500).forEach(n=>{const o=document.createElement('option');o.value=n.name;dl.appendChild(o)});
   const ss=new Set(); DATA.nodes.forEach(n=>(n.streams||[]).forEach(x=>ss.add(x)));
   [...ss].sort().forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;$('f-stream').appendChild(o)});
-  ['f-co','f-colcur','f-colpast','f-cls','f-stream','f-topn'].forEach(id=>$(id).addEventListener('change',render));
+  ['f-co','f-colcur','f-colpast','f-cls','f-stream','f-topn','f-labels'].forEach(id=>$(id).addEventListener('change',render));
   $('f-weight').addEventListener('input',()=>{$('wval').textContent=$('f-weight').value;render()});
   $('f-search').addEventListener('change',()=>{const q=$('f-search').value.trim().toLowerCase();if(!q)return;const n=DATA.nodes.find(x=>x.name.toLowerCase()===q)||DATA.nodes.find(x=>x.name.toLowerCase().includes(q));if(n)focusNode(n.id)});
   $('btn-reset').addEventListener('click',()=>{cy&&cy.fit(null,40)});
@@ -121,22 +132,32 @@ function render(){
   const {nodes,edges}=visible();
   $('stats').textContent=`Showing ${nodes.length} researchers · ${edges.length} connections`;
   const els=[];
-  nodes.forEach(n=>els.push({data:{id:n.id,label:n.name,size:Math.max(14,Math.min(48,10+9*Math.log10(1+(n.cites3||0)))),seed:n.seed?1:0,cseed:n.course_seed?1:0}}));
+  const labMode=$('f-labels').value;
+  const ranked=nodes.slice().sort((a,b)=>(b.cites3||0)-(a.cites3||0));
+  const keySet=new Set(ranked.slice(0,45).map(n=>n.id));
+  nodes.forEach(n=>{const showLab = labMode==='all' || (labMode==='key' && (n.seed || n.course_seed || keySet.has(n.id)));
+    els.push({data:{id:n.id,label:showLab?n.name:'',size:Math.max(14,Math.min(48,10+9*Math.log10(1+(n.cites3||0)))),seed:n.seed?1:0,cseed:n.course_seed?1:0}})});
   edges.forEach((e,i)=>els.push({data:{id:'e'+i,source:e.a,target:e.b,ty:e.type,cur:e.current?1:0}}));
   if(cy)cy.destroy();
   cy=cytoscape({container:$('cy'),elements:els,
     style:[
-      {selector:'node',style:{'background-color':'#7aa5f5','label':'data(label)','font-size':9,'color':'#33404f','text-valign':'bottom','text-margin-y':2,'width':'data(size)','height':'data(size)','border-width':0}},
+      {selector:'node',style:{'background-color':'#7aa5f5','label':'data(label)','font-size':7.5,'color':'#33404f','text-valign':'bottom','text-margin-y':2,'min-zoomed-font-size':9,'width':'data(size)','height':'data(size)','border-width':0}},
       {selector:'node[cseed=1]',style:{'border-width':3,'border-color':'#2f9e44'}},
       {selector:'node[seed=1]',style:{'border-width':3,'border-color':'#e8590c','background-color':'#4a86f7'}},
       {selector:'edge',style:{'width':1.2,'line-color':'#b9c8e8','opacity':.5,'curve-style':'bezier'}},
-      {selector:'edge[ty="coauthor"]',style:{'line-color':'#2f6fed','width':1.6,'opacity':.65}},
-      {selector:'edge[ty="colleague"][cur=1]',style:{'line-color':'#2f9e44','opacity':.55}},
+      {selector:'edge[ty="coauthor"]',style:{'line-color':'#2f6fed','width':1.4,'opacity':.5}},
+      {selector:'edge[ty="colleague"][cur=1]',style:{'line-color':'#2f9e44','opacity':.38}},
       {selector:'edge[ty="colleague"][cur=0]',style:{'line-color':'#a9c6ae','opacity':.4}},
       {selector:'edge[ty="classmate"]',style:{'line-color':'#e8590c','width':2.2,'opacity':.85,'line-style':'dashed'}},
-      {selector:'node.hl',style:{'border-width':4,'border-color':'#111'}}
+      {selector:'node.hl',style:{'border-width':4,'border-color':'#111'}},
+      {selector:'.dim',style:{'opacity':.06}},
+      {selector:'edge.dim',style:{'opacity':.03}},
+      {selector:'edge.hie',style:{'opacity':.95,'width':2.6}}
     ],
-    layout:{name:'cose',animate:false,nodeRepulsion:9000,idealEdgeLength:90,padding:30}});
+    layout: HAS_FCOSE ? {name:'fcose',animate:false,randomize:true,quality:'proof',nodeRepulsion:16000,idealEdgeLength:110,edgeElasticity:0.35,gravity:0.25,gravityRange:3.5,numIter:2500,tilingPaddingVertical:20,tilingPaddingHorizontal:20,padding:30}
+                     : {name:'cose',animate:false,nodeRepulsion:16000,idealEdgeLength:110,padding:30}});
+  cy.on('mouseover','node',ev=>{const n=ev.target;const nb=n.neighborhood().add(n);cy.elements().not(nb).addClass('dim');n.connectedEdges().addClass('hie')});
+  cy.on('mouseout','node',()=>{cy.elements().removeClass('dim');cy.edges().removeClass('hie')});
   cy.on('tap','node',ev=>showDetail(ev.target.id()));
 }
 function focusNode(id){
