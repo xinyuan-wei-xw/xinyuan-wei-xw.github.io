@@ -26,3 +26,14 @@ Outstanding Reviewer, Americas Conference on Information Systems (AMCIS), 2024. 
 
 - Conference on Information Systems and Technology (CIST): Volunteer, 2025.
 - Robinson Impact Summit (RIS), Georgia State University: Planning Committee Member, 2025.
+
+## Leadership and Community Service
+
+- North American Chinese Bilingual (NACB) Toastmasters Club: President, 2025–2026; Secretary, 2024–2025.
+
+## Professional Memberships
+
+- Association for Information Systems (AIS)
+- Institute for Operations Research and the Management Sciences (INFORMS)
+- Production and Operations Management Society (POMS)
+- Decision Sciences Institute (DSI)
