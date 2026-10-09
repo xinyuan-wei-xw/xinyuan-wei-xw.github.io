@@ -5,29 +5,9 @@ permalink: /research/
 author_profile: true
 ---
 
-My research focuses on generative and agentic AI, digital platforms and online communities, and AI governance, with applications in healthcare and operations analytics.
+My research focuses on generative and agentic AI, digital collectives, and AI governance, with applications in healthcare analytics and operations and supply chain analytics.
 
 ## Working Papers
-
-### Architecture as Governance: How AI Service Design Shapes Resource Consumption and Tariff Form
-
-*Working paper.*
-
-Examines how AI service architecture links contractible usage, resource consumption, and tariff design.
-
-### Adaptive Engagement in Online Q&A Communities under the Introduction of Conversational LLMs
-
-In collaboration with A. Rai, Y. Xia, and X. Fu.
-
-*Targeting submission October 2026.*
-
-Examines changes in responsiveness and evaluation within online Q&A communities following conversational LLM introduction.
-
-### Pipeline-Induced Choice Distortions in Agentic Commerce
-
-*Working paper.*
-
-Examines how product presentation shapes AI shopping agents’ choices and what these patterns imply for auditing AI intermediaries.
 
 ### A Causal Discovery Framework for Data-Driven Hypothesis Generation
 
@@ -35,15 +15,27 @@ In collaboration with A. Baird, M. Lajnef, A. Rai, and Y. Xia.
 
 *Invited for revision, ACM Transactions on Management Information Systems.*
 
-Develops a framework for data-driven hypothesis generation, with an application to substance use disorder treatment using TEDS-D data.
+### Governing AI Subscription Access: Refinement, Information, and Capacity Commitments
+
+*Working paper.*
+
+### Adaptive Engagement in Online Knowledge Communities Amid a Technology Shock: Evidence from Stack Overflow
+
+In collaboration with A. Rai, Y. Xia, and X. Fu.
+
+*Targeting submission October 2026.*
+
+### Pipeline-Induced Choice Distortion in Agentic E-Commerce
+
+In collaboration with X. Fu, A. Rai, and Y. Xia.
+
+*Working paper.*
 
 ### When All-or-Nothing Fails: Endogenous Customer Service Times in Guaranteed-Service Models
 
 In collaboration with G. Li, Z. Liu, and Y. Xia.
 
 *Revising for submission to Operations Research.*
-
-Studies endogenous delivery promises and safety-stock placement.
 
 ### Statistical Analysis of Home-Sharing Effect
 
