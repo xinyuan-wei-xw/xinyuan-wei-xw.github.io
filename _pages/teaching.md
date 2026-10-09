@@ -7,13 +7,17 @@ author_profile: true
 
 ## <a href="{{ '/files/IFI8410_Programming_for_Business_Spring2026_Syllabus.pdf' | relative_url }}" download>IFI 8410: Programming for Business</a>
 
-**MBA course · Spring 2026**
+**MBA course · Spring 2026 · Instructor of record**
 
 J. Mack Robinson College of Business, Georgia State University
 
 Online and in-person sections
 
 I taught programming as a practical tool for business analysis and decision support. Designed for students with no formal programming prerequisites, the course used Python and Google Colab to connect coding skills with business questions, reproducible analysis, and managerial communication.
+
+**Student evaluations**
+
+Both sections had 100% response rates. Student evaluations averaged 4.8 out of 5 across seven instructor-specific items.
 
 **Course topics**
 
@@ -30,3 +34,9 @@ Class sessions combined conceptual discussion, live demonstrations, and guided p
 **Teaching approach**
 
 I emphasized explaining analytical choices as well as implementing them. Students could use AI tools to clarify concepts or debug code, while remaining responsible for understanding and justifying their results. This approach connected technical practice with the judgment and communication skills needed by business professionals.
+
+## Teaching Assistant, 2023–2025
+
+Georgia State University
+
+Supported instruction in *Programming for Business*, *Managing AI in Business and Society*, *Introduction to Python* (for Delta Air Lines employees), and EMBA Analytics Certificate project sessions.
