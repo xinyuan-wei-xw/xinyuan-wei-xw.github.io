@@ -99,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 36
+      "sessions": 40
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -182,7 +182,7 @@
         "longitude": -121.851935
       },
       "region": "California",
-      "sessions": 1
+      "sessions": 2
     },
     "US|California|South San Francisco": {
       "city": "South San Francisco",
@@ -266,7 +266,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 63
+      "sessions": 65
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -633,7 +633,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 98
+      "sessions": 102
     },
     "TW": {
       "name": "Taiwan",
@@ -641,11 +641,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 175
+      "sessions": 178
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-08",
+  "last_end": "2026-10-09",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -700,7 +700,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 36
+      "sessions": 40
     },
     "SG|(not set)": {
       "country": "SG",
@@ -730,7 +730,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 10
+      "sessions": 11
     },
     "US|Florida": {
       "country": "US",
@@ -742,7 +742,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 128
+      "sessions": 130
     },
     "US|Illinois": {
       "country": "US",
@@ -826,6 +826,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 282,
+  "total_sessions": 289,
   "version": 1
 }
