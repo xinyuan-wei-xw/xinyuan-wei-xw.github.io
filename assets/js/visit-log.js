@@ -66,7 +66,11 @@ function matchOrg(org){
 
 /* ---- visit logger: university-IP visits -> Firestore counter ----
    Org-name match first; otherwise the single closest university within 10 miles
-   of the visitor's approximate location gets a +1. */
+   of the visitor's approximate location gets a +1.
+   Also writes a PRIVATE distinct-visitor record: SHA-256 hash of the visitor IP
+   (one-way; the raw IP is never sent or stored). The visit_hashes collection is
+   read-protected (owner reads via Firebase console only) and never shown on any
+   public page. */
 (function(){
   try {
     if (location.hostname.indexOf('github.io') === -1) return;
@@ -75,6 +79,32 @@ function matchOrg(org){
   } catch(e){ return; }
   function lookup(url){
     return fetch(url, {cache:'no-store'}).then(function(r){ return r.json(); });
+  }
+  var API_KEY = 'AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw';
+  var COMMIT_URL = 'https://firestore.googleapis.com/v1/projects/x-planner-99dd3/databases/(default)/documents:commit?key=' + API_KEY;
+  /* Private distinct-visitor hash: doc id = SHA-256('visit-hash-v1:'+ip).
+     Created once per IP (exists:false); repeat visits are no-ops. */
+  function logHash(d){
+    try {
+      var ip = d && (d.ip || d.query);
+      if (!ip || !window.crypto || !crypto.subtle) return;
+      var cc = String(d.country_code || d.countryCode || '').toUpperCase().slice(0,4);
+      var city = String(d.city || '').slice(0,80);
+      crypto.subtle.digest('SHA-256', new TextEncoder().encode('visit-hash-v1:'+ip))
+      .then(function(buf){
+        var hex = Array.prototype.map.call(new Uint8Array(buf),
+          function(b){ return ('0'+b.toString(16)).slice(-2); }).join('');
+        var name = 'projects/x-planner-99dd3/databases/(default)/documents/visit_hashes/' + hex;
+        var writes = [
+          {update:{name:name, fields:{country:{stringValue:cc}, city:{stringValue:city}}},
+           currentDocument:{exists:false}},
+          {transform:{document:name,
+            fieldTransforms:[{fieldPath:'firstSeen', setToServerValue:'REQUEST_TIME'}]}}
+        ];
+        fetch(COMMIT_URL, {method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({writes: writes})}).catch(function(){});
+      }).catch(function(){});
+    } catch(e){}
   }
   lookup('https://ipwho.is/').catch(function(){ return lookup('https://ipapi.co/json/'); })
   .then(function(d){
@@ -87,14 +117,14 @@ function matchOrg(org){
       var near = geoNearest(la, ln, 10 * 1.60934); /* 10 miles in km */
       slugs = near ? [near] : [];
     }
+    logHash(d); /* private distinct-visitor record, runs regardless of uni match */
     if (!slugs.length) return;
     try { sessionStorage.setItem('uvl','1'); } catch(e){}
     var base = 'projects/x-planner-99dd3/databases/(default)/documents/uni_visits/';
     var writes = slugs.map(function(slug){ return {transform:{
       document: base + slug,
       fieldTransforms:[{fieldPath:'visits', increment:{integerValue:'1'}}]}}; });
-    var url = 'https://firestore.googleapis.com/v1/projects/x-planner-99dd3/databases/(default)/documents:commit?key=AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw';
-    fetch(url, {method:'POST', headers:{'Content-Type':'application/json'},
+    fetch(COMMIT_URL, {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({writes: writes})}).catch(function(){});
   }).catch(function(){});
 })();
