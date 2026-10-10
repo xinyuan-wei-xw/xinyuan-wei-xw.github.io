@@ -6,6 +6,8 @@
 <title>Researcher Connection Map — IS &amp; Management Scholars</title>
 <meta name="description" content="Interactive map of co-authorship, colleague and classmate connections among researchers publishing in MIS Quarterly, Information Systems Research and Management Science (2000–2026). Data: OpenAlex.">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <style>
 :root{--ink:#1c2430;--mut:#5b6572;--line:#e3e7ee;--bg:#f7f8fa;--card:#fff;--accent:#2f6fed;--seed:#e8590c}
 *{box-sizing:border-box}
@@ -33,6 +35,15 @@ h1{font-size:24px;margin:0 0 4px}
 #detail .tag{display:inline-block;background:#eef3fe;color:var(--accent);border-radius:20px;padding:1px 9px;font-size:11.5px;margin:2px 3px 2px 0}
 #detail .seedbadge{display:inline-block;background:#fff1e8;color:var(--seed);border:1px solid #ffd8bd;border-radius:20px;padding:1px 9px;font-size:11.5px;margin-left:6px;vertical-align:2px}
 #detail .vchip{display:inline-block;background:#f1f4f9;border:1px solid var(--line);border-radius:8px;padding:2px 9px;font-size:12px;margin:2px 4px 2px 0}
+#detail .statgrid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+#detail .stat{background:#f1f4f9;border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:12.5px}
+#detail .stat b{font-size:13.5px}
+#detail .aibox{background:#f6f9ff;border:1px solid #dbe7ff;border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.65;margin-top:10px}
+#detail .aibox .ailab{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.loginbox{background:#fff;border:1px dashed var(--accent);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:13px}
+.loginbox input{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:8px;font-size:13px;margin:4px 0}
+.loginbox .err{color:#b42318;font-size:12.5px;margin-top:4px;min-height:16px}
+.authline{font-size:12px;color:var(--mut);margin-top:8px}
 .conn{font-size:13.5px;line-height:1.75}
 .conn a{color:var(--accent);text-decoration:none}.conn a:hover{text-decoration:underline}
 .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--mut);margin-top:12px}
@@ -78,6 +89,8 @@ button.act{background:var(--accent);color:#fff;border:0;border-radius:8px;paddin
     <h3>Find a researcher</h3>
     <input type="text" id="f-search" placeholder="Type a name…">
     <div id="f-matches" style="margin-top:4px"></div>
+    <div class="hint" style="margin-top:6px" id="search-note">Your first search is free — further searches ask you to sign in (same account as the other Toolbox tools).</div>
+    <div class="authline" id="authline"></div>
     <button class="act" id="btn-reset">Reset view</button>
     <div class="stats" id="stats"></div>
     <div class="legend">
@@ -96,6 +109,37 @@ const $=id=>document.getElementById(id);
 fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;init();});
 function nodeById(id){return DATA._byId[id]}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+const sq=s=>(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ');
+/* ---- Firebase auth for the search gate (same project as the other Toolbox tools) ---- */
+const firebaseConfig={apiKey:"AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw",authDomain:"x-planner-99dd3.firebaseapp.com",projectId:"x-planner-99dd3",appId:"1:146714833806:web:d1c4516985514f7c35eadf"};
+let fbUser=null, pendingSearch=null, runSearch=null;
+function renderAuthline(){const el=$('authline');if(!el)return;
+  if(fbUser){el.innerHTML='Signed in as '+esc(fbUser.email)+' · <a href="#" id="signout">sign out</a> · searches are unlimited';
+    $('signout').addEventListener('click',ev=>{ev.preventDefault();firebase.auth().signOut()});}
+  else{el.innerHTML='';}}
+function searchCount(){try{return parseInt(localStorage.getItem('rmap_searches')||'0',10)||0}catch(e){return 0}}
+function bumpSearch(){try{localStorage.setItem('rmap_searches',String(searchCount()+1))}catch(e){}}
+function friendlyAuthErr(code){const m={'auth/user-not-found':'No account with this email — try “Create account” below.','auth/wrong-password':'Wrong password — try again.','auth/invalid-credential':'Email or password is wrong — try again, or create an account.','auth/email-already-in-use':'This email already has an account — sign in instead.','auth/weak-password':'Password needs at least 6 characters.','auth/invalid-email':'That doesn’t look like an email address.','auth/too-many-requests':'Too many attempts — wait a minute and try again.'};return m[code]||('Sign-in failed ('+code+'). Try again.')}
+function showLogin(box,raw){
+  box.innerHTML='<div class="loginbox"><b>One free search used.</b><br><span class="hint">Sign in to keep searching — same account as the Planner and other Toolbox tools.</span>'
+  +'<input type="email" id="lg-email" placeholder="Email" autocomplete="email">'
+  +'<input type="password" id="lg-pass" placeholder="Password (6+ characters)" autocomplete="current-password">'
+  +'<div class="err" id="lg-err"></div>'
+  +'<button class="act" id="lg-in" style="margin-right:6px">Sign in</button><button class="act" id="lg-up" style="background:#fff;color:var(--accent);border:1px solid var(--accent)">Create account</button></div>';
+  const err=m=>{$('lg-err').textContent=m};
+  $('lg-in').addEventListener('click',()=>{err('');firebase.auth().signInWithEmailAndPassword($('lg-email').value.trim(),$('lg-pass').value).catch(e=>err(friendlyAuthErr(e.code)))});
+  $('lg-up').addEventListener('click',()=>{err('');const em=$('lg-email').value.trim(),pw=$('lg-pass').value;
+    if(pw.length<6){err('Password needs at least 6 characters.');return}
+    firebase.auth().createUserWithEmailAndPassword(em,pw).catch(e=>err(friendlyAuthErr(e.code)))});
+}
+function gatedSearch(raw){
+  const box=$('f-matches');
+  if(searchCount()>=1&&!fbUser){pendingSearch=raw;showLogin(box,raw);return}
+  bumpSearch();runSearch(raw);
+}
+try{if(typeof firebase!=='undefined'){firebase.initializeApp(firebaseConfig);
+  firebase.auth().onAuthStateChanged(u=>{fbUser=u||null;renderAuthline();
+    if(u&&pendingSearch){const q=pendingSearch;pendingSearch=null;bumpSearch();runSearch(q)}})}}catch(e){}
 function init(){
   DATA._byId={}; DATA.nodes.forEach(n=>DATA._byId[n.id]=n);
   const ss=new Set(); DATA.nodes.forEach(n=>(n.streams||[]).forEach(x=>ss.add(x)));
@@ -103,14 +147,15 @@ function init(){
   ['f-co','f-colcur','f-colpast','f-cls','f-stream','f-topn','f-labels'].forEach(id=>$(id).addEventListener('change',render));
   $('f-weight').addEventListener('input',()=>{$('wval').textContent=$('f-weight').value;render()});
   const sq=s=>(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ');
-  $('f-search').addEventListener('change',()=>{const raw=$('f-search').value,q=sq(raw).trim(),box=$('f-matches');box.innerHTML='';if(!q)return;const solid=v=>v.replace(/ /g,'');
+  $('f-search').addEventListener('change',()=>{gatedSearch($('f-search').value)});
+runSearch=function(raw){const q=sq(raw).trim(),box=$('f-matches');box.innerHTML='';if(!q)return;const solid=v=>v.replace(/ /g,'');
     let hits=DATA.nodes.filter(x=>{const nm=sq(x.name);return nm.includes(q)||solid(nm).includes(solid(q))});
     const firstKey=n=>{const p=sq(n.name).split(' ');return (p[0]||'')+'|'+sq(n.name)};
     hits.sort((a,b)=>firstKey(a)<firstKey(b)?-1:1);
     if(!hits.length){alert('No researcher matches "'+raw+'"');return}
     focusNode(hits[0].id);
     if(hits.length>1){box.innerHTML='<div class="hint">'+hits.length+' matches, ranked by first name — click to jump:</div>'+hits.slice(0,12).map(n=>'<a href="#" data-id="'+n.id+'" style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:#2f6fed;text-decoration:none;background:#fff">'+esc(n.name)+'</a>').join('')+(hits.length>12?'<div class="hint">…and '+(hits.length-12)+' more — type more of the name to narrow it down.</div>':'');
-      box.querySelectorAll('a[data-id]').forEach(a=>a.addEventListener('click',ev=>{ev.preventDefault();focusNode(a.getAttribute('data-id'))}))}});
+      box.querySelectorAll('a[data-id]').forEach(a=>a.addEventListener('click',ev=>{ev.preventDefault();focusNode(a.getAttribute('data-id'))}))}};
   $('btn-reset').addEventListener('click',()=>{cy&&cy.fit(null,40)});
   render();
 }
@@ -181,7 +226,16 @@ function showDetail(id){
   h+=`<div>${(n.streams||[]).map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`;
   const vc=n.venue_counts||{}; const vtot=Object.values(vc).reduce((x,y)=>x+y,0);
   h+=`<div style="margin-top:8px">${Object.entries(vc).map(([k,v])=>`<span class="vchip">${esc(k)} × ${v}</span>`).join('')}</div>`;
-  h+=`<div class="conn"><b>${vtot}</b> papers in these three journals · <b>${(n.cites_all||0).toLocaleString()}</b> career citations (OpenAlex)</div>`;
+  const wtot=n.works_all||0, share=wtot?Math.round(100*vtot/wtot):0;
+  const yrs=(n.year_first&&n.year_last)?(n.year_first===n.year_last?`${n.year_first}`:`${n.year_first}–${n.year_last}`):'';
+  const csrc=n.cites_src==='scholar'?'Google Scholar':'OpenAlex';
+  h+=`<div class="statgrid"><span class="stat"><b>${vtot}</b> papers in these 3 journals</span>`
+    +(wtot?`<span class="stat"><b>${wtot.toLocaleString()}</b> career works (${share}% here)</span>`:'')
+    +(yrs?`<span class="stat">publishing <b>${yrs}</b></span>`:'')
+    +`<span class="stat"><b>${(n.cites_all||0).toLocaleString()}</b> citations (${csrc})</span></div>`;
+  const sURL=n.scholar_url||('https://scholar.google.com/scholar?q='+encodeURIComponent('"'+n.name+'"'));
+  h+=`<div class="hint" style="margin-top:6px"><a href="${esc(sURL)}" target="_blank" rel="noopener">Verify on Google Scholar ↗</a></div>`;
+  if(n.ai_summary){h+=`<div class="aibox"><div class="ailab">AI-generated profile</div><div>${esc(n.ai_summary)}</div><div class="hint" style="margin-top:6px">Written by AI from this map's data and public sources — verify before citing.</div></div>`;}
   if(n.affiliations&&n.affiliations.length){
     const aff=n.affiliations.slice().sort((a,b)=>(Math.min(...(b.years||[0])))-(Math.min(...(a.years||[0]))));
     h+=`<h4>Institutions (OpenAlex affiliation history)</h4><ul>`+aff.map(a=>`<li>${esc(a.institution)} <span style="color:#5b6572">${esc(yrSpan(a.years))}</span></li>`).join('')+`</ul>`}
