@@ -33,7 +33,10 @@ h2.sec{font-family:"Caveat",cursive;font-weight:600;font-size:2em;color:var(--bl
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
 .colh{font-size:1.15em;margin:0 0 12px;color:var(--ink);font-weight:700;text-align:center}
 .colcards{display:grid;grid-template-columns:1fr;gap:14px}
-@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.arc-head{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:0 0 12px}
+.arc-head span{font-size:1.15em;font-weight:700;text-align:center}
+.arc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 26px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}.arc-grid{grid-template-columns:1fr}.arc-head{display:none}}
 .card{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--ink);background:var(--card);transition:transform .15s,box-shadow .15s,border-color .15s}
 .card:hover{border-color:var(--blue);box-shadow:0 4px 18px rgba(82,173,200,.18);transform:translateY(-3px)}
 .card .body{padding:16px 20px 18px;text-align:center}
@@ -59,10 +62,8 @@ footer .wrap{padding:22px;font-size:13px;color:var(--soft);text-align:center}
 <div class="srcgrid" id="srcgrid"><p class="loading">Loading sources&hellip;</p></div>
 
 <h2 class="sec">Past digests</h2>
-<div class="cols">
-  <div class="col"><h3 class="colh">The Wall Street Journal</h3><div class="colcards" id="col-wsj"><p class="loading">Loading digests&hellip;</p></div></div>
-  <div class="col"><h3 class="colh">The Economist</h3><div class="colcards" id="col-econ"><p class="loading">Loading digests&hellip;</p></div></div>
-</div>
+<div class="arc-head"><span>The Wall Street Journal</span><span>The Economist</span></div>
+<div class="arc-grid" id="arc-grid"><p class="loading">Loading digests&hellip;</p></div>
 </main>
 </div>
 <footer><div class="wrap">Signal &middot; daily digest &middot; summaries generated from public feed data; full articles live on the publisher's site.</div></footer>
@@ -121,25 +122,26 @@ function digestCard(it){
 }
 
 function renderArchive(items){
-  // Two columns — one per source — each ranked by date, most recent first.
-  var cols = {
-    wsj: document.getElementById("col-wsj"),
-    economist: document.getElementById("col-econ")
-  };
-  Object.keys(cols).forEach(function(src){
-    var box = cols[src];
-    if(!box) return;
-    box.innerHTML = "";
-    var mine = items
-      .filter(function(it){ return it.source === src; })
-      .sort(function(a,b){ return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
-    if(!mine.length){
-      var p = document.createElement("p");
-      p.className = "loading"; p.textContent = "No digests yet.";
-      box.appendChild(p);
-      return;
-    }
-    mine.forEach(function(it){ box.appendChild(digestCard(it)); });
+  // Date-aligned rows: same date shares a row, WSJ left, Economist right.
+  // A source with no digest that day leaves its cell empty.
+  var grid = document.getElementById("arc-grid");
+  grid.innerHTML = "";
+  var byDate = {};
+  items.forEach(function(it){
+    byDate[it.date] = byDate[it.date] || {};
+    byDate[it.date][it.source] = it;
+  });
+  var dates = Object.keys(byDate).sort().reverse();
+  if(!dates.length){
+    var p = document.createElement("p");
+    p.className = "loading"; p.textContent = "No digests yet.";
+    grid.appendChild(p);
+    return;
+  }
+  dates.forEach(function(d){
+    var row = byDate[d];
+    grid.appendChild(row.wsj ? digestCard(row.wsj) : document.createElement("div"));
+    grid.appendChild(row.economist ? digestCard(row.economist) : document.createElement("div"));
   });
 }
 
