@@ -4,47 +4,54 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Signal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#52adc8;--ink:#2b2f33;--soft:#5b636b;--line:#e3e6e8;--bg:#f7f8f8;}
+:root{--blue:#52adc8;--blue-deep:#3d93ae;--ink:#2f2b25;--soft:#6e6659;--line:#e3d8c2;--bg:#f9f3e6;--card:#fffdf8;}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.75}
-.topbar{border-bottom:1px solid var(--line);background:var(--bg)}
-.topbar .wrap{max-width:1180px;margin:0 auto;padding:12px 22px}
+body{margin:0;font-family:"Source Serif 4",Georgia,"Times New Roman",serif;color:var(--ink);background:var(--bg);line-height:1.75}
+.topbar{border-bottom:1px solid var(--line)}
+.topbar .wrap{max-width:760px;margin:0 auto;padding:12px 22px}
 .topbar a{color:var(--blue);text-decoration:none;font-weight:600}
-.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
-main{padding:34px 0 80px}
-.hero h1{font-size:2.2em;margin:.2em 0 .1em}
-.hero .sub{font-size:1.05em;color:var(--soft);margin:0 0 .6em}
-.hero .byline{font-size:.95em;color:var(--soft);margin:0 0 1.6em;max-width:62em}
-h2.sec{font-size:1.3em;margin:1.6em 0 .8em}
-.srcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px;margin-bottom:10px}
-.srccard{border:1px solid var(--line);border-radius:12px;padding:20px 22px;background:#fff}
-.srccard .name{font-weight:700;font-size:1.25em;margin:0 0 4px}
-.srccard .meta{color:var(--soft);font-size:.92em;margin:0 0 12px}
-.srccard .links a{color:var(--blue);font-weight:600;text-decoration:none;margin-right:14px}
-.srccard .links a:hover{text-decoration:underline}
+.topbar a:hover{color:var(--blue-deep)}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+main{padding:52px 0 90px}
+.hero{text-align:center}
+.hero .dateline{font-style:italic;color:var(--soft);margin:0 0 .4em;font-size:1em}
+.hero h1{font-family:"Caveat",cursive;font-weight:700;font-size:4.4em;line-height:1.1;color:var(--blue);margin:0 0 .25em}
+.hero .sub{font-size:1.12em;margin:0 auto .6em;max-width:40em}
+.hero .byline{font-size:.98em;color:var(--soft);margin:0 auto 2em;max-width:42em}
+h2.sec{font-family:"Caveat",cursive;font-weight:600;font-size:2em;color:var(--blue);text-align:center;margin:1.8em 0 .8em}
+.srcgrid{display:grid;grid-template-columns:1fr;gap:18px;margin-bottom:10px}
+.srccard{border:1px solid var(--line);border-radius:14px;padding:22px 26px;background:var(--card)}
+.srccard .name{font-weight:700;font-size:1.3em;margin:0 0 4px}
+.srccard .meta{color:var(--soft);font-size:.95em;margin:0 0 12px}
+.srccard .links a{color:var(--blue);font-weight:600;text-decoration:none;margin-right:16px}
+.srccard .links a:hover{color:var(--blue-deep);text-decoration:underline}
 .srccard .links .ext{font-weight:400;color:var(--soft)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
-.colh{font-size:1.05em;margin:0 0 12px;color:var(--ink)}
-.colcards{display:grid;grid-template-columns:1fr;gap:18px}
+.colh{font-size:1.15em;margin:0 0 12px;color:var(--ink);font-weight:700;text-align:center}
+.colcards{display:grid;grid-template-columns:1fr;gap:14px}
 @media (max-width:760px){.cols{grid-template-columns:1fr}}
-.card{display:block;border:1px solid var(--line);border-radius:12px;overflow:hidden;text-decoration:none;color:var(--ink);background:#fff;transition:transform .15s,box-shadow .15s,border-color .15s}
+.card{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--ink);background:var(--card);transition:transform .15s,box-shadow .15s,border-color .15s}
 .card:hover{border-color:var(--blue);box-shadow:0 4px 18px rgba(82,173,200,.18);transform:translateY(-3px)}
-.card .body{padding:16px 18px 18px}
-.card .date{font-weight:700;font-size:1.1em;margin:0 0 4px}
-.card .tag{display:inline-block;font-size:.78em;color:var(--blue);border:1px solid var(--blue);border-radius:20px;padding:1px 10px;margin-bottom:8px}
+.card .body{padding:16px 20px 18px;text-align:center}
+.card .date{font-weight:700;font-size:1.12em;margin:0 0 4px}
+.card .tag{display:inline-block;font-size:.8em;color:var(--blue);border:1px solid var(--blue);border-radius:20px;padding:1px 12px;margin-bottom:8px}
 .card .desc{color:var(--soft);font-size:.92em;margin:0}
-.loading{color:var(--soft)}
-footer{border-top:1px solid var(--line);background:var(--bg);margin-top:40px}
-footer .wrap{padding:22px;font-size:13px;color:var(--soft)}
+.loading{color:var(--soft);text-align:center}
+footer{border-top:1px solid var(--line);margin-top:40px}
+footer .wrap{padding:22px;font-size:13px;color:var(--soft);text-align:center}
 </style>
 </head>
 <body>
 <div class="topbar"><div class="wrap"><a href="/toolbox/">&larr; Back to Toolbox</a></div></div>
 <div class="wrap">
 <main>
-<div class="hero"><h1>Signal</h1>
+<div class="hero">
+<p class="dateline" id="dateline">Daily digest</p>
+<h1>Signal</h1>
 <p class="sub">A daily digest of the outlets I subscribe to &mdash; skim the day in plain English, then click through to read the originals.</p>
 <p class="byline">Every morning I pull the latest from <strong>The Wall Street Journal</strong> and <strong>The Economist</strong>, pick the stories that matter across AI &amp; tech, business &amp; markets, and economics &amp; policy, and write a short summary of each &mdash; what happened and why it matters. Each summary links to the original article, which you can read in full with your own subscription.</p></div>
 
@@ -63,14 +70,20 @@ footer .wrap{padding:22px;font-size:13px;color:var(--soft)}
 var REPO = "xinyuan-wei-xw/xinyuan-wei-xw.github.io";
 var DIR = "lab/news-watcher";
 var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+// Dateline: today's date, memo style.
+(function(){
+  var d = new Date();
+  document.getElementById("dateline").textContent =
+    MONTHS[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+})();
 // Baked-in fallback so the page works even if the API/files are unreachable.
 var FALLBACK_LATEST = {
-  "wsj": {"date":"20260928","count":12,"file":"wsj-20260928.html","site":"https://www.wsj.com","name":"The Wall Street Journal"},
-  "economist": {"date":"20260928","count":2,"file":"economist-20260928.html","site":"https://www.economist.com","name":"The Economist"}
+  "wsj": {"date":"20261011","count":14,"file":"wsj-20261011.html","site":"https://www.wsj.com","name":"The Wall Street Journal"},
+  "economist": {"date":"20261009","count":8,"file":"economist-20261009.html","site":"https://www.economist.com","name":"The Economist"}
 };
 var FALLBACK_ARCHIVE = [
-  {file:"wsj-20260928.html", source:"wsj", date:"20260928"},
-  {file:"economist-20260928.html", source:"economist", date:"20260928"}
+  {file:"wsj-20261011.html", source:"wsj", date:"20261011"},
+  {file:"economist-20261009.html", source:"economist", date:"20261009"}
 ];
 
 function fmt(d){ return MONTHS[parseInt(d.slice(4,6),10)-1] + " " + parseInt(d.slice(6,8),10) + ", " + d.slice(0,4); }
@@ -91,7 +104,6 @@ function renderSources(latest){
     a2.className = "ext"; a2.textContent = s.site.replace("https://www.","") + " ↗";
     links.appendChild(a1); links.appendChild(a2);
     div.appendChild(name); div.appendChild(meta); div.appendChild(links);
-    grid.appendChild(div);
   });
 }
 
