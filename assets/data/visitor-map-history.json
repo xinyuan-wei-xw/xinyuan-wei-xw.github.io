@@ -99,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 40
+      "sessions": 43
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -266,7 +266,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 65
+      "sessions": 67
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -383,6 +383,17 @@
       "country_name": "United States",
       "region": "New York",
       "sessions": 2
+    },
+    "US|New York|New York": {
+      "city": "New York",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 40.751925,
+        "longitude": -73.981963
+      },
+      "region": "New York",
+      "sessions": 1
     },
     "US|North Carolina|Wilmington": {
       "city": "Wilmington",
@@ -633,7 +644,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 102
+      "sessions": 105
     },
     "TW": {
       "name": "Taiwan",
@@ -641,11 +652,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 178
+      "sessions": 181
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-09",
+  "last_end": "2026-10-10",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -700,7 +711,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 40
+      "sessions": 43
     },
     "SG|(not set)": {
       "country": "SG",
@@ -742,7 +753,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 130
+      "sessions": 132
     },
     "US|Illinois": {
       "country": "US",
@@ -766,7 +777,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "New York",
-      "sessions": 2
+      "sessions": 3
     },
     "US|North Carolina": {
       "country": "US",
@@ -826,6 +837,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 289,
+  "total_sessions": 295,
   "version": 1
 }
