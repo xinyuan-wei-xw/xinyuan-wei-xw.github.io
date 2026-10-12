@@ -99,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 43
+      "sessions": 46
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -195,6 +195,13 @@
       "region": "California",
       "sessions": 1
     },
+    "US|Florida|": {
+      "city": "",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Florida",
+      "sessions": 1
+    },
     "US|Florida|Daytona Beach": {
       "city": "Daytona Beach",
       "country": "US",
@@ -266,7 +273,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 67
+      "sessions": 69
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -357,7 +364,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Iowa|Council Bluffs": {
       "city": "Council Bluffs",
@@ -368,7 +375,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Louisiana|Mandeville": {
       "city": "Mandeville",
@@ -644,7 +651,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 105
+      "sessions": 108
     },
     "TW": {
       "name": "Taiwan",
@@ -652,11 +659,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 181
+      "sessions": 186
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-10",
+  "last_end": "2026-10-11",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -711,7 +718,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 43
+      "sessions": 46
     },
     "SG|(not set)": {
       "country": "SG",
@@ -747,25 +754,25 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Georgia": {
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 132
+      "sessions": 134
     },
     "US|Illinois": {
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Iowa": {
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Louisiana": {
       "country": "US",
@@ -837,6 +844,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 295,
+  "total_sessions": 303,
   "version": 1
 }
