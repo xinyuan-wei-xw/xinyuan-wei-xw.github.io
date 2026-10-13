@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>赞美日记 · Xinyuan’s Secret Garden</title>
+<title>赞美 · 显化日记 · Xinyuan’s Secret Garden</title>
 <link rel="stylesheet" href="/xwei/xwei.css">
 <style>
 .dnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 4px}
@@ -29,6 +29,15 @@
 .pitem.on{border-color:#e8cf9f;background:#fffaf2}
 .pitem b{font-size:14px;color:var(--ink)}
 .pitem span{display:block;font-size:12.5px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.tabs{display:flex;gap:8px;margin:14px 0 4px}
+.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 20px;font-size:14px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mfield{margin-bottom:16px}
+.mfield label{display:block;font-size:13px;font-weight:700;color:var(--soft);margin-bottom:6px;letter-spacing:.03em}
+.mfield textarea{min-height:70px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;width:100%;box-sizing:border-box;font-family:inherit;color:var(--ink)}
+.mfield textarea:focus{outline:none;border-color:#e8cf9f}
+.mdone{display:flex;align-items:center;gap:6px;font-size:13.5px;cursor:pointer}
+.pitem .donebadge{color:#2f9e44;font-weight:700}
 </style>
 </head>
 <body>
@@ -87,7 +96,10 @@ var VERSES = [
   {t:"But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.", r:"Galatians 5:22-23", z:"圣灵所结的果子，就是仁爱、喜乐、和平、忍耐、恩慈、良善、信实、温柔、节制。", zr:"加拉太书 5:22-23", v:[["forbearance","fɔːˈbeərəns","忍耐"],["faithfulness","ˈfeɪθfʊlnəs","信实"],["gentleness","ˈdʒentlnəs","温柔"],["self-control","ˌself kənˈtrəʊl","节制，自制"]]}
 ];
 
-var praise = {}, curKey = "", saveT = null;
+var praise = {}, manifest = {}, curKey = "", saveT = null, mSaveT = null;
+var curTab = "praise";
+try{ curTab = localStorage.getItem("praise_tab") || "praise"; }catch(e){}
+if(curTab !== "manifest") curTab = "praise";
 var $ = function(s){ return document.querySelector(s); };
 var WK = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
 
@@ -163,8 +175,12 @@ function buildUI(){
         '  }\n' +
         '}</pre>' +
       '</div>' +
-      '<h1 class="page">🙏 赞美日记</h1>' +
+      '<h1 class="page">🙏 赞美 · ✨ 显化</h1>' +
       '<p class="sub">每天打开，都是新的一页。</p>' +
+      '<div class="tabs">' +
+        '<button class="tab" id="tabPraise">🙏 赞美</button>' +
+        '<button class="tab" id="tabManifest">✨ 显化</button>' +
+      '</div>' +
       '<div class="dnav">' +
         '<button class="btn small" id="prevDay">‹ 前一天</button>' +
         '<button class="btn small" id="todayBtn">回到今天</button>' +
@@ -172,6 +188,7 @@ function buildUI(){
         '<input type="date" id="datePick">' +
       '</div>' +
       '<div class="dateTitle" id="dateTitle"></div>' +
+      '<div id="praisePane">' +
       '<div class="verse" id="verseBox"></div>' +
       '<div class="peditor">' +
         '<textarea id="diaryText" placeholder="今天，值得赞美的事是……"></textarea>' +
@@ -183,6 +200,28 @@ function buildUI(){
       '<h3 style="margin:26px 0 6px">往日日记</h3>' +
       '<div class="plist" id="pastList"></div>' +
       '<p class="sub" id="pastEmpty">还没有写过日记。今天就是第一天。</p>' +
+      '</div>' +
+      '<div id="manifestPane" style="display:none">' +
+      '<p class="sub">写下正在显化的愿望——用已经实现的语气描述它，然后放手。</p>' +
+      '<div class="peditor">' +
+        '<div class="mfield"><label>🌱 我正在显化的愿望</label>' +
+          '<textarea id="mDesire" rows="2" placeholder="写下你正在显化的愿望……"></textarea></div>' +
+        '<div class="mfield"><label>🌅 可视化 —— 仿佛已经实现</label>' +
+          '<textarea id="mVision" placeholder="闭上眼睛，描述你看到的画面、听到的声音、感受到的心情……用现在时"></textarea></div>' +
+        '<div class="mfield"><label>👣 今日行动 —— 为它做的一小步</label>' +
+          '<textarea id="mAction" rows="2" placeholder="今天能为它做的一小步是……"></textarea></div>' +
+        '<div class="mfield"><label>🍃 放手 —— 交托</label>' +
+          '<textarea id="mRelease" rows="2" placeholder="我把时间表和结果交托，不抓取……"></textarea></div>' +
+        '<div class="prow">' +
+          '<button class="btn primary small" id="mSaveBtn" style="width:auto">保存</button>' +
+          '<label class="mdone"><input type="checkbox" id="mDone"> 这一条已经显化了 ✓</label>' +
+          '<span class="saved" id="mSaveState"></span>' +
+        '</div>' +
+      '</div>' +
+      '<h3 style="margin:26px 0 6px">往日显化</h3>' +
+      '<div class="plist" id="mPastList"></div>' +
+      '<p class="sub" id="mPastEmpty">还没有写下愿望。今天就是第一天。</p>' +
+      '</div>' +
     '</div>';
 }
 
@@ -202,8 +241,13 @@ function renderPast(){
   });
 }
 function render(){
-  var v = verseFor(curKey);
   $("#dateTitle").textContent = fmtTitle(curKey);
+  $("#datePick").value = curKey;
+  $("#datePick").max = todayKey();
+  $("#nextDay").disabled = curKey >= todayKey();
+  $("#todayBtn").disabled = curKey === todayKey();
+  if(curTab === "manifest"){ renderManifest(); return; }
+  var v = verseFor(curKey);
   $("#verseBox").innerHTML =
     '<div class="vlab">今日经文 · 中英对照</div>' +
     '<div class="vtext">' + hlVerse(v) + '</div>' +
@@ -212,12 +256,68 @@ function render(){
     vocabHTML(v);
   var e = praise[curKey];
   $("#diaryText").value = e ? (e.text || "") : "";
-  $("#datePick").value = curKey;
-  $("#datePick").max = todayKey();
-  $("#nextDay").disabled = curKey >= todayKey();
-  $("#todayBtn").disabled = curKey === todayKey();
   $("#saveState").textContent = e && e.updated ? "上次保存 " + stamp(e.updated) : "";
   renderPast();
+}
+function switchTab(t){
+  curTab = t;
+  try{ localStorage.setItem("praise_tab", t); }catch(e){}
+  $("#tabPraise").classList.toggle("on", t === "praise");
+  $("#tabManifest").classList.toggle("on", t === "manifest");
+  $("#praisePane").style.display = t === "praise" ? "" : "none";
+  $("#manifestPane").style.display = t === "manifest" ? "" : "none";
+  render();
+}
+function mEntry(){ return manifest[curKey] || {}; }
+function mHas(e){ return e && ((e.desire || "").trim() || (e.vision || "").trim() || (e.action || "").trim() || (e.release || "").trim()); }
+function renderManifest(){
+  var e = mEntry();
+  $("#mDesire").value = e.desire || "";
+  $("#mVision").value = e.vision || "";
+  $("#mAction").value = e.action || "";
+  $("#mRelease").value = e.release || "";
+  $("#mDone").checked = !!e.done;
+  $("#mSaveState").textContent = e.updated ? "上次保存 " + stamp(e.updated) : "";
+  renderMPast();
+}
+function renderMPast(){
+  var keys = Object.keys(manifest).filter(function(k){ return mHas(manifest[k]); }).sort().reverse();
+  var box = $("#mPastList"); box.innerHTML = "";
+  $("#mPastEmpty").style.display = keys.length ? "none" : "";
+  keys.forEach(function(k){
+    var e = manifest[k];
+    var first = ((e.desire || "").split("\n")[0] || (e.vision || "").split("\n")[0] || "").slice(0, 60);
+    var b = document.createElement("button");
+    b.className = "pitem" + (k === curKey ? " on" : "");
+    b.innerHTML = "<b>" + fmtShort(k) + (k === todayKey() ? "（今天）" : "") +
+      (e.done ? ' <span class="donebadge">✓ 已显化</span>' : "") + "</b><span>" + XW.esc(first) + "</span>";
+    b.addEventListener("click", function(){ goDay(k); });
+    box.appendChild(b);
+  });
+}
+function collectManifest(){
+  manifest[curKey] = {
+    desire: $("#mDesire").value,
+    vision: $("#mVision").value,
+    action: $("#mAction").value,
+    release: $("#mRelease").value,
+    done: $("#mDone").checked,
+    updated: Date.now()
+  };
+}
+function persistManifest(now){
+  var doSave = function(){
+    XW.save("manifest", manifest).then(function(){
+      $("#saved").textContent = "Saved ✓ " + stamp(Date.now());
+      $("#mSaveState").textContent = "已保存 ✓ " + stamp(Date.now());
+    }).catch(function(){
+      $("#saved").textContent = "没存上 — 检查一下网络";
+      $("#mSaveState").textContent = "没存上 — 检查一下网络，再点一次保存";
+    });
+  };
+  if(now){ clearTimeout(mSaveT); doSave(); return; }
+  clearTimeout(mSaveT);
+  mSaveT = setTimeout(doSave, 900);
 }
 function goDay(k){ curKey = k; render(); window.scrollTo({top: 0, behavior: "smooth"}); }
 
@@ -239,13 +339,17 @@ function persist(now){
 XW.boot(function(){
   curKey = todayKey();
   buildUI();
+  switchTab(curTab);
   XW.load().then(function(data){
     praise = (data && data.praise && typeof data.praise === "object") ? data.praise : {};
+    manifest = (data && data.manifest && typeof data.manifest === "object") ? data.manifest : {};
     render();
   }).catch(function(){
     $("#saved").textContent = "没加载出来 — 检查一下网络";
     render();
   });
+  $("#tabPraise").addEventListener("click", function(){ switchTab("praise"); });
+  $("#tabManifest").addEventListener("click", function(){ switchTab("manifest"); });
   $("#diaryText").addEventListener("input", function(){
     praise[curKey] = { text: $("#diaryText").value, updated: Date.now() };
     renderPast();
@@ -254,6 +358,17 @@ XW.boot(function(){
   $("#saveBtn").addEventListener("click", function(){
     praise[curKey] = { text: $("#diaryText").value, updated: Date.now() };
     persist(true);
+  });
+  ["mDesire", "mVision", "mAction", "mRelease"].forEach(function(id){
+    $("#" + id).addEventListener("input", function(){
+      collectManifest(); renderMPast(); persistManifest(false);
+    });
+  });
+  $("#mDone").addEventListener("change", function(){
+    collectManifest(); renderMPast(); persistManifest(false);
+  });
+  $("#mSaveBtn").addEventListener("click", function(){
+    collectManifest(); persistManifest(true);
   });
   $("#prevDay").addEventListener("click", function(){ goDay(shiftKey(curKey, -1)); });
   $("#nextDay").addEventListener("click", function(){ if(curKey < todayKey()) goDay(shiftKey(curKey, 1)); });
