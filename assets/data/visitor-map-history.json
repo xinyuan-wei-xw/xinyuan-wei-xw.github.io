@@ -99,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 46
+      "sessions": 49
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -160,7 +160,7 @@
         "longitude": -118.181926
       },
       "region": "California",
-      "sessions": 3
+      "sessions": 4
     },
     "US|California|San Francisco": {
       "city": "San Francisco",
@@ -193,6 +193,13 @@
         "longitude": -122.4142
       },
       "region": "California",
+      "sessions": 1
+    },
+    "US|Connecticut|Mansfield": {
+      "city": "Mansfield",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Connecticut",
       "sessions": 1
     },
     "US|Florida|": {
@@ -273,7 +280,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 69
+      "sessions": 72
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -582,7 +589,7 @@
         "longitude": -77.4827
       },
       "region": "Virginia",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Virginia|Reston": {
       "city": "Reston",
@@ -624,12 +631,19 @@
       "region": "Washington",
       "sessions": 3
     },
+    "US|West Virginia|Oak Hill": {
+      "city": "Oak Hill",
+      "country": "US",
+      "country_name": "United States",
+      "region": "West Virginia",
+      "sessions": 1
+    },
     "US||": {
       "city": "",
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 1
+      "sessions": 2
     }
   },
   "countries": {
@@ -651,7 +665,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 108
+      "sessions": 111
     },
     "TW": {
       "name": "Taiwan",
@@ -659,11 +673,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 186
+      "sessions": 194
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-11",
+  "last_end": "2026-10-12",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -718,7 +732,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 46
+      "sessions": 49
     },
     "SG|(not set)": {
       "country": "SG",
@@ -736,7 +750,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 1
+      "sessions": 2
     },
     "US|(not set)": {
       "country": "US",
@@ -748,7 +762,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 11
+      "sessions": 12
+    },
+    "US|Connecticut": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Connecticut",
+      "sessions": 1
     },
     "US|Florida": {
       "country": "US",
@@ -760,7 +780,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 134
+      "sessions": 137
     },
     "US|Illinois": {
       "country": "US",
@@ -832,18 +852,24 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Washington": {
       "country": "US",
       "country_name": "United States",
       "region": "Washington",
       "sessions": 5
+    },
+    "US|West Virginia": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "West Virginia",
+      "sessions": 1
     }
   },
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 303,
+  "total_sessions": 314,
   "version": 1
 }
