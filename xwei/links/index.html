@@ -17,6 +17,9 @@
 .lops .linkbtn:hover{color:var(--blue)}
 .ledit input{margin-bottom:8px}
 .ledit .row{display:flex;gap:8px}
+.urlrow{display:flex;gap:8px}
+.urlrow input{flex:1}
+.urlrow .btn{width:auto;margin-top:0;white-space:nowrap;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -51,8 +54,9 @@ function buildUI(){
       '<div id="list"></div>' +
       '<div class="panel">' +
         '<h3 style="margin:0 0 10px">＋ 添加链接</h3>' +
+        '<div class="fld"><span>网址（粘贴后点 ✨ 自动填好名字）</span>' +
+          '<div class="urlrow"><input type="text" id="fUrl" placeholder="https://…" inputmode="url"><button class="btn small" id="magicBtn" title="自动读取标题">✨</button></div></div>' +
         '<div class="fld"><span>名称</span><input type="text" id="fTitle" placeholder="例如：📤 上传 Signal 文件"></div>' +
-        '<div class="fld"><span>网址</span><input type="text" id="fUrl" placeholder="https://…" inputmode="url"></div>' +
         '<div class="fld"><span>备注（可选）</span><input type="text" id="fNote" placeholder="这个链接是干嘛的"></div>' +
         '<button class="btn" id="addBtn">添加</button>' +
       '</div>' +
@@ -60,6 +64,57 @@ function buildUI(){
     '</div>';
   $("#addBtn").addEventListener("click", addLink);
   $("#fUrl").addEventListener("keydown", function(e){ if(e.key === "Enter") addLink(); });
+  $("#magicBtn").addEventListener("click", magicFill);
+  $("#fUrl").addEventListener("paste", function(){ setTimeout(magicFill, 60); });
+}
+
+function decodeEnt(s){
+  var ta = document.createElement("textarea");
+  ta.innerHTML = s;
+  return ta.value;
+}
+
+// Paste a URL, tap ✨ — fetch the page title (+ description) and fill the form.
+// Uses a public CORS proxy; if it fails, fall back to manual entry.
+function magicFill(){
+  var u = normUrl($("#fUrl").value);
+  if(!u){ $("#saved").textContent = "先粘贴网址"; return; }
+  $("#fUrl").value = u;
+  // GitHub upload pages need login, so a proxy can't read their real title —
+  // name them from the path instead (e.g. "📤 上传文件到 lab/ai-news").
+  var gm = u.match(/^https?:\/\/github\.com\/[^/]+\/[^/]+\/upload\/[^/]+\/(.+?)\/?$/i);
+  if(gm){
+    $("#fTitle").value = "📤 上传文件到 " + decodeURIComponent(gm[1]);
+    $("#saved").textContent = "已填好，检查一下再添加 ✓";
+    return;
+  }
+  var btn = $("#magicBtn");
+  btn.disabled = true; btn.textContent = "…";
+  $("#saved").textContent = "正在读取标题…";
+  var finished = false;
+  function done(title, desc, msg){
+    if(finished) return; finished = true;
+    clearTimeout(timer);
+    btn.disabled = false; btn.textContent = "✨";
+    if(title) $("#fTitle").value = title;
+    if(desc && !$("#fNote").value) $("#fNote").value = desc.slice(0, 120);
+    $("#saved").textContent = msg || (title ? "已填好，检查一下再添加 ✓" : "没能自动读取，手动填一下");
+  }
+  var timer = setTimeout(function(){ done("", "", "超时了，手动填一下吧"); }, 15000);
+  fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(u))
+    .then(function(r){ if(!r.ok) throw new Error("bad"); return r.text(); })
+    .then(function(html){
+      var title = "", desc = "";
+      var tm = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+      if(tm) title = decodeEnt(tm[1]).replace(/\s+/g, " ").trim();
+      var dm = html.match(/<meta[^>]+name=["']description["'][^>]*>/i);
+      if(dm){
+        var cm = dm[0].match(/content=(["'])([\s\S]*?)\1/i);
+        if(cm) desc = decodeEnt(cm[2]).replace(/\s+/g, " ").trim();
+      }
+      done(title, desc);
+    })
+    .catch(function(){ done("", "", "没能自动读取，手动填一下"); });
 }
 
 function normUrl(u){
