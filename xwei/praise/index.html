@@ -204,7 +204,7 @@ function buildUI(){
       '<p class="sub" id="pastEmpty">还没有写过日记。今天就是第一天。</p>' +
       '</div>' +
       '<div id="manifestPane" style="display:none">' +
-      '<p class="sub">意识 → 行为 → 结果。每天 10 分钟：早晨写下身份、愿景和行动，晚上复盘与感恩。</p>' +
+      '<p class="sub">意识 → 行为 → 结果。每天 10 分钟：早晨写下身份、愿景和行动，晚上复盘。感恩的部分在 🙏 赞美 里写。</p>' +
       '<div class="peditor">' +
         '<div class="mfield"><label>🌱 01 · 我正在成为谁</label>' +
           '<textarea id="mIdentity" rows="2" placeholder="我正在成为一个____的人……（例如：独立、自律、有创造力的研究者）"></textarea></div>' +
@@ -214,13 +214,9 @@ function buildUI(){
           '<input class="mline" id="mAct1" placeholder="① ……">' +
           '<input class="mline" id="mAct2" placeholder="② ……">' +
           '<input class="mline" id="mAct3" placeholder="③ ……"></div>' +
-        '<div class="mfield"><label>🙏 04 · 今天值得感恩的三件事</label>' +
-          '<input class="mline" id="mGrat1" placeholder="① ……">' +
-          '<input class="mline" id="mGrat2" placeholder="② ……">' +
-          '<input class="mline" id="mGrat3" placeholder="③ ……"></div>' +
-        '<div class="mfield"><label>🌙 05 · 晚间复盘</label>' +
+        '<div class="mfield"><label>🌙 04 · 晚间复盘</label>' +
           '<textarea id="mReflect" placeholder="今天完成了什么？遇到了什么障碍？明天如何改进？"></textarea></div>' +
-        '<div class="mfield"><label>💫 06 · 给自己的积极暗示</label>' +
+        '<div class="mfield"><label>💫 05 · 给自己的积极暗示</label>' +
           '<textarea id="mAffirm" rows="2" placeholder="例如：我不需要一天完成所有目标，但我可以每天朝目标前进一步。"></textarea></div>' +
         '<div class="prow">' +
           '<button class="btn primary small" id="mSaveBtn" style="width:auto">保存</button>' +
@@ -284,16 +280,13 @@ function mArr(e, k){ var a = (e && e[k]) || []; return [a[0] || "", a[1] || "", 
 function mHas(e){
   if(!e) return false;
   if((e.identity || "").trim() || (e.vision || "").trim() || (e.reflect || "").trim() || (e.affirm || "").trim()) return true;
-  return ["actions", "gratitude"].some(function(k){
-    return ((e[k] || []).join("")).trim();
-  });
+  return ((e.actions || []).join("")).trim() ? true : false;
 }
 function renderManifest(){
-  var e = mEntry(), a = mArr(e, "actions"), g = mArr(e, "gratitude");
+  var e = mEntry(), a = mArr(e, "actions");
   $("#mIdentity").value = mVal(e, "identity");
   $("#mVision").value = mVal(e, "vision");
   $("#mAct1").value = a[0]; $("#mAct2").value = a[1]; $("#mAct3").value = a[2];
-  $("#mGrat1").value = g[0]; $("#mGrat2").value = g[1]; $("#mGrat3").value = g[2];
   $("#mReflect").value = mVal(e, "reflect");
   $("#mAffirm").value = mVal(e, "affirm");
   $("#mDone").checked = !!e.done;
@@ -320,7 +313,6 @@ function collectManifest(){
     identity: $("#mIdentity").value,
     vision: $("#mVision").value,
     actions: [$("#mAct1").value, $("#mAct2").value, $("#mAct3").value],
-    gratitude: [$("#mGrat1").value, $("#mGrat2").value, $("#mGrat3").value],
     reflect: $("#mReflect").value,
     affirm: $("#mAffirm").value,
     done: $("#mDone").checked,
@@ -381,7 +373,7 @@ XW.boot(function(){
     praise[curKey] = { text: $("#diaryText").value, updated: Date.now() };
     persist(true);
   });
-  ["mIdentity", "mVision", "mAct1", "mAct2", "mAct3", "mGrat1", "mGrat2", "mGrat3", "mReflect", "mAffirm"].forEach(function(id){
+  ["mIdentity", "mVision", "mAct1", "mAct2", "mAct3", "mReflect", "mAffirm"].forEach(function(id){
     $("#" + id).addEventListener("input", function(){
       collectManifest(); renderMPast(); persistManifest(false);
     });
