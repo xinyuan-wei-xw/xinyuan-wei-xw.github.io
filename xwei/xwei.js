@@ -110,7 +110,8 @@ const XW = (() => {
     {em: "🏠", name: "Digital Home", desc: "Imagining, and slowly building, my home of the future.", href: "/xwei/house/"},
     {em: "👯", name: "Digital Twins", desc: "Animated GIF stickers made from my own photos.", href: "/xwei/stickers/"},
     {em: "🌿", name: "My Life in a Few Years?", desc: "A sketch of the life I want. Add a line whenever it gets clearer.", href: "/xwei/life/"},
-    {em: "✍️", name: "Writing Guide", desc: "How to organize and write a research paper — from research problem to proofs. With my saved resources and sources.", href: "/xwei/writing/"}
+    {em: "✍️", name: "Writing Guide", desc: "How to organize and write a research paper — from research problem to proofs. With my saved resources and sources.", href: "/xwei/writing/"},
+    {em: "🔗", name: "常用链接", desc: "每天要打开的页面：上传链接、常用后台，一点就到。", href: "/xwei/links/"}
   ];
 
   function doc(){ return db.collection("xwei").doc(user.uid); }
