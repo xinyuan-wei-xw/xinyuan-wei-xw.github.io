@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>常用链接 · Xinyuan’s Secret Garden</title>
+<link rel="stylesheet" href="/xwei/xwei.css">
+<style>
+.lcard{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
+.lcard:hover{border-color:var(--sky)}
+.lmain{flex:1;text-decoration:none;color:var(--ink);min-width:0}
+.lt{display:block;font-size:16px;font-weight:700}
+.ln{display:block;font-size:13px;color:var(--soft);margin-top:2px;word-break:break-all}
+.lops{display:flex;gap:2px;flex-shrink:0}
+.lops .linkbtn{color:var(--soft);font-size:15px;padding:6px}
+.lops .linkbtn:hover{color:var(--blue)}
+.ledit input{margin-bottom:8px}
+.ledit .row{display:flex;gap:8px}
+</style>
+</head>
+<body>
+<div id="gate"></div>
+<div id="app" style="display:none"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script src="/xwei/xwei.js"></script>
+<script>
+var SEED = [
+  {t: "📤 上传 AI News 文件",
+   u: "https://github.com/xinyuan-wei-xw/xinyuan-wei-xw.github.io/upload/master/lab/ai-news",
+   n: "每天上传 AI News digest 文件 — 打开就是上传页面"}
+];
+var links = null, saveT = null;
+var $ = function(s){ return document.querySelector(s); };
+
+function buildUI(){
+  $("#app").innerHTML =
+    '<div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0">' +
+      '<a href="/xwei/" style="text-decoration:none">← Secret Garden</a>' +
+      '<span class="brand">🔗 常用链接</span><span class="sp"></span>' +
+      '<span class="saved" id="saved"></span>' +
+      '<button class="linkbtn" id="signOut">Sign out</button>' +
+    '</div></div>' +
+    '<div class="wrap">' +
+      '<h1 class="page">常用链接</h1>' +
+      '<p class="sub">每天要打开的页面都放在这里，点一下就到。随时可以添加、修改、删除。</p>' +
+      '<div id="list"></div>' +
+      '<div class="panel">' +
+        '<h3 style="margin:0 0 10px">＋ 添加链接</h3>' +
+        '<div class="fld"><span>名称</span><input type="text" id="fTitle" placeholder="例如：📤 上传 Signal 文件"></div>' +
+        '<div class="fld"><span>网址</span><input type="text" id="fUrl" placeholder="https://…" inputmode="url"></div>' +
+        '<div class="fld"><span>备注（可选）</span><input type="text" id="fNote" placeholder="这个链接是干嘛的"></div>' +
+        '<button class="btn" id="addBtn">添加</button>' +
+      '</div>' +
+      '<footer>Private — only visible to you.</footer>' +
+    '</div>';
+  $("#addBtn").addEventListener("click", addLink);
+  $("#fUrl").addEventListener("keydown", function(e){ if(e.key === "Enter") addLink(); });
+}
+
+function normUrl(u){
+  u = (u || "").trim();
+  if(u && !/^[a-z][a-z0-9+.-]*:/i.test(u)) u = "https://" + u;
+  return u;
+}
+
+function persist(){
+  clearTimeout(saveT);
+  saveT = setTimeout(function(){
+    XW.save("links", links).then(function(){
+      $("#saved").textContent = "Saved ✓";
+    }).catch(function(){
+      $("#saved").textContent = "Couldn’t save";
+    });
+  }, 500);
+}
+
+function addLink(){
+  var t = $("#fTitle").value.trim(), u = normUrl($("#fUrl").value), n = $("#fNote").value.trim();
+  if(!t || !u){ $("#saved").textContent = "名称和网址都要填"; return; }
+  links.push({t: t, u: u, n: n});
+  $("#fTitle").value = ""; $("#fUrl").value = ""; $("#fNote").value = "";
+  render(); persist();
+}
+
+function render(){
+  var box = $("#list"); box.innerHTML = "";
+  links.forEach(function(l, i){
+    var d = document.createElement("div"); d.className = "lcard";
+    var a = document.createElement("a");
+    a.className = "lmain"; a.href = l.u; a.target = "_blank"; a.rel = "noopener";
+    var t = document.createElement("span"); t.className = "lt"; t.textContent = l.t;
+    a.appendChild(t);
+    if(l.n){
+      var n = document.createElement("span"); n.className = "ln"; n.textContent = l.n;
+      a.appendChild(n);
+    }
+    var ops = document.createElement("div"); ops.className = "lops";
+    var eb = document.createElement("button"); eb.className = "linkbtn"; eb.textContent = "✎"; eb.title = "修改";
+    eb.addEventListener("click", function(){ editCard(d, i); });
+    var db = document.createElement("button"); db.className = "linkbtn"; db.textContent = "✕"; db.title = "删除";
+    db.addEventListener("click", function(){
+      if(confirm("删除「" + l.t + "」？")){ links.splice(i, 1); render(); persist(); }
+    });
+    ops.appendChild(eb); ops.appendChild(db);
+    d.appendChild(a); d.appendChild(ops);
+    box.appendChild(d);
+  });
+  if(!links.length){
+    box.innerHTML = '<p class="sub">还没有链接，在下面添加第一个吧。</p>';
+  }
+}
+
+function editCard(d, i){
+  var l = links[i];
+  d.innerHTML = "";
+  var wrap = document.createElement("div"); wrap.className = "ledit"; wrap.style.flex = "1";
+  var it = document.createElement("input"); it.type = "text"; it.value = l.t; it.placeholder = "名称";
+  var iu = document.createElement("input"); iu.type = "text"; iu.value = l.u; iu.placeholder = "网址"; iu.setAttribute("inputmode", "url");
+  var in_ = document.createElement("input"); in_.type = "text"; in_.value = l.n || ""; in_.placeholder = "备注（可选）";
+  var row = document.createElement("div"); row.className = "row";
+  var sb = document.createElement("button"); sb.className = "btn small"; sb.textContent = "保存";
+  sb.addEventListener("click", function(){
+    var t = it.value.trim(), u = normUrl(iu.value);
+    if(!t || !u) return;
+    links[i] = {t: t, u: u, n: in_.value.trim()};
+    render(); persist();
+  });
+  var cb = document.createElement("button"); cb.className = "btn small ghost"; cb.textContent = "取消";
+  cb.addEventListener("click", render);
+  row.appendChild(sb); row.appendChild(cb);
+  wrap.appendChild(it); wrap.appendChild(iu); wrap.appendChild(in_); wrap.appendChild(row);
+  d.appendChild(wrap);
+}
+
+XW.boot(function(){
+  buildUI();
+  XW.load().then(function(data){
+    if(Array.isArray(data.links)){
+      links = data.links;
+    } else {
+      links = SEED.slice();
+      XW.save("links", links).catch(function(){});
+    }
+    render();
+  }).catch(function(){
+    links = SEED.slice();
+    render();
+    $("#saved").textContent = "Couldn’t load saved links";
+  });
+});
+</script>
+</body>
+</html>
