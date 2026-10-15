@@ -66,16 +66,16 @@ function aiReadFile(f){
 /* ---------- Gemini API (free tier) ---------- */
 function aiPrompt(text){
   const now=new Date();
-  const ds=now.getFullYear()+"年"+(now.getMonth()+1)+"月"+now.getDate()+"日";
-  const dw="日一二三四五六"[now.getDay()];
-  return "今天是"+ds+"（星期"+dw+"）。请从以下文本中提取待办事项。只输出一个 JSON 数组，不要输出其他任何文字（不要 markdown 代码块标记）。\n"+
-    "数组每个元素是一个对象，字段如下：\n"+
-    "- title：任务标题（必填，简洁；会议/答辩/讲座类请写清事件类型和人物或主题，例如“Caroline Gavin 学位论文开题答辩”）\n"+
-    "- date：YYYY-MM-DD。文本中的相对日期按今天换算（今天/明天/后天/大后天/本周X/下周X/X号/X月X日）；没有明确日期的任务用今天的日期。\n"+
-    "- start：开始时间 HH:MM（24小时制）。只有文本明确提到开始时间才填，否则填 null。\n"+
-    "- end：结束时间 HH:MM。只有文本明确提到结束时间才填，否则填 null。\n"+
-    "- place：地点；线上会议则填会议链接（如 Teams/Zoom 入会链接），没有则填 null。\n"+
-    "- notes：备注。会议/答辩类请包含参会信息（会议号、密码等）；如果文本附带了摘要或正文，把摘要/要点也写入 notes。没有则填 null。\n文本：\n"+text;
+  const ds=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+  const dw=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][now.getDay()];
+  return "Today is "+ds+" ("+dw+"). Extract to-do items from the following text. Output ONLY a JSON array, nothing else (no markdown code fences).\n"+
+    "Each array element is an object with these fields:\n"+
+    "- title: task title (required, concise; for meetings/defenses/talks, state the event type and person or topic, e.g. \"Caroline Gavin dissertation proposal defense\"). Write the title in the same language as the input text.\n"+
+    "- date: YYYY-MM-DD. Convert relative dates in the text against today (today/tomorrow/day after/the day after that/this coming X/next X/the Nth/Nth of month M); tasks with no clear date use today's date.\n"+
+    "- start: start time HH:MM (24-hour). Only fill when the text states a start time, else null.\n"+
+    "- end: end time HH:MM. Only fill when the text states an end time, else null.\n"+
+    "- place: location; for online meetings use the meeting link (e.g. Teams/Zoom join link), else null.\n"+
+    "- notes: notes. For meetings/defenses include join info (meeting ID, passcode, etc.); if the text includes an abstract or body, put the summary/key points in notes. Else null.\nText:\n"+text;
 }
 function aiParseJson(t){
   t=String(t||"").trim().replace(/^```(json)?\s*/,"").replace(/\s*```$/,"");
