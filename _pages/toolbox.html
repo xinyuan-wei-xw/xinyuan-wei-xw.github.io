@@ -7,6 +7,27 @@ author_profile: true
 ---
 
 
+<style>
+.tb-star{display:flex;justify-content:center;margin:6px 0 12px}
+.tb-badge{position:relative;width:158px;height:158px}
+.tb-badge svg{width:100%;height:100%;display:block;animation:tbspin 28s linear infinite}
+@keyframes tbspin{to{transform:rotate(360deg)}}
+.tb-ring-text{font-size:13px;letter-spacing:2px;fill:#0039a6;font-weight:700}
+.tb-core{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:46px}
+@media (prefers-reduced-motion:reduce){.tb-badge svg{animation:none}}
+</style>
+<div class="tb-star" aria-hidden="true">
+  <div class="tb-badge">
+    <svg viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="97" fill="none" stroke="#d9a441" stroke-width="2" stroke-dasharray="3 7" opacity="0.9"/>
+      <circle cx="100" cy="100" r="62" fill="none" stroke="#d9a441" stroke-width="1.5" opacity="0.7"/>
+      <defs><path id="tbCirc" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs>
+      <text class="tb-ring-text"><textPath href="#tbCirc">XINYUAN'S TOOLBOX ✦ HAND-BUILT ✦ FREE TO USE ✦</textPath></text>
+    </svg>
+    <span class="tb-core">🧰</span>
+  </div>
+</div>
+
 <p>I build small tools to make my own work and everyday life a little easier: <strong>keeping up with AI, staying organized, learning the craft of IS research, planning meals, and occasionally making academia a little more fun</strong>.</p><p><strong>Xinyuan's Toolbox</strong> brings these projects together in one place. Some are practical tools I use regularly, while others are experiments, learning resources, or small side projects built around problems I wanted to solve for myself. They are all free to use.</p><p>I'm sharing them in case they are useful to others as well. If you try any of them, please feel free to <a href="mailto:xinyuanwei@gsu.edu">contact me</a> with feedback, suggestions, or ideas for improvement. I'd be very happy to hear from you.</p>
 
 
