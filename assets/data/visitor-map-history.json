@@ -99,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 50
+      "sessions": 51
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -119,6 +119,17 @@
       "city": "",
       "country": "US",
       "country_name": "United States",
+      "region": "California",
+      "sessions": 1
+    },
+    "US|California|Berkeley": {
+      "city": "Berkeley",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 37.873901,
+        "longitude": -122.271152
+      },
       "region": "California",
       "sessions": 1
     },
@@ -280,7 +291,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 80
+      "sessions": 83
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -350,6 +361,13 @@
     },
     "US|Georgia|Sandy Springs": {
       "city": "Sandy Springs",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Georgia",
+      "sessions": 1
+    },
+    "US|Georgia|Stockbridge": {
+      "city": "Stockbridge",
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
@@ -467,6 +485,17 @@
       "city": "",
       "country": "US",
       "country_name": "United States",
+      "region": "Pennsylvania",
+      "sessions": 1
+    },
+    "US|Pennsylvania|Philadelphia": {
+      "city": "Philadelphia",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 40.001919,
+        "longitude": -75.171942
+      },
       "region": "Pennsylvania",
       "sessions": 1
     },
@@ -665,7 +694,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 112
+      "sessions": 113
     },
     "TW": {
       "name": "Taiwan",
@@ -673,11 +702,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 204
+      "sessions": 210
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-13",
+  "last_end": "2026-10-14",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -732,7 +761,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 50
+      "sessions": 51
     },
     "SG|(not set)": {
       "country": "SG",
@@ -762,7 +791,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 12
+      "sessions": 13
     },
     "US|Connecticut": {
       "country": "US",
@@ -780,7 +809,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 145
+      "sessions": 149
     },
     "US|Illinois": {
       "country": "US",
@@ -828,7 +857,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Texas": {
       "country": "US",
@@ -870,6 +899,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 325,
+  "total_sessions": 332,
   "version": 1
 }
