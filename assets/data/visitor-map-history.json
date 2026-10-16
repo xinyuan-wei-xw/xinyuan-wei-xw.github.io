@@ -99,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 51
+      "sessions": 52
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -291,7 +291,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 83
+      "sessions": 95
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -357,7 +357,7 @@
         "longitude": -84.359
       },
       "region": "Georgia",
-      "sessions": 32
+      "sessions": 33
     },
     "US|Georgia|Sandy Springs": {
       "city": "Sandy Springs",
@@ -694,7 +694,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 113
+      "sessions": 114
     },
     "TW": {
       "name": "Taiwan",
@@ -702,11 +702,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 210
+      "sessions": 223
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-14",
+  "last_end": "2026-10-15",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -761,7 +761,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 51
+      "sessions": 52
     },
     "SG|(not set)": {
       "country": "SG",
@@ -809,7 +809,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 149
+      "sessions": 162
     },
     "US|Illinois": {
       "country": "US",
@@ -899,6 +899,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 332,
+  "total_sessions": 346,
   "version": 1
 }
