@@ -37,7 +37,7 @@
 
   /* ---------- find where the free preview ends ---------- */
   function gateAnchor() {
-    var s = document.getElementById("key-takeaways");
+    var s = document.getElementById("key-takeaways") || document.getElementById("takeaways");
     if (s) return s;
     var ul = document.querySelector("ul.takeaway-list");
     if (ul) return ul.closest("section") || ul.parentElement;
