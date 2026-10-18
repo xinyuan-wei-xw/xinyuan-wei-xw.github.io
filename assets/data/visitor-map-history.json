@@ -206,6 +206,13 @@
       "region": "California",
       "sessions": 1
     },
+    "US|Colorado|": {
+      "city": "",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Colorado",
+      "sessions": 1
+    },
     "US|Connecticut|Mansfield": {
       "city": "Mansfield",
       "country": "US",
@@ -324,7 +331,7 @@
         "longitude": -84.33625
       },
       "region": "Georgia",
-      "sessions": 22
+      "sessions": 23
     },
     "US|Georgia|East Cobb": {
       "city": "East Cobb",
@@ -407,7 +414,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Iowa|Council Bluffs": {
       "city": "Council Bluffs",
@@ -418,7 +425,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 3
+      "sessions": 9
     },
     "US|Louisiana|Mandeville": {
       "city": "Mandeville",
@@ -727,11 +734,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 230
+      "sessions": 239
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-16",
+  "last_end": "2026-10-17",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -818,6 +825,12 @@
       "region": "California",
       "sessions": 13
     },
+    "US|Colorado": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Colorado",
+      "sessions": 1
+    },
     "US|Connecticut": {
       "country": "US",
       "country_name": "United States",
@@ -834,19 +847,19 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 167
+      "sessions": 168
     },
     "US|Illinois": {
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 3
+      "sessions": 4
     },
     "US|Iowa": {
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 3
+      "sessions": 9
     },
     "US|Louisiana": {
       "country": "US",
@@ -924,6 +937,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 354,
+  "total_sessions": 363,
   "version": 1
 }
