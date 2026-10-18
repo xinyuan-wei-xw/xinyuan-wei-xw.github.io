@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>赞美 · 显化日记 · Xinyuan’s Secret Garden</title>
+<title>赞美 · 显化 · 引导便签 · Xinyuan’s Secret Garden</title>
 <link rel="stylesheet" href="/xwei/xwei.css">
 <style>
 .dnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 4px}
@@ -40,6 +40,36 @@
 .mline{display:block;width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14.5px;margin-bottom:8px;font-family:inherit;color:var(--ink);background:#fff}
 .mline:focus{outline:none;border-color:#e8cf9f}
 .pitem .donebadge{color:#2f9e44;font-weight:700}
+.glist{margin:2px 0 8px}
+.gitem{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:6px;font-size:14.5px}
+.gitem span{flex:1}
+.gx{border:none;background:none;color:#c0a080;font-size:14px;cursor:pointer;padding:2px 6px;font-family:inherit;flex:none}
+.gx:hover{color:#a33}
+.grow{display:flex;gap:8px;margin-bottom:4px;align-items:center}
+.grow .mline{margin-bottom:0;flex:1}
+.grow .btn{flex:none}
+.gcheck{display:flex;align-items:flex-start;gap:8px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:6px;font-size:14.5px;cursor:pointer}
+.gcheck input{margin-top:4px}
+.gcheck.done span{text-decoration:line-through;color:var(--soft)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:13.5px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.chip.on{background:#fdf3e3;border-color:#e8cf9f;color:#8a5a12;font-weight:700}
+.chakra{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-bottom:6px;cursor:pointer}
+.chakra .dot{width:14px;height:14px;border-radius:50%;flex:none;margin-top:3px}
+.chakra.on{border-color:#e8cf9f;background:#fffaf2}
+.chakra .cname{font-weight:700;font-size:13.5px}
+.chakra .caff{color:var(--soft);font-size:13px;margin-top:2px;line-height:1.6}
+.vgrid{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 8px}
+.vthumb{position:relative;width:96px;height:96px;border-radius:10px;overflow:hidden;border:1px solid var(--line);flex:none}
+.vthumb img{width:100%;height:100%;object-fit:cover}
+.vthumb .vx{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;line-height:1;padding:0}
+.rfrow{display:flex;gap:8px;margin-bottom:6px;align-items:center}
+.rfrow .mline{margin-bottom:0;flex:1}
+.rfarrow{color:#b07a2a;font-weight:700;flex:none}
+.breathbox{text-align:center;padding:10px 0 6px;margin-bottom:10px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.bcircle{width:104px;height:104px;border-radius:50%;margin:0 auto 8px;background:radial-gradient(circle,#fdf3e3,#f3dfae);border:1px solid #e8cf9f;display:flex;align-items:center;justify-content:center;font-size:15px;color:#8a5a12;transition:transform 1s linear}
+.bphase{font-size:13px;color:var(--soft);margin-bottom:8px}
+.gsub{font-weight:400;color:var(--soft)}
 </style>
 </head>
 <body>
@@ -98,10 +128,10 @@ var VERSES = [
   {t:"But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.", r:"Galatians 5:22-23", z:"圣灵所结的果子，就是仁爱、喜乐、和平、忍耐、恩慈、良善、信实、温柔、节制。", zr:"加拉太书 5:22-23", v:[["forbearance","fɔːˈbeərəns","忍耐"],["faithfulness","ˈfeɪθfʊlnəs","信实"],["gentleness","ˈdʒentlnəs","温柔"],["self-control","ˌself kənˈtrəʊl","节制，自制"]]}
 ];
 
-var praise = {}, manifest = {}, curKey = "", saveT = null, mSaveT = null;
+var praise = {}, manifest = {}, guide = {}, curKey = "", saveT = null, mSaveT = null, gSaveT = null;
 var curTab = "praise";
 try{ curTab = localStorage.getItem("praise_tab") || "praise"; }catch(e){}
-if(curTab !== "manifest") curTab = "praise";
+if(["praise","manifest","guide"].indexOf(curTab) < 0) curTab = "praise";
 var $ = function(s){ return document.querySelector(s); };
 var WK = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
 
@@ -177,11 +207,12 @@ function buildUI(){
         '  }\n' +
         '}</pre>' +
       '</div>' +
-      '<h1 class="page">🙏 赞美 · ✨ 显化</h1>' +
+      '<h1 class="page">🙏 赞美 · ✨ 显化 · 💐 引导便签</h1>' +
       '<p class="sub">每天打开，都是新的一页。</p>' +
       '<div class="tabs">' +
         '<button class="tab" id="tabPraise">🙏 赞美</button>' +
         '<button class="tab" id="tabManifest">✨ 显化</button>' +
+        '<button class="tab" id="tabGuide">💐 引导便签</button>' +
       '</div>' +
       '<div class="dnav">' +
         '<button class="btn small" id="prevDay">‹ 前一天</button>' +
@@ -228,6 +259,56 @@ function buildUI(){
       '<div class="plist" id="mPastList"></div>' +
       '<p class="sub" id="mPastEmpty">还没有写下愿望。今天就是第一天。</p>' +
       '</div>' +
+      '<div id="guidePane" style="display:none">' +
+      '<p class="sub">向内找 · 一天一张便签：身份、肯定、待办、成就、感恩、转念、正念、释放、情绪、脉轮、愿景、便签夹。</p>' +
+      '<div class="peditor">' +
+        '<div class="mfield"><label>🌱 新身份假设</label>' +
+          '<textarea id="gIdentity" rows="2" placeholder="我假设自己已经是____（例如：一个平静而坚定的写作者）"></textarea></div>' +
+        '<div class="mfield"><label>💬 肯定语</label>' +
+          '<div class="glist" id="gAffList"></div>' +
+          '<div class="grow"><input class="mline" id="gAffIn" placeholder="写下一句肯定语……"><button class="btn small" id="gAffAdd">添加</button></div></div>' +
+        '<div class="mfield"><label>✅ 待办事项</label>' +
+          '<div class="glist" id="gTodoList"></div>' +
+          '<div class="grow"><input class="mline" id="gTodoIn" placeholder="今天要做的事……"><button class="btn small" id="gTodoAdd">添加</button></div></div>' +
+        '<div class="mfield"><label>🏆 成就感记录</label>' +
+          '<div class="glist" id="gAchList"></div>' +
+          '<div class="grow"><input class="mline" id="gAchIn" placeholder="今天做成了什么？哪怕很小……"><button class="btn small" id="gAchAdd">添加</button></div></div>' +
+        '<div class="mfield"><label>🙏 感恩日记</label>' +
+          '<div class="glist" id="gGratList"></div>' +
+          '<div class="grow"><input class="mline" id="gGratIn" placeholder="今天感谢……"><button class="btn small" id="gGratAdd">添加</button></div></div>' +
+        '<div class="mfield"><label>🔄 转念 <span class="gsub">（旧念头 → 新念头）</span></label>' +
+          '<div class="glist" id="gRefList"></div>' +
+          '<button class="btn small" id="gRefAdd">＋ 一组转念</button></div>' +
+        '<div class="mfield"><label>🧘 正念 · 呼吸</label>' +
+          '<div class="breathbox">' +
+            '<div class="bcircle" id="breathCircle">准备</div>' +
+            '<div class="bphase" id="breathPhase">吸气 4 秒 → 屏息 4 秒 → 呼气 6 秒</div>' +
+            '<button class="btn small" id="breathBtn">开始呼吸</button> ' +
+            '<span class="saved" id="breathRounds"></span>' +
+          '</div>' +
+          '<textarea id="gMindful" rows="2" placeholder="此刻，我觉察到……"></textarea></div>' +
+        '<div class="mfield"><label>🕊️ 释放</label>' +
+          '<div class="glist" id="gRelList"></div>' +
+          '<div class="grow"><input class="mline" id="gRelIn" placeholder="我释放……（例如：我释放对结果的执着）"><button class="btn small" id="gRelAdd">添加</button></div></div>' +
+        '<div class="mfield"><label>🎭 情绪表 <span class="gsub">（点选今天的情绪）</span></label>' +
+          '<div class="chips" id="gEmoChips"></div></div>' +
+        '<div class="mfield"><label>🌈 脉轮肯定语 <span class="gsub">（点选今天默念的）</span></label>' +
+          '<div class="glist" id="gChakraList"></div></div>' +
+        '<div class="mfield"><label>🖼️ 愿景板素材图</label>' +
+          '<div class="vgrid" id="gVisGrid"></div>' +
+          '<div class="grow"><input type="file" id="gVisFile" accept="image/*" style="font-size:13.5px;flex:1"><span class="saved" id="gVisState"></span></div></div>' +
+        '<div class="mfield"><label>📎 便签夹</label>' +
+          '<div class="glist" id="gClipList"></div>' +
+          '<div class="grow"><input class="mline" id="gClipIn" placeholder="随手记一句……"><button class="btn small" id="gClipAdd">添加</button></div></div>' +
+        '<div class="prow">' +
+          '<button class="btn primary small" id="gSaveBtn" style="width:auto">保存</button>' +
+          '<span class="saved" id="gSaveState"></span>' +
+        '</div>' +
+      '</div>' +
+      '<h3 style="margin:26px 0 6px">往日便签</h3>' +
+      '<div class="plist" id="gPastList"></div>' +
+      '<p class="sub" id="gPastEmpty">还没有写过引导便签。今天就是第一天。</p>' +
+      '</div>' +
     '</div>';
 }
 
@@ -253,6 +334,7 @@ function render(){
   $("#nextDay").disabled = curKey >= todayKey();
   $("#todayBtn").disabled = curKey === todayKey();
   if(curTab === "manifest"){ renderManifest(); return; }
+  if(curTab === "guide"){ renderGuide(); return; }
   var v = verseFor(curKey);
   $("#verseBox").innerHTML =
     '<div class="vlab">今日经文 · 中英对照</div>' +
@@ -270,8 +352,10 @@ function switchTab(t){
   try{ localStorage.setItem("praise_tab", t); }catch(e){}
   $("#tabPraise").classList.toggle("on", t === "praise");
   $("#tabManifest").classList.toggle("on", t === "manifest");
+  $("#tabGuide").classList.toggle("on", t === "guide");
   $("#praisePane").style.display = t === "praise" ? "" : "none";
   $("#manifestPane").style.display = t === "manifest" ? "" : "none";
+  $("#guidePane").style.display = t === "guide" ? "" : "none";
   render();
 }
 function mEntry(){ return manifest[curKey] || {}; }
@@ -333,7 +417,226 @@ function persistManifest(now){
   clearTimeout(mSaveT);
   mSaveT = setTimeout(doSave, 900);
 }
-function goDay(k){ curKey = k; render(); window.scrollTo({top: 0, behavior: "smooth"}); }
+/* ---------- 💐 引导便签 ---------- */
+var EMOTIONS = ["平静","喜悦","感恩","充实","兴奋","希望","安心","自豪","焦虑","疲惫","烦躁","悲伤","孤独","迷茫","委屈","紧张"];
+var CHAKRAS = [
+  {k:"root", n:"海底轮 · 根", c:"#e74c3c", a:"我是安全的，大地稳稳地托着我。"},
+  {k:"sacral", n:"脐轮 · 创造", c:"#e67e22", a:"我接纳自己的感受，创造力在我之内流动。"},
+  {k:"solar", n:"太阳轮 · 力量", c:"#d9a404", a:"我有力量为自己的人生做选择。"},
+  {k:"heart", n:"心轮 · 爱", c:"#2ecc71", a:"我敞开心，给予爱，也配得到爱。"},
+  {k:"throat", n:"喉轮 · 表达", c:"#3498db", a:"我真实地表达自己，我的声音值得被听见。"},
+  {k:"brow", n:"眉心轮 · 直觉", c:"#5b6ee1", a:"我信任自己的直觉，看见事情的真相。"},
+  {k:"crown", n:"顶轮 · 连接", c:"#9b59b6", a:"我与更大的智慧相连，臣服而平静。"}
+];
+function blankGuide(){
+  return {identity:"", affirmations:[], todos:[], achievements:[], gratitude:[],
+    reframes:[], mindful:"", breaths:0, release:[], emotions:[], chakras:{}, vision:[], clips:[]};
+}
+function gE(){
+  if(!guide[curKey] || typeof guide[curKey] !== "object") guide[curKey] = blankGuide();
+  var e = guide[curKey];
+  ["affirmations","todos","achievements","gratitude","reframes","release","emotions","vision","clips"].forEach(function(k){ if(!Array.isArray(e[k])) e[k] = []; });
+  if(!e.chakras || typeof e.chakras !== "object") e.chakras = {};
+  return e;
+}
+function gHas(e){
+  if(!e) return false;
+  return !!((e.identity||"").trim() || (e.mindful||"").trim() ||
+    e.affirmations.length || e.todos.length || e.achievements.length ||
+    e.gratitude.length || e.reframes.length || e.release.length ||
+    e.emotions.length || e.vision.length || e.clips.length ||
+    Object.keys(e.chakras).some(function(k){ return e.chakras[k]; }) || (e.breaths||0) > 0);
+}
+function gTouch(){ renderGPast(); persistGuide(false); }
+function drawStrList(boxId, arr, onDel){
+  var box = $(boxId); box.innerHTML = "";
+  arr.forEach(function(s, i){
+    var d = document.createElement("div"); d.className = "gitem";
+    var sp = document.createElement("span"); sp.textContent = s;
+    var x = document.createElement("button"); x.className = "gx"; x.textContent = "✕"; x.title = "删除";
+    x.addEventListener("click", function(){ onDel(i); });
+    d.appendChild(sp); d.appendChild(x); box.appendChild(d);
+  });
+}
+function drawTodos(){
+  var e = gE(), box = $("#gTodoList"); box.innerHTML = "";
+  e.todos.forEach(function(td, i){
+    var d = document.createElement("div"); d.className = "gcheck" + (td.done ? " done" : "");
+    var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!td.done;
+    cb.addEventListener("change", function(){ td.done = cb.checked; drawTodos(); gTouch(); });
+    var sp = document.createElement("span"); sp.textContent = td.t; sp.style.flex = "1";
+    var x = document.createElement("button"); x.className = "gx"; x.textContent = "✕"; x.title = "删除";
+    x.addEventListener("click", function(){ e.todos.splice(i,1); drawTodos(); gTouch(); });
+    d.appendChild(cb); d.appendChild(sp); d.appendChild(x); box.appendChild(d);
+  });
+}
+function drawReframes(){
+  var e = gE(), box = $("#gRefList"); box.innerHTML = "";
+  e.reframes.forEach(function(rf, i){
+    var d = document.createElement("div"); d.className = "rfrow";
+    var o = document.createElement("input"); o.className = "mline"; o.placeholder = "旧念头……"; o.value = rf.old || "";
+    o.addEventListener("input", function(){ rf.old = o.value; persistGuide(false); });
+    var ar = document.createElement("span"); ar.className = "rfarrow"; ar.textContent = "→";
+    var n = document.createElement("input"); n.className = "mline"; n.placeholder = "新念头……"; n.value = rf.nw || "";
+    n.addEventListener("input", function(){ rf.nw = n.value; persistGuide(false); });
+    var x = document.createElement("button"); x.className = "gx"; x.textContent = "✕"; x.title = "删除";
+    x.addEventListener("click", function(){ e.reframes.splice(i,1); drawReframes(); gTouch(); });
+    d.appendChild(o); d.appendChild(ar); d.appendChild(n); d.appendChild(x); box.appendChild(d);
+  });
+}
+function drawEmotions(){
+  var e = gE(), box = $("#gEmoChips"); box.innerHTML = "";
+  EMOTIONS.forEach(function(em){
+    var b = document.createElement("button");
+    b.className = "chip" + (e.emotions.indexOf(em) >= 0 ? " on" : ""); b.textContent = em; b.type = "button";
+    b.addEventListener("click", function(){
+      var ix = e.emotions.indexOf(em);
+      if(ix >= 0) e.emotions.splice(ix,1); else e.emotions.push(em);
+      drawEmotions(); gTouch();
+    });
+    box.appendChild(b);
+  });
+}
+function drawChakras(){
+  var e = gE(), box = $("#gChakraList"); box.innerHTML = "";
+  CHAKRAS.forEach(function(ch){
+    var d = document.createElement("div"); d.className = "chakra" + (e.chakras[ch.k] ? " on" : "");
+    var dot = document.createElement("span"); dot.className = "dot"; dot.style.background = ch.c;
+    var tx = document.createElement("div");
+    var nm = document.createElement("div"); nm.className = "cname"; nm.textContent = (e.chakras[ch.k] ? "✓ " : "") + ch.n;
+    var af = document.createElement("div"); af.className = "caff"; af.textContent = ch.a;
+    tx.appendChild(nm); tx.appendChild(af);
+    d.appendChild(dot); d.appendChild(tx);
+    d.addEventListener("click", function(){ e.chakras[ch.k] = !e.chakras[ch.k]; drawChakras(); gTouch(); });
+    box.appendChild(d);
+  });
+}
+function drawVision(){
+  var e = gE(), box = $("#gVisGrid"); box.innerHTML = "";
+  e.vision.forEach(function(v, i){
+    var d = document.createElement("div"); d.className = "vthumb";
+    var im = document.createElement("img"); im.src = v.url; im.alt = "";
+    var x = document.createElement("button"); x.className = "vx"; x.textContent = "✕"; x.title = "删除";
+    x.addEventListener("click", function(){
+      e.vision.splice(i,1); drawVision(); gTouch();
+      try{ XW.storage().ref(v.path).delete(); }catch(err){}
+    });
+    d.appendChild(im); d.appendChild(x); box.appendChild(d);
+  });
+}
+function drawGuideLists(){
+  var e = gE();
+  drawStrList("#gAffList", e.affirmations, function(i){ e.affirmations.splice(i,1); drawGuideLists(); gTouch(); });
+  drawTodos();
+  drawStrList("#gAchList", e.achievements, function(i){ e.achievements.splice(i,1); drawGuideLists(); gTouch(); });
+  drawStrList("#gGratList", e.gratitude, function(i){ e.gratitude.splice(i,1); drawGuideLists(); gTouch(); });
+  drawReframes();
+  drawStrList("#gRelList", e.release, function(i){ e.release.splice(i,1); drawGuideLists(); gTouch(); });
+  drawEmotions();
+  drawChakras();
+  drawVision();
+  drawStrList("#gClipList", e.clips, function(i){ e.clips.splice(i,1); drawGuideLists(); gTouch(); });
+}
+function renderGuide(){
+  stopBreath();
+  var e = gE();
+  $("#gIdentity").value = e.identity || "";
+  $("#gMindful").value = e.mindful || "";
+  $("#breathRounds").textContent = (e.breaths||0) > 0 ? ("已完成 " + e.breaths + " 轮呼吸") : "";
+  drawGuideLists();
+  $("#gSaveState").textContent = e.updated ? "上次保存 " + stamp(e.updated) : "";
+  renderGPast();
+}
+function renderGPast(){
+  var keys = Object.keys(guide).filter(function(k){ return gHas(guide[k]); }).sort().reverse();
+  var box = $("#gPastList"); box.innerHTML = "";
+  $("#gPastEmpty").style.display = keys.length ? "none" : "";
+  keys.forEach(function(k){
+    var e = guide[k];
+    var first = ((e.identity||"").split("\n")[0] || (e.affirmations[0]||"") || (e.gratitude[0]||"") || "").slice(0,60);
+    var b = document.createElement("button");
+    b.className = "pitem" + (k === curKey ? " on" : "");
+    b.innerHTML = "<b>" + fmtShort(k) + (k === todayKey() ? "（今天）" : "") + "</b><span>" + XW.esc(first) + "</span>";
+    b.addEventListener("click", function(){ goDay(k); });
+    box.appendChild(b);
+  });
+}
+function persistGuide(now){
+  var doSave = function(){
+    var e = gE(); e.updated = Date.now();
+    XW.save("guide", guide).then(function(){
+      $("#saved").textContent = "Saved ✓ " + stamp(Date.now());
+      $("#gSaveState").textContent = "已保存 ✓ " + stamp(Date.now());
+    }).catch(function(){
+      $("#saved").textContent = "没存上 — 检查一下网络";
+      $("#gSaveState").textContent = "没存上 — 检查一下网络，再点一次保存";
+    });
+  };
+  if(now){ clearTimeout(gSaveT); doSave(); return; }
+  clearTimeout(gSaveT);
+  gSaveT = setTimeout(doSave, 900);
+}
+/* 正念呼吸：吸气4s → 屏息4s → 呼气6s */
+var breathTimer = null, bPhaseIx = 0, bSecLeft = 0;
+var BPHASES = [{t:"吸气", d:4, s:1.22},{t:"屏息", d:4, s:1.22},{t:"呼气", d:6, s:1.0}];
+function breathUI(){
+  var c = $("#breathCircle"); if(!c) return;
+  if(breathTimer === null){
+    c.textContent = "准备"; c.style.transform = "scale(1)";
+    $("#breathPhase").textContent = "吸气 4 秒 → 屏息 4 秒 → 呼气 6 秒";
+    $("#breathBtn").textContent = "开始呼吸"; return;
+  }
+  var ph = BPHASES[bPhaseIx];
+  c.textContent = ph.t + " " + bSecLeft;
+  c.style.transform = "scale(" + ph.s + ")";
+  $("#breathPhase").textContent = ph.t + "…还剩 " + bSecLeft + " 秒";
+  $("#breathBtn").textContent = "停止";
+}
+function toggleBreath(){
+  if(breathTimer !== null){ stopBreath(); return; }
+  bPhaseIx = 0; bSecLeft = BPHASES[0].d; breathUI();
+  breathTimer = setInterval(function(){
+    bSecLeft--;
+    if(bSecLeft <= 0){
+      bPhaseIx++;
+      if(bPhaseIx >= BPHASES.length){
+        bPhaseIx = 0;
+        var e = gE(); e.breaths = (e.breaths||0) + 1;
+        $("#breathRounds").textContent = "已完成 " + e.breaths + " 轮呼吸";
+        renderGPast(); persistGuide(false);
+      }
+      bSecLeft = BPHASES[bPhaseIx].d;
+    }
+    breathUI();
+  }, 1000);
+}
+function stopBreath(){ if(breathTimer !== null){ clearInterval(breathTimer); breathTimer = null; breathUI(); } }
+function compressImage(file, cb){
+  var img = new Image();
+  img.onload = function(){
+    try{
+      var max = 1200, w = img.width, h = img.height;
+      if(Math.max(w,h) > max){ var r = max/Math.max(w,h); w = Math.round(w*r); h = Math.round(h*r); }
+      var c = document.createElement("canvas"); c.width = w; c.height = h;
+      c.getContext("2d").drawImage(img, 0, 0, w, h);
+      c.toBlob(function(b){ cb(b || file); }, "image/jpeg", 0.82);
+    }catch(err){ cb(file); }
+    try{ URL.revokeObjectURL(img.src); }catch(err){}
+  };
+  img.onerror = function(){ cb(file); };
+  img.src = URL.createObjectURL(file);
+}
+function wireAdd(inputId, btnId, add){
+  var inp = $("#" + inputId);
+  var go = function(){
+    var v = inp.value.trim(); if(!v) return;
+    add(v); inp.value = ""; inp.focus();
+  };
+  $("#" + btnId).addEventListener("click", go);
+  inp.addEventListener("keydown", function(ev){ if(ev.key === "Enter") go(); });
+}
+
+function goDay(k){ stopBreath(); curKey = k; render(); window.scrollTo({top: 0, behavior: "smooth"}); }
 
 function persist(now){
   var doSave = function(){
@@ -357,6 +660,7 @@ XW.boot(function(){
   XW.load().then(function(data){
     praise = (data && data.praise && typeof data.praise === "object") ? data.praise : {};
     manifest = (data && data.manifest && typeof data.manifest === "object") ? data.manifest : {};
+    guide = (data && data.guide && typeof data.guide === "object") ? data.guide : {};
     render();
   }).catch(function(){
     $("#saved").textContent = "没加载出来 — 检查一下网络";
@@ -364,6 +668,7 @@ XW.boot(function(){
   });
   $("#tabPraise").addEventListener("click", function(){ switchTab("praise"); });
   $("#tabManifest").addEventListener("click", function(){ switchTab("manifest"); });
+  $("#tabGuide").addEventListener("click", function(){ switchTab("guide"); });
   $("#diaryText").addEventListener("input", function(){
     praise[curKey] = { text: $("#diaryText").value, updated: Date.now() };
     renderPast();
@@ -383,6 +688,29 @@ XW.boot(function(){
   });
   $("#mSaveBtn").addEventListener("click", function(){
     collectManifest(); persistManifest(true);
+  });
+  $("#gIdentity").addEventListener("input", function(){ gE().identity = this.value; gTouch(); });
+  $("#gMindful").addEventListener("input", function(){ gE().mindful = this.value; gTouch(); });
+  wireAdd("gAffIn", "gAffAdd", function(v){ gE().affirmations.push(v); drawGuideLists(); gTouch(); });
+  wireAdd("gTodoIn", "gTodoAdd", function(v){ gE().todos.push({t:v, done:false}); drawTodos(); gTouch(); });
+  wireAdd("gAchIn", "gAchAdd", function(v){ gE().achievements.push(v); drawGuideLists(); gTouch(); });
+  wireAdd("gGratIn", "gGratAdd", function(v){ gE().gratitude.push(v); drawGuideLists(); gTouch(); });
+  wireAdd("gRelIn", "gRelAdd", function(v){ gE().release.push(v); drawGuideLists(); gTouch(); });
+  wireAdd("gClipIn", "gClipAdd", function(v){ gE().clips.push(v); drawGuideLists(); gTouch(); });
+  $("#gRefAdd").addEventListener("click", function(){ gE().reframes.push({old:"", nw:""}); drawReframes(); gTouch(); });
+  $("#gSaveBtn").addEventListener("click", function(){ persistGuide(true); });
+  $("#breathBtn").addEventListener("click", toggleBreath);
+  $("#gVisFile").addEventListener("change", function(){
+    var f = this.files && this.files[0]; if(!f) return;
+    var box = $("#gVisState"); box.textContent = "上传中……";
+    compressImage(f, function(blob){
+      var path = "users/" + XW.user().uid + "/vision/" + Date.now() + ".jpg";
+      XW.storage().ref(path).put(blob).then(function(snap){ return snap.ref.getDownloadURL(); }).then(function(url){
+        gE().vision.push({url:url, path:path}); drawVision(); gTouch();
+        box.textContent = "已添加 ✓";
+      }).catch(function(){ box.textContent = "没传上 — 检查一下网络"; });
+    });
+    this.value = "";
   });
   $("#prevDay").addEventListener("click", function(){ goDay(shiftKey(curKey, -1)); });
   $("#nextDay").addEventListener("click", function(){ if(curKey < todayKey()) goDay(shiftKey(curKey, 1)); });
