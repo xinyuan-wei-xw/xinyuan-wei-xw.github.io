@@ -99,7 +99,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 53
+      "sessions": 55
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -213,6 +213,17 @@
       "region": "Colorado",
       "sessions": 1
     },
+    "US|Colorado|Boulder": {
+      "city": "Boulder",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 40.038446,
+        "longitude": -105.246093
+      },
+      "region": "Colorado",
+      "sessions": 1
+    },
     "US|Connecticut|Mansfield": {
       "city": "Mansfield",
       "country": "US",
@@ -309,7 +320,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 98
+      "sessions": 101
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -630,6 +641,13 @@
       "region": "Vermont",
       "sessions": 2
     },
+    "US|Virginia|": {
+      "city": "",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Virginia",
+      "sessions": 1
+    },
     "US|Virginia|Arlington": {
       "city": "Arlington",
       "country": "US",
@@ -651,6 +669,13 @@
       },
       "region": "Virginia",
       "sessions": 2
+    },
+    "US|Virginia|Fairfax": {
+      "city": "Fairfax",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Virginia",
+      "sessions": 1
     },
     "US|Virginia|Reston": {
       "city": "Reston",
@@ -726,7 +751,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 115
+      "sessions": 117
     },
     "TW": {
       "name": "Taiwan",
@@ -734,11 +759,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 239
+      "sessions": 245
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-19",
+  "last_end": "2026-10-20",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -793,7 +818,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 53
+      "sessions": 55
     },
     "SG|(not set)": {
       "country": "SG",
@@ -829,7 +854,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Connecticut": {
       "country": "US",
@@ -847,7 +872,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 168
+      "sessions": 171
     },
     "US|Illinois": {
       "country": "US",
@@ -919,7 +944,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 5
+      "sessions": 7
     },
     "US|Washington": {
       "country": "US",
@@ -937,6 +962,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 363,
+  "total_sessions": 371,
   "version": 1
 }
