@@ -7,6 +7,13 @@
       "region": "(not set)",
       "sessions": 1
     },
+    "BR|State of Sao Paulo|Franca": {
+      "city": "Franca",
+      "country": "BR",
+      "country_name": "Brazil",
+      "region": "State of Sao Paulo",
+      "sessions": 1
+    },
     "CA|Ontario|Toronto": {
       "city": "Toronto",
       "country": "CA",
@@ -327,7 +334,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 103
+      "sessions": 106
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -762,6 +769,10 @@
       "name": "(not set)",
       "sessions": 1
     },
+    "BR": {
+      "name": "Brazil",
+      "sessions": 1
+    },
     "CA": {
       "name": "Canada",
       "sessions": 1
@@ -784,17 +795,23 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 251
+      "sessions": 254
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-22",
+  "last_end": "2026-10-23",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
       "country": "(not set)",
       "country_name": "(not set)",
       "region": "(not set)",
+      "sessions": 1
+    },
+    "BR|State of Sao Paulo": {
+      "country": "BR",
+      "country_name": "Brazil",
+      "region": "State of Sao Paulo",
       "sessions": 1
     },
     "CA|Ontario": {
@@ -903,7 +920,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 176
+      "sessions": 179
     },
     "US|Hawaii": {
       "country": "US",
@@ -999,6 +1016,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 381,
+  "total_sessions": 385,
   "version": 1
 }
