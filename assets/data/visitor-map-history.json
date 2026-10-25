@@ -238,6 +238,17 @@
       "region": "Colorado",
       "sessions": 1
     },
+    "US|Colorado|Denver": {
+      "city": "Denver",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 39.741134,
+        "longitude": -104.985962
+      },
+      "region": "Colorado",
+      "sessions": 1
+    },
     "US|Connecticut|Mansfield": {
       "city": "Mansfield",
       "country": "US",
@@ -538,6 +549,17 @@
       "region": "Ohio",
       "sessions": 1
     },
+    "US|Oklahoma|Norman": {
+      "city": "Norman",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 35.227913,
+        "longitude": -97.344146
+      },
+      "region": "Oklahoma",
+      "sessions": 1
+    },
     "US|Oklahoma|Tulsa": {
       "city": "Tulsa",
       "country": "US",
@@ -795,11 +817,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 254
+      "sessions": 256
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-23",
+  "last_end": "2026-10-24",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -902,7 +924,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Connecticut": {
       "country": "US",
@@ -968,7 +990,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Oklahoma",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Pennsylvania": {
       "country": "US",
@@ -1016,6 +1038,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 385,
+  "total_sessions": 387,
   "version": 1
 }
