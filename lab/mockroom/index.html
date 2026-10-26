@@ -1,0 +1,1561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>MockRoom · Your solo mock interview room</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+  :root{
+    color-scheme: light dark;
+    --bg:#f4f1ea;
+    --surface:#fdfcf9;
+    --surface-2:#efe9dd;
+    --ink:#23262b;
+    --ink-soft:#5d636e;
+    --ink-faint:#8a9099;
+    --line:#ddd4c3;
+    --accent:#2e5e4e;
+    --accent-ink:#ffffff;
+    --accent-soft:#dce9e2;
+    --warn:#b06a1c;
+    --warn-soft:#f7e8d3;
+    --bad:#a93c2f;
+    --bad-soft:#f6ddd7;
+    --good:#2e5e4e;
+    --good-soft:#dce9e2;
+    --shadow:0 6px 24px rgba(50,44,30,.12);
+    --radius:14px;
+    --font-ui:"Avenir Next","Segoe UI",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    --font-display:Georgia,"Times New Roman","Songti SC","SimSun",serif;
+    --font-mono:"SF Mono","Cascadia Mono",Consolas,"Courier New",monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#17181c;
+      --surface:#22242a;
+      --surface-2:#2a2d34;
+      --ink:#ecebe6;
+      --ink-soft:#b7bcc4;
+      --ink-faint:#848b96;
+      --line:#3a3e47;
+      --accent:#7fbfa5;
+      --accent-ink:#12211b;
+      --accent-soft:#274035;
+      --warn:#e0a458;
+      --warn-soft:#45351f;
+      --bad:#e08a7c;
+      --bad-soft:#472b26;
+      --good:#7fbfa5;
+      --good-soft:#274035;
+      --shadow:0 6px 24px rgba(0,0,0,.45);
+    }
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-ui);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:20px 18px 56px;}
+  .hidden{display:none !important;}
+
+  /* ---------- header ---------- */
+  header.top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:6px 0 4px;}
+  header.top h1{font-family:var(--font-display);font-size:30px;margin:0;font-weight:700;letter-spacing:.3px;}
+  header.top .tag{color:var(--ink-soft);font-size:14.5px;}
+  .privacy{color:var(--ink-faint);font-size:13px;margin:2px 0 22px;}
+
+  /* ---------- steps ---------- */
+  .steps{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+  .step{
+    display:flex;align-items:center;gap:8px;
+    font-size:13.5px;color:var(--ink-faint);
+    padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);
+  }
+  .step .n{
+    width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+    background:var(--surface-2);color:var(--ink-soft);font-size:12px;font-weight:700;flex:none;
+  }
+  .step.active{color:var(--ink);border-color:var(--accent);}
+  .step.active .n{background:var(--accent);color:var(--accent-ink);}
+  .step.done{color:var(--ink-soft);}
+  .step.done .n{background:var(--accent-soft);color:var(--accent);}
+
+  section.panel{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:26px 26px 24px;
+  }
+  section.panel h2{font-family:var(--font-display);font-size:22px;margin:0 0 6px;}
+  section.panel .sub{color:var(--ink-soft);font-size:14.5px;margin:0 0 18px;}
+
+  /* ---------- buttons & inputs ---------- */
+  button{
+    font-family:var(--font-ui);font-size:15px;cursor:pointer;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink);
+    border-radius:10px;padding:10px 18px;line-height:1.2;
+  }
+  button:hover{border-color:var(--accent);}
+  button:disabled{opacity:.45;cursor:not-allowed;}
+  button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600;}
+  button.primary:hover{filter:brightness(1.07);}
+  button.ghost{border-color:transparent;background:transparent;color:var(--ink-soft);}
+  button.ghost:hover{color:var(--ink);border-color:var(--line);}
+  button.small{padding:6px 12px;font-size:13.5px;border-radius:8px;}
+  button.danger{color:var(--bad);}
+  button.danger:hover{border-color:var(--bad);}
+  input[type="text"],textarea,select{
+    font-family:var(--font-ui);font-size:15px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;width:100%;
+  }
+  textarea{resize:vertical;line-height:1.5;}
+  select{width:auto;}
+  label.flabel{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin:0 0 6px;}
+  .rowflex{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center;}
+  .btnrow .spacer{flex:1;}
+
+  /* ---------- drop zone ---------- */
+  .drop{
+    border:2px dashed var(--line);border-radius:var(--radius);
+    padding:34px 20px;text-align:center;color:var(--ink-soft);
+    background:var(--surface-2);cursor:pointer;transition:border-color .15s,background .15s;
+  }
+  .drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft);}
+  .drop .big{font-size:17px;color:var(--ink);font-weight:600;margin-bottom:4px;}
+  .drop input{display:none;}
+  .orline{display:flex;align-items:center;gap:12px;color:var(--ink-faint);font-size:13px;margin:18px 0;}
+  .orline::before,.orline::after{content:"";flex:1;height:1px;background:var(--line);}
+  .err{
+    background:var(--bad-soft);color:var(--bad);border:1px solid var(--bad);
+    border-radius:10px;padding:10px 14px;font-size:14px;margin-top:14px;
+  }
+  .note{font-size:13px;color:var(--ink-faint);margin-top:12px;}
+
+  /* ---------- question list ---------- */
+  .qlist{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+  .qitem{
+    display:flex;gap:10px;align-items:flex-start;
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);
+  }
+  .qitem .qn{font-family:var(--font-mono);font-size:13px;color:var(--ink-faint);padding-top:11px;min-width:26px;text-align:right;}
+  .qitem textarea{flex:1;border:none;padding:6px 4px;background:transparent;}
+  .qitem textarea:focus{outline:1px solid var(--accent);border-radius:6px;}
+  .qitem .del{flex:none;margin-top:4px;}
+  .count-line{font-size:14px;color:var(--ink-soft);margin-bottom:12px;}
+
+  /* ---------- settings ---------- */
+  .settings{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;margin-top:6px;}
+  @media (max-width:640px){.settings{grid-template-columns:1fr;}}
+  .seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .seg button{flex:1;border:none;border-radius:0;background:var(--surface);padding:10px 6px;font-size:14.5px;}
+  .seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:600;}
+  .switchrow{display:flex;align-items:center;gap:12px;}
+  .switchbtn{
+    position:relative;width:48px;height:27px;flex:none;padding:0;
+    border:none;background:transparent;border-radius:999px;cursor:pointer;
+  }
+  .switchbtn .track{
+    position:absolute;inset:0;border-radius:999px;background:var(--surface-2);
+    border:1px solid var(--line);transition:background .15s;
+  }
+  .switchbtn .track::after{
+    content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;
+    background:var(--surface);border:1px solid var(--line);transition:left .15s;
+  }
+  .switchbtn[aria-checked="true"] .track{background:var(--accent);border-color:var(--accent);}
+  .switchbtn[aria-checked="true"] .track::after{left:24px;background:var(--accent-ink);border-color:transparent;}
+  .switchbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .switchrow .sw-label{font-size:15px;}
+  .switchrow .sw-hint{font-size:12.5px;color:var(--ink-faint);}
+
+  /* panel-mode config */
+  .panelcfg{margin-top:22px;border-top:1px solid var(--line);padding-top:20px;}
+  .panelcfg .pc-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .panelcfg .pc-head h3{margin:0;font-size:17px;font-family:var(--font-display);}
+  .interviewer-rows{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+  .irow{display:flex;gap:10px;align-items:center;}
+  .irow .avatar{flex:none;}
+  .irow input[type="text"]{flex:1;min-width:0;}
+  .irow input.role{flex:1.2;}
+  .irow select{flex:none;}
+
+  /* ---------- avatars ---------- */
+  .avatar{
+    border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;
+    font-family:var(--font-display);flex:none;user-select:none;
+  }
+  .avatar.sm{width:40px;height:40px;font-size:16px;}
+  .avatar.lg{width:76px;height:76px;font-size:30px;}
+  .c0{background:#2e5e4e;} .c1{background:#8a5a2b;} .c2{background:#4a5d8a;} .c3{background:#7a4060;}
+
+  /* ---------- interview room ---------- */
+  .room-top{display:flex;gap:18px;align-items:stretch;flex-wrap:wrap;margin-bottom:18px;}
+  .timers{display:flex;gap:12px;flex-wrap:wrap;flex:1;min-width:230px;}
+  .timerbox{
+    flex:1;min-width:108px;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:12px;padding:10px 14px;
+  }
+  .timerbox .tl{font-size:12px;color:var(--ink-soft);font-weight:600;letter-spacing:.4px;}
+  .timerbox .tv{font-family:var(--font-mono);font-size:30px;font-weight:700;line-height:1.15;}
+  .timerbox .tv.over{color:var(--bad);}
+  .recbox{
+    display:flex;align-items:center;gap:10px;background:var(--surface-2);
+    border:1px solid var(--line);border-radius:12px;padding:10px 16px;min-width:150px;
+  }
+  .recdot{width:12px;height:12px;border-radius:50%;background:var(--ink-faint);flex:none;}
+  .recdot.on{background:var(--bad);animation:pulse 1.2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  @media (prefers-reduced-motion: reduce){.recdot.on{animation:none;}}
+  .recbox .rl{font-size:13.5px;color:var(--ink-soft);}
+  .qprogress{font-size:14px;color:var(--ink-soft);margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+
+  /* panel strip */
+  .panelstrip{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin:6px 0 4px;}
+  .p-person{display:flex;flex-direction:column;align-items:center;gap:6px;width:104px;text-align:center;transition:opacity .25s;}
+  .p-person.dim{opacity:.38;}
+  .p-person .pname{font-size:14px;font-weight:600;line-height:1.25;}
+  .p-person .prole{font-size:12px;color:var(--ink-soft);line-height:1.25;}
+  .p-person .avatar{outline:3px solid transparent;outline-offset:3px;transition:outline-color .25s;}
+  .p-person.speaking .avatar{outline-color:var(--accent);}
+  .bubble-zone{min-height:8px;display:flex;justify-content:center;padding:14px 0 4px;}
+  .bubble{
+    position:relative;max-width:640px;width:100%;
+    background:var(--accent-soft);border:1px solid var(--accent);
+    border-radius:16px;padding:16px 20px 14px;
+  }
+  .bubble::after{
+    content:"";position:absolute;bottom:-9px;left:var(--tailx,50%);
+    width:16px;height:16px;background:var(--accent-soft);
+    border-right:1px solid var(--accent);border-bottom:1px solid var(--accent);
+    transform:translateX(-50%) rotate(45deg);
+  }
+  .bubble .asker-tag{font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:5px;letter-spacing:.3px;}
+  .bubble .qtext{font-family:var(--font-display);font-size:clamp(19px,3.4vw,25px);line-height:1.45;}
+
+  .solo-q{
+    font-family:var(--font-display);
+    font-size:clamp(22px,4.2vw,32px);line-height:1.45;
+    padding:26px 6px 10px;min-height:120px;
+  }
+  .solo-asker{font-size:13px;color:var(--ink-soft);margin-bottom:2px;}
+
+  /* camera preview */
+  .preview-wrap{margin:14px 0 4px;}
+  .preview-wrap video{
+    width:100%;max-width:420px;border-radius:12px;background:#000;display:block;
+    aspect-ratio:4/3;object-fit:cover;
+  }
+  .preview-wrap .pv-label{font-size:12.5px;color:var(--ink-faint);margin-top:6px;}
+
+  /* ---------- coach ---------- */
+  .coach{
+    margin-top:22px;border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--surface-2);padding:16px 18px 14px;
+  }
+  .coach h3{margin:0 0 4px;font-size:15.5px;display:flex;align-items:center;gap:8px;}
+  .coach .coach-sub{font-size:12.5px;color:var(--ink-faint);margin:0 0 12px;}
+  .meters{display:flex;gap:12px;flex-wrap:wrap;}
+  .meter{
+    flex:1;min-width:150px;background:var(--surface);border:1px solid var(--line);
+    border-radius:10px;padding:10px 14px;
+  }
+  .meter .ml{font-size:12px;color:var(--ink-soft);font-weight:600;}
+  .meter .mv{font-size:21px;font-weight:700;font-family:var(--font-mono);line-height:1.25;}
+  .meter .mv small{font-size:12px;color:var(--ink-faint);font-weight:400;font-family:var(--font-ui);}
+  .meter .mstat{font-size:12.5px;font-weight:600;}
+  .mstat.ok{color:var(--good);} .mstat.warn{color:var(--warn);} .mstat.bad{color:var(--bad);} .mstat.idle{color:var(--ink-faint);}
+  .tip{
+    margin-top:12px;border-radius:10px;padding:11px 14px;font-size:14.5px;
+    background:var(--surface);border:1px solid var(--line);min-height:48px;
+  }
+  .tip.warn{background:var(--warn-soft);border-color:var(--warn);}
+  .tip.bad{background:var(--bad-soft);border-color:var(--bad);}
+  .tip.good{background:var(--good-soft);border-color:var(--good);}
+  .wave{display:flex;align-items:flex-end;gap:2px;height:34px;margin-top:12px;overflow:hidden;}
+  .wave i{flex:1;background:var(--accent);border-radius:2px 2px 0 0;min-height:2px;opacity:.75;}
+
+  /* ---------- review ---------- */
+  .sumcards{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
+  .sumcard{flex:1;min-width:130px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 16px;}
+  .sumcard .sl{font-size:12px;color:var(--ink-soft);font-weight:600;}
+  .sumcard .sv{font-size:24px;font-weight:700;font-family:var(--font-mono);}
+  .review-item{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px;}
+  .review-item .rq{font-family:var(--font-display);font-size:17.5px;margin:0 0 4px;}
+  .review-item .rmeta{font-size:13px;color:var(--ink-soft);margin-bottom:8px;}
+  .review-item audio,.review-item video{width:100%;max-width:480px;display:block;margin:8px 0;}
+  .review-item .rtips{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .review-item .rtips li{margin:2px 0;}
+  footer.foot{margin-top:26px;color:var(--ink-faint);font-size:12.5px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>MockRoom</h1>
+    <span class="tag">A mock interview room for one</span>
+  </header>
+  <p class="privacy">Your questions, audio, and video are processed only in this browser, on this device — nothing is uploaded to any server.</p>
+
+  <div class="steps" id="stepsBar">
+    <div class="step active" data-step="1"><span class="n">1</span>Add questions</div>
+    <div class="step" data-step="2"><span class="n">2</span>Review &amp; settings</div>
+    <div class="step" data-step="3"><span class="n">3</span>Interview room</div>
+    <div class="step" data-step="4"><span class="n">4</span>Debrief</div>
+  </div>
+
+  <!-- ============ STEP 1: load questions ============ -->
+  <section class="panel" id="screen-setup">
+    <h2>Bring in your interview questions</h2>
+    <p class="sub">Upload a PDF or Word (.docx) file and MockRoom will split it into questions right here on your device. You can also paste questions as text, or try the sample set first.</p>
+
+    <div class="drop" id="dropZone" tabindex="0" role="button" aria-label="Upload a question file">
+      <div class="big">Click to choose a file, or drag one in</div>
+      <div>Supports .pdf / .docx — files are parsed on this device only</div>
+      <input type="file" id="fileInput" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+    </div>
+    <div class="err hidden" id="parseError"></div>
+
+    <div class="orline">or</div>
+
+    <label class="flabel" for="pasteBox">Paste questions (one per line, or numbered / Q: — either works)</label>
+    <textarea id="pasteBox" rows="6" placeholder="For example:&#10;1. Please introduce yourself.&#10;2. Why do you want to apply for this program?&#10;Q: Tell me about the hardest problem you have faced, and how you solved it."></textarea>
+    <div class="btnrow">
+      <button class="primary" id="usePastedBtn">Use these questions</button>
+      <button id="sampleBtn">Try the sample questions</button>
+    </div>
+    <p class="note">Scanned PDFs (image-only, with no text layer) can't be read. For old .doc files, save as .docx first and upload again.</p>
+  </section>
+
+  <!-- ============ STEP 2: review + settings ============ -->
+  <section class="panel hidden" id="screen-review">
+    <h2>Review your questions, pick your settings</h2>
+    <p class="sub">Edit, delete, or add questions. When everything looks right, head into the interview room.</p>
+    <p class="count-line" id="qCountLine"></p>
+    <div class="qlist" id="qList"></div>
+    <div class="btnrow">
+      <button id="addQBtn" class="small">+ Add a question</button>
+      <button id="shuffleBtn" class="small">Shuffle order</button>
+    </div>
+
+    <div class="settings" style="margin-top:26px;">
+      <div>
+        <label class="flabel">Recording</label>
+        <div class="seg" id="recModeSeg">
+          <button data-mode="none">Off</button>
+          <button data-mode="audio" class="on">Audio only</button>
+          <button data-mode="video">Audio + video</button>
+        </div>
+      </div>
+      <div>
+        <label class="flabel" for="timeLimitSel">Per-question time reminder (the timer turns red past it — it won't stop you)</label>
+        <select id="timeLimitSel">
+          <option value="0">No reminder</option>
+          <option value="60">1 minute</option>
+          <option value="120" selected>2 minutes</option>
+          <option value="180">3 minutes</option>
+          <option value="300">5 minutes</option>
+        </select>
+      </div>
+      <div>
+        <label class="flabel">Read questions aloud</label>
+        <div class="switchrow">
+          <button type="button" class="switchbtn" id="ttsToggle" role="switch" aria-checked="true" aria-label="Read questions aloud toggle"><span class="track"></span></button>
+          <div>
+            <div class="sw-label" id="ttsStateLabel">On · reads each question as it appears</div>
+            <div class="sw-hint">Uses your browser's built-in voice; tap “Re-read” at any time</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="flabel" for="ttsRateSel">Reading speed</label>
+        <select id="ttsRateSel">
+          <option value="0.85">Slower</option>
+          <option value="1" selected>Normal</option>
+          <option value="1.15">Faster</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Interviewer panel mode -->
+    <div class="panelcfg">
+      <div class="pc-head">
+        <h3>Interviewer panel</h3>
+        <div class="switchrow">
+          <button type="button" class="switchbtn" id="panelToggle" role="switch" aria-checked="false" aria-label="Interviewer panel toggle"><span class="track"></span></button>
+          <div>
+            <div class="sw-label" id="panelStateLabel">Off · practise facing the questions on your own</div>
+            <div class="sw-hint">When on, the interviewers take turns asking; each question appears in a speech bubble above whoever is asking</div>
+          </div>
+        </div>
+        <span style="flex:1"></span>
+        <label class="flabel" for="panelCountSel" style="margin:0;">Interviewers</label>
+        <select id="panelCountSel">
+          <option value="1">1 person</option>
+          <option value="2">2 people</option>
+          <option value="3" selected>3 people</option>
+          <option value="4">4 people</option>
+        </select>
+      </div>
+      <div id="panelConfigBody" class="hidden">
+        <div class="interviewer-rows" id="interviewerRows"></div>
+        <p class="note">Names and roles are editable; questions rotate in the order shown here. Avatars use name initials — no real photos.</p>
+      </div>
+    </div>
+
+    <div class="err hidden" id="reviewError"></div>
+    <div class="btnrow">
+      <button class="ghost" id="backToSetupBtn">← Use different questions</button>
+      <span class="spacer"></span>
+      <button class="primary" id="startBtn">Enter the interview room →</button>
+    </div>
+  </section>
+
+  <!-- ============ STEP 3: interview room ============ -->
+  <section class="panel hidden" id="screen-room">
+    <div class="room-top">
+      <div class="timers">
+        <div class="timerbox">
+          <div class="tl">This question</div>
+          <div class="tv" id="qTimer">0:00</div>
+        </div>
+        <div class="timerbox">
+          <div class="tl">Session total</div>
+          <div class="tv" id="totalTimer">0:00</div>
+        </div>
+      </div>
+      <div class="recbox">
+        <span class="recdot" id="recDot"></span>
+        <span class="rl" id="recLabel">Not recording</span>
+      </div>
+    </div>
+
+    <div class="qprogress">
+      <span id="qProgress">Question 1 of 1</span>
+      <span id="phaseLabel">Reading · the timer hasn't started</span>
+    </div>
+
+    <!-- panel strip (panel mode only) -->
+    <div id="panelStripWrap" class="hidden">
+      <div class="panelstrip" id="panelStrip"></div>
+      <div class="bubble-zone"><div class="bubble hidden" id="bubble">
+        <div class="asker-tag" id="bubbleTag"></div>
+        <div class="qtext" id="bubbleText"></div>
+      </div></div>
+    </div>
+
+    <!-- solo question (non-panel mode) -->
+    <div id="soloQWrap">
+      <div class="solo-asker hidden" id="soloAsker"></div>
+      <div class="solo-q" id="soloQText"></div>
+    </div>
+
+    <div class="preview-wrap hidden" id="previewWrap">
+      <video id="previewVideo" autoplay muted playsinline></video>
+      <div class="pv-label">Camera preview (only you can see this)</div>
+    </div>
+
+    <div class="btnrow" id="roomBtns">
+      <button id="rereadBtn">🔊 Re-read</button>
+      <button class="primary" id="answerBtn">Start answer</button>
+      <button id="skipBtn">Skip question</button>
+      <button class="danger" id="endBtn">End session</button>
+    </div>
+
+    <!-- voice coach -->
+    <div class="coach" id="coachBox">
+      <h3>🎙 Voice coach · Toastmasters-style feedback</h3>
+      <p class="coach-sub" id="coachSub">Once you start answering, this watches your pace, pitch variety, and pauses in real time. The analysis runs on this device's microphone only.</p>
+      <div class="meters">
+        <div class="meter">
+          <div class="ml" id="mWpmLabel">Pace (words/min, estimated)</div>
+          <div class="mv" id="mWpm">—</div>
+          <div class="mstat idle" id="mWpmStat">Waiting to start</div>
+        </div>
+        <div class="meter">
+          <div class="ml">Pitch variety (pitch range)</div>
+          <div class="mv" id="mPitch">—</div>
+          <div class="mstat idle" id="mPitchStat">Waiting to start</div>
+        </div>
+        <div class="meter">
+          <div class="ml">Pauses (silence of 0.7 s or more)</div>
+          <div class="mv" id="mFiller">0 <small>pauses</small></div>
+          <div class="mstat idle" id="mFillerStat">—</div>
+        </div>
+      </div>
+      <div class="wave" id="waveBox" aria-hidden="true"></div>
+      <div class="tip" id="coachTip">Tip: the coach starts listening once you tap “Start answer”. A pace of 120–160 words per minute is easiest to follow; leave a small pause between sentences and let your pitch rise and fall — it sounds more confident.</div>
+      <p class="note" style="margin:10px 0 0;">The coach analyses sound only (pitch, rhythm, pauses); it never transcribes or uploads anything — so it can't hear filler words like “um” and “ah”. Count those yourself when you replay your recording.</p>
+    </div>
+  </section>
+
+  <!-- ============ STEP 4: review / debrief ============ -->
+  <section class="panel hidden" id="screen-done">
+    <h2>Session complete</h2>
+    <p class="sub">Replay each answer and compare your timing with the coach's notes. Recordings live only in this page — close the tab and they're gone, so download anything you want to keep, question by question.</p>
+    <div class="sumcards">
+      <div class="sumcard"><div class="sl">Questions answered</div><div class="sv" id="sumCount">0</div></div>
+      <div class="sumcard"><div class="sl">Session time</div><div class="sv" id="sumTime">0:00</div></div>
+      <div class="sumcard"><div class="sl">Average pace</div><div class="sv" id="sumWpm">—</div></div>
+      <div class="sumcard"><div class="sl">Total long pauses</div><div class="sv" id="sumFiller">0</div></div>
+    </div>
+    <div id="reviewList"></div>
+    <div class="btnrow">
+      <button id="againBtn">Practise again (same questions)</button>
+      <button class="primary" id="newSetBtn">New set of questions</button>
+    </div>
+  </section>
+
+  <footer class="foot">MockRoom · everything is processed locally in your browser</footer>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   MockRoom — fully client-side mock interview practice.
+   No uploads: file parsing, TTS, recording, and voice coaching
+   all happen in this page.
+   ============================================================ */
+
+/* ---------- state ---------- */
+var state = {
+  screen: "setup",
+  questions: [],
+  settings: {
+    recMode: "audio",
+    timeLimit: 120,
+    tts: true,
+    ttsRate: 1,
+    panel: false,
+    panelCount: 3,
+    interviewers: [
+      { name: "Alex Morgan", role: "Hiring Manager" },
+      { name: "Priya Shah", role: "Technical Lead" },
+      { name: "Jordan Lee", role: "HR" },
+      { name: "Sam Carter", role: "Team Lead" }
+    ]
+  },
+  session: null
+};
+
+var AVATAR_CLASSES = ["c0", "c1", "c2", "c3"];
+var SAMPLE_QUESTIONS = [
+  "Please take two minutes to introduce yourself, focusing on the experience most relevant to this opportunity.",
+  "Why do you want to apply for this program? What do you see as your biggest strength?",
+  "Tell me about the hardest thing you have faced: what was the situation, what exactly did you do, and how did it turn out?",
+  "Tell me about a time you failed, and what you learned from it.",
+  "If you had only three months to prepare, how would you plan your time? Why?",
+  "What questions do you have for us?"
+];
+
+/* ---------- helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function fmt(sec){
+  sec = Math.max(0, Math.floor(sec));
+  var m = Math.floor(sec / 60), s = sec % 60;
+  return m + ":" + (s < 10 ? "0" : "") + s;
+}
+function esc(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+function showScreen(name){
+  state.screen = name;
+  $("screen-setup").classList.toggle("hidden", name !== "setup");
+  $("screen-review").classList.toggle("hidden", name !== "review");
+  $("screen-room").classList.toggle("hidden", name !== "room");
+  $("screen-done").classList.toggle("hidden", name !== "done");
+  var order = { setup: 1, review: 2, room: 3, done: 4 };
+  var cur = order[name];
+  var steps = document.querySelectorAll("#stepsBar .step");
+  for (var i = 0; i < steps.length; i++){
+    var n = parseInt(steps[i].getAttribute("data-step"), 10);
+    steps[i].classList.toggle("active", n === cur);
+    steps[i].classList.toggle("done", n < cur);
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function showError(el, msg){
+  if (!msg){ el.classList.add("hidden"); el.textContent = ""; return; }
+  el.textContent = msg; el.classList.remove("hidden");
+}
+
+/* ============================================================
+   Question parsing
+   ============================================================ */
+function splitQuestions(text){
+  if (!text) return [];
+  var lines = String(text).replace(/\r\n?/g, "\n").split("\n");
+  var out = [], cur = null;
+  var marker = /^\s*(?:Q\s*\d*\s*[:.)]|Question\s*\d*\s*[:.]?|\d{1,3}\s*[.)]\s*|[-•·]\s+)/i;
+  function flush(){
+    if (cur !== null){
+      var t = cur.replace(/\s+/g, " ").trim();
+      if (t.length >= 2) out.push(t);
+      cur = null;
+    }
+  }
+  for (var i = 0; i < lines.length; i++){
+    var line = lines[i];
+    if (!line.trim()){ flush(); continue; }
+    if (marker.test(line)){
+      flush();
+      cur = line.replace(marker, "");
+    } else if (cur === null){
+      cur = line;
+    } else if (cur.length < 400){
+      cur += " " + line.trim();
+    }
+  }
+  flush();
+  if (out.length <= 1){
+    /* fallback: split on sentence-ending punctuation clusters */
+    var whole = String(text).replace(/\s+/g, " ").trim();
+    var parts = whole.match(/[^.!?]+[.!?]+[""']?/g);
+    if (parts && parts.length > 1){
+      var cleaned = [];
+      for (var j = 0; j < parts.length; j++){
+        var p = parts[j].replace(marker, "").trim();
+        if (p.length >= 2) cleaned.push(p);
+      }
+      if (cleaned.length > out.length) return cleaned;
+    }
+    if (out.length === 0 && whole.length >= 2) return [whole];
+  }
+  return out;
+}
+
+function parsePdf(file){
+  return file.arrayBuffer().then(function(buf){
+    if (typeof pdfjsLib === "undefined") throw new Error("noload");
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    return pdfjsLib.getDocument({ data: buf }).promise;
+  }).then(function(pdf){
+    var chain = Promise.resolve("");
+    var pages = [];
+    for (var p = 1; p <= pdf.numPages; p++){
+      (function(pno){
+        chain = chain.then(function(acc){
+          return pdf.getPage(pno).then(function(page){
+            return page.getTextContent();
+          }).then(function(tc){
+            var lastY = null, txt = "";
+            for (var i = 0; i < tc.items.length; i++){
+              var it = tc.items[i];
+              if (lastY !== null && Math.abs(it.transform[5] - lastY) > 2) txt += "\n";
+              txt += it.str + " ";
+              lastY = it.transform[5];
+            }
+            pages.push(txt);
+            return acc;
+          });
+        });
+      })(p);
+    }
+    return chain.then(function(){ return pages.join("\n"); });
+  });
+}
+
+function parseDocx(file){
+  return file.arrayBuffer().then(function(buf){
+    if (typeof mammoth === "undefined") throw new Error("noload");
+    return mammoth.extractRawText({ arrayBuffer: buf });
+  }).then(function(res){ return res.value; });
+}
+
+function handleFile(file){
+  showError($("parseError"), null);
+  if (!file) return;
+  var name = (file.name || "").toLowerCase();
+  var job;
+  if (name.endsWith(".pdf")) job = parsePdf(file);
+  else if (name.endsWith(".docx")) job = parseDocx(file);
+  else if (name.endsWith(".doc")){
+    showError($("parseError"), "This is an old-style .doc file, which browsers can't parse reliably. Save it as .docx in Word first, then upload it again.");
+    return;
+  } else {
+    showError($("parseError"), "That file type isn't supported — please upload a PDF or .docx file.");
+    return;
+  }
+  $("dropZone").querySelector(".big").textContent = "Parsing \u201c" + file.name + "\u201d\u2026";
+  job.then(function(text){
+    $("dropZone").querySelector(".big").textContent = "Click to choose a file, or drag one in";
+    var qs = splitQuestions(text);
+    if (!qs.length){
+      showError($("parseError"), "No questions could be pulled from this file — it may be a scanned PDF (no text layer), or it may contain no readable text. You can copy the questions out and use the paste box below.");
+      return;
+    }
+    state.questions = qs;
+    openReview();
+  }).catch(function(err){
+    $("dropZone").querySelector(".big").textContent = "Click to choose a file, or drag one in";
+    if (err && err.message === "noload"){
+      showError($("parseError"), "The parsing library didn't load (possibly a network problem). Try again on a better connection, or paste the questions into the box below.");
+    } else {
+      showError($("parseError"), "That file couldn't be parsed — it may be damaged or in an unusual format. You can copy the questions out and use the paste box below.");
+    }
+  });
+}
+
+/* ============================================================
+   Step 2: review list + settings
+   ============================================================ */
+function openReview(){
+  renderQList();
+  renderInterviewerRows();
+  showScreen("review");
+}
+function renderQList(){
+  var box = $("qList");
+  box.innerHTML = "";
+  $("qCountLine").textContent = state.questions.length + (state.questions.length === 1 ? " question" : " questions");
+  state.questions.forEach(function(q, idx){
+    var item = document.createElement("div");
+    item.className = "qitem";
+    item.innerHTML =
+      '<div class="qn">' + (idx + 1) + '.</div>' +
+      '<textarea rows="2"></textarea>' +
+      '<button class="small danger del" title="Delete this question">✕</button>';
+    var ta = item.querySelector("textarea");
+    ta.value = q;
+    ta.addEventListener("input", function(){ state.questions[idx] = ta.value; });
+    item.querySelector(".del").addEventListener("click", function(){
+      state.questions.splice(idx, 1);
+      renderQList();
+    });
+    box.appendChild(item);
+  });
+}
+function renderInterviewerRows(){
+  var wrap = $("interviewerRows");
+  wrap.innerHTML = "";
+  var count = state.settings.panelCount;
+  for (var i = 0; i < count; i++){
+    (function(i){
+      var iv = state.settings.interviewers[i];
+      var row = document.createElement("div");
+      row.className = "irow";
+      row.innerHTML =
+        '<div class="avatar sm ' + AVATAR_CLASSES[i % 4] + '">' + esc(initialOf(iv.name)) + '</div>' +
+        '<input type="text" class="iname" placeholder="Name" />' +
+        '<input type="text" class="role" placeholder="Role, e.g. Hiring Manager" />';
+      var nameIn = row.querySelector(".iname");
+      var roleIn = row.querySelector(".role");
+      nameIn.value = iv.name; roleIn.value = iv.role;
+      nameIn.addEventListener("input", function(){
+        state.settings.interviewers[i].name = nameIn.value;
+        row.querySelector(".avatar").textContent = initialOf(nameIn.value);
+      });
+      roleIn.addEventListener("input", function(){
+        state.settings.interviewers[i].role = roleIn.value;
+      });
+      wrap.appendChild(row);
+    })(i);
+  }
+  $("panelConfigBody").classList.toggle("hidden", !state.settings.panel);
+}
+function initialOf(name){
+  var t = String(name || "").trim();
+  return t ? t.charAt(0).toUpperCase() : "?";
+}
+function activeInterviewers(){
+  var list = [];
+  for (var i = 0; i < state.settings.panelCount; i++){
+    var iv = state.settings.interviewers[i];
+    list.push({
+      name: (iv.name || "").trim() || ("Interviewer " + (i + 1)),
+      role: (iv.role || "").trim(),
+      colorIdx: i % 4
+    });
+  }
+  return list;
+}
+
+/* ============================================================
+   TTS
+   ============================================================ */
+function speak(text){
+  if (!("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.rate = state.settings.ttsRate;
+    u.lang = "en-US";
+    window.speechSynthesis.speak(u);
+  } catch (e) { /* TTS unavailable — text still shown */ }
+}
+function stopSpeak(){
+  if ("speechSynthesis" in window){ try { window.speechSynthesis.cancel(); } catch (e) {} }
+}
+
+/* ============================================================
+   Voice coach — pitch/pace/pause analysis (Web Audio only, fully local)
+   ============================================================ */
+function Coach(stream){
+  this.stream = stream || null;
+  this.ctx = null; this.analyser = null; this.raf = null; this.srcNode = null;
+  this.reset();
+}
+Coach.prototype.reset = function(){
+  this.startedAt = 0;
+  /* pace is estimated from syllable nuclei, converted to English words */
+  this.pitchSamples = [];       /* Hz values while voiced */
+  this.syllables = 0;           /* envelope syllable nuclei — fully local pace estimate */
+  this.segments = [];           /* speech runs between >=0.7s pauses: {syll, dur} */
+  this.segSyll = 0; this.segStartAt = 0;
+  this.pauses = 0;              /* pauses of >= 0.7 s */
+  this.silenceMs = 0;           /* total unvoiced time after first speech */
+  this.heardSpeech = false;
+  this.lastTipAt = 0;
+  this.lastTipKey = "";
+};
+Coach.prototype.attachStream = function(stream){
+  this.stream = stream;
+};
+Coach.prototype.start = function(){
+  this.reset();
+  this.startedAt = Date.now();
+  this.startAudio();
+};
+Coach.prototype.startAudio = function(){
+  if (!this.stream) return;
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    if (!this.ctx) this.ctx = new AC();
+    if (this.ctx.state === "suspended") this.ctx.resume();
+    this.srcNode = this.ctx.createMediaStreamSource(this.stream);
+    this.analyser = this.ctx.createAnalyser();
+    this.analyser.fftSize = 2048;
+    this.srcNode.connect(this.analyser);
+    var buf = new Float32Array(this.analyser.fftSize);
+    var self = this;
+    var bars = [];
+    var waveBox = $("waveBox");
+    waveBox.innerHTML = "";
+    for (var i = 0; i < 36; i++){
+      var b = document.createElement("i");
+      b.style.height = "3px";
+      waveBox.appendChild(b); bars.push(b);
+    }
+    var frame = 0;
+    /* --- local prosody tracking: syllable nuclei + pauses from the envelope --- */
+    var envHist = [];            /* recent smoothed envelope samples */
+    var lastFrameAt = performance.now();
+    var lastSyllAt = 0, lastPeakVal = 0, minSincePeak = 1;
+    var silentRunMs = 0;
+    function trackProsody(rms, now){
+      var env = rms;
+      envHist.push(env);
+      if (envHist.length > 14) envHist.shift();
+      var dt = Math.min(80, now - lastFrameAt);
+      lastFrameAt = now;
+      var voiced = env > 0.018;
+      if (voiced){
+        self.heardSpeech = true;
+        if (silentRunMs >= 700){
+          self.pauses++;
+          if (self.segSyll > 0){
+            self.segments.push({ syll: self.segSyll, dur: (now - silentRunMs - self.segStartAt) / 1000 });
+            self.segSyll = 0;
+          }
+          self.segStartAt = now;
+        } else if (self.segStartAt === 0){
+          self.segStartAt = now;
+        }
+        silentRunMs = 0;
+        /* syllable nucleus: a local envelope peak with a dip before it */
+        if (envHist.length >= 7){
+          var mid = envHist[envHist.length - 4];
+          var isPeak = mid >= envHist[envHist.length - 5] && mid >= envHist[envHist.length - 3]
+            && mid >= envHist[envHist.length - 6] && mid >= envHist[envHist.length - 2]
+            && mid > 0.03;
+          if (mid < minSincePeak) minSincePeak = mid;
+          if (isPeak && now - lastSyllAt >= 95 && minSincePeak < mid * 0.72){
+            self.syllables++;
+            self.segSyll++;
+            lastSyllAt = now;
+            lastPeakVal = mid;
+            minSincePeak = 1;
+          }
+        }
+      } else if (self.heardSpeech){
+        silentRunMs += dt;
+        self.silenceMs += dt;
+      }
+    }
+    function loop(){
+      self.raf = requestAnimationFrame(loop);
+      if (!self.analyser) return;
+      self.analyser.getFloatTimeDomainData(buf);
+      /* RMS for the level meter */
+      var sum = 0, i;
+      for (i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+      var rms = Math.sqrt(sum / buf.length);
+      trackProsody(rms, performance.now());
+      frame++;
+      if (frame % 3 === 0){
+        var h = Math.max(3, Math.min(34, rms * 260));
+        for (var j = 0; j < bars.length; j++){
+          var cur = parseFloat(bars[j].style.height) || 3;
+          bars[j].style.height = Math.max(3, cur * 0.6 + h * (0.35 + Math.random() * 0.25)) + "px";
+        }
+      }
+      /* pitch via autocorrelation, sampled ~12×/s */
+      if (frame % 5 === 0 && rms > 0.012){
+        var f = autoCorrelate(buf, self.ctx.sampleRate);
+        if (f > 60 && f < 420){
+          self.pitchSamples.push(f);
+          if (self.pitchSamples.length > 4000) self.pitchSamples.splice(0, 1000);
+        }
+      }
+      if (frame % 20 === 0) self.renderStats();
+    }
+    loop();
+  } catch (e) { /* audio analysis unavailable */ }
+};
+Coach.prototype.elapsedMin = function(){
+  if (!this.startedAt) return 0;
+  return Math.max(0.05, (Date.now() - this.startedAt) / 60000);
+};
+/* Pace from locally counted syllable nuclei: ~1.4 syllables per English word,
+   comfortable range 120–160 wpm. */
+Coach.prototype.rateInfo = function(){
+  if (!this.startedAt || this.syllables < 12) return null;
+  var spm = this.syllables / this.elapsedMin();
+  return { value: Math.round(spm / 1.4), unit: "words/min", lo: 120, hi: 160 };
+};
+Coach.prototype.avgSegmentSyllables = function(){
+  var segs = this.segments.slice();
+  if (this.segSyll > 0) segs.push({ syll: this.segSyll, dur: 0 });
+  if (!segs.length) return null;
+  var total = 0;
+  for (var i = 0; i < segs.length; i++) total += segs[i].syll;
+  return Math.round(total / segs.length);
+};
+Coach.prototype.silenceRatio = function(){
+  if (!this.startedAt || !this.heardSpeech) return null;
+  var total = Date.now() - this.startedAt;
+  if (total < 3000) return null;
+  return Math.round((this.silenceMs / total) * 100) / 100;
+};
+Coach.prototype.pitchStats = function(){
+  var n = this.pitchSamples.length;
+  if (n < 30) return null;
+  var sorted = this.pitchSamples.slice().sort(function(a, b){ return a - b; });
+  var mean = 0, i;
+  for (i = 0; i < n; i++) mean += this.pitchSamples[i];
+  mean /= n;
+  var p10 = sorted[Math.floor(n * 0.1)], p90 = sorted[Math.floor(n * 0.9)];
+  var st = 12 * Math.log2(Math.max(1.05, p90 / Math.max(40, p10))); /* semitone span */
+  return { mean: Math.round(mean), span: Math.round(st * 10) / 10, n: n };
+};
+Coach.prototype.snapshot = function(){
+  var rate = this.rateInfo();
+  return {
+    rateValue: rate ? rate.value : null,
+    rateUnit: rate ? rate.unit : null,
+    pitch: this.pitchStats(),
+    pauses: this.pauses,
+    syllables: this.syllables,
+    avgSegment: this.avgSegmentSyllables(),
+    silenceRatio: this.silenceRatio(),
+    tips: this.collectTips(true)
+  };
+};
+Coach.prototype.collectTips = function(finalPass){
+  var tips = [];
+  var rate = this.rateInfo();
+  if (rate){
+    if (rate.value > rate.hi + 15) tips.push("You're speaking fast (about " + rate.value + " " + rate.unit + "): listeners may struggle to keep up — slow down on the key sentences and stress them.");
+    else if (rate.value < rate.lo - 15) tips.push("You're speaking slowly (about " + rate.value + " " + rate.unit + "): pick up the pace a little so it doesn't sound hesitant.");
+    else tips.push("Your pace is in the comfortable range (about " + rate.value + " " + rate.unit + "; reference " + rate.lo + "–" + rate.hi + ").");
+  }
+  var ps = this.pitchStats();
+  if (ps){
+    if (ps.span < 3) tips.push("Your pitch is fairly flat (span about " + ps.span + " semitones): lift or drop the ends of sentences and stress key words — more contour is more engaging.");
+    else if (ps.span > 9) tips.push("Your pitch varies a lot: keep it from sounding exaggerated, and land your sentence endings steadily.");
+    else tips.push("Your pitch variety sounds natural (span about " + ps.span + " semitones).");
+  }
+  var avgSeg = this.avgSegmentSyllables();
+  if (avgSeg !== null && avgSeg > 28)
+    tips.push("You average about " + avgSeg + " syllables before pausing — your sentences are running long: pause for half a second at natural breaks and split them into shorter sentences.");
+  var sr = this.silenceRatio();
+  if (sr !== null && sr > 0.38)
+    tips.push("Pauses take about " + Math.round(sr * 100) + "% of your time: thinking before you speak is good, but pauses this dense can sound unsure — settle the structure first, then the details.");
+  if (this.pauses === 0 && this.startedAt && (Date.now() - this.startedAt) > 45000 && this.syllables > 60)
+    tips.push("You've been speaking a while with almost no pauses: leave half a second between sentences so listeners can keep up — it sounds calmer, too.");
+  if (!tips.length && !finalPass) tips.push("Keep going — the coach is listening to your pace and pitch\u2026");
+  return tips;
+};
+Coach.prototype.renderStats = function(){
+  var rate = this.rateInfo();
+  var wEl = $("mWpm"), wStat = $("mWpmStat");
+  if (!rate){ wEl.textContent = "—"; }
+  else {
+    wEl.innerHTML = rate.value + " <small>" + rate.unit + "</small>";
+    if (rate.value > rate.hi + 15){ wStat.textContent = "Too fast · slow down"; wStat.className = "mstat bad"; }
+    else if (rate.value > rate.hi){ wStat.textContent = "A bit fast"; wStat.className = "mstat warn"; }
+    else if (rate.value >= rate.lo){ wStat.textContent = "Comfortable range (" + rate.lo + "–" + rate.hi + ")"; wStat.className = "mstat ok"; }
+    else if (rate.value >= rate.lo - 15){ wStat.textContent = "A bit slow"; wStat.className = "mstat warn"; }
+    else { wStat.textContent = "Too slow · pick up the pace"; wStat.className = "mstat bad"; }
+  }
+  var ps = this.pitchStats();
+  var pEl = $("mPitch"), pStat = $("mPitchStat");
+  if (!ps){ pEl.textContent = "—"; }
+  else {
+    pEl.innerHTML = ps.span + " <small>semitone span</small>";
+    if (ps.span < 3){ pStat.textContent = "Too flat · add some variety"; pStat.className = "mstat bad"; }
+    else if (ps.span < 4.5){ pStat.textContent = "Slightly flat · stress key words"; pStat.className = "mstat warn"; }
+    else if (ps.span <= 9){ pStat.textContent = "Natural variety"; pStat.className = "mstat ok"; }
+    else { pStat.textContent = "Wide variation"; pStat.className = "mstat warn"; }
+  }
+  $("mFiller").innerHTML = this.pauses + " <small>pauses</small>";
+  var fStat = $("mFillerStat");
+  var sr = this.silenceRatio();
+  if (sr === null){ fStat.textContent = "—"; fStat.className = "mstat idle"; }
+  else if (sr > 0.38){ fStat.textContent = "Lots of pauses · about " + Math.round(sr * 100) + "%"; fStat.className = "mstat bad"; }
+  else if (sr > 0.25){ fStat.textContent = "Frequent pauses · about " + Math.round(sr * 100) + "%"; fStat.className = "mstat warn"; }
+  else { fStat.textContent = "Flowing rhythm · about " + Math.round(sr * 100) + "%"; fStat.className = "mstat ok"; }
+
+  /* rotating live tip, at most every 6s and only when it changes */
+  var now = Date.now();
+  if (now - this.lastTipAt > 6000){
+    var tips = this.collectTips(false);
+    var warnTip = null;
+    for (var i = 0; i < tips.length; i++){
+      if (/speaking fast|speaking slowly|fairly flat|varies a lot|running long|Pauses take|almost no pauses/.test(tips[i])){ warnTip = tips[i]; break; }
+    }
+    var pick = warnTip || tips[0];
+    if (pick && pick !== this.lastTipKey){
+      this.lastTipKey = pick; this.lastTipAt = now;
+      var tipEl = $("coachTip");
+      tipEl.textContent = "💡 " + pick;
+      tipEl.className = "tip " + (warnTip ? (/fairly flat|speaking fast|speaking slowly/.test(warnTip) ? "bad" : "warn") : "good");
+    }
+  }
+};
+Coach.prototype.stop = function(){
+  if (this.raf) cancelAnimationFrame(this.raf);
+  this.raf = null;
+  if (this.srcNode){ try { this.srcNode.disconnect(); } catch (e) {} this.srcNode = null; }
+  this.analyser = null;
+  if (this.ctx){ var c = this.ctx; this.ctx = null; try { c.close(); } catch (e) {} }
+};
+
+function autoCorrelate(buf, sampleRate){
+  var SIZE = buf.length;
+  var rms = 0, i;
+  for (i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
+  rms = Math.sqrt(rms / SIZE);
+  if (rms < 0.01) return -1;
+  var r1 = 0, r2 = SIZE - 1, thres = 0.2;
+  for (i = 0; i < SIZE / 2; i++) if (Math.abs(buf[i]) < thres){ r1 = i; break; }
+  for (i = 1; i < SIZE / 2; i++) if (Math.abs(buf[SIZE - i]) < thres){ r2 = SIZE - i; break; }
+  var b = buf.slice(r1, r2);
+  var n = b.length;
+  if (n < 32) return -1;
+  var c = new Array(n).fill(0);
+  for (i = 0; i < n; i++)
+    for (var j = 0; j < n - i; j++) c[i] += b[j] * b[j + i];
+  var d = 0;
+  while (d < n - 1 && c[d] > c[d + 1]) d++;
+  var maxval = -1, maxpos = -1;
+  for (i = d; i < n; i++) if (c[i] > maxval){ maxval = c[i]; maxpos = i; }
+  if (maxpos <= 0) return -1;
+  var T0 = maxpos;
+  if (T0 > 0 && T0 < n - 1){
+    var x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+    var a = (x1 + x3 - 2 * x2) / 2, bb = (x3 - x1) / 2;
+    if (a) T0 = T0 - bb / (2 * a);
+  }
+  return sampleRate / T0;
+}
+
+/* ============================================================
+   Interview session
+   ============================================================ */
+function newSession(){
+  return {
+    idx: 0,
+    phase: "reading",           /* reading | answering | done */
+    results: [],                 /* per-question results */
+    qStartAt: 0, qElapsed: 0,
+    totalStartAt: 0, totalElapsedBank: 0,
+    timerId: null,
+    stream: null, recorder: null, chunks: [],
+    coach: null,
+    interviewers: state.settings.panel ? activeInterviewers() : null,
+    currentBlobUrl: null
+  };
+}
+function askerFor(idx){
+  var s = state.session;
+  if (!s || !s.interviewers || !s.interviewers.length) return null;
+  return s.interviewers[idx % s.interviewers.length];
+}
+
+function startInterview(){
+  /* sync edited questions */
+  state.questions = state.questions
+    .map(function(q){ return String(q).trim(); })
+    .filter(function(q){ return q.length; });
+  showError($("reviewError"), null);
+  if (!state.questions.length){
+    showError($("reviewError"), "Keep at least one question to start. Use \u201c+ Add a question\u201d to write one.");
+    return;
+  }
+  state.session = newSession();
+  state.session.coach = new Coach(null);
+  state.session.totalStartAt = Date.now();
+  showScreen("room");
+  buildPanelStrip();
+  resetCoachUI();
+  startTimerLoop();
+  acquireMediaThenQuestion();
+}
+
+function buildPanelStrip(){
+  var s = state.session;
+  var wrap = $("panelStripWrap");
+  if (!state.settings.panel || !s.interviewers){
+    wrap.classList.add("hidden");
+    $("soloQWrap").classList.remove("hidden");
+    return;
+  }
+  wrap.classList.remove("hidden");
+  $("soloQWrap").classList.add("hidden");
+  var strip = $("panelStrip");
+  strip.innerHTML = "";
+  s.interviewers.forEach(function(iv, i){
+    var d = document.createElement("div");
+    d.className = "p-person";
+    d.id = "pperson-" + i;
+    d.innerHTML =
+      '<div class="avatar lg ' + AVATAR_CLASSES[iv.colorIdx] + '">' + esc(initialOf(iv.name)) + '</div>' +
+      '<div class="pname">' + esc(iv.name) + '</div>' +
+      '<div class="prole">' + esc(iv.role) + '</div>';
+    strip.appendChild(d);
+  });
+}
+
+function acquireMediaThenQuestion(){
+  var s = state.session;
+  var mode = state.settings.recMode;
+  if (mode === "none"){
+    $("recLabel").textContent = "Not recording · voice coach off";
+    $("coachSub").textContent = "You chose not to record: without a microphone, the voice coach can't analyse your pace or pitch. To use the coach, pick \u201cAudio only\u201d or \u201cAudio + video\u201d.";
+    showQuestion();
+    return;
+  }
+  var constraints = mode === "video"
+    ? { audio: true, video: { width: { ideal: 1280 }, height: { ideal: 720 } } }
+    : { audio: true };
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined"){
+    $("recLabel").textContent = "Recording isn't supported in this browser";
+    $("coachSub").textContent = "This browser doesn't support recording, so the voice coach is unavailable too; reading the questions and timing still work for practice.";
+    showQuestion();
+    return;
+  }
+  navigator.mediaDevices.getUserMedia(constraints).then(function(stream){
+    s.stream = stream;
+    s.coach.attachStream(stream);
+    if (mode === "video"){
+      $("previewWrap").classList.remove("hidden");
+      $("previewVideo").srcObject = stream;
+    }
+    $("recLabel").textContent = mode === "video" ? "Video ready" : "Audio ready";
+    showQuestion();
+  }).catch(function(){
+    $("recLabel").textContent = "Microphone/camera not allowed";
+    $("coachSub").textContent = "Microphone (or camera) permission wasn't granted: this session is reading and timing only — no recording and no voice coach. You can allow it in your browser's site permissions, then start a new session.";
+    showQuestion();
+  });
+}
+
+function showQuestion(){
+  var s = state.session;
+  s.phase = "reading";
+  s.qElapsed = 0;
+  var q = state.questions[s.idx];
+  var asker = askerFor(s.idx);
+  $("qProgress").textContent = "Question " + (s.idx + 1) + " of " + state.questions.length;
+  $("phaseLabel").textContent = "Reading · the timer hasn't started";
+  $("qTimer").textContent = "0:00";
+  $("qTimer").classList.remove("over");
+  $("answerBtn").textContent = "Start answer";
+  $("answerBtn").disabled = false;
+  $("skipBtn").textContent = (s.idx === state.questions.length - 1) ? "Skip & finish" : "Skip question";
+  $("rereadBtn").classList.toggle("hidden", !state.settings.tts);
+
+  if (state.settings.panel && asker){
+    /* highlight current asker, dim the rest */
+    s.interviewers.forEach(function(iv, i){
+      var el = $("pperson-" + i);
+      if (!el) return;
+      var isAsker = (i === s.idx % s.interviewers.length);
+      el.classList.toggle("speaking", isAsker);
+      el.classList.toggle("dim", !isAsker);
+    });
+    var bubble = $("bubble");
+    bubble.classList.remove("hidden");
+    $("bubbleTag").textContent = asker.name + (asker.role ? " · " + asker.role : "") + " is asking";
+    $("bubbleText").textContent = q;
+    /* point the tail at the asker's avatar */
+    requestAnimationFrame(function(){
+      var strip = $("panelStrip");
+      var askerEl = $("pperson-" + (s.idx % s.interviewers.length));
+      if (strip && askerEl && bubble){
+        var br = bubble.getBoundingClientRect();
+        var ar = askerEl.getBoundingClientRect();
+        var x = (ar.left + ar.width / 2) - br.left;
+        bubble.style.setProperty("--tailx", Math.max(24, Math.min(br.width - 24, x)) + "px");
+      }
+    });
+  } else {
+    $("soloQText").textContent = q;
+    var sa = $("soloAsker");
+    if (asker){
+      sa.textContent = asker.name + (asker.role ? " · " + asker.role : "") + " asks";
+      sa.classList.remove("hidden");
+    } else sa.classList.add("hidden");
+  }
+
+  if (state.settings.tts) speak(q);
+}
+
+function startAnswering(){
+  var s = state.session;
+  if (!s || s.phase !== "reading") return;
+  stopSpeak();
+  s.phase = "answering";
+  s.qStartAt = Date.now();
+  $("phaseLabel").textContent = "Answering · the timer is running";
+  $("answerBtn").textContent = (s.idx === state.questions.length - 1) ? "Done · Finish" : "Done · Next question";
+  resetCoachUI();
+  /* start recording this answer */
+  if (s.stream && typeof MediaRecorder !== "undefined"){
+    try {
+      var mime = pickMime(state.settings.recMode);
+      s.recorder = mime ? new MediaRecorder(s.stream, { mimeType: mime })
+                         : new MediaRecorder(s.stream);
+      s.chunks = [];
+      s.recorder.ondataavailable = function(e){ if (e.data && e.data.size) s.chunks.push(e.data); };
+      s.recorder.start(250);
+      $("recDot").classList.add("on");
+      $("recLabel").textContent = state.settings.recMode === "video" ? "\u25cf Recording video" : "\u25cf Recording audio";
+    } catch (e) {
+      $("recLabel").textContent = "Recording failed to start — timing only";
+    }
+  }
+  if (s.stream) s.coach.start();
+  else $("coachTip").textContent = "No microphone input for this question, so the voice coach is paused. Timing continues as normal.";
+}
+
+function pickMime(mode){
+  var candidates = mode === "video"
+    ? ["video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm", "video/mp4"]
+    : ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg"];
+  if (typeof MediaRecorder === "undefined" || !MediaRecorder.isTypeSupported) return "";
+  for (var i = 0; i < candidates.length; i++)
+    if (MediaRecorder.isTypeSupported(candidates[i])) return candidates[i];
+  return "";
+}
+
+function finishAnswer(skipped){
+  var s = state.session;
+  if (!s) return;
+  var wasAnswering = s.phase === "answering";
+  var elapsed = wasAnswering ? (Date.now() - s.qStartAt) / 1000 : 0;
+  stopSpeak();
+
+  var result = {
+    q: state.questions[s.idx],
+    asker: askerFor(s.idx),
+    seconds: Math.round(elapsed),
+    skipped: !!skipped || !wasAnswering,
+    blobUrl: null, blobType: null,
+    coach: null
+  };
+
+  var advance = function(){
+    s.results.push(result);
+    s.idx++;
+    if (s.ending || s.idx >= state.questions.length) endInterview();
+    else showQuestion();
+  };
+
+  if (wasAnswering){
+    result.coach = s.coach.snapshot();
+    s.coach.stop();
+    if (s.recorder && s.recorder.state !== "inactive"){
+      s.recorder.onstop = function(){
+        if (s.chunks.length){
+          var type = s.recorder.mimeType || (state.settings.recMode === "video" ? "video/webm" : "audio/webm");
+          var blob = new Blob(s.chunks, { type: type });
+          result.blobUrl = URL.createObjectURL(blob);
+          result.blobType = type;
+        }
+        $("recDot").classList.remove("on");
+        $("recLabel").textContent = "This answer is saved";
+        advance();
+      };
+      try { s.recorder.stop(); } catch (e) { advance(); }
+    } else advance();
+  } else {
+    advance();
+  }
+}
+
+function startTimerLoop(){
+  var s = state.session;
+  if (s.timerId) clearInterval(s.timerId);
+  s.timerId = setInterval(function(){
+    if (!state.session) return;
+    var total = (Date.now() - s.totalStartAt) / 1000;
+    $("totalTimer").textContent = fmt(total);
+    if (s.phase === "answering"){
+      var q = (Date.now() - s.qStartAt) / 1000;
+      var el = $("qTimer");
+      el.textContent = fmt(q);
+      var limit = state.settings.timeLimit;
+      el.classList.toggle("over", limit > 0 && q > limit);
+    }
+  }, 250);
+}
+
+function endInterview(){
+  var s = state.session;
+  if (!s) return;
+  stopSpeak();
+  if (s.timerId) clearInterval(s.timerId);
+  if (s.recorder && s.recorder.state !== "inactive"){ try { s.recorder.stop(); } catch (e) {} }
+  if (s.coach) s.coach.stop();
+  if (s.stream){
+    s.stream.getTracks().forEach(function(t){ try { t.stop(); } catch (e) {} });
+    s.stream = null;
+  }
+  $("previewVideo").srcObject = null;
+  $("previewWrap").classList.add("hidden");
+  renderReview();
+  showScreen("done");
+}
+
+/* ---------- coach UI ---------- */
+function resetCoachUI(){
+  $("mWpm").textContent = "—";
+  $("mWpmStat").textContent = "Waiting to start"; $("mWpmStat").className = "mstat idle";
+  $("mPitch").textContent = "—";
+  $("mPitchStat").textContent = "Waiting to start"; $("mPitchStat").className = "mstat idle";
+  $("mFiller").innerHTML = "0 <small>pauses</small>";
+  $("mFillerStat").textContent = "—"; $("mFillerStat").className = "mstat idle";
+  $("coachTip").className = "tip";
+  $("coachTip").textContent = "Once you tap \u201cStart answer\u201d, the coach starts listening: 120–160 words per minute is easiest to follow, and pauses between sentences plus pitch that rises and falls will sound more confident.";
+  $("waveBox").innerHTML = "";
+  if (state.session && state.session.stream){
+    $("coachSub").textContent = "Once you start answering, this watches your pace, pitch variety, and pauses in real time. The analysis runs on this device's microphone only.";
+  }
+}
+
+/* ============================================================
+   Step 4: debrief
+   ============================================================ */
+function renderReview(){
+  var s = state.session;
+  var answered = s.results.filter(function(r){ return !r.skipped; });
+  var totalSec = s.results.reduce(function(a, r){ return a + r.seconds; }, 0);
+  $("sumCount").textContent = answered.length + " / " + s.results.length;
+  $("sumTime").textContent = fmt(totalSec);
+  var rates = answered.map(function(r){ return r.coach && r.coach.rateValue; })
+    .filter(function(w){ return typeof w === "number"; });
+  var rateUnit = "";
+  for (var ri = 0; ri < answered.length; ri++){
+    if (answered[ri].coach && answered[ri].coach.rateUnit){ rateUnit = answered[ri].coach.rateUnit; break; }
+  }
+  $("sumWpm").textContent = rates.length
+    ? Math.round(rates.reduce(function(a, b){ return a + b; }, 0) / rates.length) + " " + rateUnit
+    : "—";
+  $("sumFiller").textContent = answered.reduce(function(a, r){
+    return a + (r.coach ? r.coach.pauses : 0);
+  }, 0);
+
+  var list = $("reviewList");
+  list.innerHTML = "";
+  s.results.forEach(function(r, i){
+    var item = document.createElement("div");
+    item.className = "review-item";
+    var askerTxt = r.asker
+      ? " · Asked by " + esc(r.asker.name) + (r.asker.role ? " (" + esc(r.asker.role) + ")" : "")
+      : "";
+    var html = '<p class="rq">' + (i + 1) + ". " + esc(r.q) + '</p>' +
+      '<div class="rmeta">Time ' + fmt(r.seconds) + askerTxt +
+      (r.skipped ? " · Skipped" : "") + '</div>';
+    if (r.blobUrl){
+      if ((r.blobType || "").indexOf("video") === 0){
+        html += '<video controls playsinline src="' + r.blobUrl + '"></video>';
+      } else {
+        html += '<audio controls src="' + r.blobUrl + '"></audio>';
+      }
+      var ext = (r.blobType || "").indexOf("mp4") >= 0 ? "mp4" : "webm";
+      html += '<div class="btnrow" style="margin-top:6px;">' +
+        '<a href="' + r.blobUrl + '" download="mockroom-q' + (i + 1) + '.' + ext + '">' +
+        '<button class="small" type="button">Download this ' +
+        ((r.blobType || "").indexOf("video") === 0 ? "video" : "audio") + '</button></a></div>';
+    }
+    if (r.coach && r.coach.tips && r.coach.tips.length && !r.skipped){
+      html += '<ul class="rtips">' + r.coach.tips.map(function(t){
+        return "<li>" + esc(t) + "</li>";
+      }).join("") + "</ul>";
+    }
+    item.innerHTML = html;
+    list.appendChild(item);
+  });
+  if (!s.results.length){
+    list.innerHTML = '<p class="sub">No questions were recorded in this session.</p>';
+  }
+}
+
+/* ============================================================
+   Wiring
+   ============================================================ */
+function init(){
+  /* step 1 */
+  var dz = $("dropZone"), fi = $("fileInput");
+  dz.addEventListener("click", function(){ fi.click(); });
+  dz.addEventListener("keydown", function(e){
+    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); fi.click(); }
+  });
+  fi.addEventListener("change", function(){
+    if (fi.files && fi.files[0]) handleFile(fi.files[0]);
+    fi.value = "";
+  });
+  ["dragenter", "dragover"].forEach(function(ev){
+    dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.add("over"); });
+  });
+  ["dragleave", "drop"].forEach(function(ev){
+    dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.remove("over"); });
+  });
+  dz.addEventListener("drop", function(e){
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) handleFile(f);
+  });
+  $("usePastedBtn").addEventListener("click", function(){
+    showError($("parseError"), null);
+    var qs = splitQuestions($("pasteBox").value);
+    if (!qs.length){
+      showError($("parseError"), "The box is still empty. Paste a few questions and try again, or use the sample questions.");
+      return;
+    }
+    state.questions = qs;
+    openReview();
+  });
+  $("sampleBtn").addEventListener("click", function(){
+    state.questions = SAMPLE_QUESTIONS.slice();
+    openReview();
+  });
+
+  /* step 2 settings */
+  var segBtns = $("recModeSeg").querySelectorAll("button");
+  segBtns.forEach(function(b){
+    b.addEventListener("click", function(){
+      segBtns.forEach(function(x){ x.classList.remove("on"); });
+      b.classList.add("on");
+      state.settings.recMode = b.getAttribute("data-mode");
+    });
+  });
+  $("timeLimitSel").addEventListener("change", function(){
+    state.settings.timeLimit = parseInt(this.value, 10) || 0;
+  });
+  $("ttsToggle").addEventListener("click", function(){
+    var on = this.getAttribute("aria-checked") !== "true";
+    this.setAttribute("aria-checked", on ? "true" : "false");
+    state.settings.tts = on;
+    $("ttsStateLabel").textContent = on ? "On · reads each question as it appears" : "Off · text only";
+    if (!on) stopSpeak();
+  });
+  $("ttsRateSel").addEventListener("change", function(){
+    state.settings.ttsRate = parseFloat(this.value) || 1;
+  });
+  $("panelToggle").addEventListener("click", function(){
+    var on = this.getAttribute("aria-checked") !== "true";
+    this.setAttribute("aria-checked", on ? "true" : "false");
+    state.settings.panel = on;
+    $("panelStateLabel").textContent = on
+      ? "On · interviewers take turns asking"
+      : "Off · practise facing the questions on your own";
+    $("panelConfigBody").classList.toggle("hidden", !on);
+  });
+  $("panelCountSel").addEventListener("change", function(){
+    state.settings.panelCount = parseInt(this.value, 10) || 3;
+    renderInterviewerRows();
+  });
+  $("addQBtn").addEventListener("click", function(){
+    state.questions.push("");
+    renderQList();
+    var tas = $("qList").querySelectorAll("textarea");
+    if (tas.length) tas[tas.length - 1].focus();
+  });
+  $("shuffleBtn").addEventListener("click", function(){
+    for (var i = state.questions.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = state.questions[i]; state.questions[i] = state.questions[j]; state.questions[j] = tmp;
+    }
+    renderQList();
+  });
+  $("backToSetupBtn").addEventListener("click", function(){ showScreen("setup"); });
+  $("startBtn").addEventListener("click", startInterview);
+
+  /* step 3 room */
+  $("rereadBtn").addEventListener("click", function(){
+    var s = state.session;
+    if (s) speak(state.questions[s.idx]);
+  });
+  $("answerBtn").addEventListener("click", function(){
+    var s = state.session;
+    if (!s) return;
+    if (s.phase === "reading") startAnswering();
+    else if (s.phase === "answering") finishAnswer(false);
+  });
+  $("skipBtn").addEventListener("click", function(){ finishAnswer(true); });
+  $("endBtn").addEventListener("click", function(){
+    var s = state.session;
+    if (!s) return;
+    if (s.phase === "answering"){
+      /* bank the current answer; advance() sees s.ending and wraps up */
+      s.ending = true;
+      finishAnswer(false);
+    } else {
+      endInterview();
+    }
+  });
+
+  /* step 4 */
+  $("againBtn").addEventListener("click", function(){
+    showScreen("review");
+  });
+  $("newSetBtn").addEventListener("click", function(){
+    state.questions = [];
+    $("pasteBox").value = "";
+    showScreen("setup");
+  });
+
+  showScreen("setup");
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
