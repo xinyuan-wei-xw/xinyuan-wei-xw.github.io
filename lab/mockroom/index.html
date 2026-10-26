@@ -114,7 +114,7 @@
   button.small{padding:6px 12px;font-size:13.5px;border-radius:8px;}
   button.danger{color:var(--bad);}
   button.danger:hover{border-color:var(--bad);}
-  input[type="text"],textarea,select{
+  input[type="text"],input[type="number"],textarea,select{
     font-family:var(--font-ui);font-size:15px;color:var(--ink);
     background:var(--surface);border:1px solid var(--line);border-radius:10px;
     padding:10px 12px;width:100%;
@@ -153,6 +153,7 @@
   .qitem textarea{flex:1;border:none;padding:6px 4px;background:transparent;}
   .qitem textarea:focus{outline:1px solid var(--accent);border-radius:6px;}
   .qitem .del{flex:none;margin-top:4px;}
+  .qitem .qmasked{flex:1;padding:9px 4px;color:var(--ink-faint);font-size:14.5px;letter-spacing:.2px;}
   .count-line{font-size:14px;color:var(--ink-soft);margin-bottom:12px;}
 
   /* ---------- settings ---------- */
@@ -295,6 +296,19 @@
   .review-item .rq{font-family:var(--font-display);font-size:17.5px;margin:0 0 4px;}
   .review-item .rmeta{font-size:13px;color:var(--ink-soft);margin-bottom:8px;}
   .review-item audio,.review-item video{width:100%;max-width:480px;display:block;margin:8px 0;}
+  /* ---------- cloud voice (optional) ---------- */
+  .cloudbox{grid-column:1 / -1;border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface-2);}
+  .cloudbox h4{margin:0 0 4px;font-size:15.5px;}
+  .cloudbox .cloud-sub{font-size:13px;color:var(--ink-soft);margin:0 0 12px;}
+  .cloud-note{
+    background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;
+    padding:11px 14px;font-size:13.5px;margin-top:12px;line-height:1.55;
+  }
+  .cloud-note strong{color:var(--warn);}
+  .cloud-status{font-size:13px;color:var(--ink-soft);margin-top:10px;min-height:18px;}
+  .cloud-status.err{color:var(--bad);background:transparent;border:none;padding:0;}
+  .keyrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .keyrow input[type="password"]{flex:1;min-width:200px;font-family:var(--font-mono);font-size:14px;}
   .review-item .rtips{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
   .review-item .rtips li{margin:2px 0;}
   footer.foot{margin-top:26px;color:var(--ink-faint);font-size:12.5px;text-align:center;}
@@ -307,7 +321,7 @@
     <h1>MockRoom</h1>
     <span class="tag">A mock interview room for one</span>
   </header>
-  <p class="privacy">Your questions, audio, and video are processed only in this browser, on this device — nothing is uploaded to any server.</p>
+  <p class="privacy">Your questions, recordings, audio, and video stay on this device and are never uploaded. The one exception is the optional cloud voice (off by default, Step 2): if you turn it on, question text is sent to OpenAI to be read aloud.</p>
 
   <div class="steps" id="stepsBar">
     <div class="step active" data-step="1"><span class="n">1</span>Add questions</div>
@@ -319,7 +333,7 @@
   <!-- ============ STEP 1: load questions ============ -->
   <section class="panel" id="screen-setup">
     <h2>Bring in your interview questions</h2>
-    <p class="sub">Upload a PDF or Word (.docx) file and MockRoom will split it into questions right here on your device. You can also paste questions as text, or try the sample set first.</p>
+    <p class="sub">Upload a PDF or Word (.docx) file and MockRoom will split it into questions right here on your device. You can also paste questions as text, or draw a random set from the built-in question bank below.</p>
 
     <div class="drop" id="dropZone" tabindex="0" role="button" aria-label="Upload a question file">
       <div class="big">Click to choose a file, or drag one in</div>
@@ -334,18 +348,40 @@
     <textarea id="pasteBox" rows="6" placeholder="For example:&#10;1. Please introduce yourself.&#10;2. Why do you want to apply for this program?&#10;Q: Tell me about the hardest problem you have faced, and how you solved it."></textarea>
     <div class="btnrow">
       <button class="primary" id="usePastedBtn">Use these questions</button>
-      <button id="sampleBtn">Try the sample questions</button>
     </div>
+
+    <div class="orline">or</div>
+
+    <label class="flabel">Built-in question bank · general academic interview questions</label>
+    <p class="sub" style="margin-bottom:12px;">35 general questions covering research, teaching, service, and fit. Each draw picks a random set — any number from 1 to all 35 — and shuffles the order, so no two sessions start the same way.</p>
+    <div class="rowflex">
+      <label class="flabel" for="bankCountSel" style="margin:0;">Questions to draw</label>
+      <select id="bankCountSel">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="35">All 35</option>
+        <option value="custom">Custom…</option>
+      </select>
+      <input type="number" id="bankCountCustom" class="hidden" min="1" max="35" step="1" value="12" style="width:84px;" aria-label="Custom number of questions to draw" />
+      <button class="primary" id="bankBtn">Draw random questions</button>
+    </div>
+
     <p class="note">Scanned PDFs (image-only, with no text layer) can't be read. For old .doc files, save as .docx first and upload again.</p>
   </section>
 
   <!-- ============ STEP 2: review + settings ============ -->
   <section class="panel hidden" id="screen-review">
-    <h2>Review your questions, pick your settings</h2>
-    <p class="sub">Edit, delete, or add questions. When everything looks right, head into the interview room.</p>
+    <h2>Questions loaded — now pick your settings</h2>
+    <p class="sub">Like a real interview, the questions and their order stay hidden here: each question is revealed only when it's asked in the room. If you need to fix a typo or drop a question, reveal them below — otherwise leave them hidden and head in.</p>
     <p class="count-line" id="qCountLine"></p>
+    <div class="rowflex" style="margin-bottom:14px;">
+      <button id="revealQBtn" class="small">Reveal questions to check or edit</button>
+      <span class="sw-hint" id="qHideHint">Hidden — each question appears only when it's asked in the room.</span>
+    </div>
     <div class="qlist" id="qList"></div>
-    <div class="btnrow">
+    <div class="btnrow hidden" id="qEditBtns">
       <button id="addQBtn" class="small">+ Add a question</button>
       <button id="shuffleBtn" class="small">Shuffle order</button>
     </div>
@@ -375,9 +411,19 @@
           <button type="button" class="switchbtn" id="ttsToggle" role="switch" aria-checked="true" aria-label="Read questions aloud toggle"><span class="track"></span></button>
           <div>
             <div class="sw-label" id="ttsStateLabel">On · reads each question as it appears</div>
-            <div class="sw-hint">Uses your browser's built-in voice; tap “Re-read” at any time</div>
+            <div class="sw-hint">Tap “Re-read” at any time. Local reading now pauses at punctuation, lifts the ends of questions, and eases off at sentence endings so it sounds less flat; pick a voice below for a softer sound, or try the optional cloud voice further down</div>
           </div>
         </div>
+      </div>
+      <div>
+        <label class="flabel" for="ttsVoiceSel">Voice</label>
+        <div class="rowflex">
+          <select id="ttsVoiceSel" style="flex:1;min-width:0;">
+            <option value="">Softest available (auto)</option>
+          </select>
+          <button type="button" class="small" id="voicePreviewBtn">▶ Preview</button>
+        </div>
+        <div class="sw-hint" id="voiceHint" style="margin-top:6px;">Voices labelled “Natural”, “Neural” or “Premium” sound the most human. Edge and Chrome include the softest ones; the device default can sound robotic.</div>
       </div>
       <div>
         <label class="flabel" for="ttsRateSel">Reading speed</label>
@@ -386,6 +432,42 @@
           <option value="1" selected>Normal</option>
           <option value="1.15">Faster</option>
         </select>
+      </div>
+      <div class="cloudbox">
+        <h4>Cloud neural voice (optional)</h4>
+        <p class="cloud-sub">Browser voices can only go so far. For a genuinely softer, more human read-aloud, MockRoom can use OpenAI's neural speech instead — generated fresh for each question, with natural pauses and intonation. It is <strong>off by default</strong> and completely optional; the local browser voice above keeps working either way.</p>
+        <div class="switchrow">
+          <button type="button" class="switchbtn" id="cloudToggle" role="switch" aria-checked="false" aria-label="Cloud neural voice toggle"><span class="track"></span></button>
+          <div>
+            <div class="sw-label" id="cloudStateLabel">Off · questions are read by your browser voice</div>
+            <div class="sw-hint">When on, the cloud voice replaces the browser voice for reading and previews</div>
+          </div>
+        </div>
+        <div id="cloudBody" class="hidden">
+          <div style="margin-top:16px;">
+            <label class="flabel" for="cloudKeyInput">Your OpenAI API key</label>
+            <div class="keyrow">
+              <input type="password" id="cloudKeyInput" placeholder="sk-…" autocomplete="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" class="small danger" id="cloudKeyRemoveBtn">Remove key</button>
+            </div>
+            <div class="sw-hint" style="margin-top:6px;">The key is stored only in this browser's local storage, on this device. It is never saved into MockRoom, never sent anywhere except to OpenAI itself (as the sign-in for the speech request), and you can remove it here at any time. Speech usage is billed to your own OpenAI account.</div>
+          </div>
+          <div style="margin-top:14px;">
+            <label class="flabel" for="cloudVoiceSel">Cloud voice</label>
+            <div class="rowflex">
+              <select id="cloudVoiceSel">
+                <option value="nova" selected>Nova · soft, warm female voice</option>
+                <option value="coral">Coral · clear, friendly female voice</option>
+                <option value="shimmer">Shimmer · bright, gentle female voice</option>
+                <option value="sage">Sage · calm, composed female voice</option>
+                <option value="alloy">Alloy · neutral, balanced voice</option>
+              </select>
+              <button type="button" class="small" id="cloudPreviewBtn">▶ Preview cloud voice</button>
+            </div>
+          </div>
+          <div class="cloud-note"><strong>Please note — what leaves this device:</strong> while cloud voice is on, the <strong>text of each question</strong> (and of any preview) is sent from your browser directly to OpenAI to be turned into speech. Nothing else goes: your answers, recordings, uploaded files, and timing data stay on this device, exactly as before. If you'd rather nothing leave the device at all, leave cloud voice off and use the browser voice.</div>
+          <div class="cloud-status" id="cloudStatus" role="status"></div>
+        </div>
       </div>
     </div>
 
@@ -518,7 +600,7 @@
     </div>
   </section>
 
-  <footer class="foot">MockRoom · everything is processed locally in your browser</footer>
+  <footer class="foot">MockRoom · everything is processed locally in your browser, except the optional cloud voice (Step 2) if you turn it on</footer>
 </div>
 
 <script>
@@ -533,11 +615,15 @@
 var state = {
   screen: "setup",
   questions: [],
+  qVisible: false,   /* questions stay hidden on Step 2 until explicitly revealed for editing */
   settings: {
     recMode: "audio",
     timeLimit: 120,
     tts: true,
     ttsRate: 1,
+    voiceURI: "",
+    cloudTts: false,
+    cloudVoice: "nova",
     panel: false,
     panelCount: 3,
     interviewers: [
@@ -551,14 +637,54 @@ var state = {
 };
 
 var AVATAR_CLASSES = ["c0", "c1", "c2", "c3"];
-var SAMPLE_QUESTIONS = [
-  "Please take two minutes to introduce yourself, focusing on the experience most relevant to this opportunity.",
-  "Why do you want to apply for this program? What do you see as your biggest strength?",
-  "Tell me about the hardest thing you have faced: what was the situation, what exactly did you do, and how did it turn out?",
-  "Tell me about a time you failed, and what you learned from it.",
-  "If you had only three months to prepare, how would you plan your time? Why?",
-  "What questions do you have for us?"
+/* Built-in bank: general academic job-interview questions — the main
+   questions only (no follow-ups), nothing tied to one field, school,
+   or specialty. Sessions draw a random subset in random order. */
+var QUESTION_BANK = [
+  "Tell us a bit about yourself — please introduce yourself.",
+  "Tell us about your academic journey. Why did you choose academia, and why your field?",
+  "Tell us about your research. What connects your projects?",
+  "Tell us about your dissertation or main body of work. How do its parts fit together?",
+  "Could you expand on your main research paper?",
+  "What is the contribution of your work, and why does it belong in your field?",
+  "How do you establish the credibility of your findings? What are the main limitations of your work?",
+  "Could you expand on the first part of your dissertation, or your earliest major project?",
+  "Tell us about a major collaborative project. What was your role, and what did the team accomplish?",
+  "What is your publication pipeline? Where do your current projects stand in the review process?",
+  "What is your independent research agenda, beyond the work you have done with your advisors or mentors?",
+  "What is your five-year research plan? What would you aim to accomplish in the first three years?",
+  "What would be your first new project here? How would you obtain the data or resources it needs?",
+  "When do you expect to finish your current degree or position? Can you be ready by the start date?",
+  "Why this university?",
+  "Why this department? Who here might you collaborate with?",
+  "What is your teaching experience so far?",
+  "What do you like to teach, and which of our courses could you teach?",
+  "What is your teaching philosophy?",
+  "How do you support students with different levels of preparation, or a larger class?",
+  "Describe a teaching challenge you have faced, or something you would improve about your teaching.",
+  "How do you assess learning, and how do you handle students' use of AI tools?",
+  "What new course or module would you develop?",
+  "What is your experience with online and in-person teaching?",
+  "How would you balance teaching, research, and service?",
+  "How would you contribute to the department through service and mentoring?",
+  "How do you collaborate with others, and how do you handle disagreement?",
+  "What research resources or funding would you need to do your work well here?",
+  "Why should we hire you? And in what areas would you still need to develop?",
+  "Where are you in your job search? Are there any deadlines or constraints we should know about?",
+  "What questions do you have for us?",
+  "Is there anything else you would like us to know?",
+  "What have you learned from your teaching experience?",
+  "How do you make sure you cover the required course material while keeping students engaged?",
+  "What experience do you have working with partners outside academia — industry, practitioners, or the community? How could it support your work here?"
 ];
+function shuffledCopy(arr){
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
 
 /* ---------- helpers ---------- */
 function $(id){ return document.getElementById(id); }
@@ -715,6 +841,7 @@ function handleFile(file){
    Step 2: review list + settings
    ============================================================ */
 function openReview(){
+  state.qVisible = false;
   renderQList();
   renderInterviewerRows();
   showScreen("review");
@@ -722,7 +849,26 @@ function openReview(){
 function renderQList(){
   var box = $("qList");
   box.innerHTML = "";
-  $("qCountLine").textContent = state.questions.length + (state.questions.length === 1 ? " question" : " questions");
+  $("qCountLine").textContent = state.questions.length + (state.questions.length === 1 ? " question" : " questions") +
+    (state.qVisible ? "" : " · hidden until asked");
+  $("revealQBtn").textContent = state.qVisible ? "Hide questions" : "Reveal questions to check or edit";
+  $("qHideHint").textContent = state.qVisible
+    ? "Questions are visible for checking — hide them again before a realistic run."
+    : "Hidden — each question appears only when it's asked in the room.";
+  $("qEditBtns").classList.toggle("hidden", !state.qVisible);
+  if (!state.qVisible){
+    /* Interviewee view: positions only, no question text and no readable
+       order — each question is revealed in the room, when it's asked. */
+    state.questions.forEach(function(q, idx){
+      var item = document.createElement("div");
+      item.className = "qitem";
+      item.innerHTML =
+        '<div class="qn">' + (idx + 1) + '.</div>' +
+        '<div class="qmasked">Question hidden — revealed in the room when asked</div>';
+      box.appendChild(item);
+    });
+    return;
+  }
   state.questions.forEach(function(q, idx){
     var item = document.createElement("div");
     item.className = "qitem";
@@ -786,21 +932,284 @@ function activeInterviewers(){
 }
 
 /* ============================================================
-   TTS
+   TTS — voice choice matters a lot for how "human" it sounds.
+   Rank the device's English voices and prefer the natural /
+   neural / premium ones; let the user override and preview.
    ============================================================ */
-function speak(text){
+var ttsVoices = [];
+function voiceScore(v){
+  var name = (v.name || "").toLowerCase();
+  var score = 0;
+  if (/^en[-_]us/i.test(v.lang)) score += 60;
+  else if (/^en/i.test(v.lang)) score += 35;
+  else return -1000;
+  if (name.indexOf("natural") >= 0) score += 90;         /* Edge "Online (Natural)" voices */
+  if (name.indexOf("neural") >= 0) score += 85;
+  if (name.indexOf("premium") >= 0) score += 80;
+  if (name.indexOf("enhanced") >= 0) score += 70;
+  if (name.indexOf("google us english") >= 0) score += 75;
+  if (name.indexOf("samantha") >= 0) score += 65;        /* Apple */
+  if (name.indexOf("aria") >= 0 || name.indexOf("jenny") >= 0) score += 60;  /* Microsoft */
+  if (name.indexOf("zira") >= 0) score += 40;
+  if (name.indexOf("compact") >= 0) score -= 60;         /* low-quality bundled voices */
+  if (name.indexOf("eloquence") >= 0 || name.indexOf("espeak") >= 0) score -= 80;
+  if (v.default) score += 5;
+  return score;
+}
+function loadVoices(){
   if (!("speechSynthesis" in window)) return;
+  var all = [];
+  try { all = window.speechSynthesis.getVoices() || []; } catch (e) { all = []; }
+  ttsVoices = all.filter(function(v){ return voiceScore(v) > -1000; });
+  ttsVoices.sort(function(a, b){ return voiceScore(b) - voiceScore(a); });
+  var sel = $("ttsVoiceSel");
+  if (!sel) return;
+  var keep = state.settings.voiceURI;
+  sel.innerHTML = '<option value="">Softest available (auto)</option>';
+  ttsVoices.forEach(function(v){
+    var opt = document.createElement("option");
+    opt.value = v.voiceURI;
+    opt.textContent = v.name + " · " + v.lang;
+    sel.appendChild(opt);
+  });
+  sel.value = keep;
+  if (sel.value !== keep) state.settings.voiceURI = "";
+  var hint = $("voiceHint");
+  if (hint){
+    if (!ttsVoices.length){
+      hint.textContent = "No English voices were found on this device, so the system default will be used.";
+    } else if (ttsVoices[0]){
+      hint.textContent = "Auto uses “" + ttsVoices[0].name + "” — the softest English voice found on this device. Voices labelled “Natural”, “Neural” or “Premium” sound the most human.";
+    }
+  }
+}
+function chosenVoice(){
+  if (!ttsVoices.length) return null;
+  if (state.settings.voiceURI){
+    for (var i = 0; i < ttsVoices.length; i++)
+      if (ttsVoices[i].voiceURI === state.settings.voiceURI) return ttsVoices[i];
+  }
+  return ttsVoices[0];
+}
+/* ---------- local reading: prosody ----------
+   Built-in voices have no SSML or word-level stress, so the contour is
+   built from the outside: split the text into phrases at punctuation,
+   vary pitch and rate slightly from phrase to phrase, lift the ends of
+   questions, settle at sentence endings, and leave real silences
+   between phrases (queued utterances run together with no gap, which
+   is a big part of why the reading used to sound flat). */
+var speakGen = 0;          /* increments on every stop/new read: stale chains die */
+var speakTimer = null;
+function prosodyChunk(t){
+  var end = t.charAt(t.length - 1);
+  var type = (end === "?" || end === "!" || end === "." || end === "…" ||
+              end === "," || end === ";" || end === ":") ? end : "";
+  var pause = 140;
+  if (type === "?" || type === "!" || type === ".") pause = 430;
+  else if (type === "…") pause = 520;
+  else if (type === ";" || type === ":") pause = 260;
+  else if (type === ",") pause = 180;
+  return { text: t, end: type, pause: pause };
+}
+function prosodyChunks(text){
+  var raw = String(text == null ? "" : text).replace(/\s+/g, " ").trim();
+  if (!raw) return [];
+  var sentences = raw.match(/[^.!?…]+[.!?…]+[""”')\]]*\s*|[^.!?…]+$/g) || [raw];
+  var chunks = [];
+  sentences.forEach(function(s){
+    s = s.trim();
+    if (!s) return;
+    if (s.length <= 110){ chunks.push(prosodyChunk(s)); return; }
+    /* long sentence: break at clause punctuation so stress can breathe */
+    var parts = s.match(/[^,;:—–]+[,;:—–]\s*|[^,;:—–]+$/g) || [s];
+    var buf = "";
+    parts.forEach(function(p){
+      if (buf && (buf + p).length > 110){ chunks.push(prosodyChunk(buf.trim())); buf = p; }
+      else buf += p;
+    });
+    if (buf.trim()) chunks.push(prosodyChunk(buf.trim()));
+  });
+  return chunks;
+}
+function speakLocal(text){
+  if (!("speechSynthesis" in window)) return;
+  stopAllSpeech();
+  var gen = speakGen;
+  var voice = chosenVoice();
+  var chunks = prosodyChunks(text);
+  if (!chunks.length) chunks = [prosodyChunk(String(text))];
+  var baseRate = (state.settings.ttsRate || 1) * 0.95;
+  function play(i){
+    if (gen !== speakGen) return;
+    if (i >= chunks.length) return;
+    var c = chunks[i];
+    var last = (i === chunks.length - 1);
+    /* contour: start a touch lifted, undulate gently phrase to phrase,
+       rise into questions, fall to rest at a final full stop */
+    var pitch = 0.95 + ((i % 3) - 1) * 0.025;
+    if (i === 0) pitch += 0.03;
+    if (c.end === "?") pitch += last ? 0.10 : 0.05;
+    if (last && c.end === ".") pitch -= 0.045;
+    if (last && c.end === "!") pitch += 0.03;
+    pitch = Math.max(0.8, Math.min(1.15, pitch));
+    var rate = baseRate;
+    if (c.text.length > 80) rate -= 0.02;         /* slow slightly for long phrases */
+    if (c.end === "?") rate -= 0.015;             /* give the question room to land */
+    rate = Math.max(0.7, Math.min(1.3, rate));
+    var advanced = false;
+    function next(){
+      if (advanced || gen !== speakGen) return;
+      advanced = true;
+      speakTimer = setTimeout(function(){ play(i + 1); }, c.pause);
+    }
+    try {
+      var u = new SpeechSynthesisUtterance(c.text);
+      if (voice) u.voice = voice;
+      u.lang = voice ? voice.lang : "en-US";
+      u.rate = rate;
+      u.pitch = pitch;
+      u.onend = next;
+      u.onerror = next;
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      window.speechSynthesis.speak(u);
+    } catch (e) { next(); }
+  }
+  play(0);
+}
+
+/* ---------- cloud neural voice (optional, off by default) ----------
+   The user's own OpenAI API key lives only in this browser's
+   localStorage. Requests go straight from this page to OpenAI;
+   only the question text is sent — never recordings or files. */
+var LS_KEY = "mockroom.openaiKey.v1";
+var LS_CLOUD = "mockroom.cloudTts.v1";
+var cloudKeyMem = "";
+var cloudAudio = null, cloudUrl = null, cloudAbort = null;
+function cloudApiKey(){
+  var v = "";
+  try { v = window.localStorage.getItem(LS_KEY) || ""; } catch (e) { v = ""; }
+  return (v || cloudKeyMem || "").trim();
+}
+function saveCloudPrefs(){
   try {
-    window.speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance(text);
-    u.rate = state.settings.ttsRate;
-    u.lang = "en-US";
-    window.speechSynthesis.speak(u);
-  } catch (e) { /* TTS unavailable — text still shown */ }
+    window.localStorage.setItem(LS_CLOUD, JSON.stringify({
+      on: !!state.settings.cloudTts, voice: state.settings.cloudVoice
+    }));
+  } catch (e) { /* private mode etc. — settings just don't persist */ }
 }
-function stopSpeak(){
+function loadCloudPrefs(){
+  try {
+    var raw = window.localStorage.getItem(LS_CLOUD);
+    if (raw){
+      var p = JSON.parse(raw);
+      if (p){
+        state.settings.cloudTts = !!p.on;
+        if (p.voice) state.settings.cloudVoice = p.voice;
+      }
+    }
+  } catch (e) {}
+}
+function setCloudStatus(msg, isErr){
+  var el = $("cloudStatus");
+  if (!el) return;
+  el.textContent = msg || "";
+  el.className = "cloud-status" + (isErr ? " err" : "");
+}
+function applyCloudUI(){
+  var on = !!state.settings.cloudTts;
+  var t = $("cloudToggle");
+  if (t) t.setAttribute("aria-checked", on ? "true" : "false");
+  var lbl = $("cloudStateLabel");
+  if (lbl) lbl.textContent = on
+    ? "On · questions are read by OpenAI's neural voice"
+    : "Off · questions are read by your browser voice";
+  var body = $("cloudBody");
+  if (body) body.classList.toggle("hidden", !on);
+  var sel = $("cloudVoiceSel");
+  if (sel) sel.value = state.settings.cloudVoice || "nova";
+  var keyIn = $("cloudKeyInput");
+  if (keyIn && document.activeElement !== keyIn) keyIn.value = cloudApiKey();
+}
+function speakCloud(text){
+  var key = cloudApiKey();
+  if (!key){
+    setCloudStatus("Cloud voice is on, but no API key is saved yet — the browser voice was used instead. Paste your OpenAI API key above to use the cloud voice.", true);
+    speakLocal(text);
+    return;
+  }
+  stopAllSpeech();
+  var gen = speakGen;
+  setCloudStatus("Asking OpenAI to read this aloud…");
+  var payload = {
+    model: "gpt-4o-mini-tts",
+    voice: state.settings.cloudVoice || "nova",
+    input: String(text),
+    response_format: "mp3",
+    instructions: "Speak as a warm, friendly human interviewer in a calm, natural conversational tone. Use natural pauses at commas and between sentences. Gently stress the most important words, let your pitch rise a little at the end of questions, and settle at the end of statements. Do not sound rushed or robotic."
+  };
+  var ctrl = ("AbortController" in window) ? new AbortController() : null;
+  cloudAbort = ctrl;
+  function attempt(body){
+    return fetch("https://api.openai.com/v1/audio/speech", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + key, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: ctrl ? ctrl.signal : undefined
+    });
+  }
+  attempt(payload).then(function(res){
+    if (res.ok) return res;
+    /* fall back to the classic TTS model if the newer one is unavailable
+       on this account; coral/sage don't exist there, so use nova */
+    var alt = { model: "tts-1", voice: payload.voice, input: payload.input, response_format: "mp3" };
+    if (alt.voice !== "nova" && alt.voice !== "shimmer" && alt.voice !== "alloy") alt.voice = "nova";
+    return attempt(alt).then(function(res2){
+      if (res2.ok) return res2;
+      return res2.text().then(function(t){ throw new Error("http" + res2.status + " " + t); });
+    });
+  }).then(function(res){
+    return res.blob();
+  }).then(function(blob){
+    if (gen !== speakGen) return;
+    if (cloudUrl){ try { URL.revokeObjectURL(cloudUrl); } catch (e) {} cloudUrl = null; }
+    cloudUrl = URL.createObjectURL(blob);
+    cloudAudio = new Audio(cloudUrl);
+    cloudAudio.playbackRate = state.settings.ttsRate || 1;
+    setCloudStatus("Playing the cloud voice (" + (state.settings.cloudVoice || "nova") + "). Only the question text was sent to OpenAI.");
+    var p = cloudAudio.play();
+    if (p && p.catch) p.catch(function(){ setCloudStatus("The speech was generated but the browser blocked playback. Tap Re-read or Preview to play it.", true); });
+  }).catch(function(err){
+    if (gen !== speakGen) return;
+    if (err && err.name === "AbortError") return;
+    var msg = "The cloud voice didn't work, so the browser voice was used instead.";
+    var es = String(err && err.message ? err.message : err);
+    if (/http401|invalid_api_key|incorrect api key/i.test(es)) msg = "OpenAI rejected that API key (401). Check the key above — it may be mistyped, revoked, or from an account without API access. The browser voice was used instead.";
+    else if (/http429|rate|quota|billing/i.test(es)) msg = "OpenAI rate-limited the request or the account is out of credit (429). The browser voice was used instead.";
+    else if (/http4|http5/.test(es)) msg = "OpenAI returned an error (" + es.slice(0, 60) + "). The browser voice was used instead.";
+    else msg = "Couldn't reach OpenAI (network or browser blocked the request). The browser voice was used instead.";
+    setCloudStatus(msg, true);
+    if (gen === speakGen) speakLocal(text);
+  });
+}
+function stopCloudAudio(){
+  if (cloudAbort){ try { cloudAbort.abort(); } catch (e) {} cloudAbort = null; }
+  if (cloudAudio){ try { cloudAudio.pause(); } catch (e) {} cloudAudio = null; }
+  if (cloudUrl){ try { URL.revokeObjectURL(cloudUrl); } catch (e) {} cloudUrl = null; }
+}
+function speak(text){
+  if (state.settings.cloudTts){
+    if (cloudApiKey()){ speakCloud(text); return; }
+    setCloudStatus("Cloud voice is on, but no API key is saved yet — the browser voice was used. Paste your OpenAI API key in the cloud voice settings (Step 2) to switch.", true);
+  }
+  speakLocal(text);
+}
+function stopAllSpeech(){
+  speakGen++;
+  if (speakTimer){ clearTimeout(speakTimer); speakTimer = null; }
   if ("speechSynthesis" in window){ try { window.speechSynthesis.cancel(); } catch (e) {} }
+  stopCloudAudio();
 }
+function stopSpeak(){ stopAllSpeech(); }
 
 /* ============================================================
    Voice coach — pitch/pace/pause analysis (Web Audio only, fully local)
@@ -1457,14 +1866,29 @@ function init(){
     showError($("parseError"), null);
     var qs = splitQuestions($("pasteBox").value);
     if (!qs.length){
-      showError($("parseError"), "The box is still empty. Paste a few questions and try again, or use the sample questions.");
+      showError($("parseError"), "The box is still empty. Paste a few questions and try again, or draw from the question bank below.");
       return;
     }
     state.questions = qs;
     openReview();
   });
-  $("sampleBtn").addEventListener("click", function(){
-    state.questions = SAMPLE_QUESTIONS.slice();
+  $("bankCountSel").addEventListener("change", function(){
+    var custom = this.value === "custom";
+    $("bankCountCustom").classList.toggle("hidden", !custom);
+    if (custom) $("bankCountCustom").focus();
+  });
+  $("bankBtn").addEventListener("click", function(){
+    showError($("parseError"), null);
+    var n;
+    if ($("bankCountSel").value === "custom"){
+      n = parseInt($("bankCountCustom").value, 10);
+      if (isNaN(n) || n < 1) n = 1;
+      if (n > QUESTION_BANK.length) n = QUESTION_BANK.length;
+      $("bankCountCustom").value = n;
+    } else {
+      n = parseInt($("bankCountSel").value, 10) || 10;
+    }
+    state.questions = shuffledCopy(QUESTION_BANK).slice(0, Math.min(n, QUESTION_BANK.length));
     openReview();
   });
 
@@ -1490,6 +1914,65 @@ function init(){
   $("ttsRateSel").addEventListener("change", function(){
     state.settings.ttsRate = parseFloat(this.value) || 1;
   });
+  /* voices load asynchronously in most browsers */
+  loadVoices();
+  if ("speechSynthesis" in window && window.speechSynthesis.addEventListener){
+    window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+  } else if ("speechSynthesis" in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  $("ttsVoiceSel").addEventListener("change", function(){
+    state.settings.voiceURI = this.value || "";
+  });
+  $("voicePreviewBtn").addEventListener("click", function(){
+    speak("Hi, thanks for coming in today. Let's start with a simple one: please take a minute to introduce yourself, and tell me what makes you a strong fit for this role.");
+  });
+  /* cloud neural voice: persisted toggle/voice + key in localStorage only */
+  loadCloudPrefs();
+  applyCloudUI();
+  if (state.settings.cloudTts && !cloudApiKey()){
+    setCloudStatus("Cloud voice was left on, but no API key is saved in this browser yet. Paste your OpenAI API key to use it, or turn cloud voice off.", true);
+  }
+  $("cloudToggle").addEventListener("click", function(){
+    var on = this.getAttribute("aria-checked") !== "true";
+    state.settings.cloudTts = on;
+    saveCloudPrefs();
+    applyCloudUI();
+    if (!on) stopCloudAudio();
+    if (on && !cloudApiKey()){
+      setCloudStatus("Cloud voice is on. Paste your OpenAI API key below — without one, questions will keep using the browser voice.", true);
+      $("cloudKeyInput").focus();
+    } else if (on){
+      setCloudStatus("Cloud voice is on, using the key saved in this browser. Question text will be sent to OpenAI when it is read aloud.");
+    }
+  });
+  $("cloudKeyInput").addEventListener("input", function(){
+    var v = this.value.trim();
+    cloudKeyMem = v;
+    try {
+      if (v) window.localStorage.setItem(LS_KEY, v);
+      else window.localStorage.removeItem(LS_KEY);
+    } catch (e) {}
+    setCloudStatus(v ? "Key saved — in this browser's local storage only." : "");
+  });
+  $("cloudKeyRemoveBtn").addEventListener("click", function(){
+    cloudKeyMem = "";
+    $("cloudKeyInput").value = "";
+    try { window.localStorage.removeItem(LS_KEY); } catch (e) {}
+    setCloudStatus("Key removed from this browser. Cloud voice will fall back to the browser voice until a key is added again.");
+  });
+  $("cloudVoiceSel").addEventListener("change", function(){
+    state.settings.cloudVoice = this.value || "nova";
+    saveCloudPrefs();
+  });
+  $("cloudPreviewBtn").addEventListener("click", function(){
+    if (!cloudApiKey()){
+      setCloudStatus("Add your OpenAI API key first — the preview needs it to ask OpenAI for speech.", true);
+      $("cloudKeyInput").focus();
+      return;
+    }
+    speakCloud("Hi, thanks for coming in today. Let's start with a simple one: please take a minute to introduce yourself — and tell me, what makes you a strong fit for this role?");
+  });
   $("panelToggle").addEventListener("click", function(){
     var on = this.getAttribute("aria-checked") !== "true";
     this.setAttribute("aria-checked", on ? "true" : "false");
@@ -1502,6 +1985,10 @@ function init(){
   $("panelCountSel").addEventListener("change", function(){
     state.settings.panelCount = parseInt(this.value, 10) || 3;
     renderInterviewerRows();
+  });
+  $("revealQBtn").addEventListener("click", function(){
+    state.qVisible = !state.qVisible;
+    renderQList();
   });
   $("addQBtn").addEventListener("click", function(){
     state.questions.push("");
@@ -1545,6 +2032,9 @@ function init(){
 
   /* step 4 */
   $("againBtn").addEventListener("click", function(){
+    /* back to settings with the questions hidden again, as on first entry */
+    state.qVisible = false;
+    renderQList();
     showScreen("review");
   });
   $("newSetBtn").addEventListener("click", function(){
