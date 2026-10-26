@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 506.25" role="img" aria-labelledby="mr-title mr-desc">
+<title id="mr-title">MockRoom solo mock interview practice</title>
+<desc id="mr-desc">Three interviewers in a row with a speech bubble asking a question, above a timer and a recording indicator.</desc>
+<rect width="900" height="506.25" fill="#f4f1ea"/>
+<g font-family="'Segoe UI', system-ui, sans-serif" text-anchor="middle">
+  <text x="450" y="92" font-size="44" font-weight="700" fill="#23262b">MockRoom</text>
+  <text x="450" y="132" font-size="22" fill="#5d636e">practice · record · review</text>
+  <g>
+    <rect x="200" y="170" width="500" height="110" rx="20" fill="#fdfcf9" stroke="#ddd4c3" stroke-width="3"/>
+    <path d="M 300 280 L 300 310 L 340 280 Z" fill="#fdfcf9" stroke="#ddd4c3" stroke-width="3"/>
+    <rect x="230" y="196" width="300" height="14" rx="7" fill="#2e5e4e"/>
+    <rect x="230" y="222" width="420" height="14" rx="7" fill="#ddd4c3"/>
+    <rect x="230" y="248" width="260" height="14" rx="7" fill="#ddd4c3"/>
+    <text x="650" y="240" font-size="44" font-weight="700" fill="#2e5e4e">?</text>
+  </g>
+  <g>
+    <circle cx="270" cy="380" r="48" fill="#2e5e4e"/>
+    <text x="270" y="398" font-size="36" font-weight="700" fill="#ffffff">A</text>
+    <circle cx="450" cy="380" r="48" fill="#ffffff" stroke="#ddd4c3" stroke-width="3"/>
+    <text x="450" y="398" font-size="36" font-weight="700" fill="#2e5e4e">P</text>
+    <circle cx="630" cy="380" r="48" fill="#ffffff" stroke="#ddd4c3" stroke-width="3"/>
+    <text x="630" y="398" font-size="36" font-weight="700" fill="#2e5e4e">J</text>
+  </g>
+</g>
+</svg>
