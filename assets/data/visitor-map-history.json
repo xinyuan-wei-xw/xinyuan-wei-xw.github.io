@@ -134,7 +134,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 1
+      "sessions": 2
     },
     "US|California|Berkeley": {
       "city": "Berkeley",
@@ -345,7 +345,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 106
+      "sessions": 107
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -468,7 +468,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 3
+      "sessions": 4
     },
     "US|Iowa|Council Bluffs": {
       "city": "Council Bluffs",
@@ -479,13 +479,20 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 9
+      "sessions": 11
     },
     "US|Louisiana|Mandeville": {
       "city": "Mandeville",
       "country": "US",
       "country_name": "United States",
       "region": "Louisiana",
+      "sessions": 1
+    },
+    "US|New Jersey|Clinton Township": {
+      "city": "Clinton Township",
+      "country": "US",
+      "country_name": "United States",
+      "region": "New Jersey",
       "sessions": 1
     },
     "US|New York|(not set)": {
@@ -504,7 +511,7 @@
         "longitude": -73.981963
       },
       "region": "New York",
-      "sessions": 1
+      "sessions": 2
     },
     "US|North Carolina|Wilmington": {
       "city": "Wilmington",
@@ -817,11 +824,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 256
+      "sessions": 262
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-24",
+  "last_end": "2026-10-25",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -918,7 +925,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 13
+      "sessions": 14
     },
     "US|Colorado": {
       "country": "US",
@@ -942,7 +949,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 179
+      "sessions": 180
     },
     "US|Hawaii": {
       "country": "US",
@@ -954,13 +961,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Iowa": {
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 9
+      "sessions": 11
     },
     "US|Louisiana": {
       "country": "US",
@@ -968,11 +975,17 @@
       "region": "Louisiana",
       "sessions": 1
     },
+    "US|New Jersey": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "New Jersey",
+      "sessions": 1
+    },
     "US|New York": {
       "country": "US",
       "country_name": "United States",
       "region": "New York",
-      "sessions": 3
+      "sessions": 4
     },
     "US|North Carolina": {
       "country": "US",
@@ -1038,6 +1051,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 387,
+  "total_sessions": 393,
   "version": 1
 }
