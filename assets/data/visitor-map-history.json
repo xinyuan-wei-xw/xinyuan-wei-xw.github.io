@@ -345,7 +345,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 107
+      "sessions": 115
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -479,7 +479,18 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 11
+      "sessions": 12
+    },
+    "US|Iowa|Des Moines": {
+      "city": "Des Moines",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 41.57998,
+        "longitude": -93.619981
+      },
+      "region": "Iowa",
+      "sessions": 1
     },
     "US|Louisiana|Mandeville": {
       "city": "Mandeville",
@@ -614,6 +625,17 @@
       "region": "Pennsylvania",
       "sessions": 1
     },
+    "US|Tennessee|Chattanooga": {
+      "city": "Chattanooga",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 35.06999,
+        "longitude": -85.250001
+      },
+      "region": "Tennessee",
+      "sessions": 1
+    },
     "US|Texas|Arlington": {
       "city": "Arlington",
       "country": "US",
@@ -729,7 +751,7 @@
         "longitude": -77.4827
       },
       "region": "Virginia",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Virginia|Fairfax": {
       "city": "Fairfax",
@@ -824,11 +846,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 262
+      "sessions": 274
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-25",
+  "last_end": "2026-10-26",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -949,7 +971,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 180
+      "sessions": 188
     },
     "US|Hawaii": {
       "country": "US",
@@ -967,7 +989,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 11
+      "sessions": 13
     },
     "US|Louisiana": {
       "country": "US",
@@ -1011,6 +1033,12 @@
       "region": "Pennsylvania",
       "sessions": 4
     },
+    "US|Tennessee": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Tennessee",
+      "sessions": 1
+    },
     "US|Texas": {
       "country": "US",
       "country_name": "United States",
@@ -1033,7 +1061,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 7
+      "sessions": 8
     },
     "US|Washington": {
       "country": "US",
@@ -1051,6 +1079,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 393,
+  "total_sessions": 405,
   "version": 1
 }
