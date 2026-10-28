@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Visitor Map · Xinyuan’s Secret Garden</title>
+<link rel="stylesheet" href="/xwei/xwei.css">
+<style>
+.visitor-summary { display: flex; flex-wrap: wrap; gap: 32px; margin: 24px 0; }
+.visitor-summary strong { display: block; color: #18345a; font-size: 1.6em; }
+.visitor-summary span, .visitor-note, #visitor-status { color: #586c86; font-size: 0.85em; }
+.visitor-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+.visitor-toolbar button { padding: 7px 14px; background: #fff; border: 1px solid #b8cce3; border-radius: 4px; color: #0039a6; cursor: pointer; }
+.visitor-toolbar button:disabled { opacity: 0.45; cursor: default; }
+.visitor-toolbar button:focus-visible { outline: 2px solid #0039a6; outline-offset: 2px; }
+.visitor-toolbar span { color: #586c86; font-size: 0.8em; }
+.visitor-map-viewport { overflow: auto; max-height: 650px; border: 1px solid #cbdced; border-radius: 6px; }
+#visitor-map-image { display: block; width: 100%; max-width: none; aspect-ratio: 900 / 506.25; }
+.visitor-table { width: 100%; }
+.visitor-table th:first-child, .visitor-table td:first-child { width: 2ch; white-space: nowrap; }
+.visitor-table th { text-align: left; }
+.visitor-table td, .visitor-table thead th:last-child { text-align: right; }
+.visitor-table tbody th { font-weight: normal; }
+.visitor-filters { display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0; }
+.visitor-filters label { flex: 1 1 200px; font-size: 0.85em; color: #43536b; }
+.visitor-filters select { display: block; width: 100%; margin-top: 6px; padding: 8px; background: #fff; border: 1px solid #b8cce3; border-radius: 4px; }
+#visitor-map-canvas { aspect-ratio: 16 / 9; overflow: hidden; }
+#visitor-map-canvas > svg { display: block; width: 100%; height: 100%; background: #e8f2fc; touch-action: none; cursor: grab; }
+#visitor-map-canvas path:hover { stroke: #0039a6; }
+.visitor-place-link { border: 0; padding: 4px 0; background: transparent; color: #0039a6; cursor: pointer; text-align: left; text-decoration: underline; }
+</style>
+</head>
+<body>
+<div id="gate"></div>
+<div id="app" style="display:none">
+<div class="topbar"><div class="wrap" style="padding-top:0;padding-bottom:0"><a href="/xwei/" style="text-decoration:none">← Secret Garden</a><span class="brand">🗺️ Visitor Map</span><span class="sp"></span><button class="linkbtn" id="signOut">Sign out</button></div></div>
+<div class="wrap">
+<h1>Visitor Map</h1>
+
+
+<p>Explore website visits by country, state or province, and city.</p>
+<p class="byline">I set up this <strong>Visitor Map</strong> to get a simple sense of where visitors to my website are coming from.</p><p class="byline">It provides a geographic view of website traffic by <strong>country or region, state or province, and city</strong>, making it easy to see how the site reaches people across different places over time.</p><p class="byline">The map is mainly for curiosity and perspective. As I share research, notes, and small tools online, I find it interesting to see where visitors come from and how the audience gradually expands.</p><p class="byline">It is a simple feature, but I like the idea of being able to visualize how something shared online can reach people in different parts of the world.</p>
+<div class="visitor-summary" aria-live="polite">
+  <div><strong id="visitor-total">—</strong><span>Website visits</span></div>
+  <div><strong id="visitor-countries">—</strong><span>Countries / regions</span></div>
+  <div><strong>All time</strong><span>Reporting window</span></div>
+</div>
+<p id="visitor-status" role="status">Visitor data is not yet connected.</p>
+<div class="visitor-filters">
+  <label>Country / region<select id="map-country"><option value="">World</option></select></label>
+  <label>State / province<select id="map-region" disabled><option value="">All states / provinces</option></select></label>
+  <label>City<select id="map-city" disabled><option value="">All cities</option></select></label>
+</div>
+<div class="visitor-toolbar" aria-label="Map controls">
+  <button type="button" id="map-out" aria-label="Zoom out" disabled>−</button>
+  <button type="button" id="map-in" aria-label="Zoom in">+</button>
+  <button type="button" id="map-reset">Reset map</button>
+  <span>Select a country, state / province, or city</span>
+</div>
+<div id="visitor-map-canvas" class="visitor-map-viewport" tabindex="0" aria-label="Interactive visitor map. Use the selectors and zoom buttons to explore.">
+  <img src="/images/lab/visitor-map.svg" alt="World map of website visits by country">
+</div>
+<p id="visitor-location-note" class="visitor-note" aria-live="polite"></p>
+<p class="visitor-note">Visits are GA4 sessions with a page view on this website, excluding this map page. Counts update daily and keep every visit on record, through the latest complete day. No raw IP addresses or individual visit histories are displayed.</p>
+<div id="visitor-table-wrap" hidden>
+  <h2 id="visitor-table-title">Visits by country / region</h2>
+  <table class="visitor-table">
+    <thead><tr><th scope="col"><span aria-hidden="true">#</span><span class="visually-hidden">Rank</span></th><th scope="col" id="visitor-table-place">Country / region</th><th scope="col">Visits</th></tr></thead>
+    <tbody id="visitor-table-body"></tbody>
+  </table>
+</div>
+<p><small>Map boundaries: <a href="https://www.naturalearthdata.com/">Natural Earth</a>.</small></p>
+<noscript><p>Enable JavaScript to view totals and use map controls. The map image above remains available.</p></noscript>
+
+</div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script src="/xwei/xwei.js"></script>
+<script>
+XW.boot(function(){
+  var s = document.createElement("script");
+  s.src = "/assets/js/visitor-map.js";
+  document.body.appendChild(s);
+});
+</script>
+</body>
+</html>
