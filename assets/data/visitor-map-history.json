@@ -345,7 +345,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 115
+      "sessions": 116
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -787,7 +787,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Washington",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Washington|Seattle": {
       "city": "Seattle",
@@ -846,11 +846,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 274
+      "sessions": 276
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-26",
+  "last_end": "2026-10-27",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -971,7 +971,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 188
+      "sessions": 189
     },
     "US|Hawaii": {
       "country": "US",
@@ -1067,7 +1067,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Washington",
-      "sessions": 5
+      "sessions": 6
     },
     "US|West Virginia": {
       "country": "US",
@@ -1079,6 +1079,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 405,
+  "total_sessions": 407,
   "version": 1
 }
