@@ -13,8 +13,7 @@ records. The GA property is 554846099. Its service account is a GA Viewer.
   workflow ([skip ci]); the first run seeds as far back as GA4 retention allows
   (tries 365/180/90/29 days, longest first) and records the achieved
   seed_range_days. If a daily run fails, the next run's watermark covers the gap.
-- Filter: hostName xinyuan-wei-xw.github.io, eventName page_view, pagePath not
-  starting with /visitor-map. A session visiting other pages and the map still
+- Filter: hostName xinyuan-wei-xw.github.io, eventName page_view, pagePath not starting with /visitor-map or /xwei/visitor-map. A session visiting other pages and the map still
   counts. A map-only visit does not. The map page also disables GA tagging.
 - Dimensions: countryId, country, region, and city. All positive aggregate counts are included; no five-visit threshold. No institution inference or IP lookup.
 - Total comes from a separate report without a country dimension, rather than
