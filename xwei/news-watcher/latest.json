@@ -1,0 +1,16 @@
+{
+ "wsj": {
+  "date": "20261029",
+  "count": 12,
+  "file": "wsj-20261029.html",
+  "site": "https://www.wsj.com",
+  "name": "The Wall Street Journal"
+ },
+ "economist": {
+  "date": "20261029",
+  "count": 8,
+  "file": "economist-20261029.html",
+  "site": "https://www.economist.com",
+  "name": "The Economist"
+ }
+}
