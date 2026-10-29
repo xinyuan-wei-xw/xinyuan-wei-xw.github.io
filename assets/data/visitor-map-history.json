@@ -86,6 +86,13 @@
       "region": "(not set)",
       "sessions": 2
     },
+    "GB|England|London": {
+      "city": "London",
+      "country": "GB",
+      "country_name": "United Kingdom",
+      "region": "England",
+      "sessions": 1
+    },
     "SG|(not set)|(not set)": {
       "city": "(not set)",
       "country": "SG",
@@ -113,7 +120,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 57
+      "sessions": 68
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -334,7 +341,7 @@
         "longitude": -83.378022
       },
       "region": "Georgia",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Georgia|Atlanta": {
       "city": "Atlanta",
@@ -345,7 +352,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 116
+      "sessions": 123
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -377,6 +384,20 @@
         "latitude": 33.98293,
         "longitude": -84.42498
       },
+      "region": "Georgia",
+      "sessions": 2
+    },
+    "US|Georgia|Hartwell": {
+      "city": "Hartwell",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Georgia",
+      "sessions": 1
+    },
+    "US|Georgia|Kennesaw": {
+      "city": "Kennesaw",
+      "country": "US",
+      "country_name": "United States",
       "region": "Georgia",
       "sessions": 1
     },
@@ -470,6 +491,13 @@
       "region": "Illinois",
       "sessions": 4
     },
+    "US|Indiana|West Lafayette": {
+      "city": "West Lafayette",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Indiana",
+      "sessions": 1
+    },
     "US|Iowa|Council Bluffs": {
       "city": "Council Bluffs",
       "country": "US",
@@ -479,7 +507,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 12
+      "sessions": 13
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -501,6 +529,13 @@
     },
     "US|New Jersey|Clinton Township": {
       "city": "Clinton Township",
+      "country": "US",
+      "country_name": "United States",
+      "region": "New Jersey",
+      "sessions": 1
+    },
+    "US|New Jersey|Piscataway": {
+      "city": "Piscataway",
       "country": "US",
       "country_name": "United States",
       "region": "New Jersey",
@@ -596,6 +631,17 @@
       "region": "Pennsylvania",
       "sessions": 1
     },
+    "US|Pennsylvania|Harrisburg": {
+      "city": "Harrisburg",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 40.2736,
+        "longitude": -76.884749
+      },
+      "region": "Pennsylvania",
+      "sessions": 1
+    },
     "US|Pennsylvania|Philadelphia": {
       "city": "Philadelphia",
       "country": "US",
@@ -623,6 +669,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
+      "sessions": 1
+    },
+    "US|South Carolina|Mullins": {
+      "city": "Mullins",
+      "country": "US",
+      "country_name": "United States",
+      "region": "South Carolina",
       "sessions": 1
     },
     "US|Tennessee|Chattanooga": {
@@ -812,7 +865,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 2
+      "sessions": 3
     }
   },
   "countries": {
@@ -836,9 +889,13 @@
       "name": "Germany",
       "sessions": 2
     },
+    "GB": {
+      "name": "United Kingdom",
+      "sessions": 1
+    },
     "SG": {
       "name": "Singapore",
-      "sessions": 119
+      "sessions": 130
     },
     "TW": {
       "name": "Taiwan",
@@ -846,11 +903,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 276
+      "sessions": 293
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-27",
+  "last_end": "2026-10-28",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -913,11 +970,17 @@
       "region": "(not set)",
       "sessions": 2
     },
+    "GB|England": {
+      "country": "GB",
+      "country_name": "United Kingdom",
+      "region": "England",
+      "sessions": 1
+    },
     "SG|": {
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 57
+      "sessions": 68
     },
     "SG|(not set)": {
       "country": "SG",
@@ -935,7 +998,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 2
+      "sessions": 3
     },
     "US|(not set)": {
       "country": "US",
@@ -971,7 +1034,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 189
+      "sessions": 200
     },
     "US|Hawaii": {
       "country": "US",
@@ -985,11 +1048,17 @@
       "region": "Illinois",
       "sessions": 5
     },
+    "US|Indiana": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Indiana",
+      "sessions": 1
+    },
     "US|Iowa": {
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 13
+      "sessions": 14
     },
     "US|Louisiana": {
       "country": "US",
@@ -1001,7 +1070,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "New Jersey",
-      "sessions": 1
+      "sessions": 2
     },
     "US|New York": {
       "country": "US",
@@ -1031,7 +1100,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
-      "sessions": 4
+      "sessions": 5
+    },
+    "US|South Carolina": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "South Carolina",
+      "sessions": 1
     },
     "US|Tennessee": {
       "country": "US",
@@ -1079,6 +1154,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 407,
+  "total_sessions": 436,
   "version": 1
 }
