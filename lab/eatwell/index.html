@@ -409,7 +409,7 @@ function initFirebase(){const box=$("authBox");if(!firebaseReady()){box.style.di
      listen();setSync(t("syncDone"));
     }).catch(e=>{setSync(t("syncErr"));console.error(e);});
    }else{showForm(true);if(unsub){unsub();unsub=null;}userDoc=null;setSync("");
-    if(wipeOnSignOut){wipeOnSignOut=false;S.sel={};S.servings=2;savePrefs();}}
+    if(wipeOnSignOut){wipeOnSignOut=false;S.sel={};S.servings=2;S.customs=[];S.customRecs=[];try{localStorage.removeItem(CUSTOM_LS);}catch(e){}savePrefs();}}
    renderAll();});
  }catch(e){console.error(e);box.style.display="none";}}
 function needLogin(){if(fbUser)return true;
@@ -571,7 +571,7 @@ const KB={
 "pork":{cat:"catProtein",zh:"猪肉",
  buy:{en:"Pink-red, firm, with white fat — avoid pale watery or dark meat.",zh:"粉红紧实、脂肪洁白；发白发水或发暗不要买。"},
  store:{en:"Fridge 3–4 days; freeze up to 6 months.",zh:"冷藏3–4天，冷冻6个月。"},
- cook:{en:"Cook to 71°C/160°F; pork must never be served rare.",zh:"加热至71°C；猪肉不能吃生的，务必全熟。"}},
+ cook:{en:"Cook chops and roasts to 63°C/145°F and rest 3 minutes (ground pork to 71°C/160°F); pork must never be served rare.",zh:"排骨、里脊加热至63°C并静置3分钟（肉馅需71°C）；猪肉不能吃生的。"}},
 "egg":{cat:"catProtein",zh:"鸡蛋",
  buy:{en:"Check shells aren't cracked; check the date on the box.",zh:"蛋壳无裂纹；注意包装上的日期。"},
  store:{en:"Keep in the fridge in the carton, not the door; use within 3 weeks.",zh:"连盒冷藏，不要放冰箱门上；3周内吃完。"},
