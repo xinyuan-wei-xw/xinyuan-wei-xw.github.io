@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily AI News Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#52adc8;--blue-deep:#3d93ae;--ink:#2f2b25;--soft:#6e6659;--line:#e3d8c2;--bg:#f9f3e6;--card:#fffdf8;}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Source Serif 4",Georgia,"Times New Roman",serif;color:var(--ink);background:var(--bg);line-height:1.75}
+.topbar{border-bottom:1px solid var(--line)}
+.topbar .wrap{max-width:1080px;margin:0 auto;padding:12px 22px}
+.topbar a{color:var(--blue);text-decoration:none;font-weight:600}
+.topbar a:hover{color:var(--blue-deep)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+main{padding:52px 0 90px}
+.hero{text-align:center}
+.hero .dateline{font-style:italic;color:var(--soft);margin:0 0 .4em;font-size:1em}
+.hero h1{font-family:"Caveat",cursive;font-weight:700;font-size:3.6em;line-height:1.15;color:var(--blue);margin:0 0 .25em}
+.hero .sub{font-size:1.08em;margin:0 auto .8em;max-width:40em}
+.hero .byline{font-size:.95em;color:var(--soft);margin:0 auto .6em;max-width:42em}
+.hero .byline:last-of-type{margin-bottom:2em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--ink);background:var(--card);transition:transform .15s,box-shadow .15s,border-color .15s}
+.card:hover{border-color:var(--blue);box-shadow:0 4px 18px rgba(82,173,200,.18);transform:translateY(-3px)}
+.card .body{padding:16px 18px 18px;text-align:center}
+.card .date{font-weight:700;font-size:1.1em;margin:0 0 4px}
+.card .tag{display:inline-block;font-size:.78em;color:var(--blue);border:1px solid var(--blue);border-radius:20px;padding:1px 10px;margin-bottom:8px}
+.card .desc{color:var(--soft);font-size:.92em;margin:0}
+.loading{color:var(--soft);text-align:center}
+footer{border-top:1px solid var(--line);margin-top:40px}
+footer .wrap{padding:22px;font-size:13px;color:var(--soft);text-align:center}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap"><a href="/xwei/">&larr; Back to Toolbox</a></div></div>
+<div class="wrap">
+<main>
+<div class="hero">
+<p class="dateline" id="dateline">Daily briefing</p>
+<h1>Daily AI News Briefing</h1>
+<p class="sub">A daily AI news briefing connecting developments to research &mdash; accumulating knowledge and keeping pace with the field.</p>
+<p class="byline">I built the <strong>Daily AI News Briefing</strong> to help me keep up with the rapidly evolving AI landscape in a more structured and research-oriented way.</p><p class="byline">Each briefing brings together the day's key AI developments, including <strong>article-level analysis, cross-article synthesis, and potential research directions</strong>. The goal is to provide a coherent view of what is happening, rather than simply presenting a collection of individual news stories, so you can get the broader picture in one morning read.</p><p class="byline">It also helps me build cumulative knowledge around relevant <strong>theories, concepts, and research questions</strong>. Over time, the morning reading becomes more than staying informed&mdash;it becomes a way to develop understanding that can be carried directly into research.</p><p class="byline">If you find it useful, I'd be very happy to hear your feedback, suggestions, or ideas for improvement.</p></div>
+<div class="grid" id="grid"><p class="loading">Loading briefings&hellip;</p></div>
+</main>
+</div>
+<footer><div class="wrap">Daily AI News Briefing &middot; Reading notes.</div></footer>
+<script>
+var REPO = "xinyuan-wei-xw/xinyuan-wei-xw.github.io";
+var DIR = "xwei/ai-news";
+var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+// Entries baked in at build time so cards show even if the API is unreachable.
+// New files named AI_news_YYYYMMDD.html uploaded to the folder are picked up automatically.
+var FALLBACK = [{file:"AI_news_20261011.html", date:"20261011"}];
+
+(function(){
+  var d = new Date();
+  document.getElementById("dateline").textContent =
+    MONTHS[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+})();
+
+function fmt(d){ return MONTHS[parseInt(d.slice(4,6),10)-1] + " " + parseInt(d.slice(6,8),10) + ", " + d.slice(0,4); }
+
+function render(items){
+  var grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  items.forEach(function(it){
+    var a = document.createElement("a");
+    a.className = "card"; a.href = it.file;
+    var body = document.createElement("div"); body.className = "body";
+    var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = "AI News Briefing";
+    var h = document.createElement("p"); h.className = "date"; h.textContent = fmt(it.date);
+    var d = document.createElement("p"); d.className = "desc"; d.textContent = "The day's AI news and research, distilled.";
+    body.appendChild(tag); body.appendChild(h); body.appendChild(d);
+    a.appendChild(body);
+    grid.appendChild(a);
+  });
+}
+
+render(FALLBACK);
+fetch("https://api.github.com/repos/" + REPO + "/contents/" + DIR)
+  .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(function(arr){
+    var items = arr
+      .filter(function(e){ return e.type === "file" && /^AI_news_\d{8}\.html$/i.test(e.name); })
+      .map(function(e){
+        var m = e.name.match(/^AI_news_(\d{8})\.html$/i);
+        return {file: e.name, date: m[1]};
+      })
+      .sort(function(a,b){ return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
+    if(items.length) render(items);
+  })
+  .catch(function(){ /* keep fallback */ });
+</script>
+<!-- garden-gate -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>(function(){try{if(typeof firebase==="undefined"){location.replace("/xwei/");return;}var cfg={apiKey:"AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw",''authDomain:"x-planner-99dd3.firebaseapp.com",''projectId:"x-planner-99dd3",''appId:"1:146714833806:web:d1c4516985514f7c35eadf"};if(!firebase.apps.length){firebase.initializeApp(cfg);}firebase.auth().onAuthStateChanged(function(u){if(!u){location.replace("/xwei/");}});}catch(e){location.replace("/xwei/");}})();</script>
+</body>
+</html>
