@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Signal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#52adc8;--blue-deep:#3d93ae;--ink:#2f2b25;--soft:#6e6659;--line:#e3d8c2;--bg:#f9f3e6;--card:#fffdf8;}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Source Serif 4",Georgia,"Times New Roman",serif;color:var(--ink);background:var(--bg);line-height:1.75}
+.topbar{border-bottom:1px solid var(--line)}
+.topbar .wrap{max-width:760px;margin:0 auto;padding:12px 22px}
+.topbar a{color:var(--blue);text-decoration:none;font-weight:600}
+.topbar a:hover{color:var(--blue-deep)}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+main{padding:52px 0 90px}
+.hero{text-align:center}
+.hero .dateline{font-style:italic;color:var(--soft);margin:0 0 .4em;font-size:1em}
+.hero h1{font-family:"Caveat",cursive;font-weight:700;font-size:4.4em;line-height:1.1;color:var(--blue);margin:0 0 .25em}
+.hero .sub{font-size:1.12em;margin:0 auto .6em;max-width:40em}
+.hero .byline{font-size:.98em;color:var(--soft);margin:0 auto 2em;max-width:42em}
+h2.sec{font-family:"Caveat",cursive;font-weight:600;font-size:2em;color:var(--blue);text-align:center;margin:1.8em 0 .8em}
+.srcgrid{display:grid;grid-template-columns:1fr;gap:18px;margin-bottom:10px}
+.srccard{border:1px solid var(--line);border-radius:14px;padding:22px 26px;background:var(--card)}
+.srccard .name{font-weight:700;font-size:1.3em;margin:0 0 4px}
+.srccard .meta{color:var(--soft);font-size:.95em;margin:0 0 12px}
+.srccard .links a{color:var(--blue);font-weight:600;text-decoration:none;margin-right:16px}
+.srccard .links a:hover{color:var(--blue-deep);text-decoration:underline}
+.srccard .links .ext{font-weight:400;color:var(--soft)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.colh{font-size:1.15em;margin:0 0 12px;color:var(--ink);font-weight:700;text-align:center}
+.colcards{display:grid;grid-template-columns:1fr;gap:14px}
+.arc-head{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:0 0 12px}
+.arc-head span{font-size:1.15em;font-weight:700;text-align:center}
+.arc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 26px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}.arc-grid{grid-template-columns:1fr}.arc-head{display:none}}
+.card{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--ink);background:var(--card);transition:transform .15s,box-shadow .15s,border-color .15s}
+.card:hover{border-color:var(--blue);box-shadow:0 4px 18px rgba(82,173,200,.18);transform:translateY(-3px)}
+.card .body{padding:16px 20px 18px;text-align:center}
+.card .date{font-weight:700;font-size:1.12em;margin:0 0 4px}
+.card .tag{display:inline-block;font-size:.8em;color:var(--blue);border:1px solid var(--blue);border-radius:20px;padding:1px 12px;margin-bottom:8px}
+.card .desc{color:var(--soft);font-size:.92em;margin:0}
+.loading{color:var(--soft);text-align:center}
+footer{border-top:1px solid var(--line);margin-top:40px}
+footer .wrap{padding:22px;font-size:13px;color:var(--soft);text-align:center}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap"><a href="/xwei/">&larr; Back to Toolbox</a></div></div>
+<div class="wrap">
+<main>
+<div class="hero">
+<p class="dateline" id="dateline">Daily digest</p>
+<h1>Signal</h1>
+<p class="sub">A daily digest of the outlets I subscribe to &mdash; skim the day in plain English, then click through to read the originals.</p>
+<p class="byline">Every morning I pull the latest from <strong>The Wall Street Journal</strong> and <strong>The Economist</strong>, pick the stories that matter across AI &amp; tech, business &amp; markets, and economics &amp; policy, and write a short summary of each &mdash; what happened and why it matters. Each summary links to the original article, which you can read in full with your own subscription.</p></div>
+
+<h2 class="sec">Sources</h2>
+<div class="srcgrid" id="srcgrid"><p class="loading">Loading sources&hellip;</p></div>
+
+<h2 class="sec">Past digests</h2>
+<div class="arc-head"><span>The Wall Street Journal</span><span>The Economist</span></div>
+<div class="arc-grid" id="arc-grid"><p class="loading">Loading digests&hellip;</p></div>
+</main>
+</div>
+<footer><div class="wrap">Signal &middot; daily digest &middot; summaries drafted with AI assistance from public feed data; full articles live on the publisher's site.</div></footer>
+<script>
+var REPO = "xinyuan-wei-xw/xinyuan-wei-xw.github.io";
+var DIR = "xwei/news-watcher";
+var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+// Dateline: today's date, memo style.
+(function(){
+  var d = new Date();
+  document.getElementById("dateline").textContent =
+    MONTHS[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+})();
+// Baked-in fallback so the page works even if the API/files are unreachable.
+var FALLBACK_LATEST = {
+  "wsj": {"date":"20261011","count":14,"file":"wsj-20261011.html","site":"https://www.wsj.com","name":"The Wall Street Journal"},
+  "economist": {"date":"20261009","count":8,"file":"economist-20261009.html","site":"https://www.economist.com","name":"The Economist"}
+};
+var FALLBACK_ARCHIVE = [
+  {file:"wsj-20261011.html", source:"wsj", date:"20261011"},
+  {file:"economist-20261009.html", source:"economist", date:"20261009"}
+];
+
+function fmt(d){ return MONTHS[parseInt(d.slice(4,6),10)-1] + " " + parseInt(d.slice(6,8),10) + ", " + d.slice(0,4); }
+
+function renderSources(latest){
+  var grid = document.getElementById("srcgrid");
+  grid.innerHTML = "";
+  Object.keys(latest).forEach(function(k){
+    var s = latest[k];
+    var div = document.createElement("div");
+    div.className = "srccard";
+    var name = document.createElement("p"); name.className = "name"; name.textContent = s.name;
+    var meta = document.createElement("p"); meta.className = "meta";
+    meta.textContent = "Latest digest: " + fmt(s.date) + " · " + s.count + " stories";
+    var links = document.createElement("p"); links.className = "links";
+    var a1 = document.createElement("a"); a1.href = s.file; a1.textContent = "Read latest digest →";
+    var a2 = document.createElement("a"); a2.href = s.site; a2.target = "_blank"; a2.rel = "noopener";
+    a2.className = "ext"; a2.textContent = s.site.replace("https://www.","") + " ↗";
+    links.appendChild(a1); links.appendChild(a2);
+    div.appendChild(name); div.appendChild(meta); div.appendChild(links);
+  });
+}
+
+function digestCard(it){
+  var label = it.source === "wsj" ? "WSJ" : "Economist";
+  var a = document.createElement("a");
+  a.className = "card"; a.href = it.file;
+  var body = document.createElement("div"); body.className = "body";
+  var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = label;
+  var h = document.createElement("p"); h.className = "date"; h.textContent = fmt(it.date);
+  var d = document.createElement("p"); d.className = "desc"; d.textContent = "The day's essential stories, distilled.";
+  body.appendChild(tag); body.appendChild(h); body.appendChild(d);
+  a.appendChild(body);
+  return a;
+}
+
+function renderArchive(items){
+  // Date-aligned rows: same date shares a row, WSJ left, Economist right.
+  // A source with no digest that day leaves its cell empty.
+  var grid = document.getElementById("arc-grid");
+  grid.innerHTML = "";
+  var byDate = {};
+  items.forEach(function(it){
+    byDate[it.date] = byDate[it.date] || {};
+    byDate[it.date][it.source] = it;
+  });
+  var dates = Object.keys(byDate).sort().reverse();
+  if(!dates.length){
+    var p = document.createElement("p");
+    p.className = "loading"; p.textContent = "No digests yet.";
+    grid.appendChild(p);
+    return;
+  }
+  dates.forEach(function(d){
+    var row = byDate[d];
+    grid.appendChild(row.wsj ? digestCard(row.wsj) : document.createElement("div"));
+    grid.appendChild(row.economist ? digestCard(row.economist) : document.createElement("div"));
+  });
+}
+
+renderSources(FALLBACK_LATEST);
+renderArchive(FALLBACK_ARCHIVE);
+
+fetch("latest.json")
+  .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(function(latest){ renderSources(latest); })
+  .catch(function(){ /* keep fallback */ });
+
+fetch("https://api.github.com/repos/" + REPO + "/contents/" + DIR)
+  .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(function(arr){
+    var items = arr
+      .filter(function(e){ return e.type === "file" && /^(wsj|economist)-\d{8}\.html$/i.test(e.name); })
+      .map(function(e){
+        var m = e.name.match(/^(wsj|economist)-(\d{8})\.html$/i);
+        return {file: e.name, source: m[1].toLowerCase(), date: m[2]};
+      })
+      .sort(function(a,b){ return b.date < a.date ? -1 : (b.source < a.source ? -1 : 1); });
+    if(items.length) renderArchive(items);
+  })
+  .catch(function(){ /* keep fallback */ });
+</script>
+<!-- garden-gate -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>(function(){try{if(typeof firebase==="undefined"){location.replace("/xwei/");return;}var cfg={apiKey:"AIzaSyCHnVILIv_TKx9DcJ-07Z5smN0NUIhxrQw",''authDomain:"x-planner-99dd3.firebaseapp.com",''projectId:"x-planner-99dd3",''appId:"1:146714833806:web:d1c4516985514f7c35eadf"};if(!firebase.apps.length){firebase.initializeApp(cfg);}firebase.auth().onAuthStateChanged(function(u){if(!u){location.replace("/xwei/");}});}catch(e){location.replace("/xwei/");}})();</script>
+</body>
+</html>
