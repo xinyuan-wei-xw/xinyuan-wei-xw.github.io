@@ -1709,9 +1709,9 @@ function showFiles(items,intro){
   const box=document.createElement("div");
   box.style.cssText="background:#fff;border-radius:14px;max-width:920px;width:100%;max-height:88vh;overflow:auto;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3)";
   box.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
-    +'<b style="font-size:16px;color:#2b5488">'+(intro||"Copy into files, then upload to GitHub")+'</b>'
+    +'<b style="font-size:16px;color:#2b5488">'+(intro||"Save these files somewhere private")+'</b>'
     +'<button id="fpClose" style="border:1px solid #d9e4f0;background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:600">Close</button></div>'
-    +'<div style="font-size:13px;color:#5a6875;margin-bottom:14px">Downloads are blocked inside this preview. For each box: click <b>Select all</b>, press Cmd/Ctrl+C, paste into a new file with the exact name shown, and upload it to your repo.</div>';
+    +'<div style="font-size:13px;color:#5a6875;margin-bottom:14px">For each box: click <b>Select all</b>, press Cmd/Ctrl+C, paste into a new file with the exact name shown, and save it somewhere private (your own device or private storage). Do not upload it to a public repository \u2014 it contains your private plans.</div>';
   items.forEach(it=>{
     const wrap=document.createElement("div");wrap.style.marginBottom="16px";
     const bar=document.createElement("div");bar.style.cssText="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px";
@@ -1853,7 +1853,7 @@ function listen(){if(!userDoc)return;if(unsub)unsub();
     if(!d||!d.data||d.by===CLIENT_ID)return;applyRemote(d);setSync("Synced ✓");});}
 function initFirebase(){
   const box=document.getElementById("authBox");
-  if(!firebaseReady()){locked=false;box.style.display="none";setSync("");return;}
+  if(!firebaseReady()){locked=true;box.style.display="";setSync("Sign-in unavailable \u2014 your plans stay hidden until sign-in works. Check your connection and reload.");return;}
   try{
     firebase.initializeApp(firebaseConfig);
     fauth=firebase.auth();fdb=firebase.firestore();box.style.display="";
@@ -1902,11 +1902,11 @@ function initFirebase(){
         }).catch(e=>{setSync("Sync error");console.error(e);});
       }else{
         showForm(true);if(unsub){unsub();unsub=null;}userDoc=null;setSync("");
-        if(wipeOnSignOut){wipeOnSignOut=false;try{localStorage.removeItem(LS);}catch(e){}DB=emptyDB();}
+        if(wipeOnSignOut){wipeOnSignOut=false;try{localStorage.removeItem(LS);}catch(e){}try{localStorage.removeItem("xplanner.geminiKey");}catch(e){}DB=emptyDB();}
       }
       render();
     });
-  }catch(e){console.error(e);locked=false;box.style.display="none";setSync("");}
+  }catch(e){console.error(e);locked=true;box.style.display="";setSync("Sign-in unavailable \u2014 your plans stay hidden until sign-in works. Check your connection and reload.");}
 }
 function friendlyAuthError(e){
   const c=(e&&e.code)||"";
