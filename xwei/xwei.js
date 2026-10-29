@@ -111,6 +111,11 @@ const XW = (() => {
     {em: "👯", name: "Digital Twins", desc: "Animated GIF stickers made from my own photos.", href: "/xwei/stickers/"},
     {em: "🌿", name: "My Life in a Few Years?", desc: "A sketch of the life I want. Add a line whenever it gets clearer.", href: "/xwei/life/"},
     {em: "✍️", name: "Writing Guide", desc: "How to organize and write a research paper — from research problem to proofs. With my saved resources and sources.", href: "/xwei/writing/"},
+    {em: "📚", name: "IS Research Craft", desc: "Learning notes to think and work as an IS researcher.", href: "/xwei/is-research-craft/"},
+    {em: "⌨️", name: "WordType", desc: "Vocabulary typing drills that build muscle memory — six languages, with pronunciation, meanings and mistake review.", href: "/xwei/wordtype/"},
+    {em: "🎮", name: "Under Review", desc: "A simulation designed to help us get used to the process.", href: "/xwei/under-review/"},
+    {em: "🕸️", name: "Researcher Connection Map", desc: "Who has written with whom, worked alongside whom, and studied together — MISQ, ISR and Management Science, 2000–2026.", href: "/xwei/researcher-map/"},
+    {em: "🗺️", name: "Visitor Map", desc: "Website visit records by country, state/province, and city.", href: "/xwei/visitor-map/"},
     {em: "🔗", name: "links", desc: "每天要打开的页面：上传链接、常用后台，一点就到。", href: "/xwei/links/"}
   ];
 
