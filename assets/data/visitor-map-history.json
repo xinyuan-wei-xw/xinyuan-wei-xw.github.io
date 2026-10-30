@@ -72,6 +72,17 @@
       "region": "Shaanxi",
       "sessions": 1
     },
+    "CN|Zhejiang|Ningbo": {
+      "city": "Ningbo",
+      "country": "CN",
+      "country_name": "China",
+      "location": {
+        "latitude": 29.881917,
+        "longitude": 121.548092
+      },
+      "region": "Zhejiang",
+      "sessions": 1
+    },
     "CN||": {
       "city": "",
       "country": "CN",
@@ -124,6 +135,13 @@
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
+      "country": "TW",
+      "country_name": "Taiwan",
+      "region": "Changhua County",
+      "sessions": 1
+    },
+    "TW|Changhua County|Yuanlin City": {
+      "city": "Yuanlin City",
       "country": "TW",
       "country_name": "Taiwan",
       "region": "Changhua County",
@@ -203,7 +221,7 @@
         "longitude": -122.417169
       },
       "region": "California",
-      "sessions": 1
+      "sessions": 2
     },
     "US|California|San Jose": {
       "city": "San Jose",
@@ -265,6 +283,13 @@
     },
     "US|Florida|": {
       "city": "",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Florida",
+      "sessions": 2
+    },
+    "US|Florida|Brownsville": {
+      "city": "Brownsville",
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
@@ -352,7 +377,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 123
+      "sessions": 127
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -507,7 +532,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 13
+      "sessions": 14
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -525,6 +550,17 @@
       "country": "US",
       "country_name": "United States",
       "region": "Louisiana",
+      "sessions": 1
+    },
+    "US|Massachusetts|Lowell": {
+      "city": "Lowell",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 42.633688,
+        "longitude": -71.316691
+      },
+      "region": "Massachusetts",
       "sessions": 1
     },
     "US|New Jersey|Clinton Township": {
@@ -883,7 +919,7 @@
     },
     "CN": {
       "name": "China",
-      "sessions": 7
+      "sessions": 8
     },
     "DE": {
       "name": "Germany",
@@ -899,15 +935,15 @@
     },
     "TW": {
       "name": "Taiwan",
-      "sessions": 1
+      "sessions": 2
     },
     "US": {
       "name": "United States",
-      "sessions": 293
+      "sessions": 302
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-28",
+  "last_end": "2026-10-29",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -964,6 +1000,12 @@
       "region": "Shaanxi",
       "sessions": 1
     },
+    "CN|Zhejiang": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "Zhejiang",
+      "sessions": 1
+    },
     "DE|(not set)": {
       "country": "DE",
       "country_name": "Germany",
@@ -992,7 +1034,7 @@
       "country": "TW",
       "country_name": "Taiwan",
       "region": "Changhua County",
-      "sessions": 1
+      "sessions": 2
     },
     "US|": {
       "country": "US",
@@ -1010,7 +1052,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 14
+      "sessions": 15
     },
     "US|Colorado": {
       "country": "US",
@@ -1028,13 +1070,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 8
+      "sessions": 10
     },
     "US|Georgia": {
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 200
+      "sessions": 204
     },
     "US|Hawaii": {
       "country": "US",
@@ -1058,12 +1100,18 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 14
+      "sessions": 15
     },
     "US|Louisiana": {
       "country": "US",
       "country_name": "United States",
       "region": "Louisiana",
+      "sessions": 1
+    },
+    "US|Massachusetts": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Massachusetts",
       "sessions": 1
     },
     "US|New Jersey": {
@@ -1154,6 +1202,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 436,
+  "total_sessions": 447,
   "version": 1
 }
