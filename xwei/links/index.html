@@ -34,7 +34,7 @@
 <script>
 var SEED = [
   {t: "📤 上传 AI News 文件",
-   u: "https://github.com/xinyuan-wei-xw/xinyuan-wei-xw.github.io/upload/master/lab/ai-news",
+   u: "https://github.com/xinyuan-wei-xw/xinyuan-wei-xw.github.io/upload/master/xwei/ai-news",
    n: "每天上传 AI News digest 文件 — 打开就是上传页面"}
 ];
 var links = null, saveT = null;
@@ -81,7 +81,7 @@ function magicFill(){
   if(!u){ $("#saved").textContent = "先粘贴网址"; return; }
   $("#fUrl").value = u;
   // GitHub upload pages need login, so a proxy can't read their real title —
-  // name them from the path instead (e.g. "📤 上传文件到 lab/ai-news").
+  // name them from the path instead (e.g. "📤 上传文件到 xwei/ai-news").
   var gm = u.match(/^https?:\/\/github\.com\/[^/]+\/[^/]+\/upload\/[^/]+\/(.+?)\/?$/i);
   if(gm){
     $("#fTitle").value = "📤 上传文件到 " + decodeURIComponent(gm[1]);
@@ -197,6 +197,19 @@ XW.boot(function(){
   XW.load().then(function(data){
     if(Array.isArray(data.links)){
       links = data.links;
+      // 2026-10-31: migrate the AI News upload shortcut from lab/ai-news to xwei/ai-news
+      var migrated = false;
+      links.forEach(function(l){
+        if(l.u && l.u.indexOf("/upload/master/lab/ai-news") !== -1){
+          l.u = l.u.replace("/upload/master/lab/ai-news", "/upload/master/xwei/ai-news");
+          migrated = true;
+        }
+        if(l.t && l.t.indexOf("lab/ai-news") !== -1){
+          l.t = l.t.replace(/lab\/ai-news/g, "xwei/ai-news");
+          migrated = true;
+        }
+      });
+      if(migrated){ XW.save("links", links).catch(function(){}); }
     } else {
       links = SEED.slice();
       XW.save("links", links).catch(function(){});
