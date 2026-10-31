@@ -104,6 +104,17 @@
       "region": "England",
       "sessions": 1
     },
+    "PK|Punjab|Faisalabad": {
+      "city": "Faisalabad",
+      "country": "PK",
+      "country_name": "Pakistan",
+      "location": {
+        "latitude": 31.411927,
+        "longitude": 73.108051
+      },
+      "region": "Punjab",
+      "sessions": 1
+    },
     "SG|(not set)|(not set)": {
       "city": "(not set)",
       "country": "SG",
@@ -131,7 +142,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 68
+      "sessions": 70
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -221,7 +232,7 @@
         "longitude": -122.417169
       },
       "region": "California",
-      "sessions": 2
+      "sessions": 5
     },
     "US|California|San Jose": {
       "city": "San Jose",
@@ -377,7 +388,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 127
+      "sessions": 128
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -550,6 +561,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Louisiana",
+      "sessions": 1
+    },
+    "US|Maryland|Brooklyn Park": {
+      "city": "Brooklyn Park",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Maryland",
       "sessions": 1
     },
     "US|Massachusetts|Lowell": {
@@ -725,6 +743,13 @@
       "region": "Tennessee",
       "sessions": 1
     },
+    "US|Tennessee|Sweetwater": {
+      "city": "Sweetwater",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Tennessee",
+      "sessions": 1
+    },
     "US|Texas|Arlington": {
       "city": "Arlington",
       "country": "US",
@@ -858,7 +883,7 @@
         "longitude": -77.35453
       },
       "region": "Virginia",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Virginia|Suffolk": {
       "city": "Suffolk",
@@ -929,9 +954,13 @@
       "name": "United Kingdom",
       "sessions": 1
     },
+    "PK": {
+      "name": "Pakistan",
+      "sessions": 1
+    },
     "SG": {
       "name": "Singapore",
-      "sessions": 130
+      "sessions": 132
     },
     "TW": {
       "name": "Taiwan",
@@ -939,11 +968,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 302
+      "sessions": 309
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-29",
+  "last_end": "2026-10-30",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1018,11 +1047,17 @@
       "region": "England",
       "sessions": 1
     },
+    "PK|Punjab": {
+      "country": "PK",
+      "country_name": "Pakistan",
+      "region": "Punjab",
+      "sessions": 1
+    },
     "SG|": {
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 68
+      "sessions": 70
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1052,7 +1087,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 15
+      "sessions": 18
     },
     "US|Colorado": {
       "country": "US",
@@ -1076,7 +1111,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 204
+      "sessions": 205
     },
     "US|Hawaii": {
       "country": "US",
@@ -1106,6 +1141,12 @@
       "country": "US",
       "country_name": "United States",
       "region": "Louisiana",
+      "sessions": 1
+    },
+    "US|Maryland": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Maryland",
       "sessions": 1
     },
     "US|Massachusetts": {
@@ -1160,7 +1201,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Tennessee",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Texas": {
       "country": "US",
@@ -1184,7 +1225,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 8
+      "sessions": 9
     },
     "US|Washington": {
       "country": "US",
@@ -1202,6 +1243,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 447,
+  "total_sessions": 457,
   "version": 1
 }
