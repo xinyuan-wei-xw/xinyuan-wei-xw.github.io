@@ -142,7 +142,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 70
+      "sessions": 71
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -232,7 +232,7 @@
         "longitude": -122.417169
       },
       "region": "California",
-      "sessions": 5
+      "sessions": 8
     },
     "US|California|San Jose": {
       "city": "San Jose",
@@ -243,7 +243,7 @@
         "longitude": -121.851935
       },
       "region": "California",
-      "sessions": 2
+      "sessions": 3
     },
     "US|California|South San Francisco": {
       "city": "South San Francisco",
@@ -388,7 +388,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 128
+      "sessions": 131
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -579,6 +579,17 @@
         "longitude": -71.316691
       },
       "region": "Massachusetts",
+      "sessions": 1
+    },
+    "US|Missouri|Kansas City": {
+      "city": "Kansas City",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 39.109034,
+        "longitude": -94.60604
+      },
+      "region": "Missouri",
       "sessions": 1
     },
     "US|New Jersey|Clinton Township": {
@@ -960,7 +971,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 132
+      "sessions": 133
     },
     "TW": {
       "name": "Taiwan",
@@ -968,11 +979,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 309
+      "sessions": 317
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-30",
+  "last_end": "2026-10-31",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1057,7 +1068,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 70
+      "sessions": 71
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1087,7 +1098,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 18
+      "sessions": 22
     },
     "US|Colorado": {
       "country": "US",
@@ -1111,7 +1122,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 205
+      "sessions": 208
     },
     "US|Hawaii": {
       "country": "US",
@@ -1153,6 +1164,12 @@
       "country": "US",
       "country_name": "United States",
       "region": "Massachusetts",
+      "sessions": 1
+    },
+    "US|Missouri": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Missouri",
       "sessions": 1
     },
     "US|New Jersey": {
@@ -1243,6 +1260,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 457,
+  "total_sessions": 466,
   "version": 1
 }
