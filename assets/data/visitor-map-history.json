@@ -221,7 +221,7 @@
         "longitude": -118.181926
       },
       "region": "California",
-      "sessions": 4
+      "sessions": 5
     },
     "US|California|San Francisco": {
       "city": "San Francisco",
@@ -232,7 +232,7 @@
         "longitude": -122.417169
       },
       "region": "California",
-      "sessions": 8
+      "sessions": 11
     },
     "US|California|San Jose": {
       "city": "San Jose",
@@ -388,7 +388,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 131
+      "sessions": 132
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -579,6 +579,17 @@
         "longitude": -71.316691
       },
       "region": "Massachusetts",
+      "sessions": 1
+    },
+    "US|Minnesota|Minneapolis": {
+      "city": "Minneapolis",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 44.981925,
+        "longitude": -93.253732
+      },
+      "region": "Minnesota",
       "sessions": 1
     },
     "US|Missouri|Kansas City": {
@@ -905,7 +916,7 @@
         "longitude": -76.58837
       },
       "region": "Virginia",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Washington|Moses Lake": {
       "city": "Moses Lake",
@@ -923,7 +934,7 @@
         "longitude": -122.341931
       },
       "region": "Washington",
-      "sessions": 3
+      "sessions": 4
     },
     "US|West Virginia|Oak Hill": {
       "city": "Oak Hill",
@@ -979,11 +990,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 317
+      "sessions": 325
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-10-31",
+  "last_end": "2026-11-01",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1098,7 +1109,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 22
+      "sessions": 26
     },
     "US|Colorado": {
       "country": "US",
@@ -1122,7 +1133,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 208
+      "sessions": 209
     },
     "US|Hawaii": {
       "country": "US",
@@ -1164,6 +1175,12 @@
       "country": "US",
       "country_name": "United States",
       "region": "Massachusetts",
+      "sessions": 1
+    },
+    "US|Minnesota": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Minnesota",
       "sessions": 1
     },
     "US|Missouri": {
@@ -1242,13 +1259,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 9
+      "sessions": 10
     },
     "US|Washington": {
       "country": "US",
       "country_name": "United States",
       "region": "Washington",
-      "sessions": 6
+      "sessions": 7
     },
     "US|West Virginia": {
       "country": "US",
@@ -1260,6 +1277,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 466,
+  "total_sessions": 474,
   "version": 1
 }
