@@ -243,7 +243,7 @@
         "longitude": -121.851935
       },
       "region": "California",
-      "sessions": 3
+      "sessions": 4
     },
     "US|California|South San Francisco": {
       "city": "South San Francisco",
@@ -304,7 +304,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Florida|Daytona Beach": {
       "city": "Daytona Beach",
@@ -525,7 +525,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Indiana|West Lafayette": {
       "city": "West Lafayette",
@@ -543,7 +543,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 14
+      "sessions": 16
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -990,11 +990,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 325
+      "sessions": 330
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-01",
+  "last_end": "2026-11-02",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1109,7 +1109,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 26
+      "sessions": 27
     },
     "US|Colorado": {
       "country": "US",
@@ -1127,7 +1127,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 10
+      "sessions": 11
     },
     "US|Georgia": {
       "country": "US",
@@ -1145,7 +1145,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 5
+      "sessions": 6
     },
     "US|Indiana": {
       "country": "US",
@@ -1157,7 +1157,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 15
+      "sessions": 17
     },
     "US|Louisiana": {
       "country": "US",
@@ -1277,6 +1277,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 474,
+  "total_sessions": 479,
   "version": 1
 }
