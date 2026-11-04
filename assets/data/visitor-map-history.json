@@ -25,6 +25,17 @@
       "region": "Ontario",
       "sessions": 1
     },
+    "CA|Quebec|Montreal": {
+      "city": "Montreal",
+      "country": "CA",
+      "country_name": "Canada",
+      "location": {
+        "latitude": 45.501945,
+        "longitude": -73.585243
+      },
+      "region": "Quebec",
+      "sessions": 1
+    },
     "CN|(not set)|(not set)": {
       "city": "(not set)",
       "country": "CN",
@@ -172,6 +183,13 @@
       "region": "California",
       "sessions": 2
     },
+    "US|California|Acton": {
+      "city": "Acton",
+      "country": "US",
+      "country_name": "United States",
+      "region": "California",
+      "sessions": 1
+    },
     "US|California|Berkeley": {
       "city": "Berkeley",
       "country": "US",
@@ -232,7 +250,7 @@
         "longitude": -122.417169
       },
       "region": "California",
-      "sessions": 11
+      "sessions": 13
     },
     "US|California|San Jose": {
       "city": "San Jose",
@@ -534,6 +552,13 @@
       "region": "Indiana",
       "sessions": 1
     },
+    "US|Iowa|Cedar Falls": {
+      "city": "Cedar Falls",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Iowa",
+      "sessions": 1
+    },
     "US|Iowa|Council Bluffs": {
       "city": "Council Bluffs",
       "country": "US",
@@ -543,7 +568,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 16
+      "sessions": 17
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -962,7 +987,7 @@
     },
     "CA": {
       "name": "Canada",
-      "sessions": 1
+      "sessions": 2
     },
     "CN": {
       "name": "China",
@@ -990,11 +1015,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 330
+      "sessions": 335
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-02",
+  "last_end": "2026-11-03",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1013,6 +1038,12 @@
       "country": "CA",
       "country_name": "Canada",
       "region": "Ontario",
+      "sessions": 1
+    },
+    "CA|Quebec": {
+      "country": "CA",
+      "country_name": "Canada",
+      "region": "Quebec",
       "sessions": 1
     },
     "CN|": {
@@ -1109,7 +1140,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 27
+      "sessions": 30
     },
     "US|Colorado": {
       "country": "US",
@@ -1157,7 +1188,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 17
+      "sessions": 19
     },
     "US|Louisiana": {
       "country": "US",
@@ -1277,6 +1308,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 479,
+  "total_sessions": 485,
   "version": 1
 }
