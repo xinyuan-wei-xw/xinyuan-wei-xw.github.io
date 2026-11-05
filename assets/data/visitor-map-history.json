@@ -50,6 +50,17 @@
       "region": "Guangdong Province",
       "sessions": 1
     },
+    "CN|Guangxi|Guilin": {
+      "city": "Guilin",
+      "country": "CN",
+      "country_name": "China",
+      "location": {
+        "latitude": 25.281939,
+        "longitude": 110.278082
+      },
+      "region": "Guangxi",
+      "sessions": 1
+    },
     "CN|Heilongjiang|Harbin": {
       "city": "Harbin",
       "country": "CN",
@@ -144,6 +155,13 @@
       "region": "(not set)",
       "sessions": 61
     },
+    "SG||": {
+      "city": "",
+      "country": "SG",
+      "country_name": "Singapore",
+      "region": "",
+      "sessions": 1
+    },
     "SG||Singapore": {
       "city": "Singapore",
       "country": "SG",
@@ -153,7 +171,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 71
+      "sessions": 72
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -261,7 +279,7 @@
         "longitude": -121.851935
       },
       "region": "California",
-      "sessions": 4
+      "sessions": 5
     },
     "US|California|South San Francisco": {
       "city": "South San Francisco",
@@ -406,7 +424,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 132
+      "sessions": 133
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -543,7 +561,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 5
+      "sessions": 6
     },
     "US|Indiana|West Lafayette": {
       "city": "West Lafayette",
@@ -568,7 +586,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 17
+      "sessions": 18
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -968,6 +986,13 @@
       "region": "West Virginia",
       "sessions": 1
     },
+    "US|Wisconsin|Franklin": {
+      "city": "Franklin",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Wisconsin",
+      "sessions": 1
+    },
     "US||": {
       "city": "",
       "country": "US",
@@ -991,7 +1016,7 @@
     },
     "CN": {
       "name": "China",
-      "sessions": 8
+      "sessions": 9
     },
     "DE": {
       "name": "Germany",
@@ -1007,7 +1032,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 133
+      "sessions": 135
     },
     "TW": {
       "name": "Taiwan",
@@ -1015,11 +1040,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 335
+      "sessions": 340
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-03",
+  "last_end": "2026-11-04",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1062,6 +1087,12 @@
       "country": "CN",
       "country_name": "China",
       "region": "Guangdong Province",
+      "sessions": 1
+    },
+    "CN|Guangxi": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "Guangxi",
       "sessions": 1
     },
     "CN|Heilongjiang": {
@@ -1110,7 +1141,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 71
+      "sessions": 73
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1140,7 +1171,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 30
+      "sessions": 31
     },
     "US|Colorado": {
       "country": "US",
@@ -1164,7 +1195,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 209
+      "sessions": 210
     },
     "US|Hawaii": {
       "country": "US",
@@ -1176,7 +1207,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 6
+      "sessions": 7
     },
     "US|Indiana": {
       "country": "US",
@@ -1188,7 +1219,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 19
+      "sessions": 20
     },
     "US|Louisiana": {
       "country": "US",
@@ -1303,11 +1334,17 @@
       "country_name": "United States",
       "region": "West Virginia",
       "sessions": 1
+    },
+    "US|Wisconsin": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Wisconsin",
+      "sessions": 1
     }
   },
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 485,
+  "total_sessions": 493,
   "version": 1
 }
