@@ -257,7 +257,7 @@
         "longitude": -118.181926
       },
       "region": "California",
-      "sessions": 5
+      "sessions": 6
     },
     "US|California|San Francisco": {
       "city": "San Francisco",
@@ -279,7 +279,7 @@
         "longitude": -121.851935
       },
       "region": "California",
-      "sessions": 5
+      "sessions": 6
     },
     "US|California|South San Francisco": {
       "city": "South San Francisco",
@@ -644,7 +644,7 @@
         "longitude": -94.60604
       },
       "region": "Missouri",
-      "sessions": 1
+      "sessions": 2
     },
     "US|New Jersey|Clinton Township": {
       "city": "Clinton Township",
@@ -1040,11 +1040,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 340
+      "sessions": 343
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-04",
+  "last_end": "2026-11-05",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1171,7 +1171,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 31
+      "sessions": 33
     },
     "US|Colorado": {
       "country": "US",
@@ -1249,7 +1249,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Missouri",
-      "sessions": 1
+      "sessions": 2
     },
     "US|New Jersey": {
       "country": "US",
@@ -1345,6 +1345,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 493,
+  "total_sessions": 496,
   "version": 1
 }
