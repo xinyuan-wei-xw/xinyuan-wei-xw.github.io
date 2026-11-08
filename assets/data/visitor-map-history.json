@@ -424,7 +424,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 135
+      "sessions": 136
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -511,7 +511,7 @@
         "longitude": -84.359
       },
       "region": "Georgia",
-      "sessions": 35
+      "sessions": 36
     },
     "US|Georgia|Sandy Springs": {
       "city": "Sandy Springs",
@@ -543,6 +543,13 @@
         "longitude": -155.090027
       },
       "region": "Hawaii",
+      "sessions": 1
+    },
+    "US|Illinois|Champaign": {
+      "city": "Champaign",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Illinois",
       "sessions": 1
     },
     "US|Illinois|Chicago": {
@@ -644,7 +651,7 @@
         "longitude": -94.60604
       },
       "region": "Missouri",
-      "sessions": 2
+      "sessions": 3
     },
     "US|New Jersey|Clinton Township": {
       "city": "Clinton Township",
@@ -1040,11 +1047,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 345
+      "sessions": 349
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-06",
+  "last_end": "2026-11-07",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1195,7 +1202,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 212
+      "sessions": 214
     },
     "US|Hawaii": {
       "country": "US",
@@ -1207,7 +1214,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 7
+      "sessions": 8
     },
     "US|Indiana": {
       "country": "US",
@@ -1249,7 +1256,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Missouri",
-      "sessions": 2
+      "sessions": 3
     },
     "US|New Jersey": {
       "country": "US",
@@ -1345,6 +1352,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 498,
+  "total_sessions": 502,
   "version": 1
 }
