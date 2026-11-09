@@ -281,6 +281,13 @@
       "region": "California",
       "sessions": 6
     },
+    "US|California|Santa Clara": {
+      "city": "Santa Clara",
+      "country": "US",
+      "country_name": "United States",
+      "region": "California",
+      "sessions": 1
+    },
     "US|California|South San Francisco": {
       "city": "South San Francisco",
       "country": "US",
@@ -320,6 +327,17 @@
       },
       "region": "Colorado",
       "sessions": 1
+    },
+    "US|Connecticut|Hartford": {
+      "city": "Hartford",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 41.771966,
+        "longitude": -72.681913
+      },
+      "region": "Connecticut",
+      "sessions": 2
     },
     "US|Connecticut|Mansfield": {
       "city": "Mansfield",
@@ -371,6 +389,17 @@
       "location": {
         "latitude": 25.789557,
         "longitude": -80.226052
+      },
+      "region": "Florida",
+      "sessions": 1
+    },
+    "US|Florida|Orlando": {
+      "city": "Orlando",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 28.511923,
+        "longitude": -81.381976
       },
       "region": "Florida",
       "sessions": 1
@@ -534,6 +563,13 @@
       "region": "Georgia",
       "sessions": 1
     },
+    "US|Georgia|Tucker": {
+      "city": "Tucker",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Georgia",
+      "sessions": 1
+    },
     "US|Hawaii|Hilo": {
       "city": "Hilo",
       "country": "US",
@@ -568,7 +604,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 6
+      "sessions": 7
     },
     "US|Indiana|West Lafayette": {
       "city": "West Lafayette",
@@ -593,7 +629,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 18
+      "sessions": 19
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -1047,11 +1083,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 349
+      "sessions": 356
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-07",
+  "last_end": "2026-11-08",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1178,7 +1214,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 33
+      "sessions": 34
     },
     "US|Colorado": {
       "country": "US",
@@ -1190,19 +1226,19 @@
       "country": "US",
       "country_name": "United States",
       "region": "Connecticut",
-      "sessions": 1
+      "sessions": 3
     },
     "US|Florida": {
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 11
+      "sessions": 12
     },
     "US|Georgia": {
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 214
+      "sessions": 215
     },
     "US|Hawaii": {
       "country": "US",
@@ -1214,7 +1250,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 8
+      "sessions": 9
     },
     "US|Indiana": {
       "country": "US",
@@ -1226,7 +1262,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 20
+      "sessions": 21
     },
     "US|Louisiana": {
       "country": "US",
@@ -1352,6 +1388,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 502,
+  "total_sessions": 509,
   "version": 1
 }
