@@ -160,7 +160,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 1
+      "sessions": 2
     },
     "SG||Singapore": {
       "city": "Singapore",
@@ -360,6 +360,13 @@
       "region": "Florida",
       "sessions": 2
     },
+    "US|Florida|Clearwater": {
+      "city": "Clearwater",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Florida",
+      "sessions": 1
+    },
     "US|Florida|Daytona Beach": {
       "city": "Daytona Beach",
       "country": "US",
@@ -453,7 +460,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 136
+      "sessions": 137
     },
     "US|Georgia|Dallas": {
       "city": "Dallas",
@@ -487,6 +494,13 @@
       },
       "region": "Georgia",
       "sessions": 2
+    },
+    "US|Georgia|Forest Park": {
+      "city": "Forest Park",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Georgia",
+      "sessions": 1
     },
     "US|Georgia|Hartwell": {
       "city": "Hartwell",
@@ -629,7 +643,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 19
+      "sessions": 20
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -1004,6 +1018,17 @@
       "region": "Virginia",
       "sessions": 2
     },
+    "US|Virginia|Virginia Beach": {
+      "city": "Virginia Beach",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 36.85516,
+        "longitude": -75.980265
+      },
+      "region": "Virginia",
+      "sessions": 1
+    },
     "US|Washington|Moses Lake": {
       "city": "Moses Lake",
       "country": "US",
@@ -1075,7 +1100,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 135
+      "sessions": 136
     },
     "TW": {
       "name": "Taiwan",
@@ -1083,11 +1108,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 356
+      "sessions": 361
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-08",
+  "last_end": "2026-11-09",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1184,7 +1209,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 73
+      "sessions": 74
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1232,13 +1257,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 12
+      "sessions": 13
     },
     "US|Georgia": {
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 215
+      "sessions": 217
     },
     "US|Hawaii": {
       "country": "US",
@@ -1262,7 +1287,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 21
+      "sessions": 22
     },
     "US|Louisiana": {
       "country": "US",
@@ -1364,7 +1389,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 10
+      "sessions": 11
     },
     "US|Washington": {
       "country": "US",
@@ -1388,6 +1413,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 509,
+  "total_sessions": 515,
   "version": 1
 }
