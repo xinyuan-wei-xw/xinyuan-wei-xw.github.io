@@ -16,11 +16,11 @@ projects:
     description: "Solo mock interview practice — upload your questions, answer one at a time with a timer, recording, and live vocal coaching on pace and intonation."
     figure: "/images/lab/mockroom.svg"
     figure_alt: "MockRoom solo mock interview practice illustration"
-    url: "/lab/mockroom/"
-  # Temporarily hidden 2026-09-29 (tex2word not working well yet) — uncomment to restore.
+    url: "https://xinyuan-wei-xw.github.io/mockroom/"
+# Temporarily hidden 2026-09-29 (tex2word not working well yet) — uncomment to restore.
 #   - title: "[Productivity] Tex/PDF to Word"
 #     description: "Convert LaTeX projects and PDFs into clean Word documents"
 #     figure: "/images/lab/tex-pdf-to-word.svg"
 #     figure_alt: "A LaTeX document and a scanned page converting into a Word document"
 #     url: "https://tex2word.onrender.com"
-# 
+#
