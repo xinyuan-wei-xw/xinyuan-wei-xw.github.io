@@ -43,6 +43,17 @@
       "region": "(not set)",
       "sessions": 1
     },
+    "CN|Beijing|Beijing": {
+      "city": "Beijing",
+      "country": "CN",
+      "country_name": "China",
+      "location": {
+        "latitude": 39.930838,
+        "longitude": 116.38634
+      },
+      "region": "Beijing",
+      "sessions": 1
+    },
     "CN|Guangdong Province|Guangzhou": {
       "city": "Guangzhou",
       "country": "CN",
@@ -160,7 +171,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 2
+      "sessions": 5
     },
     "SG||Singapore": {
       "city": "Singapore",
@@ -193,6 +204,17 @@
       "country_name": "United States",
       "region": "(not set)",
       "sessions": 5
+    },
+    "US|Alabama|Auburn": {
+      "city": "Auburn",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 32.609701,
+        "longitude": -85.48084
+      },
+      "region": "Alabama",
+      "sessions": 1
     },
     "US|California|": {
       "city": "",
@@ -304,7 +326,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Colorado|Boulder": {
       "city": "Boulder",
@@ -462,6 +484,13 @@
       "region": "Georgia",
       "sessions": 137
     },
+    "US|Georgia|Dacula": {
+      "city": "Dacula",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Georgia",
+      "sessions": 1
+    },
     "US|Georgia|Dallas": {
       "city": "Dallas",
       "country": "US",
@@ -554,7 +583,7 @@
         "longitude": -84.359
       },
       "region": "Georgia",
-      "sessions": 36
+      "sessions": 37
     },
     "US|Georgia|Sandy Springs": {
       "city": "Sandy Springs",
@@ -643,7 +672,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 20
+      "sessions": 21
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -883,6 +912,17 @@
       "region": "Texas",
       "sessions": 1
     },
+    "US|Texas|Austin": {
+      "city": "Austin",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 30.268896,
+        "longitude": -97.744724
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
     "US|Texas|Dallas": {
       "city": "Dallas",
       "country": "US",
@@ -1084,7 +1124,7 @@
     },
     "CN": {
       "name": "China",
-      "sessions": 9
+      "sessions": 10
     },
     "DE": {
       "name": "Germany",
@@ -1100,7 +1140,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 136
+      "sessions": 139
     },
     "TW": {
       "name": "Taiwan",
@@ -1108,11 +1148,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 361
+      "sessions": 367
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-09",
+  "last_end": "2026-11-10",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1149,6 +1189,12 @@
       "country": "CN",
       "country_name": "China",
       "region": "(not set)",
+      "sessions": 1
+    },
+    "CN|Beijing": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "Beijing",
       "sessions": 1
     },
     "CN|Guangdong Province": {
@@ -1209,7 +1255,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 74
+      "sessions": 77
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1235,6 +1281,12 @@
       "region": "(not set)",
       "sessions": 5
     },
+    "US|Alabama": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Alabama",
+      "sessions": 1
+    },
     "US|California": {
       "country": "US",
       "country_name": "United States",
@@ -1245,7 +1297,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 3
+      "sessions": 4
     },
     "US|Connecticut": {
       "country": "US",
@@ -1263,7 +1315,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 217
+      "sessions": 219
     },
     "US|Hawaii": {
       "country": "US",
@@ -1287,7 +1339,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 22
+      "sessions": 23
     },
     "US|Louisiana": {
       "country": "US",
@@ -1371,7 +1423,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Texas",
-      "sessions": 6
+      "sessions": 7
     },
     "US|Utah": {
       "country": "US",
@@ -1413,6 +1465,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 515,
+  "total_sessions": 525,
   "version": 1
 }
