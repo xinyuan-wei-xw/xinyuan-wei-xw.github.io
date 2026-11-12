@@ -105,6 +105,17 @@
       "region": "Shaanxi",
       "sessions": 1
     },
+    "CN|Sichuan|Chengdu": {
+      "city": "Chengdu",
+      "country": "CN",
+      "country_name": "China",
+      "location": {
+        "latitude": 30.671946,
+        "longitude": 104.068074
+      },
+      "region": "Sichuan",
+      "sessions": 1
+    },
     "CN|Zhejiang|Ningbo": {
       "city": "Ningbo",
       "country": "CN",
@@ -123,6 +134,28 @@
       "region": "",
       "sessions": 2
     },
+    "CO|Bogota|Bogota": {
+      "city": "Bogota",
+      "country": "CO",
+      "country_name": "Colombia",
+      "location": {
+        "latitude": 4.598369,
+        "longitude": -74.08529
+      },
+      "region": "Bogota",
+      "sessions": 1
+    },
+    "CO|Santander|Bucaramanga": {
+      "city": "Bucaramanga",
+      "country": "CO",
+      "country_name": "Colombia",
+      "location": {
+        "latitude": 7.132039,
+        "longitude": -73.127829
+      },
+      "region": "Santander",
+      "sessions": 1
+    },
     "DE|(not set)|(not set)": {
       "city": "(not set)",
       "country": "DE",
@@ -135,6 +168,13 @@
       "country": "GB",
       "country_name": "United Kingdom",
       "region": "England",
+      "sessions": 1
+    },
+    "GB|Wales|Llandudno": {
+      "city": "Llandudno",
+      "country": "GB",
+      "country_name": "United Kingdom",
+      "region": "Wales",
       "sessions": 1
     },
     "PK|Punjab|Faisalabad": {
@@ -171,7 +211,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 5
+      "sessions": 20
     },
     "SG||Singapore": {
       "city": "Singapore",
@@ -182,7 +222,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 72
+      "sessions": 75
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -545,6 +585,17 @@
       "region": "Georgia",
       "sessions": 1
     },
+    "US|Georgia|Macon": {
+      "city": "Macon",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 32.850384,
+        "longitude": -83.630048
+      },
+      "region": "Georgia",
+      "sessions": 1
+    },
     "US|Georgia|Marietta": {
       "city": "Marietta",
       "country": "US",
@@ -744,7 +795,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "New Jersey",
-      "sessions": 1
+      "sessions": 2
     },
     "US|New York|(not set)": {
       "city": "(not set)",
@@ -1007,6 +1058,17 @@
       "region": "Virginia",
       "sessions": 1
     },
+    "US|Virginia|Alexandria": {
+      "city": "Alexandria",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 38.820433,
+        "longitude": -77.099982
+      },
+      "region": "Virginia",
+      "sessions": 1
+    },
     "US|Virginia|Arlington": {
       "city": "Arlington",
       "country": "US",
@@ -1027,7 +1089,14 @@
         "longitude": -77.4827
       },
       "region": "Virginia",
-      "sessions": 3
+      "sessions": 4
+    },
+    "US|Virginia|Exmore": {
+      "city": "Exmore",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Virginia",
+      "sessions": 1
     },
     "US|Virginia|Fairfax": {
       "city": "Fairfax",
@@ -1124,7 +1193,11 @@
     },
     "CN": {
       "name": "China",
-      "sessions": 10
+      "sessions": 11
+    },
+    "CO": {
+      "name": "Colombia",
+      "sessions": 2
     },
     "DE": {
       "name": "Germany",
@@ -1132,7 +1205,7 @@
     },
     "GB": {
       "name": "United Kingdom",
-      "sessions": 1
+      "sessions": 2
     },
     "PK": {
       "name": "Pakistan",
@@ -1140,7 +1213,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 139
+      "sessions": 157
     },
     "TW": {
       "name": "Taiwan",
@@ -1148,11 +1221,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 367
+      "sessions": 372
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-10",
+  "last_end": "2026-11-11",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1227,10 +1300,28 @@
       "region": "Shaanxi",
       "sessions": 1
     },
+    "CN|Sichuan": {
+      "country": "CN",
+      "country_name": "China",
+      "region": "Sichuan",
+      "sessions": 1
+    },
     "CN|Zhejiang": {
       "country": "CN",
       "country_name": "China",
       "region": "Zhejiang",
+      "sessions": 1
+    },
+    "CO|Bogota": {
+      "country": "CO",
+      "country_name": "Colombia",
+      "region": "Bogota",
+      "sessions": 1
+    },
+    "CO|Santander": {
+      "country": "CO",
+      "country_name": "Colombia",
+      "region": "Santander",
       "sessions": 1
     },
     "DE|(not set)": {
@@ -1245,6 +1336,12 @@
       "region": "England",
       "sessions": 1
     },
+    "GB|Wales": {
+      "country": "GB",
+      "country_name": "United Kingdom",
+      "region": "Wales",
+      "sessions": 1
+    },
     "PK|Punjab": {
       "country": "PK",
       "country_name": "Pakistan",
@@ -1255,7 +1352,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 77
+      "sessions": 95
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1315,7 +1412,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 219
+      "sessions": 220
     },
     "US|Hawaii": {
       "country": "US",
@@ -1375,7 +1472,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "New Jersey",
-      "sessions": 2
+      "sessions": 3
     },
     "US|New York": {
       "country": "US",
@@ -1441,7 +1538,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 11
+      "sessions": 14
     },
     "US|Washington": {
       "country": "US",
@@ -1465,6 +1562,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 525,
+  "total_sessions": 552,
   "version": 1
 }
