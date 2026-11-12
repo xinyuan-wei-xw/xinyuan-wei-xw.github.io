@@ -1,15 +1,15 @@
 {
  "wsj": {
-  "date": "20261111",
-  "count": 12,
-  "file": "wsj-20261111.html",
+  "date": "20261112",
+  "count": 14,
+  "file": "wsj-20261112.html",
   "site": "https://www.wsj.com",
   "name": "The Wall Street Journal"
  },
  "economist": {
-  "date": "20261111",
-  "count": 4,
-  "file": "economist-20261111.html",
+  "date": "20261112",
+  "count": 8,
+  "file": "economist-20261112.html",
   "site": "https://www.economist.com",
   "name": "The Economist"
  }
