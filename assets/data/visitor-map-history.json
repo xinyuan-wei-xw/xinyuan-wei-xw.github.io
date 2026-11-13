@@ -790,6 +790,13 @@
       "region": "New Jersey",
       "sessions": 1
     },
+    "US|New Jersey|Jersey City": {
+      "city": "Jersey City",
+      "country": "US",
+      "country_name": "United States",
+      "region": "New Jersey",
+      "sessions": 1
+    },
     "US|New Jersey|Piscataway": {
       "city": "Piscataway",
       "country": "US",
@@ -1089,7 +1096,7 @@
         "longitude": -77.4827
       },
       "region": "Virginia",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Virginia|Exmore": {
       "city": "Exmore",
@@ -1115,6 +1122,13 @@
       },
       "region": "Virginia",
       "sessions": 2
+    },
+    "US|Virginia|Short Pump": {
+      "city": "Short Pump",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Virginia",
+      "sessions": 1
     },
     "US|Virginia|Suffolk": {
       "city": "Suffolk",
@@ -1175,7 +1189,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 3
+      "sessions": 4
     }
   },
   "countries": {
@@ -1221,11 +1235,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 372
+      "sessions": 376
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-11",
+  "last_end": "2026-11-12",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1370,7 +1384,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 3
+      "sessions": 4
     },
     "US|(not set)": {
       "country": "US",
@@ -1472,7 +1486,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "New Jersey",
-      "sessions": 3
+      "sessions": 4
     },
     "US|New York": {
       "country": "US",
@@ -1538,7 +1552,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 14
+      "sessions": 16
     },
     "US|Washington": {
       "country": "US",
@@ -1562,6 +1576,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 552,
+  "total_sessions": 556,
   "version": 1
 }
