@@ -211,7 +211,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 20
+      "sessions": 21
     },
     "SG||Singapore": {
       "city": "Singapore",
@@ -261,7 +261,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 2
+      "sessions": 3
     },
     "US|California|Acton": {
       "city": "Acton",
@@ -804,6 +804,13 @@
       "region": "New Jersey",
       "sessions": 2
     },
+    "US|New York|": {
+      "city": "",
+      "country": "US",
+      "country_name": "United States",
+      "region": "New York",
+      "sessions": 1
+    },
     "US|New York|(not set)": {
       "city": "(not set)",
       "country": "US",
@@ -977,6 +984,17 @@
       "location": {
         "latitude": 30.268896,
         "longitude": -97.744724
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
+    "US|Texas|Baytown": {
+      "city": "Baytown",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 29.755844,
+        "longitude": -94.967728
       },
       "region": "Texas",
       "sessions": 1
@@ -1189,7 +1207,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 4
+      "sessions": 6
     }
   },
   "countries": {
@@ -1227,7 +1245,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 157
+      "sessions": 158
     },
     "TW": {
       "name": "Taiwan",
@@ -1235,11 +1253,11 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 376
+      "sessions": 380
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-12",
+  "last_end": "2026-11-13",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1366,7 +1384,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 95
+      "sessions": 96
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1384,7 +1402,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 4
+      "sessions": 6
     },
     "US|(not set)": {
       "country": "US",
@@ -1402,7 +1420,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 34
+      "sessions": 35
     },
     "US|Colorado": {
       "country": "US",
@@ -1492,7 +1510,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "New York",
-      "sessions": 4
+      "sessions": 5
     },
     "US|North Carolina": {
       "country": "US",
@@ -1534,7 +1552,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Texas",
-      "sessions": 7
+      "sessions": 8
     },
     "US|Utah": {
       "country": "US",
@@ -1576,6 +1594,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 556,
+  "total_sessions": 561,
   "version": 1
 }
