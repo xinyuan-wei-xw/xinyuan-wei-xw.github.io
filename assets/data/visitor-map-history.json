@@ -7,6 +7,13 @@
       "region": "(not set)",
       "sessions": 1
     },
+    "BR|State of Rio de Janeiro|Nova Iguacu": {
+      "city": "Nova Iguacu",
+      "country": "BR",
+      "country_name": "Brazil",
+      "region": "State of Rio de Janeiro",
+      "sessions": 1
+    },
     "BR|State of Sao Paulo|Franca": {
       "city": "Franca",
       "country": "BR",
@@ -319,7 +326,18 @@
         "longitude": -118.181926
       },
       "region": "California",
-      "sessions": 6
+      "sessions": 7
+    },
+    "US|California|Riverside": {
+      "city": "Riverside",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 33.941945,
+        "longitude": -117.398039
+      },
+      "region": "California",
+      "sessions": 1
     },
     "US|California|San Francisco": {
       "city": "San Francisco",
@@ -460,7 +478,7 @@
         "longitude": -80.226052
       },
       "region": "Florida",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Florida|Orlando": {
       "city": "Orlando",
@@ -469,6 +487,17 @@
       "location": {
         "latitude": 28.511923,
         "longitude": -81.381976
+      },
+      "region": "Florida",
+      "sessions": 2
+    },
+    "US|Florida|Palm Coast": {
+      "city": "Palm Coast",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 29.538002,
+        "longitude": -81.223296
       },
       "region": "Florida",
       "sessions": 1
@@ -500,7 +529,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Georgia|Athens": {
       "city": "Athens",
@@ -522,7 +551,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 137
+      "sessions": 138
     },
     "US|Georgia|Dacula": {
       "city": "Dacula",
@@ -691,7 +720,7 @@
         "longitude": -87.752001
       },
       "region": "Illinois",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Illinois|Glenview": {
       "city": "Glenview",
@@ -699,6 +728,24 @@
       "country_name": "United States",
       "region": "Illinois",
       "sessions": 7
+    },
+    "US|Illinois|Rockford": {
+      "city": "Rockford",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 42.269705,
+        "longitude": -89.06969
+      },
+      "region": "Illinois",
+      "sessions": 1
+    },
+    "US|Indiana|Columbus": {
+      "city": "Columbus",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Indiana",
+      "sessions": 1
     },
     "US|Indiana|West Lafayette": {
       "city": "West Lafayette",
@@ -761,6 +808,17 @@
       "region": "Massachusetts",
       "sessions": 1
     },
+    "US|Michigan|Detroit": {
+      "city": "Detroit",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 42.331906,
+        "longitude": -83.082002
+      },
+      "region": "Michigan",
+      "sessions": 1
+    },
     "US|Minnesota|Minneapolis": {
       "city": "Minneapolis",
       "country": "US",
@@ -782,6 +840,13 @@
       },
       "region": "Missouri",
       "sessions": 3
+    },
+    "US|Nevada|Las Vegas Valley": {
+      "city": "Las Vegas Valley",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Nevada",
+      "sessions": 1
     },
     "US|New Jersey|Clinton Township": {
       "city": "Clinton Township",
@@ -828,6 +893,24 @@
       },
       "region": "New York",
       "sessions": 2
+    },
+    "US|New York|Schenectady": {
+      "city": "Schenectady",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 42.814582,
+        "longitude": -73.939968
+      },
+      "region": "New York",
+      "sessions": 1
+    },
+    "US|North Carolina|Conover": {
+      "city": "Conover",
+      "country": "US",
+      "country_name": "United States",
+      "region": "North Carolina",
+      "sessions": 1
     },
     "US|North Carolina|Wilmington": {
       "city": "Wilmington",
@@ -896,6 +979,13 @@
     },
     "US|Pennsylvania|": {
       "city": "",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Pennsylvania",
+      "sessions": 1
+    },
+    "US|Pennsylvania|Bradford": {
+      "city": "Bradford",
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
@@ -1114,7 +1204,7 @@
         "longitude": -77.4827
       },
       "region": "Virginia",
-      "sessions": 5
+      "sessions": 6
     },
     "US|Virginia|Exmore": {
       "city": "Exmore",
@@ -1208,6 +1298,13 @@
       "country_name": "United States",
       "region": "",
       "sessions": 6
+    },
+    "VN|Lam Dong|": {
+      "city": "",
+      "country": "VN",
+      "country_name": "Vietnam",
+      "region": "Lam Dong",
+      "sessions": 1
     }
   },
   "countries": {
@@ -1217,7 +1314,7 @@
     },
     "BR": {
       "name": "Brazil",
-      "sessions": 1
+      "sessions": 2
     },
     "CA": {
       "name": "Canada",
@@ -1253,17 +1350,27 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 380
+      "sessions": 395
+    },
+    "VN": {
+      "name": "Vietnam",
+      "sessions": 1
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-13",
+  "last_end": "2026-11-14",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
       "country": "(not set)",
       "country_name": "(not set)",
       "region": "(not set)",
+      "sessions": 1
+    },
+    "BR|State of Rio de Janeiro": {
+      "country": "BR",
+      "country_name": "Brazil",
+      "region": "State of Rio de Janeiro",
       "sessions": 1
     },
     "BR|State of Sao Paulo": {
@@ -1420,7 +1527,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 35
+      "sessions": 37
     },
     "US|Colorado": {
       "country": "US",
@@ -1438,13 +1545,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 13
+      "sessions": 17
     },
     "US|Georgia": {
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 220
+      "sessions": 221
     },
     "US|Hawaii": {
       "country": "US",
@@ -1456,13 +1563,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 9
+      "sessions": 11
     },
     "US|Indiana": {
       "country": "US",
       "country_name": "United States",
       "region": "Indiana",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Iowa": {
       "country": "US",
@@ -1488,6 +1595,12 @@
       "region": "Massachusetts",
       "sessions": 1
     },
+    "US|Michigan": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Michigan",
+      "sessions": 1
+    },
     "US|Minnesota": {
       "country": "US",
       "country_name": "United States",
@@ -1500,6 +1613,12 @@
       "region": "Missouri",
       "sessions": 3
     },
+    "US|Nevada": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Nevada",
+      "sessions": 1
+    },
     "US|New Jersey": {
       "country": "US",
       "country_name": "United States",
@@ -1510,13 +1629,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "New York",
-      "sessions": 5
+      "sessions": 6
     },
     "US|North Carolina": {
       "country": "US",
       "country_name": "United States",
       "region": "North Carolina",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Ohio": {
       "country": "US",
@@ -1534,7 +1653,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
-      "sessions": 5
+      "sessions": 6
     },
     "US|South Carolina": {
       "country": "US",
@@ -1570,7 +1689,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 16
+      "sessions": 17
     },
     "US|Washington": {
       "country": "US",
@@ -1589,11 +1708,17 @@
       "country_name": "United States",
       "region": "Wisconsin",
       "sessions": 1
+    },
+    "VN|Lam Dong": {
+      "country": "VN",
+      "country_name": "Vietnam",
+      "region": "Lam Dong",
+      "sessions": 1
     }
   },
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 561,
+  "total_sessions": 578,
   "version": 1
 }
