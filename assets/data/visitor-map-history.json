@@ -7,6 +7,27 @@
       "region": "(not set)",
       "sessions": 1
     },
+    "AM|Aragatsotn Province|Karbi": {
+      "city": "Karbi",
+      "country": "AM",
+      "country_name": "Armenia",
+      "region": "Aragatsotn Province",
+      "sessions": 1
+    },
+    "AM||Yerevan": {
+      "city": "Yerevan",
+      "country": "AM",
+      "country_name": "Armenia",
+      "region": "",
+      "sessions": 1
+    },
+    "BR|State of Rio de Janeiro|Cabo Frio": {
+      "city": "Cabo Frio",
+      "country": "BR",
+      "country_name": "Brazil",
+      "region": "State of Rio de Janeiro",
+      "sessions": 1
+    },
     "BR|State of Rio de Janeiro|Nova Iguacu": {
       "city": "Nova Iguacu",
       "country": "BR",
@@ -152,6 +173,13 @@
       "region": "Bogota",
       "sessions": 1
     },
+    "CO|Cundinamarca|Soacha": {
+      "city": "Soacha",
+      "country": "CO",
+      "country_name": "Colombia",
+      "region": "Cundinamarca",
+      "sessions": 1
+    },
     "CO|Santander|Bucaramanga": {
       "city": "Bucaramanga",
       "country": "CO",
@@ -182,6 +210,17 @@
       "country": "GB",
       "country_name": "United Kingdom",
       "region": "Wales",
+      "sessions": 1
+    },
+    "MX|Guanajuato|Leon": {
+      "city": "Leon",
+      "country": "MX",
+      "country_name": "Mexico",
+      "location": {
+        "latitude": 21.151933,
+        "longitude": -101.701976
+      },
+      "region": "Guanajuato",
       "sessions": 1
     },
     "PK|Punjab|Faisalabad": {
@@ -218,7 +257,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 21
+      "sessions": 22
     },
     "SG||Singapore": {
       "city": "Singapore",
@@ -480,6 +519,13 @@
       "region": "Florida",
       "sessions": 2
     },
+    "US|Florida|Ocoee": {
+      "city": "Ocoee",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Florida",
+      "sessions": 1
+    },
     "US|Florida|Orlando": {
       "city": "Orlando",
       "country": "US",
@@ -551,7 +597,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 138
+      "sessions": 140
     },
     "US|Georgia|Dacula": {
       "city": "Dacula",
@@ -727,7 +773,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 7
+      "sessions": 8
     },
     "US|Illinois|Rockford": {
       "city": "Rockford",
@@ -770,7 +816,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 21
+      "sessions": 22
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -893,6 +939,13 @@
       },
       "region": "New York",
       "sessions": 2
+    },
+    "US|New York|Oswego": {
+      "city": "Oswego",
+      "country": "US",
+      "country_name": "United States",
+      "region": "New York",
+      "sessions": 1
     },
     "US|New York|Schenectady": {
       "city": "Schenectady",
@@ -1029,6 +1082,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
+      "sessions": 1
+    },
+    "US|South Carolina|Holly Hill": {
+      "city": "Holly Hill",
+      "country": "US",
+      "country_name": "United States",
+      "region": "South Carolina",
       "sessions": 1
     },
     "US|South Carolina|Mullins": {
@@ -1247,7 +1307,7 @@
         "longitude": -76.58837
       },
       "region": "Virginia",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Virginia|Virginia Beach": {
       "city": "Virginia Beach",
@@ -1292,6 +1352,17 @@
       "region": "Wisconsin",
       "sessions": 1
     },
+    "US|Wisconsin|Madison": {
+      "city": "Madison",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 43.073016,
+        "longitude": -89.401117
+      },
+      "region": "Wisconsin",
+      "sessions": 1
+    },
     "US||": {
       "city": "",
       "country": "US",
@@ -1312,9 +1383,13 @@
       "name": "(not set)",
       "sessions": 1
     },
+    "AM": {
+      "name": "Armenia",
+      "sessions": 2
+    },
     "BR": {
       "name": "Brazil",
-      "sessions": 2
+      "sessions": 3
     },
     "CA": {
       "name": "Canada",
@@ -1326,7 +1401,7 @@
     },
     "CO": {
       "name": "Colombia",
-      "sessions": 2
+      "sessions": 3
     },
     "DE": {
       "name": "Germany",
@@ -1336,13 +1411,17 @@
       "name": "United Kingdom",
       "sessions": 2
     },
+    "MX": {
+      "name": "Mexico",
+      "sessions": 1
+    },
     "PK": {
       "name": "Pakistan",
       "sessions": 1
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 158
+      "sessions": 159
     },
     "TW": {
       "name": "Taiwan",
@@ -1350,7 +1429,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 395
+      "sessions": 404
     },
     "VN": {
       "name": "Vietnam",
@@ -1358,7 +1437,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-14",
+  "last_end": "2026-11-15",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1367,11 +1446,23 @@
       "region": "(not set)",
       "sessions": 1
     },
+    "AM|": {
+      "country": "AM",
+      "country_name": "Armenia",
+      "region": "",
+      "sessions": 1
+    },
+    "AM|Aragatsotn Province": {
+      "country": "AM",
+      "country_name": "Armenia",
+      "region": "Aragatsotn Province",
+      "sessions": 1
+    },
     "BR|State of Rio de Janeiro": {
       "country": "BR",
       "country_name": "Brazil",
       "region": "State of Rio de Janeiro",
-      "sessions": 1
+      "sessions": 2
     },
     "BR|State of Sao Paulo": {
       "country": "BR",
@@ -1457,6 +1548,12 @@
       "region": "Bogota",
       "sessions": 1
     },
+    "CO|Cundinamarca": {
+      "country": "CO",
+      "country_name": "Colombia",
+      "region": "Cundinamarca",
+      "sessions": 1
+    },
     "CO|Santander": {
       "country": "CO",
       "country_name": "Colombia",
@@ -1481,6 +1578,12 @@
       "region": "Wales",
       "sessions": 1
     },
+    "MX|Guanajuato": {
+      "country": "MX",
+      "country_name": "Mexico",
+      "region": "Guanajuato",
+      "sessions": 1
+    },
     "PK|Punjab": {
       "country": "PK",
       "country_name": "Pakistan",
@@ -1491,7 +1594,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 96
+      "sessions": 97
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1545,13 +1648,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 17
+      "sessions": 18
     },
     "US|Georgia": {
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 221
+      "sessions": 223
     },
     "US|Hawaii": {
       "country": "US",
@@ -1563,7 +1666,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 11
+      "sessions": 12
     },
     "US|Indiana": {
       "country": "US",
@@ -1575,7 +1678,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 23
+      "sessions": 24
     },
     "US|Louisiana": {
       "country": "US",
@@ -1629,7 +1732,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "New York",
-      "sessions": 6
+      "sessions": 7
     },
     "US|North Carolina": {
       "country": "US",
@@ -1659,7 +1762,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "South Carolina",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Tennessee": {
       "country": "US",
@@ -1689,7 +1792,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 17
+      "sessions": 18
     },
     "US|Washington": {
       "country": "US",
@@ -1707,7 +1810,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Wisconsin",
-      "sessions": 1
+      "sessions": 2
     },
     "VN|Lam Dong": {
       "country": "VN",
@@ -1719,6 +1822,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 578,
+  "total_sessions": 593,
   "version": 1
 }
