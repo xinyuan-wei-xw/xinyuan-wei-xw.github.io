@@ -212,6 +212,13 @@
       "region": "Wales",
       "sessions": 1
     },
+    "IN|Ropar Division|Chandigarh": {
+      "city": "Chandigarh",
+      "country": "IN",
+      "country_name": "India",
+      "region": "Ropar Division",
+      "sessions": 1
+    },
     "MX|Guanajuato|Leon": {
       "city": "Leon",
       "country": "MX",
@@ -268,7 +275,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 75
+      "sessions": 76
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -423,7 +430,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Colorado|Boulder": {
       "city": "Boulder",
@@ -504,6 +511,17 @@
       "location": {
         "latitude": 25.82699,
         "longitude": -80.2815
+      },
+      "region": "Florida",
+      "sessions": 1
+    },
+    "US|Florida|Jacksonville": {
+      "city": "Jacksonville",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 30.331967,
+        "longitude": -81.671933
       },
       "region": "Florida",
       "sessions": 1
@@ -816,7 +834,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 22
+      "sessions": 23
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -852,7 +870,7 @@
         "longitude": -71.316691
       },
       "region": "Massachusetts",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Michigan|Detroit": {
       "city": "Detroit",
@@ -1124,6 +1142,13 @@
         "latitude": 32.684761,
         "longitude": -97.020239
       },
+      "region": "Texas",
+      "sessions": 1
+    },
+    "US|Texas|Atascocita": {
+      "city": "Atascocita",
+      "country": "US",
+      "country_name": "United States",
       "region": "Texas",
       "sessions": 1
     },
@@ -1411,6 +1436,10 @@
       "name": "United Kingdom",
       "sessions": 2
     },
+    "IN": {
+      "name": "India",
+      "sessions": 1
+    },
     "MX": {
       "name": "Mexico",
       "sessions": 1
@@ -1421,7 +1450,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 159
+      "sessions": 160
     },
     "TW": {
       "name": "Taiwan",
@@ -1429,7 +1458,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 404
+      "sessions": 409
     },
     "VN": {
       "name": "Vietnam",
@@ -1437,7 +1466,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-15",
+  "last_end": "2026-11-16",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1578,6 +1607,12 @@
       "region": "Wales",
       "sessions": 1
     },
+    "IN|Ropar Division": {
+      "country": "IN",
+      "country_name": "India",
+      "region": "Ropar Division",
+      "sessions": 1
+    },
     "MX|Guanajuato": {
       "country": "MX",
       "country_name": "Mexico",
@@ -1594,7 +1629,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 97
+      "sessions": 98
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1636,7 +1671,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Connecticut": {
       "country": "US",
@@ -1648,7 +1683,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 18
+      "sessions": 19
     },
     "US|Georgia": {
       "country": "US",
@@ -1678,7 +1713,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 24
+      "sessions": 25
     },
     "US|Louisiana": {
       "country": "US",
@@ -1696,7 +1731,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Massachusetts",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Michigan": {
       "country": "US",
@@ -1774,7 +1809,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Texas",
-      "sessions": 8
+      "sessions": 9
     },
     "US|Utah": {
       "country": "US",
@@ -1822,6 +1857,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 593,
+  "total_sessions": 600,
   "version": 1
 }
