@@ -264,7 +264,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 22
+      "sessions": 23
     },
     "SG||Singapore": {
       "city": "Singapore",
@@ -470,7 +470,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Connecticut",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Florida|": {
       "city": "",
@@ -615,7 +615,7 @@
         "longitude": -84.401895
       },
       "region": "Georgia",
-      "sessions": 140
+      "sessions": 141
     },
     "US|Georgia|Dacula": {
       "city": "Dacula",
@@ -834,7 +834,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 23
+      "sessions": 24
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -1010,7 +1010,7 @@
         "longitude": -82.991956
       },
       "region": "Ohio",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Ohio|McConnelsville": {
       "city": "McConnelsville",
@@ -1450,7 +1450,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 160
+      "sessions": 161
     },
     "TW": {
       "name": "Taiwan",
@@ -1458,7 +1458,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 409
+      "sessions": 413
     },
     "VN": {
       "name": "Vietnam",
@@ -1466,7 +1466,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-16",
+  "last_end": "2026-11-17",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1629,7 +1629,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 98
+      "sessions": 99
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1677,7 +1677,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Connecticut",
-      "sessions": 3
+      "sessions": 4
     },
     "US|Florida": {
       "country": "US",
@@ -1689,7 +1689,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Georgia",
-      "sessions": 223
+      "sessions": 224
     },
     "US|Hawaii": {
       "country": "US",
@@ -1713,7 +1713,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 25
+      "sessions": 26
     },
     "US|Louisiana": {
       "country": "US",
@@ -1779,7 +1779,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Ohio",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Oklahoma": {
       "country": "US",
@@ -1857,6 +1857,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 600,
+  "total_sessions": 605,
   "version": 1
 }
