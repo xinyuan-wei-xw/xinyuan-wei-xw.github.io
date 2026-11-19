@@ -430,7 +430,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 3
+      "sessions": 4
     },
     "US|Colorado|Boulder": {
       "city": "Boulder",
@@ -834,7 +834,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 24
+      "sessions": 26
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -1010,7 +1010,7 @@
         "longitude": -82.991956
       },
       "region": "Ohio",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Ohio|McConnelsville": {
       "city": "McConnelsville",
@@ -1174,6 +1174,17 @@
       "region": "Texas",
       "sessions": 1
     },
+    "US|Texas|Brownsville": {
+      "city": "Brownsville",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 25.91998,
+        "longitude": -97.500003
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
     "US|Texas|Dallas": {
       "city": "Dallas",
       "country": "US",
@@ -1239,6 +1250,13 @@
       },
       "region": "Utah",
       "sessions": 2
+    },
+    "US|Utah|Tooele": {
+      "city": "Tooele",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Utah",
+      "sessions": 1
     },
     "US|Vermont|Burlington": {
       "city": "Burlington",
@@ -1458,7 +1476,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 413
+      "sessions": 419
     },
     "VN": {
       "name": "Vietnam",
@@ -1466,7 +1484,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-17",
+  "last_end": "2026-11-18",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1671,7 +1689,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 5
+      "sessions": 6
     },
     "US|Connecticut": {
       "country": "US",
@@ -1713,7 +1731,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 26
+      "sessions": 28
     },
     "US|Louisiana": {
       "country": "US",
@@ -1779,7 +1797,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Ohio",
-      "sessions": 5
+      "sessions": 6
     },
     "US|Oklahoma": {
       "country": "US",
@@ -1809,13 +1827,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Texas",
-      "sessions": 9
+      "sessions": 10
     },
     "US|Utah": {
       "country": "US",
       "country_name": "United States",
       "region": "Utah",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Vermont": {
       "country": "US",
@@ -1857,6 +1875,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 605,
+  "total_sessions": 611,
   "version": 1
 }
