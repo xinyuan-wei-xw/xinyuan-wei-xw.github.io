@@ -903,7 +903,7 @@
         "longitude": -94.60604
       },
       "region": "Missouri",
-      "sessions": 3
+      "sessions": 4
     },
     "US|Nevada|Las Vegas Valley": {
       "city": "Las Vegas Valley",
@@ -1476,7 +1476,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 419
+      "sessions": 420
     },
     "VN": {
       "name": "Vietnam",
@@ -1484,7 +1484,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-18",
+  "last_end": "2026-11-19",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1767,7 +1767,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Missouri",
-      "sessions": 3
+      "sessions": 4
     },
     "US|Nevada": {
       "country": "US",
@@ -1875,6 +1875,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 611,
+  "total_sessions": 612,
   "version": 1
 }
