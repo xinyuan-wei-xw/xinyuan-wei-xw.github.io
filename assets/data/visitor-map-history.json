@@ -430,7 +430,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Colorado|Boulder": {
       "city": "Boulder",
@@ -834,7 +834,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 26
+      "sessions": 27
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -1053,7 +1053,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Pennsylvania|Bradford": {
       "city": "Bradford",
@@ -1132,6 +1132,13 @@
       "country": "US",
       "country_name": "United States",
       "region": "Tennessee",
+      "sessions": 1
+    },
+    "US|Texas|Allen": {
+      "city": "Allen",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Texas",
       "sessions": 1
     },
     "US|Texas|Arlington": {
@@ -1274,7 +1281,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Virginia|Alexandria": {
       "city": "Alexandria",
@@ -1308,6 +1315,13 @@
       },
       "region": "Virginia",
       "sessions": 6
+    },
+    "US|Virginia|Chesapeake": {
+      "city": "Chesapeake",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Virginia",
+      "sessions": 1
     },
     "US|Virginia|Exmore": {
       "city": "Exmore",
@@ -1361,7 +1375,7 @@
         "longitude": -75.980265
       },
       "region": "Virginia",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Washington|Moses Lake": {
       "city": "Moses Lake",
@@ -1476,7 +1490,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 420
+      "sessions": 426
     },
     "VN": {
       "name": "Vietnam",
@@ -1484,7 +1498,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-19",
+  "last_end": "2026-11-20",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1689,7 +1703,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Colorado",
-      "sessions": 6
+      "sessions": 7
     },
     "US|Connecticut": {
       "country": "US",
@@ -1731,7 +1745,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 28
+      "sessions": 29
     },
     "US|Louisiana": {
       "country": "US",
@@ -1809,7 +1823,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
-      "sessions": 6
+      "sessions": 7
     },
     "US|South Carolina": {
       "country": "US",
@@ -1827,7 +1841,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Texas",
-      "sessions": 10
+      "sessions": 11
     },
     "US|Utah": {
       "country": "US",
@@ -1845,7 +1859,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 18
+      "sessions": 20
     },
     "US|Washington": {
       "country": "US",
@@ -1875,6 +1889,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 612,
+  "total_sessions": 618,
   "version": 1
 }
