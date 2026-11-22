@@ -1353,7 +1353,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Virginia|Suffolk": {
       "city": "Suffolk",
@@ -1490,7 +1490,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 426
+      "sessions": 427
     },
     "VN": {
       "name": "Vietnam",
@@ -1498,7 +1498,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-20",
+  "last_end": "2026-11-21",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1859,7 +1859,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 20
+      "sessions": 21
     },
     "US|Washington": {
       "country": "US",
@@ -1889,6 +1889,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 618,
+  "total_sessions": 619,
   "version": 1
 }
