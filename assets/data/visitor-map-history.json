@@ -332,7 +332,7 @@
         "longitude": -122.271152
       },
       "region": "California",
-      "sessions": 1
+      "sessions": 2
     },
     "US|California|Copperopolis": {
       "city": "Copperopolis",
@@ -1093,7 +1093,7 @@
         "longitude": -80.001931
       },
       "region": "Pennsylvania",
-      "sessions": 1
+      "sessions": 2
     },
     "US|Pennsylvania|Pottsville": {
       "city": "Pottsville",
@@ -1490,7 +1490,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 427
+      "sessions": 429
     },
     "VN": {
       "name": "Vietnam",
@@ -1498,7 +1498,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-21",
+  "last_end": "2026-11-22",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1697,7 +1697,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 37
+      "sessions": 38
     },
     "US|Colorado": {
       "country": "US",
@@ -1823,7 +1823,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Pennsylvania",
-      "sessions": 7
+      "sessions": 8
     },
     "US|South Carolina": {
       "country": "US",
@@ -1889,6 +1889,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 619,
+  "total_sessions": 621,
   "version": 1
 }
