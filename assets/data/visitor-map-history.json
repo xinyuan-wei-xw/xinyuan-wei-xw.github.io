@@ -21,6 +21,13 @@
       "region": "",
       "sessions": 1
     },
+    "AR|Buenos Aires Province|San Vicente": {
+      "city": "San Vicente",
+      "country": "AR",
+      "country_name": "Argentina",
+      "region": "Buenos Aires Province",
+      "sessions": 1
+    },
     "BR|State of Rio de Janeiro|Cabo Frio": {
       "city": "Cabo Frio",
       "country": "BR",
@@ -275,7 +282,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 76
+      "sessions": 78
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -307,6 +314,17 @@
         "longitude": -85.48084
       },
       "region": "Alabama",
+      "sessions": 1
+    },
+    "US|Arizona|Bullhead City": {
+      "city": "Bullhead City",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 35.148176,
+        "longitude": -114.567488
+      },
+      "region": "Arizona",
       "sessions": 1
     },
     "US|California|": {
@@ -791,7 +809,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 8
+      "sessions": 9
     },
     "US|Illinois|Rockford": {
       "city": "Rockford",
@@ -834,7 +852,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 27
+      "sessions": 29
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -1247,6 +1265,17 @@
       "region": "Texas",
       "sessions": 1
     },
+    "US|Texas|Temple": {
+      "city": "Temple",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 31.102093,
+        "longitude": -97.363008
+      },
+      "region": "Texas",
+      "sessions": 1
+    },
     "US|Utah|Salt Lake City": {
       "city": "Salt Lake City",
       "country": "US",
@@ -1444,6 +1473,10 @@
       "name": "Armenia",
       "sessions": 2
     },
+    "AR": {
+      "name": "Argentina",
+      "sessions": 1
+    },
     "BR": {
       "name": "Brazil",
       "sessions": 3
@@ -1482,7 +1515,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 161
+      "sessions": 163
     },
     "TW": {
       "name": "Taiwan",
@@ -1490,7 +1523,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 429
+      "sessions": 434
     },
     "VN": {
       "name": "Vietnam",
@@ -1498,7 +1531,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-22",
+  "last_end": "2026-11-23",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1517,6 +1550,12 @@
       "country": "AM",
       "country_name": "Armenia",
       "region": "Aragatsotn Province",
+      "sessions": 1
+    },
+    "AR|Buenos Aires Province": {
+      "country": "AR",
+      "country_name": "Argentina",
+      "region": "Buenos Aires Province",
       "sessions": 1
     },
     "BR|State of Rio de Janeiro": {
@@ -1661,7 +1700,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 99
+      "sessions": 101
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1691,6 +1730,12 @@
       "country": "US",
       "country_name": "United States",
       "region": "Alabama",
+      "sessions": 1
+    },
+    "US|Arizona": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Arizona",
       "sessions": 1
     },
     "US|California": {
@@ -1733,7 +1778,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Illinois",
-      "sessions": 12
+      "sessions": 13
     },
     "US|Indiana": {
       "country": "US",
@@ -1745,7 +1790,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 29
+      "sessions": 31
     },
     "US|Louisiana": {
       "country": "US",
@@ -1841,7 +1886,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Texas",
-      "sessions": 11
+      "sessions": 12
     },
     "US|Utah": {
       "country": "US",
@@ -1889,6 +1934,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 621,
+  "total_sessions": 629,
   "version": 1
 }
