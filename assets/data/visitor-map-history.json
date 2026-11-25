@@ -370,6 +370,13 @@
       "region": "California",
       "sessions": 1
     },
+    "US|California|Goleta": {
+      "city": "Goleta",
+      "country": "US",
+      "country_name": "United States",
+      "region": "California",
+      "sessions": 1
+    },
     "US|California|Hercules": {
       "city": "Hercules",
       "country": "US",
@@ -488,7 +495,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Connecticut",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Florida|": {
       "city": "",
@@ -1066,6 +1073,13 @@
       "region": "Oklahoma",
       "sessions": 1
     },
+    "US|Oregon|The Dalles": {
+      "city": "The Dalles",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Oregon",
+      "sessions": 1
+    },
     "US|Pennsylvania|": {
       "city": "",
       "country": "US",
@@ -1345,6 +1359,17 @@
       "region": "Virginia",
       "sessions": 6
     },
+    "US|Virginia|Charlottesville": {
+      "city": "Charlottesville",
+      "country": "US",
+      "country_name": "United States",
+      "location": {
+        "latitude": 38.029189,
+        "longitude": -78.476926
+      },
+      "region": "Virginia",
+      "sessions": 1
+    },
     "US|Virginia|Chesapeake": {
       "city": "Chesapeake",
       "country": "US",
@@ -1523,7 +1548,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 434
+      "sessions": 438
     },
     "VN": {
       "name": "Vietnam",
@@ -1531,7 +1556,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-23",
+  "last_end": "2026-11-24",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1742,7 +1767,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "California",
-      "sessions": 38
+      "sessions": 39
     },
     "US|Colorado": {
       "country": "US",
@@ -1754,7 +1779,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Connecticut",
-      "sessions": 4
+      "sessions": 5
     },
     "US|Florida": {
       "country": "US",
@@ -1864,6 +1889,12 @@
       "region": "Oklahoma",
       "sessions": 2
     },
+    "US|Oregon": {
+      "country": "US",
+      "country_name": "United States",
+      "region": "Oregon",
+      "sessions": 1
+    },
     "US|Pennsylvania": {
       "country": "US",
       "country_name": "United States",
@@ -1904,7 +1935,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 21
+      "sessions": 22
     },
     "US|Washington": {
       "country": "US",
@@ -1934,6 +1965,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 629,
+  "total_sessions": 633,
   "version": 1
 }
