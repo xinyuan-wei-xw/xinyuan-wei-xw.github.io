@@ -282,7 +282,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 78
+      "sessions": 79
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -502,7 +502,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Florida|Brownsville": {
       "city": "Brownsville",
@@ -859,7 +859,7 @@
         "longitude": -95.8608
       },
       "region": "Iowa",
-      "sessions": 29
+      "sessions": 30
     },
     "US|Iowa|Des Moines": {
       "city": "Des Moines",
@@ -1359,6 +1359,13 @@
       "region": "Virginia",
       "sessions": 6
     },
+    "US|Virginia|Chantilly": {
+      "city": "Chantilly",
+      "country": "US",
+      "country_name": "United States",
+      "region": "Virginia",
+      "sessions": 1
+    },
     "US|Virginia|Charlottesville": {
       "city": "Charlottesville",
       "country": "US",
@@ -1479,7 +1486,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 6
+      "sessions": 7
     },
     "VN|Lam Dong|": {
       "city": "",
@@ -1540,7 +1547,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 163
+      "sessions": 164
     },
     "TW": {
       "name": "Taiwan",
@@ -1548,7 +1555,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 438
+      "sessions": 442
     },
     "VN": {
       "name": "Vietnam",
@@ -1556,7 +1563,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-24",
+  "last_end": "2026-11-25",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1725,7 +1732,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 101
+      "sessions": 102
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1743,7 +1750,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "",
-      "sessions": 6
+      "sessions": 7
     },
     "US|(not set)": {
       "country": "US",
@@ -1785,7 +1792,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Florida",
-      "sessions": 19
+      "sessions": 20
     },
     "US|Georgia": {
       "country": "US",
@@ -1815,7 +1822,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Iowa",
-      "sessions": 31
+      "sessions": 32
     },
     "US|Louisiana": {
       "country": "US",
@@ -1935,7 +1942,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "Virginia",
-      "sessions": 22
+      "sessions": 23
     },
     "US|Washington": {
       "country": "US",
@@ -1965,6 +1972,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 633,
+  "total_sessions": 638,
   "version": 1
 }
