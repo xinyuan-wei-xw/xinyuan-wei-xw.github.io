@@ -282,7 +282,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 79
+      "sessions": 80
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -1134,6 +1134,13 @@
       "region": "Pennsylvania",
       "sessions": 1
     },
+    "US|South Carolina|Clemson": {
+      "city": "Clemson",
+      "country": "US",
+      "country_name": "United States",
+      "region": "South Carolina",
+      "sessions": 1
+    },
     "US|South Carolina|Holly Hill": {
       "city": "Holly Hill",
       "country": "US",
@@ -1547,7 +1554,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 164
+      "sessions": 165
     },
     "TW": {
       "name": "Taiwan",
@@ -1555,7 +1562,7 @@
     },
     "US": {
       "name": "United States",
-      "sessions": 442
+      "sessions": 443
     },
     "VN": {
       "name": "Vietnam",
@@ -1563,7 +1570,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-25",
+  "last_end": "2026-11-26",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1732,7 +1739,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 102
+      "sessions": 103
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1912,7 +1919,7 @@
       "country": "US",
       "country_name": "United States",
       "region": "South Carolina",
-      "sessions": 2
+      "sessions": 3
     },
     "US|Tennessee": {
       "country": "US",
@@ -1972,6 +1979,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 638,
+  "total_sessions": 640,
   "version": 1
 }
