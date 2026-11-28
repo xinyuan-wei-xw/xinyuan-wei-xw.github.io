@@ -28,6 +28,13 @@
       "region": "Buenos Aires Province",
       "sessions": 1
     },
+    "BH|Capital Governorate|Manama": {
+      "city": "Manama",
+      "country": "BH",
+      "country_name": "Bahrain",
+      "region": "Capital Governorate",
+      "sessions": 1
+    },
     "BR|State of Rio de Janeiro|Cabo Frio": {
       "city": "Cabo Frio",
       "country": "BR",
@@ -282,7 +289,7 @@
         "longitude": 103.853875
       },
       "region": "",
-      "sessions": 80
+      "sessions": 81
     },
     "TW|Changhua County|Beidou Township": {
       "city": "Beidou Township",
@@ -1516,6 +1523,10 @@
       "name": "Argentina",
       "sessions": 1
     },
+    "BH": {
+      "name": "Bahrain",
+      "sessions": 1
+    },
     "BR": {
       "name": "Brazil",
       "sessions": 3
@@ -1554,7 +1565,7 @@
     },
     "SG": {
       "name": "Singapore",
-      "sessions": 165
+      "sessions": 166
     },
     "TW": {
       "name": "Taiwan",
@@ -1570,7 +1581,7 @@
     }
   },
   "first_start": "2025-10-01",
-  "last_end": "2026-11-26",
+  "last_end": "2026-11-27",
   "metric": "sessions",
   "regions": {
     "(not set)|(not set)": {
@@ -1595,6 +1606,12 @@
       "country": "AR",
       "country_name": "Argentina",
       "region": "Buenos Aires Province",
+      "sessions": 1
+    },
+    "BH|Capital Governorate": {
+      "country": "BH",
+      "country_name": "Bahrain",
+      "region": "Capital Governorate",
       "sessions": 1
     },
     "BR|State of Rio de Janeiro": {
@@ -1739,7 +1756,7 @@
       "country": "SG",
       "country_name": "Singapore",
       "region": "",
-      "sessions": 103
+      "sessions": 104
     },
     "SG|(not set)": {
       "country": "SG",
@@ -1979,6 +1996,6 @@
   "seed_range_days": 365,
   "thresholded": false,
   "timezone": "America/Los_Angeles",
-  "total_sessions": 640,
+  "total_sessions": 642,
   "version": 1
 }
